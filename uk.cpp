@@ -936,16 +936,22 @@ QString UK::encData(QByteArray d, QString user, QString key)
     QString cdt = QDateTime::currentDateTime().toString("z");
     if(cdt.at(0)=="1"||cdt.at(0)=="2"||cdt.at(0)=="3"){
         //funciona
-        r="9cc9";
-        r2="1dd1";
+        //r="9cc9";
+        r=rA1;
+        //r2="1dd1";
+        r2=rA2;
     }else if(cdt.at(0)=="1"||cdt.at(0)=="2"||cdt.at(0)=="3"){
         //funciona
-        r="9dd9";
-        r2="1cc1";
+//        r="9dd9";
+//        r2="1cc1";
+        r=rB1;
+        r2=rB2;
     }else{
         //funciona
-        r="6dd6";
-        r2="2cc2";
+//        r="6dd6";
+//        r2="2cc2";
+        r=rC1;
+        r2=rC2;
     }
     QByteArray segUser;
     segUser.append(user);
@@ -1034,7 +1040,6 @@ QString UK::encData(QByteArray d, QString user, QString key)
             encode.append(uc0);
         }
     }
-
     ret0.append("||||||");
     ret0.append("I");
     ret0.append(encode);
@@ -1046,7 +1051,6 @@ QString UK::encData(QByteArray d, QString user, QString key)
 QString UK::decData(QByteArray d0, QString user, QString key)
 {
     QString ret;
-
     QString pd=QString(d0);
     QByteArray d;
     d.append(desCompData(pd));
@@ -1061,10 +1065,7 @@ QString UK::decData(QByteArray d0, QString user, QString key)
     QByteArray passDataBA;
     bool passDataWrite=false;
 
-    for (int i = 0; i < d.size(); ++i) {
-
-
-        //do{
+    for(int i = 0; i < d.size(); ++i) {
         QString l;
         l.append(d.at(i));
         QByteArray enc;
@@ -1624,22 +1625,41 @@ bool UK::fileExist(QByteArray fileName)
     return a.exists();
 }
 
-void UK::unZip(QString zip_filename, QString filename)
+bool UK::createLink(QString originalLocationFileName, QString lnkLocationFileName, QString description, QString workingDirectory)
 {
-       QFile infile(zip_filename);
-       QFile outfile(filename);
-       infile.open(QIODevice::ReadOnly);
-       outfile.open(QIODevice::WriteOnly);
-       QByteArray uncompressed_data = QByteArray::fromBase64(infile.readAll());
-       QByteArray compressed_data = qUncompress(uncompressed_data);
-       outfile.write(compressed_data);
-       infile.close();
-       outfile.close();
-}
 
-bool UK::createLink(QString location, QString name)
-{
-    return false;
+#ifdef Q_OS_WIN
+    QFile f1(originalLocationFileName);
+    if(!f1.exists()){
+        return false;
+    }
+    QDir d1(workingDirectory);
+    if(!d1.exists()){
+        return false;
+    }
+    QByteArray vbs = "";
+    vbs.append("set WshShell = WScript.CreateObject(\"WScript.Shell\")\n");
+    vbs.append("set objShell = CreateObject(\"Shell.Application\")\n");
+
+    //vbs.append("strDesktop = WshShell.SpecialFolders(\"Desktop\")\n");
+    //vbs.append("set objFolder = objShell.NameSpace(strDesktop)\n");
+
+    vbs.append("set oShellLink = WshShell.CreateShortcut(\""+lnkLocationFileName+"\")\n");
+
+    vbs.append("oShellLink.TargetPath = \""+originalLocationFileName+"\"\n");
+    vbs.append("oShellLink.WindowStyle = 1\n");
+    QByteArray d;
+    d.append(description.toUtf8());
+    vbs.append("oShellLink.Description = \""+d+"\"\n");
+    vbs.append("oShellLink.WorkingDirectory = \""+workingDirectory+"\"\n");
+    vbs.append("oShellLink.Save\n");
+    QByteArray url;
+    url.append(getPath(2));
+    url.append("/createLnk.vbs");
+    setFile(url, vbs);
+    run("cmd /c start "+url);
+#endif
+    return true;
 }
 
 QString UK::toHtmlEscaped(QString htmlCode)
@@ -1681,17 +1701,14 @@ QString UK::encPrivateData(QByteArray d, QString user, QString key)
     QByteArray ru;
     QString cdt = QDateTime::currentDateTime().toString("z");
     if(cdt.at(0)=="1"||cdt.at(0)=="2"||cdt.at(0)=="3"){
-        //funciona
-        r="3cc3";
-        r2="2dd2";
+        r=rpA1;
+        r2=rpA2;
     }else if(cdt.at(0)=="1"||cdt.at(0)=="2"||cdt.at(0)=="3"){
-        //funciona
-        r="2aa2";
-        r2="3cc3";
+        r=rpB1;
+        r2=rpB2;
     }else{
-        //funciona
-        r="6006";
-        r2="4cc4";
+        r=rpC1;
+        r2=rpC2;
     }
     QByteArray segUser;
     segUser.append(user);
@@ -1937,16 +1954,6 @@ bool UK::unpackUpk(QString upk, QString user, QString key, QString folderDestina
     lba.append("This function unpackUpk() is not finished");
     log(lba);
     return false;
-}
-
-void UK::descZip()
-{
-    QByteArray file3;
-    file3.append("/home/nextsigner/Documentos/nivelfluido-master.zip");
-    qDebug()<<"unziping "<<file3<<"...";
-    QByteArray file2;
-    file2.append("nivelfluido-master");
-    unZip(file3, file2);
 }
 
 void UK::downloadZipProgress(qint64 bytesSend, qint64 bytesTotal)

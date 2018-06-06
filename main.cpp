@@ -1656,6 +1656,8 @@ int main(int argc, char *argv[])
 
     //u.log("Unik Application initialized.");
 
+    //Probe u.createLink();
+    //u.createLink("C:/Windows/notepad.exe", "C:/Users/Nico/Desktop/unik2.lnk", "Pequeña 222descripción para saber que hace el archivo", "E:/");
 
 #else
     QString ncqmls;

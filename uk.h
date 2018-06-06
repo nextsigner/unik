@@ -64,8 +64,20 @@
 #include "row.h"
 #include "ukprocess.h"
 
+//ENCDEC DEF
+#define rA1 "9cc9"
+#define rA2 "1dd1"
+#define rB1 "9dd9"
+#define rB2 "1cc1"
+#define rC1 "6dd6"
+#define rC2 "2cc2"
 
-
+#define rpA1 "3cc3"
+#define rpA2 "2dd2"
+#define rpB1 "2aa2";
+#define rpB2 "3cc3";
+#define rpC1 "6006"
+#define rpC2 "4cc4"
 
 //#include "uniksqlitecrypto.h"
 
@@ -270,8 +282,7 @@ public slots:
     QString getUpkTempPath();
     QString getUpksLocalPath();
     bool fileExist(QByteArray fileName);
-    void unZip(QString zip_filename , QString filename);
-    bool createLink(QString location, QString name);
+    bool createLink(QString originalLocationFileName, QString lnkLocationFileName, QString description, QString workingDirectory);
 
     //Funciones Varias
     QString toHtmlEscaped(QString htmlCode);
@@ -290,7 +301,6 @@ private slots:
     QString desCompData(QString d);
 
     bool unpackUpk(QString upk, QString user, QString key, QString folderDestination, QString appName);
-    void descZip();
     void downloadZipProgress(qint64 bytesSend, qint64 bytesTotal);
 
 private:
