@@ -282,8 +282,13 @@ public slots:
     QString getUpkTempPath();
     QString getUpksLocalPath();
     bool fileExist(QByteArray fileName);
+#ifdef Q_OS_WIN
     bool createLink(QString originalLocationFileName, QString lnkLocationFileName, QString description, QString workingDirectory);
-
+#endif
+#ifdef Q_OS_LINUX
+    bool createLink(QString execString, QString desktopLocationFileName, QString name, QString comment);
+    bool createLink(QString execString, QString desktopLocationFileName, QString name, QString comment, QString iconPath);
+#endif
     //Funciones Varias
     QString toHtmlEscaped(QString htmlCode);
     void crearPDF(QString captura, QString url, int orientacion);

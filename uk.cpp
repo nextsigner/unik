@@ -900,11 +900,17 @@ QString UK::getPath(int path)
 #endif
 
     }
-    if(path==4){//AppDate location
+    if(path==4){//AppData location
         r = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     }
     if(path==5){//Current Dir
         r = QDir::currentPath();
+    }
+    if(path==6){//Current Desktop
+        r = QStandardPaths::standardLocations(QStandardPaths::DesktopLocation).at(0);
+    }
+    if(path==7){//Current Home
+        r = QStandardPaths::standardLocations(QStandardPaths::HomeLocation).at(0);
     }
     QDir dir(r);
     if (!dir.exists()) {
@@ -1625,11 +1631,12 @@ bool UK::fileExist(QByteArray fileName)
     return a.exists();
 }
 
+
+#ifdef Q_OS_WIN
 bool UK::createLink(QString originalLocationFileName, QString lnkLocationFileName, QString description, QString workingDirectory)
 {
 
-#ifdef Q_OS_WIN
-    QFile f1(originalLocationFileName);
+QFile f1(originalLocationFileName);
     if(!f1.exists()){
         return false;
     }
@@ -1658,9 +1665,39 @@ bool UK::createLink(QString originalLocationFileName, QString lnkLocationFileNam
     url.append("/createLnk.vbs");
     setFile(url, vbs);
     run("cmd /c start "+url);
-#endif
     return true;
 }
+#else
+bool UK::createLink(QString execString, QString desktopLocationFileName, QString name, QString comment)
+{
+    return createLink(execString, desktopLocationFileName, name, comment, "");
+}
+
+bool UK::createLink(QString execString, QString desktopLocationFileName, QString name, QString comment, QString iconPath)
+{
+
+    QByteArray desktopFile = "";
+    desktopFile.append("[Desktop Entry]\n");
+    desktopFile.append("Name="+name+"\n");
+    desktopFile.append("Comment="+comment+"\n");
+    desktopFile.append("Exec="+execString+"\n");
+    QString cf;
+    cf.append(iconPath);
+    if(cf.isEmpty()){
+        cf.append(getPath(4));
+        cf.append("/img/unik.png");
+    }
+    desktopFile.append("Icon="+cf+"\n");
+    desktopFile.append("Terminal=false\n");
+    desktopFile.append("Type=Application\n");
+    QByteArray url;
+    url.append(desktopLocationFileName);
+    setFile(url, desktopFile);
+    run("chmod a+x "+url);
+    return true;
+}
+#endif
+
 
 QString UK::toHtmlEscaped(QString htmlCode)
 {

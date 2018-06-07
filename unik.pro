@@ -22,6 +22,13 @@ linux{
         LIBS += -L$$PWD/../unik-recursos/build_usc_linux/ -lunikSqliteCrypto
         INCLUDEPATH += $$PWD/../unik-recursos/unikSqliteCrypto
         DEPENDPATH += $$PWD/../unik-recursos/unikSqliteCrypto
+
+        #COPIAR ARCHIVOS DENTRO DE APPIMAGE
+        #EXTRA_BINFILES += \
+        #$$PWD/logo_unik_512x512.png
+        #for(FILE,EXTRA_BINFILES){
+            #QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}$$escape_expand(\n\t))
+        #}
     }
 }
 mac{
@@ -45,7 +52,6 @@ windows{
 }
 
 android{
-
     message(Programando en Android)
     QT += webview
 #ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android-build

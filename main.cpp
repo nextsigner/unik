@@ -759,6 +759,29 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("userhost", u.host());
     //Finaliza CHEQUEO DE URLHOST
 
+    //->Comienza configuracion OS
+#ifdef Q_OS_LINUX
+    QByteArray cf;
+    cf.append(u.getPath(4));
+    cf.append("/img");
+    qInfo()<<"Unik Image Folder: "<<cf;
+    QDir configFolder(cf);
+    if(!configFolder.exists()){
+        qInfo()<<"Making Unik Image Folder...";
+        u.mkdir(cf);
+    }
+    QFile icon2(cf+"/unik.png");
+    if(!icon2.exists()){
+        QByteArray cf2;
+        cf2.append(u.getPath(1));
+        cf2.append("/unik.png");
+        QFile icon(cf2);
+        icon.copy(cf+"/unik.png");
+        qInfo()<<"Copyng unik icon file: "<<cf2<<" to "<<cf+"/unik.png";
+    }
+#endif
+    //<-Finaliza configuracion OS
+
     qmlRegisterType<UK>("uk", 1, 0, "UK");
     engine.rootContext()->setContextProperty("engine", &engine);
 
@@ -1656,8 +1679,6 @@ int main(int argc, char *argv[])
 
     //u.log("Unik Application initialized.");
 
-    //Probe u.createLink();
-    //u.createLink("C:/Windows/notepad.exe", "C:/Users/Nico/Desktop/unik2.lnk", "Pequeña 222descripción para saber que hace el archivo", "E:/");
 
 #else
     QString ncqmls;
@@ -1715,6 +1736,10 @@ int main(int argc, char *argv[])
     }
 #endif
 
+
+    //Probe u.createLink();
+    //u.createLink("C:/Windows/notepad.exe", "C:/Users/Nico/Desktop/unik2.lnk", "Pequeña 222descripción para saber que hace el archivo", "E:/");
+   //u.createLink("/home/nextsigner/Escritorio/unik_v2.22.2.AppImage", "/home/nextsigner/Escritorio/eee4.desktop",  "rrr777", "Pequeña 222vo", "/home/nextsigner/Imàgenes/ladaga.jpg");
 
 
     return app.exec();
