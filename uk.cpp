@@ -244,7 +244,7 @@ bool UK::mkUpk(QByteArray folder, QByteArray upkName, QByteArray user, QByteArra
         ro.append(fileList[i]);
         QFile archOrig(ro);
         if(archOrig.size()>0&&!QString(fileList[i]).contains(".qmlc")){
-         //if(archOrig.size()>0){
+            //if(archOrig.size()>0){
             if(!archOrig.open(QIODevice::ReadOnly)){
                 if(debugLog){
                     lba="";
@@ -367,7 +367,7 @@ bool UK::upkToFolder(QByteArray upk, QByteArray user, QByteArray key, QByteArray
     do{
         fileData.append(stream.read(1));
         nl++;
-        }while (nl<upkFile.size());
+    }while (nl<upkFile.size());
     upkFile.close();
 
     QString dec;
@@ -382,7 +382,7 @@ bool UK::upkToFolder(QByteArray upk, QByteArray user, QByteArray key, QByteArray
 
         QStringList m0=f.split(nsep2);
         if(m0.size()!=2||m0.size()>2){
-             qDebug()<<"upkToFolder fail in each "<<i <<" data segments "<<m0.size();
+            qDebug()<<"upkToFolder fail in each "<<i <<" data segments "<<m0.size();
             return false;
         }
         QByteArray urlNf;
@@ -442,7 +442,7 @@ bool UK::isFree(QString upk)
     do{
         fileData.append(stream.read(1));
         nl++;
-        }while (nl<upkFile.size());
+    }while (nl<upkFile.size());
     upkFile.close();
     QString dec;
     dec.append(decData(fileData, "unik-free", "free"));
@@ -456,7 +456,7 @@ bool UK::isFree(QString upk)
 
         QStringList m0=f.split(nsep2);
         if(m0.size()!=2||m0.size()>2){
-             qDebug()<<"upkToFolder fail in each "<<i <<" data segments "<<m0.size();
+            qDebug()<<"upkToFolder fail in each "<<i <<" data segments "<<m0.size();
             return false;
         }else{
             return true;
@@ -619,7 +619,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     bool *pt=false;
     connect(p1, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             [=]  (int exitCode, QProcess::ExitStatus exitStatus)
-    {       
+    {
         //qInfo(">>>>>>>>>>>>>>>>AAAAAAAAAAAAAAAAAAAAAA");
     });
 
@@ -754,7 +754,7 @@ void UK::restartApp()
     auto activityIntent = packageManager.callObjectMethod("getLaunchIntentForPackage",
                                                           "(Ljava/lang/String;)Landroid/content/Intent;",
                                                           activity.callObjectMethod("getPackageName",
-                                                          "()Ljava/lang/String;").object());
+                                                                                    "()Ljava/lang/String;").object());
 
     auto pendingIntent = QAndroidJniObject::callStaticObjectMethod("android/app/PendingIntent", "getActivity",
                                                                    "(Landroid/content/Context;ILandroid/content/Intent;I)Landroid/app/PendingIntent;",
@@ -948,14 +948,14 @@ QString UK::encData(QByteArray d, QString user, QString key)
         r2=rA2;
     }else if(cdt.at(0)=="1"||cdt.at(0)=="2"||cdt.at(0)=="3"){
         //funciona
-//        r="9dd9";
-//        r2="1cc1";
+        //        r="9dd9";
+        //        r2="1cc1";
         r=rB1;
         r2=rB2;
     }else{
         //funciona
-//        r="6dd6";
-//        r2="2cc2";
+        //        r="6dd6";
+        //        r2="2cc2";
         r=rC1;
         r2=rC2;
     }
@@ -1136,7 +1136,7 @@ QString UK::decData(QByteArray d0, QString user, QString key)
             r2.append(l);
         }else  if(i>=8&&i<=67+60){
             passDataBA.append(l);
-    }else{
+        }else{
             if(tipo==0){
                 //nom.append(enc);
             }else{
@@ -1196,7 +1196,7 @@ QByteArray UK::getHttpFile(QByteArray url)
             lba.append("Failure ");
             lba.append(reply->errorString());
             log(lba);
-        }        
+        }
         err.append(reply->errorString());
         return err;
         delete reply;
@@ -1216,16 +1216,16 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
     QNetworkAccessManager mgr;
     QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
     QNetworkRequest req(QUrl(url.constData()));
-    QNetworkReply *reply = mgr.get(req);   
+    QNetworkReply *reply = mgr.get(req);
     connect(reply,SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadZipProgress(qint64,qint64)));
     eventLoop.exec();
     if (reply->error() == QNetworkReply::NoError) {
-            QFile other(ubicacion);
-            other.open(QIODevice::WriteOnly);
-            other.write(reply->readAll());
-            other.flush();
-            other.close();
-            return true;
+        QFile other(ubicacion);
+        other.open(QIODevice::WriteOnly);
+        other.write(reply->readAll());
+        other.flush();
+        other.close();
+        return true;
     }else{
         if(debugLog){
             QByteArray log100;
@@ -1561,10 +1561,10 @@ bool UK::setFile(QByteArray n, QByteArray d)
 {
     QFile file(n);
     if (!file.open(QIODevice::WriteOnly)) {
-            lba="";
-            lba.append("Cannot open file for writing: ");
-            lba.append(file.errorString());
-            log(lba);    
+        lba="";
+        lba.append("Cannot open file for writing: ");
+        lba.append(file.errorString());
+        log(lba);
         return false;
     }
     QTextStream out(&file);
@@ -1576,7 +1576,7 @@ bool UK::setFile(QByteArray n, QByteArray d)
 
 QString UK::getFile(QByteArray n)
 {
-    QString r;    
+    QString r;
     QFile file(n);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         return "error";
@@ -1633,13 +1633,8 @@ bool UK::fileExist(QByteArray fileName)
 
 
 #ifdef Q_OS_WIN
-bool UK::createLink(QString originalLocationFileName, QString lnkLocationFileName, QString description, QString workingDirectory)
+bool UK::createLink(QString execString, QString arguments, QString lnkLocationFileName, QString description, QString workingDirectory)
 {
-
-QFile f1(originalLocationFileName);
-    if(!f1.exists()){
-        return false;
-    }
     QDir d1(workingDirectory);
     if(!d1.exists()){
         return false;
@@ -1647,13 +1642,9 @@ QFile f1(originalLocationFileName);
     QByteArray vbs = "";
     vbs.append("set WshShell = WScript.CreateObject(\"WScript.Shell\")\n");
     vbs.append("set objShell = CreateObject(\"Shell.Application\")\n");
-
-    //vbs.append("strDesktop = WshShell.SpecialFolders(\"Desktop\")\n");
-    //vbs.append("set objFolder = objShell.NameSpace(strDesktop)\n");
-
     vbs.append("set oShellLink = WshShell.CreateShortcut(\""+lnkLocationFileName+"\")\n");
-
-    vbs.append("oShellLink.TargetPath = \""+originalLocationFileName+"\"\n");
+    vbs.append("oShellLink.TargetPath = \""+execString+"\"\n");
+    vbs.append("oShellLink.Arguments = \""+arguments+"\"\n");
     vbs.append("oShellLink.WindowStyle = 1\n");
     QByteArray d;
     d.append(description.toUtf8());
@@ -1665,6 +1656,7 @@ QFile f1(originalLocationFileName);
     url.append("/createLnk.vbs");
     setFile(url, vbs);
     run("cmd /c start "+url);
+    qDebug()<<"vbs... "<<url;
     return true;
 }
 #else
@@ -1833,7 +1825,7 @@ QString UK::encPrivateData(QByteArray d, QString user, QString key)
             encode.append(r2.at(3));
         }else{
             encode.append(uc0);
-        }        
+        }
     }
 
     ret0.append("||||||");
@@ -1864,7 +1856,7 @@ QString UK::decPrivateData(QByteArray d0, QString user, QString key)
     bool passDataWrite=false;
 
     for (int i = 0; i < d.size(); ++i) {
-       QString l;
+        QString l;
         l.append(d.at(i));
         QByteArray enc;
         if(l.contains(r.at(0))){

@@ -283,7 +283,7 @@ public slots:
     QString getUpksLocalPath();
     bool fileExist(QByteArray fileName);
 #ifdef Q_OS_WIN
-    bool createLink(QString originalLocationFileName, QString lnkLocationFileName, QString description, QString workingDirectory);
+    bool createLink(QString execString,  QString arguments, QString lnkLocationFileName, QString description, QString workingDirectory);
 #endif
 #ifdef Q_OS_LINUX
     bool createLink(QString execString, QString desktopLocationFileName, QString name, QString comment);
