@@ -32,6 +32,7 @@
 #include <QtWebView>
 #endif
 
+
 UK u;
 QByteArray debugData;
 QString debugPrevio;
@@ -134,7 +135,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     app.setApplicationDisplayName("unik qml engine");
     app.setApplicationName("unik");
-    app.setOrganizationDomain("http://nsdocs.blogspot.com.ar/");
+    app.setOrganizationDomain("http://unikode.org/");
     app.setOrganizationName("nextsigner");
 
 
@@ -150,19 +151,34 @@ int main(int argc, char *argv[])
     nv.append(QString::number(anio));
     nv.append(".");
     nv.append(QString::number(sem));
-    nv.append(".");
+    //nv.append(".");
     nv.append(QString::number(dia));
-    nv.append(".");
+    //nv.append(".");
     nv.append(QString::number(hora));
     nv.append(QString::number(min));
     nv.append(QString::number(seg));
-
-    bool release=true;
-    if(release){
-        app.setApplicationVersion("2.22");
+    if(QDir::currentPath()=='C:/'){
+        qDebug() << "UNIK_PROJECT_LOCATION: " << QString(UNIK_PROJECT_LOCATION);
+        QString fvp=QString(UNIK_PROJECT_LOCATION);
+        fvp.append("/version");
+        QFile fileVersion(fvp);
+        fileVersion.open(QIODevice::WriteOnly);
+        fileVersion.write(nv.toUtf8());
+        fileVersion.close();
     }else{
-        app.setApplicationVersion(nv.toUtf8());
+        QString fvp;
+        fvp.append(u.getPath(1));
+        fvp.append("/version");
+        qDebug() << "UNIK FILE VERSION: " << fvp;
+        QFile fileVersion(fvp);
+        fileVersion.open(QIODevice::ReadOnly);
+        nv = fileVersion.readAll();
+        fileVersion.close();
     }
+    qDebug() << "UNIK VERSION: " << nv;
+    app.setApplicationVersion(nv.toUtf8());
+
+
 
     bool updateDay=false;
 

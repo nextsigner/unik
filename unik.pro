@@ -4,6 +4,8 @@ CONFIG -= qmlcache
 #CONFIG += console
 #CONFIG+=qml_debug
 
+LOCATION = $$PWD
+DEFINES += UNIK_PROJECT_LOCATION=\\\"$$LOCATION\\\"
 
 linux{
     !android{
@@ -24,11 +26,11 @@ linux{
         DEPENDPATH += $$PWD/../unik-recursos/unikSqliteCrypto
 
         #COPIAR ARCHIVOS DENTRO DE APPIMAGE
-        #EXTRA_BINFILES += \
-        #$$PWD/logo_unik_512x512.png
-        #for(FILE,EXTRA_BINFILES){
-            #QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}$$escape_expand(\n\t))
-        #}
+        EXTRA_BINFILES += \
+        $$PWD/version
+        for(FILE,EXTRA_BINFILES){
+            QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}$$escape_expand(\n\t))
+        }
     }
 }
 mac{
@@ -49,6 +51,16 @@ windows{
     LIBS += -L$$PWD/../libvlc-qt/lib/ -lVLCQtCore -lVLCQtWidgets -lVLCQtQml
     INCLUDEPATH += $$PWD/../libvlc-qt/include
     DEPENDPATH += $$PWD/../libvlc-qt/include
+
+    EXTRA_BINFILES += \
+        $$PWD/version
+    EXTRA_BINFILES_WIN = $${EXTRA_BINFILES}
+    EXTRA_BINFILES_WIN ~= s,/,\\,g
+        DESTDIR_WIN = $${DESTDIR}
+    DESTDIR_WIN ~= s,/,\\,g
+    for(FILE,EXTRA_BINFILES_WIN){
+                QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${FILE} $${DESTDIR_WIN}$$escape_expand(\n\t))
+    }
 }
 
 android{
