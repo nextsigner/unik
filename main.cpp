@@ -161,25 +161,27 @@ int main(int argc, char *argv[])
     QString currentPath="";
     currentPath.append(QDir::currentPath());
     QString carpComp="";
+    QString nomVersion="";
 #ifdef Q_OS_LINUX
      carpComp.append("/home/nextsigner/Documentos");
+    nomVersion="linux_version";
 #endif
 #ifdef Q_OS_WIN
      carpComp.append("C:/");
+    nomVersion="windows_version";
 #endif
-    qDebug() << "UNIK::::::::::" << currentPath;
-    qDebug() << "UNIK2::::::::::" << carpComp;
-    qDebug() << "UNIK3::::::::::" <<currentPath<<carpComp;
-     if(currentPath==carpComp){
+    if(currentPath==carpComp){
         qDebug() << "UNIK_PROJECT_LOCATION: " << QString(UNIK_PROJECT_LOCATION);
         QString fvp=QString(UNIK_PROJECT_LOCATION);
-        fvp.append("/version");
+        fvp.append("/");
+        fvp.append(nomVersion);
         QFile fileVersion(fvp);
         fileVersion.open(QIODevice::WriteOnly);
         fileVersion.write(nv.toUtf8());
         fileVersion.close();
         QString fvp2=qApp->applicationDirPath();
-        fvp2.append("/version");
+        fvp2.append("/");
+         fvp2.append(nomVersion);
         QFile fileVersion2(fvp2);
         fileVersion2.open(QIODevice::WriteOnly);
         fileVersion2.write(nv.toUtf8());
@@ -187,7 +189,8 @@ int main(int argc, char *argv[])
     }else{
         QString fvp;
         fvp.append(qApp->applicationDirPath());
-        fvp.append("/version");
+        fvp.append("/");
+        fvp.append(nomVersion);
         qDebug() << "UNIK FILE VERSION: " << fvp;
         QFile fileVersion(fvp);
         fileVersion.open(QIODevice::ReadOnly);
