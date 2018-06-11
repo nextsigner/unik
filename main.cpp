@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
         fileVersion2.close();
     }else{
         QString fvp;
-        fvp.append(u.getPath(1));
+        fvp.append(qApp->applicationDirPath());
         fvp.append("/version");
         qDebug() << "UNIK FILE VERSION: " << fvp;
         QFile fileVersion(fvp);
@@ -727,7 +727,7 @@ int main(int argc, char *argv[])
     //Cominenza CHEQUEO DE URLHOST
     QByteArray hcomp;
     //QString urlHost1=u.getHttpFile("http://unikdev.net/unik_host.php");
-    QString urlHost1=u.getHttpFile("http://codigosenaccion.com/unik_host.php");
+    QString urlHost1=u.getHttpFile("http://c1300733.ferozo.com/unik_host.php");
 
     QString urlHost2;
     QString urlHost3;
