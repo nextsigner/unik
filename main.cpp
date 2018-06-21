@@ -164,9 +164,15 @@ int main(int argc, char *argv[])
     currentPath.append(QDir::currentPath());
     QString carpComp="";
     QString nomVersion="";
-#ifdef Q_OS_LINUX
-     carpComp.append("/home/nextsigner/Documentos");
-    nomVersion="linux_version";
+#ifdef Q_OS_LINUX    
+#ifdef __arm__
+     carpComp.append("/home/pi/nsp");
+    nomVersion="linux_rpi_version";
+#else
+    carpComp.append("/home/nextsigner/Documentos");
+   nomVersion="linux_version";
+#endif
+
 #endif
 #ifdef Q_OS_WIN
      carpComp.append("C:/");
@@ -283,7 +289,11 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_ANDROID
     engine.load("qrc:/SplashAndroid.qml");
 #else
+#ifndef __arm__
     engine.load("qrc:/Splash.qml");
+#else
+    engine.load("://Splash.qml");
+#endif
 #endif
 
     //Example Connection for unik engine into uk.cpp method.
@@ -1731,6 +1741,9 @@ int main(int argc, char *argv[])
     unikPluginsPath.append(u.getPath(1));
     unikPluginsPath.append("/unikplugins");
     engine.addImportPath(unikPluginsPath);
+#ifdef __arm__
+    engine.addImportPath("/home/pi/unik/qml");
+#endif
     engine.load(QUrl(mainQml));
     QQmlComponent component(&engine, QUrl(mainQml));
     engine.addImportPath(qmlImportPath);
@@ -1754,7 +1767,7 @@ int main(int argc, char *argv[])
 #ifndef __arm__
         engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 #else
-        engine.load(QUrl(QStringLiteral("qrc:/main_rpi.qml")));
+        engine.load("://main_rpi.qml");
 #endif
 #endif
     }

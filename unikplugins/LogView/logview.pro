@@ -5,13 +5,19 @@ QT += qml
 
 linux{
     !android{
- qmakeforce.target = dummy
-  qmakeforce.commands = rm -f Makefile ##to force rerun of qmake
-  qmakeforce.depends = FORCE
-  PRE_TARGETDEPS += $$qmakeforce.target
-  QMAKE_EXTRA_TARGETS += qmakeforce
-  DESTDIR= ../../../unik-recursos/build_unik_linux_64/qml/LogView
-        message(Destino GNU/Linux NO Android $$DESTDIR)
+        qmakeforce.target = dummy
+        qmakeforce.commands = rm -f Makefile ##to force rerun of qmake
+        qmakeforce.depends = FORCE
+        PRE_TARGETDEPS += $$qmakeforce.target
+        QMAKE_EXTRA_TARGETS += qmakeforce
+        !contains(QMAKE_HOST.arch, arm.*):{
+            DESTDIR= ../../../unik-recursos/build_unik_linux_64/qml/LogView
+            message(Destino GNU/Linux NO Android $$DESTDIR)
+        }else{
+            #DESTDIR= /home/pi/unik/qml/LogView
+            DESTDIR= $$PWD/build_LogView_linux_rpi/qml
+            message(Destino GNU/Linux RPI3 $$DESTDIR)
+        }
     }
 }
 win32{

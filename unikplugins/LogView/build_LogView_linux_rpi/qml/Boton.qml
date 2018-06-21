@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Layouts 1.1
+import QtQuick.Layouts 1.3
 Item {
     id: raiz
     property alias w: raiz.width
@@ -9,7 +9,6 @@ Item {
     property string b:'red'
     property alias f: txt.font.family
     property int r:6
-    property alias d: tip.text
     property int tp: 0
     signal clicking
     Layout.preferredWidth:  w
@@ -49,8 +48,6 @@ Item {
         anchors.fill: raiz
         property bool pre: false
         hoverEnabled: true
-        onEntered:{if(raiz.d!==''){xTip.visible=true}}
-        onExited: xTip.visible=false
         onClicked: {
             ma.pre=false
             an.start()
@@ -73,39 +70,5 @@ Item {
         font.pixelSize: raiz.height*0.8
         anchors.centerIn: raiz
         font.family: "FontAwesome"
-    }
-    Rectangle{
-        id:xTip
-        width: tip.width+app.fs*0.5
-        height: tip.height+app.fs*0.2
-        visible:false
-        border.width: 1
-        border.color: txt.color
-        color: raiz.b
-        radius: 6
-        Text {
-            id: tip
-            width: contentWidth
-            height: app.fs*0.5
-            font.pixelSize: parent.height*0.7
-            anchors.centerIn: parent
-            text:"?"
-            color: txt.color
-        }
-    }
-    Component.onCompleted: {
-        if(raiz.tp===0){
-            xTip.rotation=0
-            xTip.anchors.verticalCenter= raiz.verticalCenter
-            xTip.anchors.left=raiz.right
-            xTip.anchors.leftMargin=app.fs*0.1
-        }
-        if(raiz.tp===1){
-            xTip.rotation=-180
-            xTip.anchors.verticalCenter= raiz.verticalCenter
-            xTip.anchors.right=raiz.left
-            xTip.anchors.rightMargin=app.fs*0.1
-            tip.rotation=180
-        }
     }
 }

@@ -39,6 +39,36 @@ linux{
             #QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}$$escape_expand(\n\t))
             #message(Copyng $${FILE} $${DESTDIR}$$escape_expand(\n\t))
         #}
+    }else{
+        #Set Working Directory for RPI3 compilation in /home/pi/nsp
+        DESTDIR= /home/pi/unik
+        message(Current Executable Path: $$DESTDIR)
+        message(Current Working Directory: $$PWD)
+
+        #COPIAR ARCHIVOS NECESARIOS EN RPI3
+        #QMAKE_POST_LINK += $$quote(mkdir $${DESTDIR}/qml$$escape_expand(\n\t))
+        #QMAKE_POST_LINK += $$quote(mkdir $${DESTDIR}/qml/LogView$$escape_expand(\n\t))
+        #LOGVIEWPATH=$$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/LogView
+        #QMAKE_POST_LINK += $$quote(cp $$LOGVIEWPATH/liblogview.so $${DESTDIR}/qml/LogView$$escape_expand(\n\t))
+        #QMAKE_POST_LINK += $$quote(cp $$LOGVIEWPATH/LogView.qml $${DESTDIR}/qml/LogView$$escape_expand(\n\t))
+        EXTRA_BINFILES += \
+        $$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/qmldir \
+        $$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/liblogview.so \
+        $$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/Boton.qml \
+        $$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/LineResizeTop.qml \
+        $$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/LogView.qml
+        for(FILE,EXTRA_BINFILES){
+            QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}/qml/LogView$$escape_expand(\n\t))
+            message(Copyng $${FILE} $${DESTDIR}$$escape_expand(\n\t))
+        }
+
+        #COPIAR ARCHIVOS NECESARIOS EN RPI3 RAIZ
+        #EXTRA_BINFILES += \
+        #$$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/liblogview.so
+        #for(FILE,EXTRA_BINFILES){
+            #QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}$$escape_expand(\n\t))
+            #message(Copyng $${FILE} $${DESTDIR}$$escape_expand(\n\t))
+        #}
     }
 
 
