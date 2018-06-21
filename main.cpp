@@ -27,7 +27,9 @@
 #include "uk.h"
 #ifndef Q_OS_ANDROID
 #include "qmlclipboardadapter.h"
+#ifndef __arm__
 #include <QtWebEngine>
+#endif
 #else
 #include <QtWebView>
 #endif
@@ -242,7 +244,9 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_ANDROID
     QtWebView::initialize();
 #else
+    #ifndef __arm__
     QtWebEngine::initialize();
+    #endif
 #endif
 
     QQmlApplicationEngine engine;
@@ -1747,7 +1751,11 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_ANDROID
         engine.load(QUrl(QStringLiteral("qrc:/mainAndroid.qml")));
 #else
+#ifndef __arm__
         engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+#else
+        engine.load(QUrl(QStringLiteral("qrc:/main_rpi.qml")));
+#endif
 #endif
     }
     u.deleteFile(urlConfigJsonT.toUtf8());

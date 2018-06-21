@@ -561,7 +561,11 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     QByteArray tempFile;
     tempFile.append(getPath(2));
     tempFile.append("/");
+#ifndef __arm__
     tempFile.append(QString::number(a.toSecsSinceEpoch()));
+#else
+    tempFile.append(QString::number(a.toMSecsSinceEpoch()));
+#endif
     tempFile.append(".zip");
     qInfo("temp zip location "+tempFile);
     //tempFile.append("/nivelfluido-master.zip");
@@ -616,7 +620,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     cl.append(carpetaDestino);
     cl.append("\"");
     QProcess *p1 = new QProcess(this);
-    bool *pt=false;
+    bool pt=false;
     connect(p1, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             [=]  (int exitCode, QProcess::ExitStatus exitStatus)
     {
@@ -940,13 +944,13 @@ QString UK::encData(QByteArray d, QString user, QString key)
     QByteArray r2="6226";
     QByteArray ru;
     QString cdt = QDateTime::currentDateTime().toString("z");
-    if(cdt.at(0)=="1"||cdt.at(0)=="2"||cdt.at(0)=="3"){
+    if(QString(cdt.at(0))=="1"||QString(cdt.at(0))=="2"||QString(cdt.at(0))=="3"){
         //funciona
         //r="9cc9";
         r=rA1;
         //r2="1dd1";
         r2=rA2;
-    }else if(cdt.at(0)=="1"||cdt.at(0)=="2"||cdt.at(0)=="3"){
+    }else if(QString(cdt.at(0))=="1"||QString(cdt.at(0))=="2"||QString(cdt.at(0))=="3"){
         //funciona
         //        r="9dd9";
         //        r2="1cc1";
@@ -1729,10 +1733,10 @@ QString UK::encPrivateData(QByteArray d, QString user, QString key)
     QByteArray r2="6226";
     QByteArray ru;
     QString cdt = QDateTime::currentDateTime().toString("z");
-    if(cdt.at(0)=="1"||cdt.at(0)=="2"||cdt.at(0)=="3"){
+    if(QString(cdt.at(0))=="1"||QString(cdt.at(0))=="2"||QString(cdt.at(0))=="3"){
         r=rpA1;
         r2=rpA2;
-    }else if(cdt.at(0)=="1"||cdt.at(0)=="2"||cdt.at(0)=="3"){
+    }else if(QString(cdt.at(0))=="1"||QString(cdt.at(0))=="2"||QString(cdt.at(0))=="3"){
         r=rpB1;
         r2=rpB2;
     }else{

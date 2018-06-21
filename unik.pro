@@ -1,4 +1,10 @@
-QT += qml quick sql multimedia
+QT += qml quick sql
+!contains(QMAKE_HOST.arch, arm.*):{
+    message(NO Desarrollando para RPI)
+    QT += multimedia
+}else{
+    message(Desarrollando para RPI)
+}
 CONFIG += c++11
 CONFIG -= qmlcache
 #CONFIG += console
@@ -10,6 +16,7 @@ DEFINES += UNIK_PROJECT_LOCATION=\\\"$$LOCATION\\\"
 linux{
     !android{
         message(Linux NO ANDROID)
+    !contains(QMAKE_HOST.arch, arm.*):{
         QT += webengine webview
         DESTDIR= ../build_unik_linux_64
         message(Ubicaciòn del Ejecutable: $$DESTDIR)
@@ -32,6 +39,9 @@ linux{
             #QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}$$escape_expand(\n\t))
             #message(Copyng $${FILE} $${DESTDIR}$$escape_expand(\n\t))
         #}
+    }
+
+
 
         #Deploy Command Line Example
         #linuxdeployqt /media/nextsigner/ZONA-A1/nsp/unik-recursos/build_unik_linux_64/unik -qmldir=/media/nextsigner/ZONA-A1/nsp/unik -appimage -always-overwrite -bundle-non-qt-libs -no-plugins

@@ -53,7 +53,7 @@ ApplicationWindow {
         }
         Image {
             anchors.fill: parent
-            source: "qrc:/logo_unik_512x512.png"
+            source: "qrc:/resources/logo_unik_300.png"
         }
         Text{
             text: "by <b>@nextsigner</b>"

@@ -54,7 +54,7 @@ ApplicationWindow{
             anchors.top: parent.top
             anchors.horizontalCenter: parent.horizontalCenter
             //anchors.centerIn: parent
-            source: "qrc:/logo_unik_512x512.png"
+            source: "qrc:/resources/logo_unik_300.png"
             opacity: 0.0
             Behavior on opacity {
                 NumberAnimation{
