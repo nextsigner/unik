@@ -62,7 +62,6 @@
 #include <QThread>
 
 #include "row.h"
-#include "ukprocess.h"
 
 //ENCDEC DEF
 #define rA1 "9cc9"
