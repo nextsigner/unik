@@ -228,9 +228,13 @@ int main(int argc, char *argv[])
     QByteArray appArg5="";
     QByteArray appArg6="";
 
-
+#ifndef __arm__
     QByteArray urlGit="https://github.com/nextsigner/unik-tools";
     QByteArray moduloGit="unik-tools";
+#else
+    QByteArray urlGit="https://github.com/nextsigner/unik-tools-rpi";
+    QByteArray moduloGit="unik-tools-rpi";
+#endif
     QByteArray modoDeEjecucion="indefinido";
     QByteArray lba="";
     QString listaErrores;
@@ -485,10 +489,17 @@ int main(int argc, char *argv[])
     }
 #else
     QString cut;
+#ifndef __arm__
     cut.append(u.getFile(pws+"/unik-tools/main.qml"));
     if(!cut.contains("objectName: \'unik-tools\'")){
         qInfo("unik-tools have any fail! repairing..."+dupl.toUtf8());
         bool autd=u.downloadGit("https://github.com/nextsigner/unik-tools.git", dupl.toUtf8());
+#else
+    cut.append(u.getFile(pws+"/unik-tools-rpi/main.qml"));
+    if(!cut.contains("objectName: \'unik-tools\'")){
+        qInfo("unik-tools have any fail! repairing..."+dupl.toUtf8());
+        bool autd=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi.git", dupl.toUtf8());
+#endif
     }else{
         qInfo("unik-tools module is ready!");
     }
@@ -519,6 +530,9 @@ int main(int argc, char *argv[])
     QString utp;
     utp.append(dupl);
     utp.append("/unik-tools");
+#ifdef __arm__
+    utp.append("-rpi");
+#endif
     QDir dirUnikToolsLocation(utp);
     QFile utmain(utp+"/main.qml");
     if (!dirWS.exists()||!dirUnikToolsLocation.exists()||!utmain.exists()) {
@@ -532,7 +546,11 @@ int main(int argc, char *argv[])
             if(!dirUnikToolsLocation.exists()){
                 dirUnikToolsLocation.mkpath(".");
             }
+#ifndef __arm__
             bool unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools", dupl.toUtf8());
+#else
+            bool unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi", dupl.toUtf8());
+#endif
             lba="";
             if(unikToolDownloaded){
                 lba.append("Unik-Tools downloaded.");
@@ -841,7 +859,11 @@ int main(int argc, char *argv[])
     tempFolder.append(QDateTime::currentDateTime().toString("hhmmss"));
     QString pq;
     pq.append(pws);
+#ifndef __arm__
     pq.append("/unik-tools/");
+#else
+    pq.append("/unik-tools-rpi/");
+#endif
     QDir dir0(pq);
     if (!dir0.exists()) {
         dir0.mkpath(".");
@@ -1203,7 +1225,11 @@ int main(int argc, char *argv[])
             }
             pq="";
             pq.append(pws);
+#ifndef __arm__
             pq.append("/unik-tools/");
+#else
+            pq.append("/unik-tools-rpi/");
+#endif
         }
         u.mkdir(pq);
         QString arg2;

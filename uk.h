@@ -80,28 +80,6 @@
 
 //#include "uniksqlitecrypto.h"
 
-
-//#include "frame.h"
-
-//#include "definiciones.h"
-
-/*class ROW : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(QStringList fila READ getFila WRITE setFila)
-public:
-    explicit ROW(QObject *parent = nullptr);
-    QStringList fila;
-    void setFila(QStringList f){
-        fila = f;
-    }
-    QStringList getFila(){
-        return fila;
-    }
-
-};*/
-//#define() = MY_DEFINE
-
 class UK : public QObject
 {
     Q_OBJECT
@@ -116,10 +94,8 @@ class UK : public QObject
 public:
     explicit UK(QObject *parent = nullptr);
     ~UK();
-    //static const QString dataVersion = QByteArrayLiteral(MY_DEFINE);
     QStringList uErrors;
     bool enabledInj;
-    //Frame ukIPF;
 
     //Propiedades para QML
     int porc;
@@ -254,6 +230,7 @@ public slots:
     QQuickWindow *mainWindow(int n);
     void setProperty(const QString name, const QVariant &value);
     QVariant getProperty(const QString name);
+    bool isRPI();
 
     //Funciones Network
     QByteArray getHttpFile(QByteArray url);

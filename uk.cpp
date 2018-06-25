@@ -1175,6 +1175,19 @@ QVariant UK::getProperty(const QString name)
     return _engine->rootContext()->property(name.toUtf8());
 }
 
+bool UK::isRPI()
+{
+#ifdef __arm__
+#ifndef Q_OS_ANDROID
+    return true;
+#else
+    return false;
+#endif
+#else
+    return false;
+#endif
+}
+
 QByteArray UK::getHttpFile(QByteArray url)
 {
     QEventLoop eventLoop;

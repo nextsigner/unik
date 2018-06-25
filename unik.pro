@@ -129,9 +129,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp \
     uk.cpp \
     row.cpp \
-    frame.cpp \
-    asterisk.cpp \
-    ukprocess.cpp
+    asterisk.cpp
 
 RESOURCES += qml.qrc
 
@@ -150,9 +148,7 @@ HEADERS += \
     uk.h \
     qmlclipboardadapter.h \
     row.h \
-    frame.h \
-    asterisk.h \
-    ukprocess.h
+    asterisk.h
 
 DISTFILES += \
     android/AndroidManifest.xml \

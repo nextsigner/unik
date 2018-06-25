@@ -17,8 +17,6 @@ ApplicationWindow {
     onVisibleChanged: {
         if(!visible){
             appSplash.flags =  Qt.Window
-            //appSplash.width=0
-            //appSplash.height=0
             if(Qt.platform.os==='android'){
                     //appSplash.close()
             }
@@ -66,6 +64,7 @@ ApplicationWindow {
         }
     }
     Rectangle{
+        id:xLogTxt
         width: logtxt.contentWidth+20
         height: 20
         anchors.top: r.bottom
@@ -73,7 +72,6 @@ ApplicationWindow {
         anchors.horizontalCenter: r.horizontalCenter
         color: "#333333"
         radius: 6
-        border.width: 1
         border.color: appSplash.c1
         Text{
             id: logtxt
@@ -81,6 +79,13 @@ ApplicationWindow {
             font.pixelSize: 10
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenter: parent.horizontalCenter
+        }
+        Component.onCompleted: {
+            if(!unik.isRPI()){
+                xLogTxt.border.width=1
+            }else{
+                xLogTxt.border.width=0
+            }
         }
     }
     MouseArea{

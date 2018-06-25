@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import QtQuick.Controls 1.2
+import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.0
 import QtQuick.Dialogs 1.2
@@ -244,18 +244,11 @@ ApplicationWindow {
             }
         }
     }
-//    Timer{
-//        running: true
-//        repeat: true
-//        interval: 1000
-//        onTriggered: unik.setProperty("logViewVisible", true)
-//    }
     Component.onCompleted: {
         if(Qt.platform.os==='windows'){
             var a1 = Screen.desktopAvailableHeight
             var altoBarra = a1-unik.frameHeight(app)
             app.height = a1-altoBarra
         }
-        //console.log(unik.stdErr)
     }
 }

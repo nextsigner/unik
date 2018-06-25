@@ -1,5 +1,5 @@
-import QtQuick 2.0
-import QtQuick.Layouts 1.1
+import QtQuick 2.7
+import QtQuick.Layouts 1.0
 Item {
     id: raiz
     property alias w: raiz.width
@@ -21,13 +21,13 @@ Item {
         color: 'transparent'
         radius: raiz.r
         anchors.centerIn: raiz
-        border.width: 1
+        //border.width: 1
         border.color: txt.color
         Rectangle{
             id:bg
             color: raiz.b
             anchors.fill: parent
-            border.width: 1
+            //border.width: 1
             border.color: txt.color
             radius: parent.radius
         }
@@ -53,7 +53,7 @@ Item {
         onExited: xTip.visible=false
         onClicked: {
             ma.pre=false
-            an.start()
+            //an.start()
             clicking()
         }
         onPressed: {ma.pre=true;tp.start()}
@@ -79,7 +79,7 @@ Item {
         width: tip.width+app.fs*0.5
         height: tip.height+app.fs*0.2
         visible:false
-        border.width: 1
+        //border.width: 1
         border.color: txt.color
         color: raiz.b
         radius: 6
@@ -94,6 +94,15 @@ Item {
         }
     }
     Component.onCompleted: {
+        if(!unik.isRPI()){
+            rect.border.width=1
+            xTip.border.width=1
+            bg.border.width=1
+        }else{
+            rect.border.width=0
+            xTip.border.width=0
+            bg.border.width=0
+        }
         if(raiz.tp===0){
             xTip.rotation=0
             xTip.anchors.verticalCenter= raiz.verticalCenter
