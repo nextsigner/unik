@@ -1,3 +1,3 @@
 #!/bin/bash
-sudo apt-get install qt5-default && sudo apt-get install qtdeclarative5-* && sudo apt-get install qml-module-qtquick*  && sudo apt-get install  qtquick1-*  && sudo apt-get install  qtquickcontrols5-*  && sudo apt-get install qml-module-qtquick2 && sudo apt-get install  qtcreator
+sudo apt-get -y install cmake qt5-default qtdeclarative5-* qml-module-qtquick*  qtquickcontrols5-* qml-module-qtquick2 qtcreator
 
