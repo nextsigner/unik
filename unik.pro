@@ -39,6 +39,10 @@ linux{
             #QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}$$escape_expand(\n\t))
             #message(Copyng $${FILE} $${DESTDIR}$$escape_expand(\n\t))
         #}
+
+        #Deploy Command Line Example
+        #linuxdeployqt /media/nextsigner/ZONA-A1/nsp/unik-recursos/build_unik_linux_64/unik -qmldir=/media/nextsigner/ZONA-A1/nsp/unik -appimage -always-overwrite -bundle-non-qt-libs -no-plugins
+        #mv /media/nextsigner/ZONA-A1/nsp/unik-recursos/build_unik_linux_64.AppImage /home/nextsigner/Escritorio/unik_v2.24.AppImage
     }else{
         #Set Working Directory for RPI3 compilation in /home/pi/nsp
         DESTDIR= /home/pi/unik
@@ -59,23 +63,18 @@ linux{
         $$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/LogView.qml
         for(FILE,EXTRA_BINFILES){
             QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}/qml/LogView$$escape_expand(\n\t))
-            message(Copyng $${FILE} $${DESTDIR}$$escape_expand(\n\t))
+            #message(Copyng $${FILE} $${DESTDIR}$$escape_expand(\n\t))
         }
 
         #COPIAR ARCHIVOS NECESARIOS EN RPI3 RAIZ
-        #EXTRA_BINFILES += \
-        #$$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/liblogview.so
-        #for(FILE,EXTRA_BINFILES){
-            #QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}$$escape_expand(\n\t))
+        EXTRA_BINFILES2 += \
+        $$PWD/logo_unik.png
+        for(FILE2,EXTRA_BINFILES2){
+            QMAKE_POST_LINK += $$quote(cp $${FILE2} $${DESTDIR}$$escape_expand(\n\t))
             #message(Copyng $${FILE} $${DESTDIR}$$escape_expand(\n\t))
-        #}
+        }
     }
 
-
-
-        #Deploy Command Line Example
-        #linuxdeployqt /media/nextsigner/ZONA-A1/nsp/unik-recursos/build_unik_linux_64/unik -qmldir=/media/nextsigner/ZONA-A1/nsp/unik -appimage -always-overwrite -bundle-non-qt-libs -no-plugins
-        #mv /media/nextsigner/ZONA-A1/nsp/unik-recursos/build_unik_linux_64.AppImage /home/nextsigner/Escritorio/unik_v2.24.AppImage
     }
 }
 mac{

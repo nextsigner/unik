@@ -179,6 +179,11 @@ public:
         _engine = e;
         //connect(_engine, SIGNAL(quit()), this, SLOT(engineQuited()));
     }
+
+    Q_INVOKABLE bool createLnk(QString execString, QString destopLocationFilename, QString name, QString comment){
+        return createLink(execString, destopLocationFilename, name, comment);
+    }
+
     QString inj;
     QString initStdString;
     bool debugLog=false;
@@ -262,8 +267,8 @@ public slots:
     bool createLink(QString execString,  QString arguments, QString lnkLocationFileName, QString description, QString workingDirectory);
 #endif
 #ifdef Q_OS_LINUX
-    bool createLink(QString execString, QString desktopLocationFileName, QString name, QString comment);
-    bool createLink(QString execString, QString desktopLocationFileName, QString name, QString comment, QString iconPath);
+    Q_INVOKABLE bool createLink(QString execString, QString desktopLocationFileName, QString name, QString comment);
+    Q_INVOKABLE bool createLink(QString execString, QString desktopLocationFileName, QString name, QString comment, QString iconPath);
 #endif
     //Funciones Varias
     QString toHtmlEscaped(QString htmlCode);
