@@ -50,8 +50,8 @@ linux{
         message(Current Working Directory: $$PWD)
 
         #COPIAR ARCHIVOS NECESARIOS EN RPI3
-        #QMAKE_POST_LINK += $$quote(mkdir $${DESTDIR}/qml$$escape_expand(\n\t))
-        #QMAKE_POST_LINK += $$quote(mkdir $${DESTDIR}/qml/LogView$$escape_expand(\n\t))
+        QMAKE_POST_LINK += $$quote(mkdir $${DESTDIR}/qml$$escape_expand(\n\t))
+        QMAKE_POST_LINK += $$quote(mkdir $${DESTDIR}/qml/LogView$$escape_expand(\n\t))
         #LOGVIEWPATH=$$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/LogView
         #QMAKE_POST_LINK += $$quote(cp $$LOGVIEWPATH/liblogview.so $${DESTDIR}/qml/LogView$$escape_expand(\n\t))
         #QMAKE_POST_LINK += $$quote(cp $$LOGVIEWPATH/LogView.qml $${DESTDIR}/qml/LogView$$escape_expand(\n\t))
@@ -63,7 +63,7 @@ linux{
         $$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/LogView.qml
         for(FILE,EXTRA_BINFILES){
             QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}/qml/LogView$$escape_expand(\n\t))
-            #message(Copyng $${FILE} $${DESTDIR}$$escape_expand(\n\t))
+            message(Copyng $${FILE} $${DESTDIR}$$escape_expand(\n\t))
         }
 
         #COPIAR ARCHIVOS NECESARIOS EN RPI3 RAIZ
