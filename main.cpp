@@ -178,6 +178,10 @@ int main(int argc, char *argv[])
      carpComp.append("C:/");
     nomVersion="windows_version";
 #endif
+#ifdef Q_OS_OSX
+    carpComp.append("/Users/qt/nsp/unik-recursos/build_osx_clang64/unik.app/Contents/MacOS");
+   nomVersion="macos_version";
+#endif
     if(currentPath==carpComp){
         qDebug() << "UNIK_PROJECT_LOCATION: " << QString(UNIK_PROJECT_LOCATION);
         QString fvp=QString(UNIK_PROJECT_LOCATION);

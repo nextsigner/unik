@@ -79,7 +79,7 @@ linux{
 }
 mac{
     QT += webengine
-    DESTDIR=../unik/build
+    DESTDIR=../unik-recursos/build_osx_clang64
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.11
     message(MkLevel Desarrollo en Mac)
     ICON = logo.icns
@@ -87,6 +87,9 @@ mac{
     #APP_QML_FILES.files = ffmpegsumo.so
     #APP_QML_FILES.path = Contents/Resources
     #QMAKE_BUNDLE_DATA += APP_QML_FILES
+
+    #Deploy command line example
+    #/Users/qt/Qt5.9.1/5.9.1/clang_64/bin/macdeployqt /Users/qt/nsp/unik-recursos/build_osx_clang64/unik.app -qmldir=/Users/qt/nsp/unik -no-strip -dmg
 }
 windows{
     QT += webengine

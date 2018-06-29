@@ -180,10 +180,11 @@ public:
         //connect(_engine, SIGNAL(quit()), this, SLOT(engineQuited()));
     }
 
+#ifdef __arm__
     Q_INVOKABLE bool createLnk(QString execString, QString destopLocationFilename, QString name, QString comment){
         return createLink(execString, destopLocationFilename, name, comment);
     }
-
+#endif∫
     QString inj;
     QString initStdString;
     bool debugLog=false;

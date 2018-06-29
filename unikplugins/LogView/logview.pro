@@ -20,6 +20,18 @@ linux{
         }
     }
 }
+macos{
+    DESTDIR= $$PWD/build_LogView_macos_clang64/qml
+    message(Destino Macos $$DESTDIR)
+    EXTRA_BINFILES += \
+        $$PWD/qmldir \
+        $$PWD/Boton.qml \
+        $$PWD/LineResizeTop.qml \
+        $$PWD/LogView.qml
+    for(FILE,EXTRA_BINFILES){
+        QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}$$escape_expand(\n\t))
+    }
+}
 win32{
     qmakeforce.target = dummy
     qmakeforce.commands = cmd /c del Makefile ##to force rerun of qmake

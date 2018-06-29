@@ -1676,7 +1676,11 @@ bool UK::createLink(QString execString, QString arguments, QString lnkLocationFi
     qDebug()<<"vbs... "<<url;
     return true;
 }
-#else
+#endif
+#ifdef Q_OS_OSX
+
+#endif
+#ifdef Q_OS_LINUX
 bool UK::createLink(QString execString, QString desktopLocationFileName, QString name, QString comment)
 {
     return createLink(execString, desktopLocationFileName, name, comment, "");
