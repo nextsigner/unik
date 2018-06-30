@@ -27,71 +27,18 @@ QString UK::host()
 }
 
 void UK::ukClose(QQuickCloseEvent *close){
-    QSettings settings;
-    _engine->rootContext()->setContextProperty("logViewVisible", true);
-    qInfo("ApplicationWindow closed. ");
-    db.close();
-
-    /*
-     * This is a disable unik code :)
-     * This method is replaced by
-     * onClosing{
-     *      //close.accepted=false
-     *      engine.load(appDirs+'/unik-tools/main.qml')
-     *  }
-     *
-     *
-#ifndef Q_OS_ANDROID
-    QByteArray unikMainLocation;
-
-    unikMainLocation.append(settings.value("ws").toString());
-    unikMainLocation.append("/unik-tools/main.qml");
-    qInfo("Loading "+unikMainLocation);
-   //_engine->load(unikMainLocation);
-   QStringList listaErrores;
-    QQmlComponent component(_engine, QUrl::fromLocalFile(unikMainLocation));
-   if (component.errors().size()>0){
-       log("Errors detected!");
-       for (int i = 0; i < component.errors().size(); ++i) {
-           listaErrores.append(component.errors().at(i).toString());
-           listaErrores.append("\n");
-       }
-       //qDebug()<<"------->"<<component.errors();
-       _engine->rootContext()->setContextProperty("unikError", listaErrores);
-#ifdef Q_OS_ANDROID
-       _engine->load(QUrl(QStringLiteral("qrc:/mainAndroid.qml")));
-#else
-       _engine->load(QUrl(QStringLiteral("qrc:/main.qml")));
-#endif
-
-   }
-
- #else
-    _engine->rootContext()->setContextProperty("wait", true);
-    log("Android ApplicationWindow closed. ");
-    db.close();
-    QObject *aw0 = _engine->rootObjects().at(0);
-    //qDebug()<<"awsplash: "<<aw0->property("objectName");
-    if(aw0->property("objectName")=="awsplash"){
-        aw0->setProperty("visible", false);
+    if(close){
+        qInfo("ApplicationWindow closed.");
+        db.close();
     }
-    QByteArray unikMainLocation;
-    //unikMainLocation.append(getPath(3));
-    unikMainLocation.append(settings.value("ws").toString());
-    unikMainLocation.append("/unik-tools/main.qml");
-
-    //if(!canCloseApp){
-        _engine->load(unikMainLocation);
-    //}else{
-        //qApp->quit();
-    //}
-
-#endif        
-    */
 }
 
 void UK::engineExited(int n)
 {
+    QByteArray ld;
+    ld.append("Unik Qml Engine exited with code: ");
+    ld.append(QString::number(n));
+    qInfo()<<ld;
     db.close();
 }
 
@@ -544,8 +491,8 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     QString carpetaDestino;
     QStringList m0 = u.split(".git");
     if(m0.size()<2){
-        qInfo("Url no valid: "+url);
-        qInfo("Use: https://github.com/<user>/<repository>.git");
+        qInfo()<<"Url no valid: "<<url;
+        qInfo()<<"Use: https://github.com/<user>/<repository>.git";
 
     }else{
         QStringList m1=u.split("/");
@@ -620,13 +567,11 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     cl.append(carpetaDestino);
     cl.append("\"");
     QProcess *p1 = new QProcess(this);
-    bool pt=false;
-    connect(p1, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+    /*connect(p1, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             [=]  (int exitCode, QProcess::ExitStatus exitStatus)
     {
         //qInfo(">>>>>>>>>>>>>>>>AAAAAAAAAAAAAAAAAAAAAA");
-    });
-
+    });*/
     p1->start(cl);
     p1->deleteLater();
     while (p1->waitForFinished()) {
@@ -1067,7 +1012,6 @@ QString UK::decData(QByteArray d0, QString user, QString key)
 
     QByteArray arch;
     QByteArray nom;
-    int nl=0;
     int tipo=0;
     QByteArray r;
     QByteArray r2;
@@ -1390,11 +1334,6 @@ bool UK::sqliteInit(QString pathName)
     return ret;
 }
 
-bool UK::sqliteCryptoInit(QString pathName, QString user, QString key)
-{
-    return false;
-}
-
 bool UK::sqlQuery(QString query)
 {
     QSqlQuery q;
@@ -1424,76 +1363,7 @@ bool UK::sqlQuery(QString query)
     return false;
 }
 
-QString UK::getJsonSql(QString table, QString query, QString type)
-{
-    QString j="{}";
-    QSqlQuery consultar;
-    consultar.prepare(query);
-    int cantcols=0;
-    if(consultar.exec()){
-        cantcols = consultar.record().count();
-        j="";
-        if(debugLog){
-            log("Sql query is exec...");
-            QString cc;
-            cc.append("Column count: ");
-            cc.append(QString::number(cantcols));
-            cc.append("\n");
-            log(cc.toUtf8());
-        }
-
-        j.append("{");
-        int v=0;
-        while (consultar.next()) {
-            QString row;
-            if(v!=0){
-                row.append(",");
-            }
-            row.append("\"row");
-            row.append(QString::number(v));
-            row.append("\":");
-            row.append("{");
-
-            for (int i = 0; i < cantcols; ++i) {
-                if(i==0){
-                    row.append("\"col");
-                }else{
-                    row.append(",\"col");
-                }
-                row.append(QString::number(i));
-                row.append("\":\"");
-                QString dato = consultar.value(i).toString();
-                dato.replace("\"", "\\\"");
-                dato.replace("\\n", "\\\n");
-                row.append(dato);
-                row.append("\"");
-            }
-
-            row.append("}");
-            j.append(row);
-            v++;
-        }
-        j.append("}");
-        if(debugLog){
-            QString cc;
-            cc.append("JSON Query result: ");
-            cc.append(j);
-            cc.append("\n");
-            log(cc.toUtf8());
-        }
-    }else{
-        if(debugLog){
-            lba="";
-            lba.append("Sql query no exec: ");
-            lba.append(consultar.lastError().text());
-            log(lba);
-        }
-        return "{}";
-    }
-    return j;
-}
-
-QList<QObject *> UK::getSqlData(QString table, QString query, QString type)
+QList<QObject *> UK::getSqlData(QString query)
 {
     QList<QObject*> ret;
     QSqlQuery consultar;
@@ -1868,7 +1738,6 @@ QString UK::decPrivateData(QByteArray d0, QString user, QString key)
 
     QByteArray arch;
     QByteArray nom;
-    int nl=0;
     int tipo=0;
     QByteArray r;
     QByteArray r2;
@@ -1996,14 +1865,6 @@ QString UK::desCompData(QString d)
         nd=ad.replace(rs, rn);
     }
     return nd;
-}
-
-bool UK::unpackUpk(QString upk, QString user, QString key, QString folderDestination, QString appName)
-{
-    QByteArray lba;
-    lba.append("This function unpackUpk() is not finished");
-    log(lba);
-    return false;
 }
 
 void UK::downloadZipProgress(qint64 bytesSend, qint64 bytesTotal)

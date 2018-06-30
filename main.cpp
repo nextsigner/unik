@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
 
     QDateTime hoy = QDateTime::currentDateTime();
     int anio = hoy.date().year()-2016;
-    int mes = hoy.date().month();
+    //int mes = hoy.date().month();
     int dia = hoy.date().day();
     int sem = hoy.date().weekNumber();
     int hora = hoy.time().hour();
@@ -169,7 +169,7 @@ int main(int argc, char *argv[])
      carpComp.append("/home/pi/nsp");
     nomVersion="linux_rpi_version";
 #else
-    carpComp.append("/home/nextsigner/Documentos");
+    carpComp.append(QString(UNIK_CURRENTDIR_COMPILATION));
    nomVersion="linux_version";
 #endif
 
@@ -182,7 +182,9 @@ int main(int argc, char *argv[])
     carpComp.append("/Users/qt/nsp/unik-recursos/build_osx_clang64/unik.app/Contents/MacOS");
    nomVersion="macos_version";
 #endif
-    if(currentPath==carpComp){
+   qDebug()<<"Current dir: "<<currentPath;
+   qDebug()<<"Current dir compilation: "<<carpComp;
+   if(currentPath==carpComp){
         qDebug() << "UNIK_PROJECT_LOCATION: " << QString(UNIK_PROJECT_LOCATION);
         QString fvp=QString(UNIK_PROJECT_LOCATION);
         fvp.append("/");
@@ -287,13 +289,12 @@ int main(int argc, char *argv[])
     lba="";
     lba.append("appExec: ");
     lba.append(appExec);
-    qInfo(lba);
+    qInfo()<<lba;
     engine.rootContext()->setContextProperty("appExec", appExec);
-    engine.rootContext()->setContextProperty("wait", false);
-    engine.rootContext()->setContextProperty("splashvisible", true);
-    engine.rootContext()->setContextProperty("setInitString", false);
+    engine.rootContext()->setContextProperty("wait", u.wait);
+    engine.rootContext()->setContextProperty("splashvisible", u.splashvisible);
+    engine.rootContext()->setContextProperty("setInitString", u.setInitString);
     engine.rootContext()->setContextProperty("unik", &u);
-    u._engine->rootContext()->setContextProperty("logViewVisible", false);
 #ifdef Q_OS_ANDROID
     engine.load("qrc:/SplashAndroid.qml");
 #else
@@ -345,7 +346,7 @@ int main(int argc, char *argv[])
                 lba="";
                 lba.append("-dir=");
                 lba.append(marg.at(1));
-                qInfo(lba);
+                qInfo()<<lba;
             }
         }
         if(arg.contains("-git=")){
@@ -356,7 +357,7 @@ int main(int argc, char *argv[])
                 lba="";
                 lba.append("-git=");
                 lba.append(marg.at(1));
-                qInfo(lba);
+                qInfo()<<lba;
                 urlGit = "";
                 //qDebug()<<"____________"<<pUrlGit1.mid(pUrlGit1.size()-4, pUrlGit1.size());
                 if(pUrlGit1.contains(".git")||pUrlGit1.mid(pUrlGit1.size()-4, pUrlGit1.size())==".git"){
@@ -431,7 +432,7 @@ int main(int argc, char *argv[])
     lba="";
     lba.append("unik debug enabled: ");
     lba.append(debugLog ? "true" : "false");
-    qInfo(lba);
+    qInfo()<<lba;
     u.debugLog = debugLog;
 
     //u.log("AAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAaaaa AAA");
@@ -496,7 +497,7 @@ int main(int argc, char *argv[])
 #ifndef __arm__
     cut.append(u.getFile(pws+"/unik-tools/main.qml"));
     if(!cut.contains("objectName: \'unik-tools\'")){
-        qInfo("unik-tools have any fail! repairing..."+dupl.toUtf8());
+        qInfo()<<"unik-tools have any fail! repairing..."<<dupl.toUtf8();
         bool autd=u.downloadGit("https://github.com/nextsigner/unik-tools.git", dupl.toUtf8());
 #else
     cut.append(u.getFile(pws+"/unik-tools-rpi/main.qml"));
@@ -504,15 +505,15 @@ int main(int argc, char *argv[])
         qInfo("unik-tools have any fail! repairing..."+dupl.toUtf8());
         bool autd=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi.git", dupl.toUtf8());
 #endif
+        if(autd){
+            qInfo()<<"unik-tools repared.";
+        }else{
+            qInfo()<<"unik-tools is not repared.";
+        }
     }else{
         qInfo("unik-tools module is ready!");
     }
-
 #endif
-
-
-
-
     if(settings.value("ws").toString().isEmpty()){
         settings.setValue("ws", dupl);
         u.log("WorkSpace by default: "+dupl.toUtf8());
@@ -545,7 +546,7 @@ int main(int argc, char *argv[])
             lba="";
             lba.append("Making folder ");
             lba.append(dupl);
-            qInfo(lba);
+            qInfo()<<lba;
 
             if(!dirUnikToolsLocation.exists()){
                 dirUnikToolsLocation.mkpath(".");
@@ -561,7 +562,7 @@ int main(int argc, char *argv[])
             }else {
                 lba.append("Unik-Tools is not downloaded!");
             }
-            qInfo(lba);
+            qInfo()<<lba;
         }
     }else{
         if(debugLog){
@@ -569,7 +570,7 @@ int main(int argc, char *argv[])
             lba.append("Folder ");
             lba.append(dupl);
             lba.append(" pre existent.");
-            qInfo(lba);
+            qInfo()<<lba;
         }
     }
 
@@ -579,7 +580,7 @@ int main(int argc, char *argv[])
             lba.append("Closing because folder ");
             lba.append(dupl);
             lba.append(" no existent.");
-            qInfo(lba);
+            qInfo()<<lba;
         }
         return -5;
     }else{
@@ -588,7 +589,7 @@ int main(int argc, char *argv[])
             lba.append("Folder ");
             lba.append(dupl);
             lba.append(" existent.");
-            qInfo(lba);
+            qInfo()<<lba;
         }
     }
 
@@ -674,7 +675,7 @@ int main(int argc, char *argv[])
         if(debugLog){
             lba="";
             lba.append("Run mode -appName.");
-            qInfo(lba);
+            qInfo()<<lba;
         }
         makeUpk=false;
         modoAppName=true;
@@ -692,7 +693,7 @@ int main(int argc, char *argv[])
         if(debugLog){
             lba="";
             lba.append("Prepare mode -folder.");
-            qInfo(lba);
+            qInfo()<<lba;
         }
         updateDay=false;
         updateUnikTools=false;
@@ -728,7 +729,7 @@ int main(int argc, char *argv[])
         if(debugLog){
             lba="";
             lba.append("Prepare mode -foldertoupk.");
-            qInfo(lba);
+            qInfo()<<lba;
         }
         updateUnikTools=false;
     }
@@ -780,7 +781,7 @@ int main(int argc, char *argv[])
             lba="";
             lba.append("unik host: ");
             lba.append(urlHost1);
-            qInfo(lba);
+            qInfo()<<lba;
         }
         //qDebug()<<"hcomp1: "<<hcomp;
         if(urlHost1!=""&&hcomp=="http"){
@@ -828,7 +829,7 @@ int main(int argc, char *argv[])
         lba="";
         lba.append("active host: ");
         lba.append(u.host());
-        qInfo(lba);
+        qInfo()<<lba;
     }
     engine.rootContext()->setContextProperty("userhost", u.host());
     //Finaliza CHEQUEO DE URLHOST
@@ -883,7 +884,7 @@ int main(int argc, char *argv[])
             if(debugLog){
                 lba="";
                 lba.append("Running -reset for clean config.json.");
-                qInfo(lba);
+                qInfo()<<lba;
             }
             u.deleteFile(urlConfigJson.toLatin1());
         }
@@ -894,7 +895,7 @@ int main(int argc, char *argv[])
         if(debugLog){
             lba="";
             lba.append("Reading config file...");
-            qInfo(lba);
+            qInfo()<<lba;
         }
         QFile jsonConfig(urlConfigJson);
         if(jsonConfig.open(QIODevice::ReadOnly)){
@@ -902,7 +903,7 @@ int main(int argc, char *argv[])
             if(debugLog){
                 lba="";
                 lba.append("Loading config...");
-                qInfo(lba);
+                qInfo()<<lba;
             }
 
             QJsonDocument docConf = QJsonDocument::fromJson(jsonConfigData.constData());
@@ -914,7 +915,7 @@ int main(int argc, char *argv[])
             if(jsonConfigData=="{\"appName\":\"unik-tools\"}"){
                 lba="";
                 lba.append("Default config detected...");
-                qInfo(lba);
+                qInfo()<<lba;
             }else{
                 //u.setHost(raizConf.value("host").toString());
                 engine.rootContext()->setContextProperty("userhost", raizConf.value("host").toString());
@@ -930,20 +931,20 @@ int main(int argc, char *argv[])
                 lba="";
                 lba.append("Config set Mode: ");
                 lba.append(jsonConfigData);
-                qInfo(lba);
+                qInfo()<<lba;
                 if(raizConf.value("mode").toString()!=""){
                     QString vm =raizConf.value("mode").toString();
                     if(debugLog){
                         lba="";
                         lba.append("Config set Mode: ");
                         lba.append(vm);
-                        qInfo(lba);
+                        qInfo()<<lba;
                     }
                     lba="";
                     lba.append("Loading config mode: ");
                     lba.append(vm);
                     lba.append("...");
-                    qInfo(lba);
+                    qInfo()<<lba;
                     //qDebug("-----------------------------------------------iiiiiiiiiiiiiiiii"+vm.toUtf8());
                     if(vm=="-folder"){
                         //{"appName":"unik-installer", "mode": "-folder", "arg1": "/home/nextsigner/Escritorio/app"}
@@ -970,7 +971,7 @@ int main(int argc, char *argv[])
                                     lba.append(appArg2);
                                     lba.append("\nAppName from config.json: ");
                                     lba.append(appName);
-                                    qInfo(lba);
+                                    qInfo()<<lba;
 
                                 }
                                 updateUnikTools=false;
@@ -1014,7 +1015,7 @@ int main(int argc, char *argv[])
                             lba.append(appArg2);
                             lba.append(" arg3: ");
                             lba.append(appArg3);
-                            qInfo(lba);
+                            qInfo()<<lba;
                         }
                     }
                     if(vm=="-upk"){
@@ -1060,7 +1061,7 @@ int main(int argc, char *argv[])
             if(debugLog){
                 lba="";
                 lba.append("Loading unik-installer by default.");
-                qInfo(lba);
+                qInfo()<<lba;
             }
             QFile nuevoJsonConfig(urlConfigJson);
 
@@ -1080,13 +1081,13 @@ int main(int argc, char *argv[])
             lba="";
             lba.append("Upk filename reset: ");
             lba.append(upkFileName);
-            qInfo(lba);
+            qInfo()<<lba;
         }
     }
     lba="";
     lba.append("Count arguments: ");
     lba.append(QString::number(argc));
-    qInfo(lba);
+    qInfo()<<lba;
 
 
     if(modeUpk&&loadConfig){
@@ -1111,7 +1112,7 @@ int main(int argc, char *argv[])
                 lba="";
                 lba.append("UPK detected: ");
                 lba.append(pathCorr);
-                qInfo(lba);
+                qInfo()<<lba;
             }
         }
         QByteArray tf;
@@ -1128,7 +1129,7 @@ int main(int argc, char *argv[])
                 lba="";
                 lba.append(argv[1]);
                 lba.append(" extract successful...");
-                qInfo(lba);
+                qInfo()<<lba;
             }
             QStringList sl =sl2.split("/");
             QByteArray nAppName;
@@ -1148,7 +1149,7 @@ int main(int argc, char *argv[])
                     lba="";
                     lba.append(argv[1]);
                     lba.append(" extract no successful...");
-                    qInfo(lba);
+                    qInfo()<<lba;
                 }
             }
         }
@@ -1165,16 +1166,16 @@ int main(int argc, char *argv[])
             lba.append(argv[0]);
             lba.append(" ");
             lba.append(argv[1]);
-            qInfo(lba);
+            qInfo()<<lba;
             if(setPass){
                 lba="";
                 lba.append("Using seted pass.");
-                qInfo(lba);
+                qInfo()<<lba;
                 //qDebug()<<"Using seted pass: "<<user<<" "<<key;
             }else{
                 lba="";
                 lba.append("Using free pass.");
-                qInfo(lba);
+                qInfo()<<lba;
             }
         }
         appName = arg2;
@@ -1187,14 +1188,14 @@ int main(int argc, char *argv[])
             lba="";
             lba.append("Upk filename: ");
             lba.append(upkFileName);
-            qInfo(lba);
+            qInfo()<<lba;
         }
         if(u.upkToFolder(upkFileName, user, key, pq.toUtf8())){
             if(debugLog){
                 lba="";
                 lba.append(appName);
                 lba.append(" extract successful...");
-                qInfo(lba);
+                qInfo()<<lba;
             }
             upkActivo = appName;
             updateUnikTools=false;
@@ -1211,7 +1212,7 @@ int main(int argc, char *argv[])
             lba.append(" ");
             lba.append(appArg3);
             lba.append(" ");
-            qInfo(lba);
+            qInfo()<<lba;
         }
         pq = "";
         pq.append(appArg2);
@@ -1261,7 +1262,7 @@ int main(int argc, char *argv[])
             lba.append(key);
             /*lba.append(" arg4: ");
             lba.append(appArg4);*/
-            qInfo(lba);
+            qInfo()<<lba;
         }
 
         //upk file
@@ -1309,7 +1310,7 @@ int main(int argc, char *argv[])
                 lba.append(user);
                 lba.append(" key: ");
                 lba.append(key);*/
-                qInfo(lba);
+                qInfo()<<lba;
             }
             if(u.upkToFolder(arg1.toUtf8(), user, key, tempFolder)){
                 if(setPass){
@@ -1323,7 +1324,7 @@ int main(int argc, char *argv[])
                 lba.append("/");
                 lba.append(nAppName);
                 lba.append(".upk");
-                qInfo(lba);
+                qInfo()<<lba;
                 appName = nAppName;
                 //return 0;
             }else{
@@ -1331,7 +1332,7 @@ int main(int argc, char *argv[])
                 lba.append("Error at extract ");
                 lba.append(nAppName);
                 lba.append(".upk");
-                qInfo(lba);
+                qInfo()<<lba;
             }
             upkFileName.append(dupl);
             upkFileName.append("/");
@@ -1341,14 +1342,14 @@ int main(int argc, char *argv[])
                 lba="";
                 lba.append("Upk filename: ");
                 lba.append(upkFileName);
-                qInfo(lba);
+                qInfo()<<lba;
             }
             if(u.upkToFolder(upkFileName, user, key, pq.toUtf8())){
                 if(debugLog){
                     lba="";
                     lba.append(appName);
                     lba.append(" extract successful...");
-                    qInfo(lba);
+                    qInfo()<<lba;
                 }
                 upkActivo = appName;
                 updateUnikTools=false;
@@ -1371,7 +1372,7 @@ int main(int argc, char *argv[])
             lba.append(appArg3);
             lba.append(" arg4: ");
             lba.append(appArg4);
-            qInfo(lba);
+            qInfo()<<lba;
         }
 
         //Carpeta para upk
@@ -1415,7 +1416,7 @@ int main(int argc, char *argv[])
                 lba.append(user);
                 lba.append(" key: ");
                 lba.append(key);
-                qInfo(lba);
+                qInfo()<<lba;
             }
 
             if(u.folderToUpk(arg1, nAppName, arg2, arg3, dupl)){
@@ -1430,7 +1431,7 @@ int main(int argc, char *argv[])
                 lba.append("/");
                 lba.append(nAppName);
                 lba.append(".upk");
-                qInfo(lba);
+                qInfo()<<lba;
                 appName = nAppName;
                 //return 0;
             }else{
@@ -1438,7 +1439,7 @@ int main(int argc, char *argv[])
                 lba.append("Error al crear ");
                 lba.append(nAppName);
                 lba.append(".upk");
-                qInfo(lba);
+                qInfo()<<lba;
             }
             upkFileName.append(dupl);
             upkFileName.append("/");
@@ -1448,14 +1449,14 @@ int main(int argc, char *argv[])
                 lba="";
                 lba.append("Upk filename: ");
                 lba.append(upkFileName);
-                qInfo(lba);
+                qInfo()<<lba;
             }
             if(u.upkToFolder(upkFileName, user, key, pq.toUtf8())){
                 if(debugLog){
                     lba="";
                     lba.append(appName);
                     lba.append(" extract successful...");
-                    qInfo(lba);
+                    qInfo()<<lba;
                 }
                 upkActivo = appName;
                 updateUnikTools=false;
@@ -1549,7 +1550,7 @@ int main(int argc, char *argv[])
         if(debugLog){
             lba="";
             lba.append("Opening config pass file...");
-            qInfo(lba);
+            qInfo()<<lba;
         }
         jsonPassData.append(jsonPass.readAll());
         QJsonDocument docPass = QJsonDocument::fromJson(jsonPassData.constData());
@@ -1562,7 +1563,7 @@ int main(int argc, char *argv[])
             lba.append(upass);
             lba.append(" ");
             lba.append(kpass);
-            //qInfo(lba);
+            //qInfo()<<lba;
         }
         engine.rootContext()->setContextProperty("ukuser", upass);
         engine.rootContext()->setContextProperty("ukkey", kpass);
@@ -1601,24 +1602,24 @@ int main(int argc, char *argv[])
         lba="";
         lba.append("Updating from github: ");
         lba.append(urlGit);
-        qInfo(lba);
+        qInfo()<<lba;
         QByteArray tmpZipPath;
         tmpZipPath.append(pws);
         //u.mkdir(tmpZipPath);
         lba="";
         lba.append("Downloading Zip in folder ");
         lba.append(tmpZipPath);
-        qInfo(lba);
+        qInfo()<<lba;
         bool up=u.downloadGit(urlGit, tmpZipPath);
         if(up){
             lba="";
             lba.append("Zip downloaded.");
-            qInfo(lba);
+            qInfo()<<lba;
         }else{
             lba="";
             lba.append("Fail Zip download: ");
             lba.append(urlGit);
-            qInfo(lba);
+            qInfo()<<lba;
         }
         QByteArray npq;
         npq.append(pws);
@@ -1628,15 +1629,13 @@ int main(int argc, char *argv[])
         lba="";
         lba.append("Current Application Folder: ");
         lba.append(npq);
-        qInfo(lba);
+        qInfo()<<lba;
         pq = npq;
         mainQml="";
         mainQml.append(pq);
         mainQml.append("main.qml");
         u.log("Updated: "+pq.toUtf8());
     }
-
-
     if(updateUnikTools||updateDay){
         lba="";
         lba.append("Updating from github: ");
@@ -1645,11 +1644,16 @@ int main(int argc, char *argv[])
         lba.append(updateUnikTools ? "true" : "false");
         lba.append("\nupdateDay: ");
         lba.append(updateDay ? "true" : "false");
-        qInfo(lba);
+        qInfo()<<lba;
         QByteArray unikOsPath;
         unikOsPath.append(pws);
         u.mkdir(unikOsPath);
         bool up=u.downloadZipFile(urlGit, unikOsPath);
+        if(up){
+            qInfo()<<"Updated from github...";
+        }else{
+            qInfo()<<"Fail Update from github...";
+        }
         unikOsPath.append("/"+moduloGit+"/");
         pq = unikOsPath;
         mainQml="";
@@ -1664,7 +1668,7 @@ int main(int argc, char *argv[])
 
         log3.append("Execute mode: ");
         log3.append(modoDeEjecucion);
-        qInfo(log3);
+        qInfo()<<log3;
 
         QByteArray log4;
 
@@ -1716,9 +1720,8 @@ int main(int argc, char *argv[])
         log4.append("setPass: ");
         log4.append(setPass ? "true" : "false");
         log4.append("\n");
-        qInfo(log4);
+        qInfo()<<log4;
     }
-
 #ifndef Q_OS_ANDROID
     if (!engine.rootObjects().isEmpty()){
         QObject *aw0 = engine.rootObjects().at(0);
@@ -1730,7 +1733,8 @@ int main(int argc, char *argv[])
 
 #endif
     if (!engine.rootObjects().isEmpty()){
-       engine.rootContext()->setContextProperty("splashvisible", false);
+       u.splashvisible=false;
+        engine.rootContext()->setContextProperty("splashvisible", u.splashvisible);
     }
 #ifdef Q_OS_WIN
     qmlImportPath.append("file:/");

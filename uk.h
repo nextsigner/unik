@@ -184,14 +184,19 @@ public:
     Q_INVOKABLE bool createLnk(QString execString, QString destopLocationFilename, QString name, QString comment){
         return createLink(execString, destopLocationFilename, name, comment);
     }
-#endif∫
+#endif
     QString inj;
     QString initStdString;
     bool debugLog=false;
     bool canCloseApp=false;
     bool splashClosed=false;
 
-signals:
+    //Engine Root Context Properties
+    bool wait=false;
+    bool splashvisible=true;
+    bool setInitString=false;
+
+ signals:
     //Señales para QML
     void porcChanged();
     void uploadStateChanged();
@@ -249,10 +254,8 @@ public slots:
 
     //Funciones Sqlite
     bool sqliteInit(QString pathName);
-    bool sqliteCryptoInit(QString pathName, QString user, QString key);
     bool sqlQuery(QString query);
-    QString getJsonSql(QString table, QString query, QString type);
-    QList<QObject *> getSqlData(QString table, QString query, QString type);
+    QList<QObject *> getSqlData(QString query);
     bool mysqlInit(QString hostName, QString dataBaseName, QString userName, QString password, int firtOrSecondDB);
     void setMySqlDatabase(QString databaseName, int firtOrSecondDB);
 
@@ -287,11 +290,9 @@ private slots:
     QString compData(QString d);
     QString desCompData(QString d);
 
-    bool unpackUpk(QString upk, QString user, QString key, QString folderDestination, QString appName);
     void downloadZipProgress(qint64 bytesSend, qint64 bytesTotal);
 
 private:
-
     QSqlDatabase db;
     QSqlDatabase firstDB;
     QSqlDatabase secondDB;
@@ -318,5 +319,8 @@ private:
 
     QNetworkReply *respuentaSendDatos;
     QImage *frame;
+
+
+
 };
 #endif
