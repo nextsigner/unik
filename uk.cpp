@@ -1104,7 +1104,8 @@ QQuickWindow *UK::mainWindow(int n)
         QQuickWindow *window = qobject_cast<QQuickWindow*>(aw0);
         return window;
     }else{
-        QQuickWindow *window2;
+        QObject *aw0 = _engine->rootObjects().at(0);
+        QQuickWindow *window2 = qobject_cast<QQuickWindow*>(aw0);
         return window2;
     }
 }
