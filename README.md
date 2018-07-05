@@ -10,7 +10,7 @@ Whatsapps: +54 11 3802 4370
 
 Donate: (Patreon.com/unik)[https://patreon.com/unik]
 
-Download: (unikode.org)[http://unikode.org/download.html]
+Download Unik Installers for GNU/Linux, Windows or Macos: (unikode.org)[http://unikode.org/p/download.html]
 
 ## Descripción en Español
 Este es el repositorio oficial del proyecto unik qml engine creado por @nextsigner.
@@ -22,4 +22,4 @@ Whatsapps: +54 11 3802 4370
 
 Donar: (Patreon.com/unik)[https://patreon.com/unik]
 
-Descargar: (unikode.org)[http://unikode.org/download.html]
+Descargar Instaladores para GNU/Linux, Windows o Macos: (unikode.org)[http://unikode.org/p/download.html]
