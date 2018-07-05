@@ -310,6 +310,7 @@ int main(int argc, char *argv[])
 
     u.enabledInj = true;
 
+    bool readConfig=true;
     bool debugLog=false;
     debugLog=true;
     u.debugLog=debugLog;
@@ -320,6 +321,9 @@ int main(int argc, char *argv[])
     for (int i = 0; i < argc; ++i) {
         if(QByteArray(argv[i])==QByteArray("-debug")){
             debugLog=true;
+        }
+        if(QByteArray(argv[i])==QByteArray("-no-config")){
+            readConfig=false;
         }
         QString arg;
         arg.append(argv[i]);
@@ -496,9 +500,12 @@ int main(int argc, char *argv[])
     QString cut;
 #ifndef __arm__
     cut.append(u.getFile(pws+"/unik-tools/main.qml"));
+    QByteArray utf;//unik-tools folder
+    utf.append(pws);
+    //utf.append("/unik-tools");
     if(!cut.contains("objectName: \'unik-tools\'")){
-        qInfo()<<"unik-tools have any fail! repairing..."<<dupl.toUtf8();
-        bool autd=u.downloadGit("https://github.com/nextsigner/unik-tools.git", dupl.toUtf8());
+        qInfo()<<"unik-tools have any fail! repairing..."<<pws;
+        bool autd=u.downloadGit("https://github.com/nextsigner/unik-tools.git", pws);
 #else
     cut.append(u.getFile(pws+"/unik-tools-rpi/main.qml"));
     if(!cut.contains("objectName: \'unik-tools\'")){
@@ -519,7 +526,7 @@ int main(int argc, char *argv[])
         u.log("WorkSpace by default: "+dupl.toUtf8());
     }else{
         u.log("Current WorkSpace: "+settings.value("ws").toString().toUtf8());
-        dupl = settings.value("ws").toString();
+
         QFileInfo fi(dupl);
         if(!fi.isWritable()){
             QString ndulw;
@@ -528,6 +535,9 @@ int main(int argc, char *argv[])
             dupl = ndulw;
             u.log("WorkSpace not writable!");
             u.log("New WorkSpace seted: "+ndulw.toUtf8());
+        }else{
+            pws = settings.value("ws").toString().toUtf8();
+            dupl = pws;
         }
     }
 
@@ -762,78 +772,6 @@ int main(int argc, char *argv[])
         updateUnikTools=false;
     }
 
-
-
-    //Cominenza CHEQUEO DE URLHOST
-    QByteArray hcomp;
-    //QString urlHost1=u.getHttpFile("http://unikdev.net/unik_host.php");
-    QString urlHost1=u.getHttpFile("http://c1300733.ferozo.com/unik_host.php");
-
-    QString urlHost2;
-    QString urlHost3;
-    int hvalido=0;
-    if(urlHost1.size()>3){
-        hcomp.append(urlHost1.at(0));
-        hcomp.append(urlHost1.at(1));
-        hcomp.append(urlHost1.at(2));
-        hcomp.append(urlHost1.at(3));
-        if(debugLog){
-            lba="";
-            lba.append("unik host: ");
-            lba.append(urlHost1);
-            qInfo()<<lba;
-        }
-        //qDebug()<<"hcomp1: "<<hcomp;
-        if(urlHost1!=""&&hcomp=="http"){
-            hvalido = 1;
-        }
-    }
-    hcomp="";
-    if(hvalido==0){
-        urlHost2=u.getHttpFile("http://codigosenaccion.com/unik_host.php");
-        if(urlHost2.size()>3){
-            hcomp.append(urlHost2.at(0));
-            hcomp.append(urlHost2.at(1));
-            hcomp.append(urlHost2.at(2));
-            hcomp.append(urlHost2.at(3));
-            //qDebug()<<"hcomp2: "<<hcomp;
-            if(urlHost2!=""&&hcomp=="http"){
-                hvalido = 2;
-            }
-        }
-    }
-    hcomp="";
-    if(hvalido==0){
-        urlHost3=u.getHttpFile("http://nextsigner.ml/unik_host.php");
-        if(urlHost3.size()>3){
-            hcomp.append(urlHost3.at(0));
-            hcomp.append(urlHost3.at(1));
-            hcomp.append(urlHost3.at(2));
-            hcomp.append(urlHost3.at(3));
-            //qDebug()<<"hcomp3: "<<hcomp;
-            if(urlHost3!=""&&hcomp=="http"){
-                hvalido = 3;
-            }
-        }
-    }
-    if(hvalido==1){
-        u.setHost(urlHost1);
-    }else if(hvalido==2){
-        u.setHost(urlHost2);
-    }else if(hvalido==3){
-        u.setHost(urlHost3);
-    }else{
-        u.setHost("http://codigosenaccion.com/unik");
-    }
-    if(debugLog){
-        lba="";
-        lba.append("active host: ");
-        lba.append(u.host());
-        qInfo()<<lba;
-    }
-    engine.rootContext()->setContextProperty("userhost", u.host());
-    //Finaliza CHEQUEO DE URLHOST
-
     //->Comienza configuracion OS
 #ifdef Q_OS_LINUX
     QByteArray cf;
@@ -891,7 +829,7 @@ int main(int argc, char *argv[])
     }
 
     //Leer config.json
-    if(!modoAppName&&!modeFolderToUpk&&!modeUpk&&!modeGit&&!modeFolder){
+    if(readConfig&&!modoAppName&&!modeFolderToUpk&&!modeUpk&&!modeGit&&!modeFolder){
         if(debugLog){
             lba="";
             lba.append("Reading config file...");
@@ -1571,32 +1509,7 @@ int main(int argc, char *argv[])
         ukitName.append("ukit");
         ukitName.append(raizPass.value("key").toString());
         engine.rootContext()->setContextProperty(ukitName.constData(), &u);
-    }
-
-    if(!modeFolder&&!modeRemoteFolder){
-        QByteArray urlUserAgent;
-        urlUserAgent.append(u.host());
-        urlUserAgent.append("/getUserAgent.php?user=");
-        urlUserAgent.append(upass);
-        urlUserAgent.append("&key=");
-        urlUserAgent.append(kpass);
-        QString inj=u.getHttpFile(urlUserAgent);
-        //qDebug()<<"INJ: "<<inj;
-        hcomp = "";
-        if(inj.size()>3){
-            hcomp.append(inj.at(0));
-            hcomp.append(inj.at(1));
-            hcomp.append(inj.at(2));
-            hcomp.append(inj.at(3));
-            //qDebug()<<"hcomp3: "<<hcomp;
-            if(inj!=""&&hcomp=="Time"){
-                if(u.debugLog){
-                    //qDebug()<<"User Agent: "<<u.inject(mainQml, inj);
-                }
-            }
-        }
-        u.inj = inj;
-    }
+    }    
 
     if(modeGit){
         lba="";
