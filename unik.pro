@@ -13,12 +13,13 @@ CONFIG -= qmlcache
 LOCATION = $$PWD
 DEFINES += UNIK_PROJECT_LOCATION=\\\"$$LOCATION\\\"
 
-CURRENTDIR_COMPILATION=$(HOME)/unikCurrentDirComp
-DEFINES += UNIK_CURRENTDIR_COMPILATION=\\\"$$CURRENTDIR_COMPILATION\\\"
-QMAKE_POST_LINK += $$quote(mkdir $$CURRENTDIR_COMPILATION$$escape_expand(\n\t))
-message(UNIK_CURRENTDIR_COMPILATION=$$CURRENTDIR_COMPILATION)
+
 
 linux{
+CURRENTDIR_COMPILATION=$(HOME)/unikCurrentDirComp
+DEFINES += UNIK_CURRENTDIR_COMPILATION=\\\"$$CURRENTDIR_COMPILATION\\\"
+message(UNIK_CURRENTDIR_COMPILATION=$$CURRENTDIR_COMPILATION)
+QMAKE_POST_LINK += $$quote(mkdir $$CURRENTDIR_COMPILATION$$escape_expand(\n\t))
     !android{
         message(Linux NO ANDROID)
     !contains(QMAKE_HOST.arch, arm.*):{
@@ -103,6 +104,12 @@ windows{
     LIBS += -L$$PWD/../libvlc-qt/lib/ -lVLCQtCore -lVLCQtWidgets -lVLCQtQml
     INCLUDEPATH += $$PWD/../libvlc-qt/include
     DEPENDPATH += $$PWD/../libvlc-qt/include
+
+    CURRENTDIR_COMPILATION=E:/unikCurrentDirComp
+    CURRENTDIR_COMPILATION ~= s,/,\\,g
+    DEFINES += UNIK_CURRENTDIR_COMPILATION=\\\"$$CURRENTDIR_COMPILATION\\\"
+    message(UNIK_CURRENTDIR_COMPILATION=$$CURRENTDIR_COMPILATION)
+    QMAKE_POST_LINK += $$quote(cmd /c md $$CURRENTDIR_COMPILATION$$escape_expand(\n\t))
 
     #EXTRA_BINFILES += \
         #$$PWD/version

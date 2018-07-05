@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
 
 #endif
 #ifdef Q_OS_WIN
-     carpComp.append("C:/");
+     carpComp.append(QString(UNIK_CURRENTDIR_COMPILATION));
     nomVersion="windows_version";
 #endif
 #ifdef Q_OS_OSX

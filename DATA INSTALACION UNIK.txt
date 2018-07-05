@@ -1,16 +1,22 @@
-Información
+﻿Información
+
+Usted instalará Unik Qml Engine es su equipo. 
 
 Usted instalará unik en su equipo. Esta aplicación sirve para cargar aplicaciones desarrolladas en Qml.
 
 A continuación se le informará bajo que tipo de Licencia y modalidad usted podrá hacer uso de unik.
 
-unik aún está en fase de desarrollo.
-mas información en nextsigner@gmail.com
-Tel: +54 11 3802 4370
+unik aún está en fase de desarrollo Beta.
 
-Términos
+Para más información dirigirse a http://unikode.org/
+Emaíl: nextsigner@gmail.com
+Whatsapps: +54 11 3802 4370
+
+Términos y condiciones de uso.
 
 Aplicación distribuida en el marco de la Licencia LGPL.
+
+Lea atentamente sobre este tipo de licencias en https://www.gnu.org/licenses/lgpl-3.0.html
 
 Esta aplicación no cumple ni provée ningún tipo de garantía. Toda la responsabilidad sobre los actos o hechos producidos al momento o tiempo después de utilizar esta aplicación llamada unik, el distribuidor de la mencionada aplicación no asume responsabilidad alguna sobre los mismos.
 
