@@ -61,47 +61,86 @@ ApplicationWindow {
 
             }
         }
-        Rectangle{
-            width: app.fs*2
-            height: width
-            anchors.top: parent.top
-            anchors.topMargin: app.width*0.005
-            anchors.right: parent.right
-            anchors.rightMargin: app.width*0.005
-            Text {
-                text: "X"
-                font.pixelSize: parent.width*0.8
-                anchors.centerIn: parent
-            }
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    var p=''+appsDir+'/config.json'
-                    var c = '{"mode":"-folder", "arg1": "'+appsDir+'/unik-tools'+'"}'
-                    unik.setFile(p, c)
-                    unik.restartApp()
-                }
-            }
-        }
-        Rectangle{
-            width: labelbtn1.contentWidth*1.2
-            height: app.width*0.02
+
+        Row{
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: app.width*0.005
-            anchors.left: parent.left
-            anchors.leftMargin: app.width*0.005
-            Text {
-                id:labelbtn1
-                text: "Edit Config"
-                font.pixelSize: app.width*0.015
-                anchors.centerIn: parent
-            }
-            MouseArea{
-                anchors.fill: parent
-                onClicked: {
-                    xEditor.visible = true
+            anchors.horizontalCenter: parent.horizontalCenter
+            height: app.fs*2
+            spacing: app.fs*2
+
+            Rectangle{
+                width: labelbtn1.contentWidth*1.2
+                height: app.width*0.02
+                anchors.verticalCenter: parent.verticalCenter
+                Text {
+                    id:labelbtn1
+                    text: "Edit Config"
+                    font.pixelSize: app.width*0.015
+                    anchors.centerIn: parent
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        xEditor.visible = true
+                    }
                 }
             }
+
+            Rectangle{
+                width: labelbtnDelete.contentWidth*1.2
+                height: app.width*0.02
+               anchors.verticalCenter: parent.verticalCenter
+                Text {
+                    id:labelbtnDelete
+                    text: "Delete Config"
+                    font.pixelSize: app.width*0.015
+                    anchors.centerIn: parent
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        unik.deleteFile(appsDir+'/config.json')
+                        unik.restartApp()
+                    }
+                }
+            }
+
+            Rectangle{
+                width: app.fs*2
+                height: width
+                Text {
+                    text: "UT"
+                    font.pixelSize: parent.width*0.4
+                    font.family: 'FontAwesome'
+                    anchors.centerIn: parent
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        var p=''+appsDir+'/config.json'
+                        var c = '{"mode":"-folder", "arg1": "'+appsDir+'/unik-tools'+'"}'
+                        unik.setFile(p, c)
+                        unik.restartApp()
+                    }
+                }
+            }
+            Rectangle{
+                width: app.fs*2
+                height: width
+                Text {
+                    text: "X"
+                    font.pixelSize: parent.width*0.8
+                    anchors.centerIn: parent
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        Qt.quit()
+                    }
+                }
+            }
+
+
         }
         Rectangle{
             id: xEditor
@@ -210,14 +249,10 @@ ApplicationWindow {
         txt += 'sourcePath: '+sourcePath+'\n'
         txt += '\nconfig.json:\n'+uk.getFile(appsDir+'/config.json')+'\n'
 
-        txt += '\nuserhost: ['+userhost+']\n'
+        //txt += '\nuserhost: ['+userhost+']\n'
 
         txtEstado.text = txt
         unik.log(txt)
-        if(Qt.platform.os==='windows'){
-            var a1 = Screen.desktopAvailableHeight
-            var altoBarra = a1-uk.frameHeight(app)
-            app.height = a1-altoBarra
-        }
+
     }
 }

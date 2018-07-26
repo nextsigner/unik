@@ -28,6 +28,8 @@
 #ifdef Q_OS_ANDROID
 #include <QtAndroidExtras/QtAndroid>
 #include <QtAndroidExtras/QAndroidJniObject>
+#include <quazip.h>
+#include <quazipfile.h>
 #endif
 
 //Libreria QtQuick

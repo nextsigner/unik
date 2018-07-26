@@ -6,9 +6,10 @@
 #include <QQuickImageProvider>
 #include <QSettings>
 
+#ifndef Q_OS_ANDROID
 #include <stdio.h>
 #include <stdlib.h>
-
+#endif
 
 #ifdef Q_OS_WIN
 #include <VLCQtCore/Common.h>
@@ -166,8 +167,13 @@ int main(int argc, char *argv[])
     QString nomVersion="";
 #ifdef Q_OS_LINUX    
 #ifdef __arm__
-     carpComp.append("/home/pi/nsp");
+#ifdef Q_OS_ANDROID
+    carpComp.append("/home/pi/nsp");
+    nomVersion="android_version";
+#else
+    carpComp.append("/home/pi/nsp");
     nomVersion="linux_rpi_version";
+#endif
 #else
     carpComp.append(QString(UNIK_CURRENTDIR_COMPILATION));
    nomVersion="linux_version";
@@ -182,6 +188,7 @@ int main(int argc, char *argv[])
     carpComp.append("/Users/qt/nsp/unik-recursos/build_osx_clang64/unik.app/Contents/MacOS");
    nomVersion="macos_version";
 #endif
+
    qDebug()<<"Current dir: "<<currentPath;
    qDebug()<<"Current dir compilation: "<<carpComp;
    if(currentPath==carpComp){
@@ -202,7 +209,11 @@ int main(int argc, char *argv[])
         fileVersion2.close();
     }else{
         QString fvp;
+#ifdef Q_OS_ANDROID
+        fvp.append("assets:");
+#else
         fvp.append(qApp->applicationDirPath());
+#endif
         fvp.append("/");
         fvp.append(nomVersion);
         qDebug() << "UNIK FILE VERSION: " << fvp;
@@ -238,8 +249,13 @@ int main(int argc, char *argv[])
     QByteArray urlGit="https://github.com/nextsigner/unik-tools";
     QByteArray moduloGit="unik-tools";
 #else
+#ifdef Q_OS_ANDROID
+    QByteArray urlGit="https://github.com/nextsigner/unik-tools";
+    QByteArray moduloGit="unik-tools";
+#else
     QByteArray urlGit="https://github.com/nextsigner/unik-tools-rpi";
     QByteArray moduloGit="unik-tools-rpi";
+#endif
 #endif
     QByteArray modoDeEjecucion="indefinido";
     QByteArray lba="";
@@ -280,8 +296,9 @@ int main(int argc, char *argv[])
     qmlRegisterType<VlcQmlVideoPlayer>("VLCQt", 1, 0, "VlcVideoPlayer");
 #endif
     u.setEngine(&engine);
+#ifndef Q_OS_ANDROID
     qInstallMessageHandler(unikStdOutPut);
-
+#endif
     QByteArray pws=u.getPath(3).toUtf8();//Path WorkSpace
     pws.append("/unik");
 
@@ -564,7 +581,11 @@ int main(int argc, char *argv[])
 #ifndef __arm__
             bool unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools", dupl.toUtf8());
 #else
+#ifdef Q_OS_ANDROID
+            bool unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools", dupl.toUtf8());
+#else
             bool unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi", dupl.toUtf8());
+#endif
 #endif
             lba="";
             if(unikToolDownloaded){
@@ -805,7 +826,11 @@ int main(int argc, char *argv[])
 #ifndef __arm__
     pq.append("/unik-tools/");
 #else
+#ifdef Q_OS_ANDROID
+    pq.append("/unik-tools/");
+#else
     pq.append("/unik-tools-rpi/");
+#endif
 #endif
     QDir dir0(pq);
     if (!dir0.exists()) {
@@ -1171,7 +1196,11 @@ int main(int argc, char *argv[])
 #ifndef __arm__
             pq.append("/unik-tools/");
 #else
+#ifdef Q_OS_ANDROID
+            pq.append("/unik-tools/");
+#else
             pq.append("/unik-tools-rpi/");
+#endif
 #endif
         }
         u.mkdir(pq);
@@ -1709,7 +1738,7 @@ int main(int argc, char *argv[])
         //qDebug()<<"------->"<<component.errors();
         engine.rootContext()->setContextProperty("unikError", listaErrores);
 #ifdef Q_OS_ANDROID
-        engine.load(QUrl(QStringLiteral("qrc:/mainAndroid.qml")));
+        engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 #else
 #ifndef __arm__
         engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

@@ -13,9 +13,8 @@ CONFIG -= qmlcache
 LOCATION = $$PWD
 DEFINES += UNIK_PROJECT_LOCATION=\\\"$$LOCATION\\\"
 
-
-
 linux{
+FILE_VERSION_NAME=linux_version
 CURRENTDIR_COMPILATION=$(HOME)/unikCurrentDirComp
 DEFINES += UNIK_CURRENTDIR_COMPILATION=\\\"$$CURRENTDIR_COMPILATION\\\"
 message(UNIK_CURRENTDIR_COMPILATION=$$CURRENTDIR_COMPILATION)
@@ -84,6 +83,7 @@ QMAKE_POST_LINK += $$quote(mkdir $$CURRENTDIR_COMPILATION$$escape_expand(\n\t))
     }
 }
 mac{
+    FILE_VERSION_NAME=macos_version
     QT += webengine
     DESTDIR=../unik-recursos/build_osx_clang64
     QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.11
@@ -98,6 +98,7 @@ mac{
     #/Users/qt/Qt5.9.1/5.9.1/clang_64/bin/macdeployqt /Users/qt/nsp/unik-recursos/build_osx_clang64/unik.app -qmldir=/Users/qt/nsp/unik -no-strip -dmg
 }
 windows{
+    FILE_VERSION_NAME=windows_version
     QT += webengine
     DESTDIR = ../build_win_unik_32
     RC_FILE = unik.rc
@@ -123,11 +124,48 @@ windows{
 }
 
 android{
+    FILE_VERSION_NAME=android/assets/android_version
     message(Programando en Android)
     QT += webview
-#ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android-build
+    INCLUDEPATH += $$PWD/quazip
+    #DEFINES += QUAZIP_BUILD
+    LIBS += -lz
+    #CONFIG(staticlib): DEFINES += QUAZIP_STATIC
+    LIBS+=-L/usr/local/zlib/lib
+    INCLUDEPATH+=/usr/local/zlib/include
+HEADERS += $$PWD/quazip/*.h
+SOURCES += $$PWD/quazip/*.cpp
+SOURCES += $$PWD/quazip/*.c
+
+    #ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android-build
+
+    #LIBS+=-L/home/nextsigner/android-ndk-r10e/platforms/android-3/arch-arm/usr/lib
+    #INCLUDEPATH+=/home/nextsigner/android-ndk-r10e/platforms/android-3/arch-arm/usr/include
+
     QT += androidextras
+
+COMMON_DATA.path = /assets/                                                                                qml
+COMMON_DATA.files = $$files($$PWD/android/qml/*)
+INSTALLS += COMMON_DATA
 }
+
+VERSION_YEAR=2016
+VERSION_MAJ1=$$system(date +%Y)
+win32 {
+    VERSION_MAJ= $$system("set /a $$VERSION_MAJ1 - $$VERSION_YEAR")
+    VERSION_MEN1= $$system("set /a $$system(date +%m) + $$system(date +%d) + $$system(date +%H) + $$system(date +%M)")
+} else:unix {
+    VERSION_MAJ= $$system("echo $(($$VERSION_MAJ1 - $$VERSION_YEAR))")
+    VERSION_MEN1= $$system("echo $(($$system(date +%m) + $$system(date +%d) + $$system(date +%H) + $$system(date +%M)))")
+}
+greaterThan(VERSION_MEN1, 99){
+    VERSION_MEN2=$$VERSION_MEN1
+}else{
+    VERSION_MEN2=0$$VERSION_MEN1
+}
+APPVERSION=$$VERSION_MAJ"."$$system(date +%W)$$VERSION_MEN2
+message(App Version $$APPVERSION)
+write_file($$PWD/$$FILE_VERSION_NAME, APPVERSION)
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings

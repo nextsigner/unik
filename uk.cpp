@@ -551,10 +551,22 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
 #endif
 #ifdef Q_OS_LINUX
     QByteArray carpDestinoFinal;
+#ifndef Q_OS_ANDROID
     carpDestinoFinal.append("\"");
+#endif
     carpDestinoFinal.append(localFolder);
+#ifndef Q_OS_ANDROID
     carpDestinoFinal.append("\"");
+#endif
+    QFile zipFile(tempFile);
+    if(zipFile.exists()){
+        qInfo("Zip File "+tempFile+" exist.");
+    }else{
+        qInfo("Zip File "+tempFile+" not exist.");
+        return false;
+    }
 
+#ifndef Q_OS_ANDROID
     QByteArray cl;
     cl.append("unzip -o ");
     cl.append("\"");
@@ -566,6 +578,50 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     cl.append("/");
     cl.append(carpetaDestino);
     cl.append("\"");
+#else
+    QByteArray cl;
+    cl.append("unzip ");
+    //cl.append("\");
+    cl.append(tempFile);
+#endif
+
+#ifdef Q_OS_ANDROID
+    QuaZip zip(tempFile.constData());
+    zip.open(QuaZip::mdUnzip);
+
+    QuaZipFile file(&zip);
+
+    QString carpeta="aaa";
+    int v=0;
+    for(bool f=zip.goToFirstFile(); f; f=zip.goToNextFile()) {
+        file.open(QIODevice::ReadOnly);
+        //same functionality as QIODevice::readData() -- data is a char*, maxSize is qint64
+        //file.readData(data,maxSize);
+        qInfo()<<"AAAAAAAA"<<zip.getFileNameList();
+        if(v==0){
+            carpeta=QString(zip.getFileNameList().at(0));
+            qInfo()<<"Carpeta de destino Zip: "<<carpeta;
+        }else{
+            QString nfn;
+            nfn.append(carpDestinoFinal);
+            nfn.append("/");
+            nfn.append(zip.getFileNameList().at(v));
+            qInfo()<<"Destino de archivo: "<<nfn.replace("-master/", "/");
+            QFile nfile(nfn.replace("-master/", "/"));
+            if(!nfile.open(QIODevice::WriteOnly)){
+                qInfo()<<"Error al abrir archivo "<<nfn.replace("-master/", "/");
+            }else{
+                nfile.write(file.readAll());
+                nfile.close();
+            }
+        }
+        //qInfo()<<"SSSSSSSSSS"<<file.readAll();
+        //do something with the data
+        file.close();
+        v++;
+    }
+    zip.close();
+#else
     QProcess *p1 = new QProcess(this);
     /*connect(p1, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             [=]  (int exitCode, QProcess::ExitStatus exitStatus)
@@ -586,7 +642,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     cl.append(carpetaDestino);
     cl.append("-master");
     cl.append(" ");
-    cl.append(carpDestinoFinal);
+    cl.append(carpDestinoFinal.replace("\"",""));
     cl.append("/");
     cl.append(carpetaDestino);
     qInfo("Running "+cl);
@@ -634,6 +690,8 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     log(cl);
     run(cl);
 #endif
+#endif
+
 
     return true;
 }

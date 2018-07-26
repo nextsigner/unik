@@ -1,0 +1,20 @@
+QMAKE_CXX.INCDIRS = \
+    /home/nextsigner/android-ndk-r10e/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86/lib/gcc/arm-linux-androideabi/4.9/include \
+    /home/nextsigner/android-ndk-r10e/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86/lib/gcc/arm-linux-androideabi/4.9/include-fixed \
+    /home/nextsigner/android-ndk-r10e/platforms/android-16/arch-arm/usr/include
+QMAKE_CXX.LIBDIRS = \
+    /home/nextsigner/android-ndk-r10e/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86/lib/gcc/arm-linux-androideabi/4.9/armv7-a \
+    /home/nextsigner/android-ndk-r10e/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86/arm-linux-androideabi/lib/armv7-a \
+    /home/nextsigner/android-ndk-r10e/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86/lib/gcc/arm-linux-androideabi/4.9 \
+    /home/nextsigner/android-ndk-r10e/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86/lib/gcc \
+    /home/nextsigner/android-ndk-r10e/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86/arm-linux-androideabi/lib \
+    /home/nextsigner/android-ndk-r10e/platforms/android-16/arch-arm/usr/lib
+QMAKE_CXX.QT_COMPILER_STDCXX = 199711L
+QMAKE_CXX.QMAKE_GCC_MAJOR_VERSION = 4
+QMAKE_CXX.QMAKE_GCC_MINOR_VERSION = 9
+QMAKE_CXX.QMAKE_GCC_PATCH_VERSION = 0
+QMAKE_CXX.COMPILER_MACROS = \
+    QT_COMPILER_STDCXX \
+    QMAKE_GCC_MAJOR_VERSION \
+    QMAKE_GCC_MINOR_VERSION \
+    QMAKE_GCC_PATCH_VERSION

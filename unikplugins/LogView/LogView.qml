@@ -39,8 +39,8 @@ Rectangle{
     property string help: ''
 
     FontLoader {name: "FontAwesome";source: "qrc:/fontawesome-webfont.ttf";}
-    Connections {target: unik;onUkStdChanged: log(unik.ukStd);}
-    Connections {target: unik;onStdErrChanged: log(unik.getStdErr());}
+    //Connections {target: unik;onUkStdChanged: log(unik.ukStd);}
+    //Connections {target: unik;onStdErrChanged: log(unik.getStdErr());}
     LineResizeTop{
         id:lineRTop;
         width: raiz.width
