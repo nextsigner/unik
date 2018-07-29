@@ -259,6 +259,7 @@ ApplicationWindow {
             var altoBarra = a1-unik.frameHeight(app)
             app.height = a1-altoBarra
         }
-        //console.log(unik.stdErr)
+        console.log(unikError)
+        console.log(unik.stdErr)
     }
 }

@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.2
 import QtQuick.Controls.Styles 1.4
+//import uk 1.0
 Rectangle{
     id:raiz
     width: parent.width
@@ -38,9 +39,11 @@ Rectangle{
 
     property string help: ''
 
+
     FontLoader {name: "FontAwesome";source: "qrc:/fontawesome-webfont.ttf";}
-    //Connections {target: unik;onUkStdChanged: log(unik.ukStd);}
-    //Connections {target: unik;onStdErrChanged: log(unik.getStdErr());}
+    //UK{id:uk2}
+    Connections {target: unik;onUkStdChanged: log('aaa1'+unik.ukStd);}
+    Connections {target: unik;onStdErrChanged: log('aaa2'+unik.ukStd);}
     LineResizeTop{
         id:lineRTop;
         width: raiz.width
@@ -314,13 +317,14 @@ Rectangle{
 
         }
     }
+
     Rectangle{
-       width: raiz.scrollBarStyle?taLog2.width:taLog3.width
-       height: raiz.scrollBarStyle?taLog2.height:taLog3.height
-       anchors.centerIn: raiz.scrollBarStyle?taLog2:taLog3
-       color: 'transparent'
-       border.width: 1
-       border.color: raiz.fontColor
+        width: raiz.scrollBarStyle?taLog2.width:taLog3.width
+        height: raiz.scrollBarStyle?taLog2.height:taLog3.height
+        anchors.centerIn: raiz.scrollBarStyle?taLog2:taLog3
+        color: 'transparent'
+        border.width: 1
+        border.color: raiz.fontColor
     }
     Rectangle {
         id:redArrowDown1
@@ -426,52 +430,54 @@ Rectangle{
 
     }
     Component.onCompleted: {
+        if(Qt.platform.os==='android'){
+            taLog2.readOnly=true
+            taLog3.readOnly=true
+        }
         if(raiz.showUnikInitMessages){
             var s=(''+unik.initStdString).replace(/\n/g, '<br>')
             var stdinit='<b>Start Unik Init Message:</b>\u21b4<br>'+s+'<br><b>End Unik Init Message.</b><br>\n'
             var txt =''
-            if(raiz.objectName==='unik-main-errors'){
-                txt += "<b>OS: </b>"+Qt.platform.os
-                txt += "<br><b>Errors: </b><br>"
-                var s2=(''+unikError).replace(/\n/g, '<br>')
-                txt+=s2
-                txt += '<b>unik version: </b>'+version+'<br>\n'
-                txt += '<b>AppName: </b>'+appName+'<br>\n'
-                var e;
-                if(unikError!==''){
-                    txt += '\n<b>Unik Errors:</b>\n'+unikError+'<br>\n'
-                }else{
-                    txt += '\n<b>Unik Errors:</b>none<br>\n'
-                }
-                //txt += '\nErrors:\n'+unikError+'\n'
-                txt += 'Doc location: '+appsDir+'/<br>\n'
-                txt += 'host: '+host+'<br>\n'
-                txt += 'user: '+ukuser+'<br>\n'
-                if(ukuser==='unik-free'){
-                    txt += 'key: '+ukkey+'<br>\n'
-                }else{
-                    txt += 'key: '
-                    var k= (''+ukkey).split('')
-                    for(var i=0;i<k.length;i++){
-                        txt += '*'
-                    }
-                    txt += '<br>\n'
-                }
-                txt += 'sourcePath: '+sourcePath+'<br />\n'
-                txt += '\n<b>config.json:</b>\n'+unik.getFile(appsDir+'/config.json')+'<br />\n'
 
-                txt += '\nuserhost: ['+userhost+']<br>\n'
-                bodyText+=txt+'<br>'+stdinit
+            txt += "<b>OS: </b>"+Qt.platform.os
+            txt += "<br><b>Errors: </b><br>"
+            var s2=(''+unikError).replace(/\n/g, '<br>')
+            txt+=s2
+            txt += '<b>unik version: </b>'+version+'<br>\n'
+            txt += '<b>AppName: </b>'+appName+'<br>\n'
+            var e;
+            if(unikError!==''){
+                txt += '\n<b>Unik Errors:</b>\n'+unikError+'<br>\n'
             }else{
-                bodyText+=stdinit
+                txt += '\n<b>Unik Errors:</b>none<br>\n'
             }
+            //txt += '\nErrors:\n'+unikError+'\n'
+            txt += 'Doc location: '+appsDir+'/<br>\n'
+            txt += 'host: '+host+'<br>\n'
+            txt += 'user: '+ukuser+'<br>\n'
+            if(ukuser==='unik-free'){
+                txt += 'key: '+ukkey+'<br>\n'
+            }else{
+                txt += 'key: '
+                var k= (''+ukkey).split('')
+                for(var i=0;i<k.length;i++){
+                    txt += '*'
+                }
+                txt += '<br>\n'
+            }
+            txt += 'sourcePath: '+sourcePath+'<br />\n'
+            txt += '\n<b>config.json:</b>\n'+unik.getFile(appsDir+'/config.json')+'<br />\n'
+
+            txt += '\nuserhost: ['+userhost+']<br>\n'
+            bodyText+=txt+'<br>'+stdinit
+
             if(raiz.scrollBarStyle){
                 taLog2.append(bodyText)
             }else{
                 taLog3.append(bodyText)
             }
         }
-        unik.setProperty("setInitString", true)
+        //unik.setProperty("setInitString", true)
         if(raiz.fontSize<=0){
             raiz.fontSize = 14
         }

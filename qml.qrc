@@ -9,8 +9,8 @@
         <file>Boton.qml</file>
         <file>Unik.qml</file>
         <file>LineResizeH.qml</file>
-        <file>LogView.qml</file>
         <file>resources/logo_unik_300.png</file>
         <file>main_rpi.qml</file>
+        <file>probe.qml</file>
     </qresource>
 </RCC>

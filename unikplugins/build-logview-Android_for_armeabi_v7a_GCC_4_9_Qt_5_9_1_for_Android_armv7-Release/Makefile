@@ -53,6 +53,7 @@ OBJECTS_DIR   = ../../../.obj/
 SOURCES       = ../LogView/logview.cpp 
 OBJECTS       = ../../../.obj/logview.o
 DIST          = ../LogView/LogView.qml \
+		../LogView/Boton.qml \
 		../LogView/LineResizeTop.qml \
 		../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/features/spec_pre.prf \
 		../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/common/unix.conf \
@@ -200,6 +201,7 @@ DIST          = ../LogView/LogView.qml \
 		../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/common/android-base-tail.conf \
 		../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/android-g++/qmake.conf \
 		../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/features/spec_post.prf \
+		../LogView/.qmake.stash \
 		../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/features/exclusive_builds.prf \
 		../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/features/toolchain.prf \
 		../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/features/default_pre.prf \
@@ -221,7 +223,7 @@ DIST          = ../LogView/LogView.qml \
 		../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/features/lex.prf \
 		../LogView/logview.pro  ../LogView/logview.cpp
 QMAKE_TARGET  = logview
-DESTDIR       = ../../android/qml/
+DESTDIR       = ../../../../Qt5.9.1/5.9.1/android_armv7/qml/LogView/
 TARGET        = liblogview.so
 TARGETD       = liblogview.so
 
@@ -229,15 +231,15 @@ TARGETD       = liblogview.so
 first: all
 ####### Build rules
 
-../../android/qml/$(TARGET):  $(OBJECTS) $(SUBLIBS) $(OBJCOMP)  
-	@test -d ../../android/qml/ || mkdir -p ../../android/qml/
+../../../../Qt5.9.1/5.9.1/android_armv7/qml/LogView/$(TARGET):  $(OBJECTS) $(SUBLIBS) $(OBJCOMP)  
+	@test -d ../../../../Qt5.9.1/5.9.1/android_armv7/qml/LogView/ || mkdir -p ../../../../Qt5.9.1/5.9.1/android_armv7/qml/LogView/
 	-$(DEL_FILE) $(TARGET)
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(LIBS) $(OBJCOMP)
-	-$(MOVE) $(TARGET) ../../android/qml/ 
-	cp /home/nextsigner/nsp/unik/unikplugins/LogView/qmldir ../../android/qml
-	 cp /home/nextsigner/nsp/unik/unikplugins/LogView/Boton.qml ../../android/qml
-	 cp /home/nextsigner/nsp/unik/unikplugins/LogView/LineResizeTop.qml ../../android/qml
-	 cp /home/nextsigner/nsp/unik/unikplugins/LogView/LogView.qml ../../android/qml
+	-$(MOVE) $(TARGET) ../../../../Qt5.9.1/5.9.1/android_armv7/qml/LogView/ 
+	cp /home/nextsigner/nsp/unik/unikplugins/LogView/qmldir /home/nextsigner/Qt5.9.1/5.9.1/android_armv7/qml/LogView
+	 cp /home/nextsigner/nsp/unik/unikplugins/LogView/Boton.qml /home/nextsigner/Qt5.9.1/5.9.1/android_armv7/qml/LogView
+	 cp /home/nextsigner/nsp/unik/unikplugins/LogView/LineResizeTop.qml /home/nextsigner/Qt5.9.1/5.9.1/android_armv7/qml/LogView
+	 cp /home/nextsigner/nsp/unik/unikplugins/LogView/LogView.qml /home/nextsigner/Qt5.9.1/5.9.1/android_armv7/qml/LogView
 	
 
 
@@ -388,6 +390,7 @@ Makefile: ../LogView/logview.pro ../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs
 		../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/common/android-base-tail.conf \
 		../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/android-g++/qmake.conf \
 		../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/features/exclusive_builds.prf \
 		../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/features/toolchain.prf \
 		../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/features/default_pre.prf \
@@ -559,6 +562,7 @@ Makefile: ../LogView/logview.pro ../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs
 ../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/common/android-base-tail.conf:
 ../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/android-g++/qmake.conf:
 ../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/features/exclusive_builds.prf:
 ../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/features/toolchain.prf:
 ../../../../Qt5.9.1/5.9.1/android_armv7/mkspecs/features/default_pre.prf:
@@ -589,7 +593,7 @@ qmake: FORCE
 qmake_all: FORCE
 
 
-all: Makefile ../../android/qml/$(TARGET)
+all: Makefile ../../../../Qt5.9.1/5.9.1/android_armv7/qml/LogView/$(TARGET)
 
 dist: distdir FORCE
 	(cd `dirname $(DISTDIR)` && $(TAR) $(DISTNAME).tar $(DISTNAME) && $(COMPRESS) $(DISTNAME).tar) && $(MOVE) `dirname $(DISTDIR)`/$(DISTNAME).tar.gz . && $(DEL_FILE) -r $(DISTDIR)
@@ -607,7 +611,7 @@ clean: compiler_clean
 
 
 distclean: clean 
-	-$(DEL_FILE) ../../android/qml/$(TARGET) 
+	-$(DEL_FILE) ../../../../Qt5.9.1/5.9.1/android_armv7/qml/LogView/$(TARGET) 
 	-$(DEL_FILE) .qmake.stash
 	-$(DEL_FILE) Makefile
 
@@ -1433,10 +1437,14 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_source_clean
 
 install_target: first FORCE
 	@test -d $(INSTALL_ROOT)/libs/armeabi-v7a/ || mkdir -p $(INSTALL_ROOT)/libs/armeabi-v7a/
-	-$(QINSTALL_PROGRAM) ../../android/qml/$(TARGET) $(INSTALL_ROOT)/libs/armeabi-v7a/$(TARGET)
+	-$(QINSTALL) /home/nextsigner/nsp/unik/unikplugins/LogView/Boton.qml $(INSTALL_ROOT)/libs/armeabi-v7a/Boton.qml
+	-$(QINSTALL) /home/nextsigner/nsp/unik/unikplugins/LogView/LineResizeTop.qml $(INSTALL_ROOT)/libs/armeabi-v7a/LineResizeTop.qml
+	-$(QINSTALL) /home/nextsigner/nsp/unik/unikplugins/LogView/LogView.qml $(INSTALL_ROOT)/libs/armeabi-v7a/LogView.qml
 
 uninstall_target: FORCE
-	-$(DEL_FILE) $(INSTALL_ROOT)/libs/armeabi-v7a/$(TARGET)
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/libs/armeabi-v7a/LogView.qml
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/libs/armeabi-v7a/LineResizeTop.qml
+	-$(DEL_FILE) -r $(INSTALL_ROOT)/libs/armeabi-v7a/Boton.qml
 	-$(DEL_DIR) $(INSTALL_ROOT)/libs/armeabi-v7a/ 
 
 

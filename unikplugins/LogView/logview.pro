@@ -2,6 +2,7 @@ TEMPLATE = lib
 CONFIG += plugin
 QT += qml
 
+LIBNAME=LogView
 
 linux{
     !android{
@@ -19,32 +20,17 @@ linux{
             message(Destino GNU/Linux RPI3 $$DESTDIR)
         }
     }else{
-            DESTDIR= ../../android/qml
+            DESTDIR=$$[QT_INSTALL_QML]/$${LIBNAME}
             message(Destino Android $$DESTDIR)
-            #EXTRA_BINFILES += \
-               # $$PWD/qmldir \
-                #$$PWD/Boton.qml \
-                #$$PWD/LineResizeTop.qml \
-                #$$PWD/LogView.qml
-                #for(FILE,EXTRA_BINFILES){
-                    #QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}$$escape_expand(\n\t))
-                #}
-            #QMAKE_POST_LINK += $$quote(mkdir /home/nextsigner/aaasss222$$escape_expand(\n\t))
-            #OUT_PWD=%{sourceDir}/../aaalll
-            #Release:DESTDIR = release
 
-            #@nextsigner
-            #SET THIS PROJECT INTO BUILD DIR %{sourceDir}/../../../../build_logview_android
             OBJECTS_DIR = $$PWD/../../../.obj
             MOC_DIR = $$PWD/../../../.moc
             RCC_DIR = $$PWD/../../../.r
-            message(--AAA--> $$OUT_PWD)
-            message(----> $$[QT_INSTALL_QML])
-#target3.path=$${OUT_PWD}/
-#unix:target3.files=$${DESTDIR}/*.so*
-#win32:target3.files=$${DESTDIR}/*.dll
+            message(----> $${DESTDIR})
 
-#INSTALLS += target3
+            target.path=$${DESTDIR}/
+            target.files=$${PWD}/*.qml
+            INSTALLS += target
     }
 }
 macos{
@@ -104,4 +90,5 @@ win32 {
 
 DISTFILES += \
     LogView.qml \
+    Boton.qml \
     LineResizeTop.qml

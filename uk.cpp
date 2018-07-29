@@ -2,6 +2,7 @@
 
 UK::UK(QObject *parent) : QObject(parent)
 {
+    //qInstallMessageHandler(this->unikStdOut());
     cinj = new QTimer(this);
     lsim<<"g"<<"h"<<"i"<<"j"<<"k"<<"l"<<"m"<<"n"<<"o"<<"p"<<"q"<<"r"<<"s"<<"t"<<"u"<<"v"<<"w"<<"x"<<"y"<<"z";
     lnum<<"11"<<"33"<<"66"<<"77"<<"88"<<"99"<<"20"<<"30"<<"40"<<"60"<<"70"<<"80"<<"90"<<"12"<<"21"<<"57"<<"82"<<"92"<<"84"<<"72";
@@ -24,6 +25,11 @@ void UK::setHost(QString nh)
 QString UK::host()
 {
     return h;
+}
+
+void UK::setUnikLog(QString l)
+{
+    log(l.toUtf8());
 }
 
 void UK::ukClose(QQuickCloseEvent *close){
@@ -558,6 +564,11 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
 #ifndef Q_OS_ANDROID
     carpDestinoFinal.append("\"");
 #endif
+    qInfo()<<"Local Folder: "<<localFolder;
+    QDir fdf(localFolder);
+    if(!fdf.exists()){
+        fdf.mkpath(".");
+    }
     QFile zipFile(tempFile);
     if(zipFile.exists()){
         qInfo("Zip File "+tempFile+" exist.");
@@ -793,6 +804,7 @@ void UK::restartApp(QString args)
 
 bool UK::run(QString commandLine)
 {
+   #ifndef Q_OS_ANDROID
     proc = new QProcess(this);
     connect(proc, SIGNAL(readyReadStandardOutput()),this, SLOT(salidaRun()));
     connect(proc, SIGNAL(readyReadStandardError()),this, SLOT(salidaRunError()));
@@ -811,6 +823,7 @@ bool UK::run(QString commandLine)
         setUkStd(msg);
         setRunCL(false);
     }
+#endif
     return false;
 }
 
@@ -1433,11 +1446,11 @@ QList<QObject *> UK::getSqlData(QString query)
         ret.clear();
         if(debugLog){
             qDebug()<<"Sql query is exec...";
-            setUkStd("Sql query is exec...");
+            qInfo("Sql query is exec...");
             QString cc;
             cc.append("Column count: ");
             cc.append(QString::number(cantcols));
-            setUkStd(cc);
+            qInfo(cc.toUtf8());
         }
         int v=0;
         while (consultar.next()) {

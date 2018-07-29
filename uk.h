@@ -63,7 +63,9 @@
 #include <QStandardPaths>
 #include <QThread>
 
+
 #include "row.h"
+#include "uniklog.h"
 
 //ENCDEC DEF
 #define rA1 "9cc9"
@@ -85,26 +87,30 @@
 class UK : public QObject
 {
     Q_OBJECT
-    //Q_PROPERTY(int porc READ getPorc WRITE setPorc NOTIFY porcChanged)
     Q_PROPERTY(int porc READ getPorc  NOTIFY porcChanged)
     Q_PROPERTY(QString uploadState READ getUploadState WRITE setUploadState NOTIFY uploadStateChanged)
-    Q_PROPERTY(QString ukStd READ getUkStd() WRITE setUkStd NOTIFY ukStdChanged)
-    Q_PROPERTY(QString stdErr READ getStdErr WRITE setStdErr NOTIFY stdErrChanged)
     Q_PROPERTY(bool runCL READ getRunCL WRITE setRunCL NOTIFY runCLChanged)
     Q_PROPERTY(bool debugLog READ getDebugLog WRITE setDebugLog NOTIFY debugLogChanged)
+    Q_PROPERTY(QString ukStd READ getUkStd() WRITE setUkStd NOTIFY ukStdChanged)
+    Q_PROPERTY(QString stdErr READ getStdErr WRITE setStdErr NOTIFY stdErrChanged)
     Q_PROPERTY(QString initStdString READ getInitStdString WRITE setInitStdString)
 public:
     explicit UK(QObject *parent = nullptr);
     ~UK();
+    static void unikStdOut(QtMsgType type, const QMessageLogContext &context, const QString &message);
     QStringList uErrors;
-    bool enabledInj;
 
     //Propiedades para QML
+    UnikLog *ul;
     int porc;
     QString uploadState;
     QString ukStd;
     QString stdErr;
     bool runCL;
+
+    void setUl(UnikLog *nUl){
+        ul = nUl;
+    }
 
     Q_INVOKABLE int getPorc(){
         return porc;
@@ -134,16 +140,14 @@ public:
         uploadState = us;
         emit uploadStateChanged();
     }
-    Q_INVOKABLE QString getUkStd(){
+    QString getUkStd(){
         return ukStd;
     }
-    Q_INVOKABLE void setUkStd(const QString s){
-        ukStd.clear();
-        ukStd.append(s.toHtmlEscaped());
-        ukStd.append("\n");
-        /* QByteArray ls;
-        ls.append(s);
-        log(ls);*/
+    void setUkStd(const QString s){
+        QString u="";
+        u.append(s.toHtmlEscaped());
+        u.append("\n");
+        ukStd=u;
         emit ukStdChanged();
     }
     Q_INVOKABLE QString getStdErr(){
@@ -158,6 +162,9 @@ public:
     }
     Q_INVOKABLE void setInitStdString(QString s){
         initStdString = s;
+    }
+    Q_INVOKABLE QObject* unik(){
+        return this;
     }
     Q_INVOKABLE bool getRunCL(){
         return runCL;
@@ -200,6 +207,7 @@ public:
 
  signals:
     //Señales para QML
+    void log();
     void porcChanged();
     void uploadStateChanged();
     void ukStdChanged();
@@ -208,6 +216,7 @@ public:
     void debugLogChanged();
 
 public slots:
+    void setUnikLog(QString l);
     void ukClose(QQuickCloseEvent *close);
     void engineExited(int n);
     void engineQuited(QObject*);
@@ -325,4 +334,21 @@ private:
 
 
 };
+
+/*void UK::unikStdOut(QtMsgType type,
+                    const QMessageLogContext &context,
+                    const QString &message)
+{
+        android_LogPriority priority = ANDROID_LOG_DEBUG;
+        switch (type) {
+        case QtDebugMsg: priority = ANDROID_LOG_DEBUG; break;
+        case QtWarningMsg: priority = ANDROID_LOG_WARN; break;
+        case QtCriticalMsg: priority = ANDROID_LOG_ERROR; break;
+        case QtFatalMsg: priority = ANDROID_LOG_FATAL; break;
+        };
+
+        __android_log_print(priority, "Qt", "%s", qPrintable(message));
+        //log(message.toUtf8());
+    //}
+}*/
 #endif

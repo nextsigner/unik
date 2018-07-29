@@ -252,7 +252,7 @@ ApplicationWindow {
         //txt += '\nuserhost: ['+userhost+']\n'
 
         txtEstado.text = txt
-        unik.log(txt)
+        console.log(txt)
 
     }
 }

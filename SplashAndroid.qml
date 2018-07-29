@@ -6,13 +6,13 @@ ApplicationWindow{
     objectName: 'awsplash'
     visible: true
     visibility: "FullScreen"
-    //visibility: Qt.platform.os!=='android' ? "Maximized": undefined
     color: "black"
     property bool ver: true
     property color c1: "#1fbc05"
     property color c2: "#4fec35"
-    //Connections {target: unik;onUkStdChanged: log.text=(''+unik.ukStd).replace(/\n/g, ' ');}
-    //Connections {target: unik;onStdErrChanged: log.text=(''+unik.getStdErr()).replace(/\n/g, ' ');}
+
+    Connections {target: unik;onUkStdChanged:log.text=(''+unik.ukStd).replace(/\n/g, ' ');}
+    Connections {target: unik;onUkStdChanged: log.text=(''+unik.ukStd).replace(/\n/g, ' '); }
 
     onClosing: {
         close.accepted = false
@@ -100,5 +100,8 @@ ApplicationWindow{
             }
         }
     }
-    Component.onCompleted: logo.opacity=1.0
+    Component.onCompleted: {
+        logo.opacity=1.0
+        console.log("Splash Android running...")
+    }
 }

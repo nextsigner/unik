@@ -32,14 +32,19 @@
 #include <QtWebEngine>
 #endif
 #else
+#include <android/log.h>
 #include <QtWebView>
 #endif
 
+//#include "uniklog.h"
 
-UK u;
+
+UK *u0;
 QByteArray debugData;
 QString debugPrevio;
 bool abortar=false;
+#ifndef  Q_OS_ANDROID
+UK u;
 void unikStdOutPut(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     QTextStream out(stdout);
@@ -131,7 +136,23 @@ void unikStdOutPut(QtMsgType type, const QMessageLogContext &context, const QStr
         abort();
     }
 }
+#else
+static void android_message_handler(QtMsgType type,
+                                  const QMessageLogContext &context,
+                                  const QString &message)
+{
+    android_LogPriority priority = ANDROID_LOG_DEBUG;
+    switch (type) {
+    case QtDebugMsg: priority = ANDROID_LOG_DEBUG; break;
+    case QtWarningMsg: priority = ANDROID_LOG_WARN; break;
+    case QtCriticalMsg: priority = ANDROID_LOG_ERROR; break;
+    case QtFatalMsg: priority = ANDROID_LOG_FATAL; break;
+    };
 
+    __android_log_print(priority, "Qt", "%s", qPrintable(message));
+    u0->log(message.toUtf8());
+}
+#endif
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -140,6 +161,8 @@ int main(int argc, char *argv[])
     app.setApplicationName("unik");
     app.setOrganizationDomain("http://unikode.org/");
     app.setOrganizationName("nextsigner");
+
+    UK u;
 
 
     QDateTime hoy = QDateTime::currentDateTime();
@@ -223,7 +246,8 @@ int main(int argc, char *argv[])
         fileVersion.close();
     }
     qDebug() << "UNIK VERSION: " << nv;
-    app.setApplicationVersion(nv.toUtf8());
+    //app.setApplicationVersion(nv.toUtf8());
+    app.setApplicationVersion("2.222");
 
 
 
@@ -250,8 +274,8 @@ int main(int argc, char *argv[])
     QByteArray moduloGit="unik-tools";
 #else
 #ifdef Q_OS_ANDROID
-    QByteArray urlGit="https://github.com/nextsigner/unik-tools";
-    QByteArray moduloGit="unik-tools";
+    QByteArray urlGit="https://github.com/nextsigner/qmlandia";
+    QByteArray moduloGit="qmlandia";
 #else
     QByteArray urlGit="https://github.com/nextsigner/unik-tools-rpi";
     QByteArray moduloGit="unik-tools-rpi";
@@ -298,6 +322,12 @@ int main(int argc, char *argv[])
     u.setEngine(&engine);
 #ifndef Q_OS_ANDROID
     qInstallMessageHandler(unikStdOutPut);
+#else
+   u0=&u;
+    qInstallMessageHandler(android_message_handler);
+    //QtMessageHandler a;
+    //a.
+    //qInstallMessageHandler(a);
 #endif
     QByteArray pws=u.getPath(3).toUtf8();//Path WorkSpace
     pws.append("/unik");
@@ -311,7 +341,24 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("wait", u.wait);
     engine.rootContext()->setContextProperty("splashvisible", u.splashvisible);
     engine.rootContext()->setContextProperty("setInitString", u.setInitString);
+    //engine.rootContext()->setContextProperty("log", u.ukStd);
     engine.rootContext()->setContextProperty("unik", &u);
+    engine.rootContext()->setContextProperty("console", &u);
+    engine.rootContext()->setContextProperty("unikLog", u.ukStd);
+
+    //UnikLog ul;
+    //QObject::connect(&ul, SIGNAL(myLogChanged(QString)), &u, SLOT(setUnikLog(QString)));
+    //ul.start();
+    //QObject::connect(&ul, SIGNAL(logIsChanged(QString)), &u, SLOT(setUnikLog(QString)));
+    //QObject::connect(&u, SIGNAL(stdErrChanged()), &ul, SLOT(deleteLater());
+    //engine.rootContext()->setContextProperty("unikLog", &ul);
+    //engine.rootContext()->setContextObject(u.ukStd);
+    //u.setObjectName("unik");
+    //engine.rootContext()->setContextObject(&u);
+
+
+    qmlRegisterType<UK>("uk", 1, 0, "UK");
+
 #ifdef Q_OS_ANDROID
     engine.load("qrc:/SplashAndroid.qml");
 #else
@@ -325,7 +372,6 @@ int main(int argc, char *argv[])
     //Example Connection for unik engine into uk.cpp method.
     //QObject::connect(&engine, SIGNAL(warnings(QList<QQmlError>)), &u, SLOT(errorQML(QList<QQmlError>)));
 
-    u.enabledInj = true;
 
     bool readConfig=true;
     bool debugLog=false;
@@ -508,10 +554,10 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_ANDROID
     QByteArray mf;
     mf.append(dupl);
-    mf.append("/unik-tools/main.qml");
+    mf.append("/qmlandia/main.qml");
     QFile m(mf);
     if(!m.exists()){
-        bool autd=u.downloadGit("https://github.com/nextsigner/unik-tools", dupl.toUtf8());
+        bool autd=u.downloadGit("https://github.com/nextsigner/qmlandia", dupl.toUtf8());
     }
 #else
     QString cut;
@@ -540,9 +586,9 @@ int main(int argc, char *argv[])
 #endif
     if(settings.value("ws").toString().isEmpty()){
         settings.setValue("ws", dupl);
-        u.log("WorkSpace by default: "+dupl.toUtf8());
+        qInfo()<<"WorkSpace by default: "<<dupl.toUtf8();
     }else{
-        u.log("Current WorkSpace: "+settings.value("ws").toString().toUtf8());
+        qInfo()<<"Current WorkSpace: "<<settings.value("ws").toString().toUtf8();
 
         QFileInfo fi(dupl);
         if(!fi.isWritable()){
@@ -550,7 +596,7 @@ int main(int argc, char *argv[])
             ndulw.append(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
             ndulw.append("/unik");
             dupl = ndulw;
-            u.log("WorkSpace not writable!");
+            qInfo()<<"WorkSpace not writable!";
             u.log("New WorkSpace seted: "+ndulw.toUtf8());
         }else{
             pws = settings.value("ws").toString().toUtf8();
@@ -561,7 +607,11 @@ int main(int argc, char *argv[])
     QDir dirWS(dupl);
     QString utp;
     utp.append(dupl);
+#ifndef Q_OS_ANDROID
     utp.append("/unik-tools");
+#else
+    utp.append("/qmlandia");
+#endif
 #ifdef __arm__
     utp.append("-rpi");
 #endif
@@ -582,16 +632,21 @@ int main(int argc, char *argv[])
             bool unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools", dupl.toUtf8());
 #else
 #ifdef Q_OS_ANDROID
-            bool unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools", dupl.toUtf8());
+            bool unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/qmlandia", dupl.toUtf8());
 #else
             bool unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi", dupl.toUtf8());
 #endif
 #endif
             lba="";
+#ifndef Q_OS_ANDROID
+            lba.append("Unik-Tools ");
+#else
+            lba.append("QmLandia ");
+#endif
             if(unikToolDownloaded){
-                lba.append("Unik-Tools downloaded.");
+                lba.append("downloaded.");
             }else {
-                lba.append("Unik-Tools is not downloaded!");
+                lba.append("is not downloaded!");
             }
             qInfo()<<lba;
         }
@@ -631,7 +686,12 @@ int main(int argc, char *argv[])
     QByteArray cfgData;
     cfgData.append("{\"mode\":\"-folder\", \"arg1\": \"");
     cfgData.append(settings.value("ws").toString());
+#ifndef Q_OS_ANDROID
     cfgData.append("/unik-tools\"}");
+#else
+    cfgData.append("/qmlandia\"}");
+#endif
+
     QFile cfg(urlConfigJson);
     if(!cfg.exists()){
         u.setFile(urlConfigJson.toUtf8(), cfgData);
@@ -815,8 +875,6 @@ int main(int argc, char *argv[])
     }
 #endif
     //<-Finaliza configuracion OS
-
-    qmlRegisterType<UK>("uk", 1, 0, "UK");
     engine.rootContext()->setContextProperty("engine", &engine);
 
     QByteArray tempFolder;
@@ -827,7 +885,7 @@ int main(int argc, char *argv[])
     pq.append("/unik-tools/");
 #else
 #ifdef Q_OS_ANDROID
-    pq.append("/unik-tools/");
+    pq.append("/qmlandia/");
 #else
     pq.append("/unik-tools-rpi/");
 #endif
@@ -1142,7 +1200,6 @@ int main(int argc, char *argv[])
             }
         }
         appName = arg2;
-        u.enabledInj = false;
         upkFileName.append(dupl);
         upkFileName.append("/");
         upkFileName.append(appName);
@@ -1197,7 +1254,7 @@ int main(int argc, char *argv[])
             pq.append("/unik-tools/");
 #else
 #ifdef Q_OS_ANDROID
-            pq.append("/unik-tools/");
+            pq.append("/qmlandia/");
 #else
             pq.append("/unik-tools-rpi/");
 #endif
@@ -1212,7 +1269,6 @@ int main(int argc, char *argv[])
         }else{
             appName = marg2.at(0);
         }
-        u.enabledInj = false;
     }
 
     QString arg1Control;
@@ -1442,7 +1498,6 @@ int main(int argc, char *argv[])
             qDebug()<<"unik working in mode: -remoteFolder";
             qDebug()<<"Remote Folder Url: "<<urlRemoteFolder;
         }
-        u.enabledInj = false;
         u.downloadRemoteFolder(urlRemoteFolder, appArg2, appArg3);
         pq = "";
         pq.append(appArg3);
@@ -1717,11 +1772,17 @@ int main(int argc, char *argv[])
     unikPluginsPath.append(u.getPath(1));
     unikPluginsPath.append("/unikplugins");
     engine.addImportPath(unikPluginsPath);
+
 #ifdef __arm__
     engine.addImportPath("/home/pi/unik/qml");
 #endif
-    engine.load(QUrl(mainQml));
-    QQmlComponent component(&engine, QUrl(mainQml));
+
+
+    //Probe file is for debug any components in the build operations. Set empty for release.
+    QByteArray probe = "qrc:/probe.qml";
+    engine.load(probe.isEmpty() ? QUrl(mainQml) : QUrl(probe));
+    QQmlComponent component(&engine, probe.isEmpty() ? QUrl(mainQml) : QUrl(probe));
+
     engine.addImportPath(qmlImportPath);
     QByteArray m1;
     m1.append(qmlImportPath);

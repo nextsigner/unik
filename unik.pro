@@ -80,6 +80,9 @@ QMAKE_POST_LINK += $$quote(mkdir $$CURRENTDIR_COMPILATION$$escape_expand(\n\t))
         }
     }
 
+    }else{
+        message(QT_MESSAGELOGCONTEXT defined for Android)
+        DEFINES += QT_MESSAGELOGCONTEXT
     }
 }
 mac{
@@ -209,30 +212,7 @@ DISTFILES += \
     android/res/values/libs.xml \
     android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.properties \
-    android/gradlew.bat \
-    build_unik.AppImage \
-    android/assets/unik-tools/Ayuda.qml \
-    android/assets/unik-tools/Boton.qml \
-    android/assets/unik-tools/DialogoConfirmar.qml \
-    android/assets/unik-tools/FormUnikLogin.qml \
-    android/assets/unik-tools/GitAppsList.qml \
-    android/assets/unik-tools/LineResizeH.qml \
-    android/assets/unik-tools/LogView.qml \
-    android/assets/unik-tools/main.qml \
-    android/assets/unik-tools/Page1.qml \
-    android/assets/unik-tools/PageAppList.qml \
-    android/assets/unik-tools/ToUpkDialog.qml \
-    android/assets/unik-tools/Ayuda.qml \
-    android/assets/unik-tools/Boton.qml \
-    android/assets/unik-tools/DialogoConfirmar.qml \
-    android/assets/unik-tools/FormUnikLogin.qml \
-    android/assets/unik-tools/GitAppsList.qml \
-    android/assets/unik-tools/LineResizeH.qml \
-    android/assets/unik-tools/LogView.qml \
-    android/assets/unik-tools/main.qml \
-    android/assets/unik-tools/Page1.qml \
-    android/assets/unik-tools/PageAppList.qml \
-    android/assets/unik-tools/ToUpkDialog.qml
+    android/gradlew.bat
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
