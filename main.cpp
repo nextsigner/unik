@@ -1779,7 +1779,8 @@ int main(int argc, char *argv[])
 
 
     //Probe file is for debug any components in the build operations. Set empty for release.
-    QByteArray probe = "qrc:/probe.qml";
+    QByteArray probe = "";
+    //probe.append("qrc:/probe.qml");
     engine.load(probe.isEmpty() ? QUrl(mainQml) : QUrl(probe));
     QQmlComponent component(&engine, probe.isEmpty() ? QUrl(mainQml) : QUrl(probe));
 

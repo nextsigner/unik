@@ -65,7 +65,6 @@
 
 
 #include "row.h"
-#include "uniklog.h"
 
 //ENCDEC DEF
 #define rA1 "9cc9"
@@ -97,20 +96,14 @@ class UK : public QObject
 public:
     explicit UK(QObject *parent = nullptr);
     ~UK();
-    static void unikStdOut(QtMsgType type, const QMessageLogContext &context, const QString &message);
     QStringList uErrors;
 
     //Propiedades para QML
-    UnikLog *ul;
     int porc;
     QString uploadState;
     QString ukStd;
     QString stdErr;
     bool runCL;
-
-    void setUl(UnikLog *nUl){
-        ul = nUl;
-    }
 
     Q_INVOKABLE int getPorc(){
         return porc;
