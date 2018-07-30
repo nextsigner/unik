@@ -7,18 +7,16 @@ QT += qml quick sql
 }
 CONFIG += c++11
 CONFIG -= qmlcache
-#CONFIG += console
-#CONFIG+=qml_debug
 
 LOCATION = $$PWD
 DEFINES += UNIK_PROJECT_LOCATION=\\\"$$LOCATION\\\"
 
 linux{
-FILE_VERSION_NAME=linux_version
-CURRENTDIR_COMPILATION=$(HOME)/unikCurrentDirComp
-DEFINES += UNIK_CURRENTDIR_COMPILATION=\\\"$$CURRENTDIR_COMPILATION\\\"
-message(UNIK_CURRENTDIR_COMPILATION=$$CURRENTDIR_COMPILATION)
-QMAKE_POST_LINK += $$quote(mkdir $$CURRENTDIR_COMPILATION$$escape_expand(\n\t))
+    FILE_VERSION_NAME=linux_version
+    CURRENTDIR_COMPILATION=$(HOME)/unikCurrentDirComp
+    DEFINES += UNIK_CURRENTDIR_COMPILATION=\\\"$$CURRENTDIR_COMPILATION\\\"
+    message(UNIK_CURRENTDIR_COMPILATION=$$CURRENTDIR_COMPILATION)
+    QMAKE_POST_LINK += $$quote(mkdir $$CURRENTDIR_COMPILATION$$escape_expand(\n\t))
     !android{
         message(Linux NO ANDROID)
     !contains(QMAKE_HOST.arch, arm.*):{
@@ -33,20 +31,20 @@ QMAKE_POST_LINK += $$quote(mkdir $$CURRENTDIR_COMPILATION$$escape_expand(\n\t))
 
         #Para Plugins unikSqliteCrypto
         #message(Plugins unikSqliteCrypto INCLUDEPATH= $$PWD/unikSqliteCrypto)
-        LIBS += -L$$PWD/../unik-recursos/build_usc_linux/ -lunikSqliteCrypto
-        INCLUDEPATH += $$PWD/../unik-recursos/unikSqliteCrypto
-        DEPENDPATH += $$PWD/../unik-recursos/unikSqliteCrypto
+        #LIBS += -L$$PWD/../unik-recursos/build_usc_linux/ -lunikSqliteCrypto
+        #INCLUDEPATH += $$PWD/../unik-recursos/unikSqliteCrypto
+        #DEPENDPATH += $$PWD/../unik-recursos/unikSqliteCrypto
 
         #COPIAR ARCHIVOS DENTRO DE APPIMAGE
-        #EXTRA_BINFILES += \
-        #$$PWD/version
-        #for(FILE,EXTRA_BINFILES){
-            #QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}$$escape_expand(\n\t))
-            #message(Copyng $${FILE} $${DESTDIR}$$escape_expand(\n\t))
-        #}
+        EXTRA_BINFILES += \
+        $$PWD/linux_version
+        for(FILE,EXTRA_BINFILES){
+            QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}$$escape_expand(\n\t))
+            message(Copyng $${FILE} $${DESTDIR}$$escape_expand(\n\t))
+        }
 
         #Deploy Command Line Example
-        #linuxdeployqt /media/nextsigner/ZONA-A1/nsp/unik-recursos/build_unik_linux_64/unik -qmldir=/media/nextsigner/ZONA-A1/nsp/unik -appimage -always-overwrite -bundle-non-qt-libs -no-plugins
+        #linuxdeployqt /media/nextsigner/ZONA-A1/nsp/build_unik_linux_64/unik -qmldir=/media/nextsigner/ZONA-A1/nsp/unik -appimage -always-overwrite -bundle-non-qt-libs -no-plugins
         #mv /media/nextsigner/ZONA-A1/nsp/unik-recursos/build_unik_linux_64.AppImage /home/nextsigner/Escritorio/unik_v2.24.AppImage
     }else{
         #Set Working Directory for RPI3 compilation in /home/pi/nsp
@@ -136,9 +134,9 @@ android{
     #CONFIG(staticlib): DEFINES += QUAZIP_STATIC
     LIBS+=-L/usr/local/zlib/lib
     INCLUDEPATH+=/usr/local/zlib/include
-HEADERS += $$PWD/quazip/*.h
-SOURCES += $$PWD/quazip/*.cpp
-SOURCES += $$PWD/quazip/*.c
+    HEADERS += $$PWD/quazip/*.h
+    SOURCES += $$PWD/quazip/*.cpp
+    SOURCES += $$PWD/quazip/*.c
 
     #ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android-build
 
@@ -147,9 +145,9 @@ SOURCES += $$PWD/quazip/*.c
 
     QT += androidextras
 
-COMMON_DATA.path = /assets/                                                                                qml
-COMMON_DATA.files = $$files($$PWD/android/qml/*)
-INSTALLS += COMMON_DATA
+    COMMON_DATA.path = /assets/                                                                                qml
+    COMMON_DATA.files = $$files($$PWD/android/qml/*)
+    INSTALLS += COMMON_DATA
 }
 
 VERSION_YEAR=2016

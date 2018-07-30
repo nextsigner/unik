@@ -39,7 +39,10 @@
 //#include "uniklog.h"
 
 
+#ifdef Q_OS_ANDROID
 UK *u0;
+#endif
+
 QByteArray debugData;
 QString debugPrevio;
 bool abortar=false;
@@ -162,10 +165,12 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("http://unikode.org/");
     app.setOrganizationName("nextsigner");
 
+#ifdef Q_OS_ANDROID
     UK u;
+#endif
 
 
-    QDateTime hoy = QDateTime::currentDateTime();
+    /*QDateTime hoy = QDateTime::currentDateTime();
     int anio = hoy.date().year()-2016;
     //int mes = hoy.date().month();
     int dia = hoy.date().day();
@@ -187,7 +192,7 @@ int main(int argc, char *argv[])
     QString currentPath="";
     currentPath.append(QDir::currentPath());
     QString carpComp="";
-    QString nomVersion="";
+    QString nomVersion="";*/
 #ifdef Q_OS_LINUX    
 #ifdef __arm__
 #ifdef Q_OS_ANDROID
@@ -198,8 +203,8 @@ int main(int argc, char *argv[])
     nomVersion="linux_rpi_version";
 #endif
 #else
-    carpComp.append(QString(UNIK_CURRENTDIR_COMPILATION));
-   nomVersion="linux_version";
+    //carpComp.append(QString(UNIK_CURRENTDIR_COMPILATION));
+    //nomVersion="linux_version";
 #endif
 
 #endif
@@ -212,9 +217,9 @@ int main(int argc, char *argv[])
    nomVersion="macos_version";
 #endif
 
-   qDebug()<<"Current dir: "<<currentPath;
-   qDebug()<<"Current dir compilation: "<<carpComp;
-   if(currentPath==carpComp){
+   //qDebug()<<"Current dir: "<<currentPath;
+   //qDebug()<<"Current dir compilation: "<<carpComp;
+   /*if(currentPath==carpComp){
         qDebug() << "UNIK_PROJECT_LOCATION: " << QString(UNIK_PROJECT_LOCATION);
         QString fvp=QString(UNIK_PROJECT_LOCATION);
         fvp.append("/");
@@ -246,7 +251,7 @@ int main(int argc, char *argv[])
         fileVersion.close();
     }
     qDebug() << "UNIK VERSION: " << nv;
-    //app.setApplicationVersion(nv.toUtf8());
+    app.setApplicationVersion(nv.toUtf8());*/
     app.setApplicationVersion("2.222");
 
 
@@ -312,6 +317,7 @@ int main(int argc, char *argv[])
     engine.addImportPath("/home/nextsigner/Escritorio/prueba");
     */
 
+
 #ifndef Q_OS_ANDROID
     QmlClipboardAdapter clipboard;
     engine.rootContext()->setContextProperty("clipboard", &clipboard);
@@ -325,9 +331,6 @@ int main(int argc, char *argv[])
 #else
    u0=&u;
     qInstallMessageHandler(android_message_handler);
-    //QtMessageHandler a;
-    //a.
-    //qInstallMessageHandler(a);
 #endif
     QByteArray pws=u.getPath(3).toUtf8();//Path WorkSpace
     pws.append("/unik");
@@ -338,23 +341,17 @@ int main(int argc, char *argv[])
     lba.append(appExec);
     qInfo()<<lba;
     engine.rootContext()->setContextProperty("appExec", appExec);
+
     engine.rootContext()->setContextProperty("wait", u.wait);
     engine.rootContext()->setContextProperty("splashvisible", u.splashvisible);
     engine.rootContext()->setContextProperty("setInitString", u.setInitString);
     //engine.rootContext()->setContextProperty("log", u.ukStd);
+
     engine.rootContext()->setContextProperty("unik", &u);
     engine.rootContext()->setContextProperty("console", &u);
     engine.rootContext()->setContextProperty("unikLog", u.ukStd);
+    engine.rootContext()->setContextProperty("unikError", listaErrores);
 
-    //UnikLog ul;
-    //QObject::connect(&ul, SIGNAL(myLogChanged(QString)), &u, SLOT(setUnikLog(QString)));
-    //ul.start();
-    //QObject::connect(&ul, SIGNAL(logIsChanged(QString)), &u, SLOT(setUnikLog(QString)));
-    //QObject::connect(&u, SIGNAL(stdErrChanged()), &ul, SLOT(deleteLater());
-    //engine.rootContext()->setContextProperty("unikLog", &ul);
-    //engine.rootContext()->setContextObject(u.ukStd);
-    //u.setObjectName("unik");
-    //engine.rootContext()->setContextObject(&u);
 
 
     qmlRegisterType<UK>("uk", 1, 0, "UK");
@@ -410,6 +407,8 @@ int main(int argc, char *argv[])
             QStringList marg = arg.split("-dir=");
             if(marg.size()==2){
                 QDir::setCurrent(marg.at(1));
+                engine.addImportPath(QDir::currentPath());
+                engine.addPluginPath(QDir::currentPath());
                 lba="";
                 lba.append("-dir=");
                 lba.append(marg.at(1));
@@ -510,7 +509,6 @@ int main(int argc, char *argv[])
     if(u.fileExist("/media/nextsigner/ZONA-A1/ul.txt")){
         u.debugLog = true;
         debugLog = true;
-
     }
 #endif
 #ifdef Q_OS_ANDROID
@@ -615,6 +613,7 @@ int main(int argc, char *argv[])
 #ifdef __arm__
     utp.append("-rpi");
 #endif
+    qInfo()<<"Checking UTP exists...";
     QDir dirUnikToolsLocation(utp);
     QFile utmain(utp+"/main.qml");
     if (!dirWS.exists()||!dirUnikToolsLocation.exists()||!utmain.exists()) {
@@ -1250,6 +1249,8 @@ int main(int argc, char *argv[])
             }
             pq="";
             pq.append(pws);
+            engine.addImportPath(pq);
+            engine.addPluginPath(pq);
 #ifndef __arm__
             pq.append("/unik-tools/");
 #else
@@ -1798,7 +1799,7 @@ int main(int argc, char *argv[])
             listaErrores.append("\n");
         }
         //qDebug()<<"------->"<<component.errors();
-        engine.rootContext()->setContextProperty("unikError", listaErrores);
+
 #ifdef Q_OS_ANDROID
         engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 #else

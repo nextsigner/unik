@@ -1,7 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 1.2
 import QtQuick.Controls.Styles 1.4
-//import uk 1.0
 Rectangle{
     id:raiz
     width: parent.width
@@ -319,6 +318,11 @@ Rectangle{
     }
 
     Rectangle{
+        anchors.fill: taLog2
+        color: 'red'
+    }
+
+    Rectangle{
         width: raiz.scrollBarStyle?taLog2.width:taLog3.width
         height: raiz.scrollBarStyle?taLog2.height:taLog3.height
         anchors.centerIn: raiz.scrollBarStyle?taLog2:taLog3
@@ -430,9 +434,13 @@ Rectangle{
 
     }
     Component.onCompleted: {
+        taLog2.flickableItem.boundsBehavior = Flickable.StopAtBounds
+        taLog3.flickableItem.boundsBehavior = Flickable.StopAtBounds
         if(Qt.platform.os==='android'){
             taLog2.readOnly=true
             taLog3.readOnly=true
+            taLog2.activeFocusOnPress=false
+            taLog3.activeFocusOnPress=false
         }
         if(raiz.showUnikInitMessages){
             var s=(''+unik.initStdString).replace(/\n/g, '<br>')
