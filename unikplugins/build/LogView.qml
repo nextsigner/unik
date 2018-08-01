@@ -33,12 +33,66 @@ Rectangle{
     property bool showCommandsLineInput: false
     property int commandsLineInputHeight: raiz.fontSize*2
 
-    property string help: ''
+    property string help: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
 
 
     FontLoader {name: "FontAwesome";source: "qrc:/fontawesome-webfont.ttf";}
     Connections {target: unik;onUkStdChanged: log((''+unik.ukStd).replace(/\n/g, '<br />'));}
     Connections {target: unik;onStdErrChanged: log((''+unik.ukStd).replace(/\n/g, '<br />'));}
+    Timer{
+        running: raiz.height<=0&&raiz.topHandlerHeight<=0
+        repeat: false
+        interval: 500
+        onTriggered: {
+            raiz.topHandlerHeight=4
+            raiz.height=4
+        }
+    }
+    Flickable{
+        id:fk
+        width: parent.width-fontSize*2
+        height: raiz.showUnikControls ? parent.height-lineRTop.height-xBtns.height : parent.height-lineRTop.height
+        anchors.bottom: parent.bottom
+        anchors.horizontalCenter: parent.horizontalCenter
+        contentWidth: parent.width
+        contentHeight: logTxt.height
+        boundsBehavior: Flickable.StopAtBounds
+        onDragStarted:  draged=true
+
+        property bool draged: false
+        property int uh:0
+        property int ucy:0
+        onContentYChanged: {
+            if(fk.contentY>fk.contentHeight-fk.height-(fk.height/16)&&draged){
+                draged=false
+            }
+            if(contentY!==0&&contentY<=ucy){
+                draged=true
+            }
+            ucy=contentY
+        }
+        ScrollBar.vertical: ScrollBar {
+            parent: fk.parent
+            anchors.top: fk.top
+            anchors.left: fk.right
+            anchors.bottom: fk.bottom
+            width: fontSize
+        }
+        Text {
+            id: logTxt
+            width: parent.width-fontSize*2
+            height: contentHeight
+            font.pixelSize: fontSize
+            color: fontColor
+            wrapMode: Text.WordWrap
+            textFormat: showPlainText ? Text.Normal : Text.RichText
+            onTextChanged: {
+                if(!fk.draged){
+                    //fk.uh=contentHeight
+                }
+            }
+        }
+    }
     LineResizeTop{
         id:lineRTop;
         width: raiz.width
@@ -65,15 +119,6 @@ Rectangle{
             }
         }
     }
-    Timer{
-        running: raiz.height<=0&&raiz.topHandlerHeight<=0
-        repeat: false
-        interval: 500
-        onTriggered: {
-            raiz.topHandlerHeight=4
-            raiz.height=4
-        }
-    }
     Rectangle{
         id: xBtns
         width: raiz.width
@@ -87,6 +132,17 @@ Rectangle{
             anchors.verticalCenter: parent.verticalCenter
             height: raiz.fontSize*1.6
             spacing: raiz.fontSize
+            Boton{
+                id:btnDown
+                w:parent.height
+                h: w
+                t: '\uf063'
+                b: raiz.bgColor
+                c: raiz.fontColor
+                onClicking: {
+                    raiz.height=0+lineRTop.height
+                }
+            }
             Boton{
                 id:btnTextType
                 w:parent.height
@@ -113,8 +169,7 @@ Rectangle{
                 b: raiz.bgColor
                 c: raiz.fontColor
                 onClicking: {
-                    taLog2.cursorPosition=0
-                    taLog2.text=''
+                    logTxt.text=''
                 }
             }
             Boton{
@@ -125,15 +180,9 @@ Rectangle{
                 b: raiz.bgColor
                 c: raiz.fontColor
                 onClicking: {
-                    raiz.enableAutoToBottom=false
-                    if(raiz.scrollBarStyle){
-                        taLog2.append(raiz.help)
-                        //sv.flickableItem.contentY = sv.flickableItem.contentY+raiz.fontSize*6
-                    }else{
-                        taLog3.append(raiz.help)
-                        //sv3.flickableItem.contentY = sv3.flickableItem.contentY+raiz.fontSize*6
-                    }
-
+                    logTxt.text+=raiz.help
+                    fk.contentY=fk.contentHeight-fk.height
+                    fk.draged=false
                 }
             }
 
@@ -188,65 +237,7 @@ Rectangle{
             }
         }
     }
-    Flickable{
-        id:fk
-        width: parent.width-fontSize*2
-        height: parent.height
-        anchors.horizontalCenter: parent.horizontalCenter
-        contentWidth: parent.width
-        contentHeight: draged?logTxt.height:fk.uh
-        boundsBehavior: Flickable.StopAtBounds
-        onDragStarted:  draged=true
 
-        property bool draged: false
-        property int uh:0
-        property int ucy:0
-        onContentYChanged: {
-            if(fk.contentY>fk.contentHeight-fk.height-(fk.height/16)&&draged){
-                draged=false
-            }
-            if(contentY!==0&&contentY<=ucy){
-                draged=true
-            }else{
-                draged=false
-            }
-            ucy=contentY
-        }
-        ScrollBar.vertical: ScrollBar {
-            parent: fk.parent
-            anchors.top: fk.top
-            anchors.left: fk.right
-            anchors.bottom: fk.bottom
-            width: fontSize
-        }
-        Text {
-            id: logTxt
-            width: parent.width-fontSize*2
-            height: contentHeight
-            font.pixelSize: fontSize
-            color: fontColor
-            wrapMode: Text.WordWrap
-            textFormat: showPlainText ? Text.Normal : Text.RichText
-            onTextChanged: {
-                if(!fk.draged){
-                    fk.uh=contentHeight
-                }
-            }
-        }
-    }
-
-    Row{
-        Text{
-            font.pixelSize: 40
-            color: 'red'
-            text: '<b>'+fk.contentY+'</b>'
-        }
-        Text{
-            font.pixelSize: 40
-            color: 'yellow'
-            text: '<b>'+parseInt(fk.contentHeight-fk.height)+'</b>'
-        }
-    }
     Component.onCompleted: {
         if(raiz.showUnikInitMessages){
             var s=(''+unik.initStdString).replace(/\n/g, '<br />')
@@ -254,7 +245,7 @@ Rectangle{
             var txt =''
 
             txt += "<b>OS: </b>"+Qt.platform.os
-            txt += "<br /><b>Errors: </b><br />"
+
             var s2=(''+unikError).replace(/\n/g, '<br />')
             txt+=s2
             txt += '<b>unik version: </b>'+version+'<br />\n'
@@ -265,7 +256,6 @@ Rectangle{
             }else{
                 txt += '\n<b>Unik Errors:</b>none<br />\n'
             }
-            //txt += '\nErrors:\n'+unikError+'\n'
             txt += 'Doc location: '+appsDir+'/<br />\n'
             txt += 'host: '+host+'<br />\n'
             txt += 'user: '+ukuser+'<br />\n'
@@ -281,10 +271,7 @@ Rectangle{
             }
             txt += 'sourcePath: '+sourcePath+'<br />\n'
             txt += '\n<b>config.json:</b>\n'+unik.getFile(appsDir+'/config.json')+'<br />\n'
-
-            txt += '\nuserhost: ['+userhost+']<br />\n'
             bodyText+=txt+'<br />'+stdinit
-
             logTxt.text+=bodyText
         }
         //unik.setProperty("setInitString", true)
@@ -298,7 +285,6 @@ Rectangle{
                 +'&nbsp;&nbsp;&nbsp;&nbsp;width: 500<br />'
                 +'&nbsp;&nbsp;&nbsp;&nbsp;height: 300<br />'
                 +'&nbsp;&nbsp;&nbsp;&nbsp;anchors.centerIn:parent<br />'
-                +'&nbsp;&nbsp;&nbsp;&nbsp;scrollBarStyle:false<br />'
                 +'&nbsp;&nbsp;&nbsp;&nbsp;showUnikControls:true<br />'
                 +'&nbsp;&nbsp;&nbsp;&nbsp;topHandlerHeight:4<br />'
                 +'&nbsp;&nbsp;&nbsp;&nbsp;handleColor:"green"<br />'
@@ -307,13 +293,6 @@ Rectangle{
                 +'&nbsp;&nbsp;&nbsp;&nbsp;fontFamily: "Arial Black"<br />'
                 +'&nbsp;&nbsp;&nbsp;&nbsp;fontSize: 25<br />'
                 +'&nbsp;&nbsp;&nbsp;&nbsp;fontColor: "#00ff88"<br />'
-                +'&nbsp;&nbsp;&nbsp;&nbsp;scrollBarWidth: 30<br />'
-                +'&nbsp;&nbsp;&nbsp;&nbsp;scrollBarHandlerColor: "red"<br />'
-                +'&nbsp;&nbsp;&nbsp;&nbsp;scrollBarBgColor: "#ffff00"<br />'
-                +'&nbsp;&nbsp;&nbsp;&nbsp;selectionColor: "#000000"<br />'
-                +'&nbsp;&nbsp;&nbsp;&nbsp;selectedTextColor: "#55ffff"<br />'
-                +'&nbsp;&nbsp;&nbsp;&nbsp;commandsLineInputHeight:50<br />'
-                +'&nbsp;&nbsp;&nbsp;&nbsp;showCommandsLineInput:true<br />'
                 +'<b>}</b><br />'
 
     }

@@ -63,6 +63,8 @@ win32 {
     }
 }
 
+OTHER_FILES+= ../main.qml
+
 android{
 DISTFILES += \
     LogView.qml \

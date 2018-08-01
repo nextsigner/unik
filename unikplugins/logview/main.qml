@@ -13,8 +13,12 @@ ApplicationWindow {
         color: '#ff8833'
         LogView{
             id: logView
-            anchors.fill: parent
+            width:  parent.width
+            height:  400
+            anchors.bottom: parent.bottom
             fontSize: 20
+            topHandlerHeight: 6
+            showUnikControls: true
         }
     }
     Timer{

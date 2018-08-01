@@ -12,7 +12,6 @@ LOCATION = $$PWD
 DEFINES += UNIK_PROJECT_LOCATION=\\\"$$LOCATION\\\"
 
 include(version.pri)
-
 linux{
     include(linux.pri)
 }
@@ -98,8 +97,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
     uk.cpp \
-    row.cpp \
-    asterisk.cpp
+    row.cpp
 
 RESOURCES += qml.qrc
 
@@ -117,8 +115,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     uk.h \
     qmlclipboardadapter.h \
-    row.h \
-    asterisk.h
+    row.h
 
 DISTFILES += \
     android/AndroidManifest.xml \
