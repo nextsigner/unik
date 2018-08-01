@@ -529,9 +529,6 @@ int main(int argc, char *argv[])
     qInfo()<<lba;
     u.debugLog = debugLog;
 
-    //u.log("AAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAaaaa AAA");
-    //qDebug()<<"00000000000000"<<QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-
 #ifdef Q_OS_LINUX
 #ifndef Q_OS_ANDROID
     if(u.fileExist("/media/nextsigner/ZONA-A1/ul.txt")){

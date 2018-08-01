@@ -488,8 +488,16 @@ bool UK::loadUpk(QString upkLocation, bool closeAppLauncher, QString user, QStri
 
 bool UK::downloadGit(QByteArray url, QByteArray localFolder)
 {    
+
     QString u;
     u.append(url);
+    QStringList mUrl0=u.split("/");
+    if(mUrl0.size()<2){
+        qInfo()<<"downloadGit() fail! This url git is no valid!";
+        return false;
+    }
+    QString u2 = mUrl0.at(mUrl0.size()-1);
+    QString module=u2.replace(".git", "");
     if(u.mid(u.size()-4, 4)!=".git"){
         u.append(".git");
     }
@@ -508,6 +516,8 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
         urlZipGit=url0.replace("https://github.com/", "https://codeload.github.com/");
         qInfo("Downloading zip file: "+urlZipGit.toUtf8());
     }
+
+
     qInfo("Downloading from GitHub: "+url);
     qInfo("Download Folder Location: "+carpetaDestino.toUtf8());
     QDateTime a = QDateTime::currentDateTime();
@@ -561,13 +571,18 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     //carpDestinoFinal.append("\"");
 #endif
     carpDestinoFinal.append(localFolder);
+    //carpDestinoFinal.append("/");
+    //carpDestinoFinal.append(module);
 #ifndef Q_OS_ANDROID
     //carpDestinoFinal.append("\"");
 #endif
-    qInfo()<<"Local Folder: "<<localFolder;
-    QDir fdf(localFolder);
+    qInfo()<<"Local Folder: "<<carpDestinoFinal;
+    QString nFolder=carpDestinoFinal;
+    nFolder.append("/");
+    nFolder.append(module);
+    QDir fdf(nFolder);
     if(!fdf.exists()){
-        fdf.mkdir(".");
+        fdf.mkpath(".");
     }
     QFile zipFile(tempFile);
     if(zipFile.exists()){
@@ -598,7 +613,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
         file.open(QIODevice::ReadOnly);
         //same functionality as QIODevice::readData() -- data is a char*, maxSize is qint64
         //file.readData(data,maxSize);
-        qInfo()<<"AAAAAAAA"<<zip.getFileNameList();
+        qInfo()<<"gfn:"<<zip.getFileNameList();
         if(v==0){
             carpeta=QString(zip.getFileNameList().at(0));
             qInfo()<<"Carpeta de destino Zip: "<<carpeta;
@@ -634,7 +649,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
         file.open(QIODevice::ReadOnly);
         //same functionality as QIODevice::readData() -- data is a char*, maxSize is qint64
         //file.readData(data,maxSize);
-        qInfo()<<"AAAAAAAA"<<zip.getFileNameList();
+        qInfo()<<"Zip filename: "<<zip.getFileNameList();
         if(v==0){
             carpeta=QString(zip.getFileNameList().at(0));
             qInfo()<<"Carpeta de destino Zip: "<<carpeta;
@@ -672,7 +687,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
 //    connect(p1, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
 //            [=]  (int exitCode, QProcess::ExitStatus exitStatus)
 //    {
-//        //qInfo(">>>>>>>>>>>>>>>>AAAAAAAAAAAAAAAAAAAAAA");
+//        //qInfo("!--!");
 //    });
     p1->start(cl);
     p1->deleteLater();
