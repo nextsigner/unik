@@ -136,7 +136,7 @@ void unikStdOutPut(QtMsgType type, const QMessageLogContext &context, const QStr
     out << debugData;
 #endif
     if(abortar){
-        abort();
+        //abort();
     }
 }
 #else
@@ -191,22 +191,19 @@ int main(int argc, char *argv[])
 
     QString currentPath="";
     currentPath.append(QDir::currentPath());
-    QString carpComp="";
-    QString nomVersion="";*/
-#ifdef Q_OS_LINUX    
-#ifdef __arm__
+    QString carpComp="";*/
+
+    QString nomVersion="";
+#ifdef Q_OS_LINUX
 #ifdef Q_OS_ANDROID
-    carpComp.append("/home/pi/nsp");
     nomVersion="android_version";
 #else
-    carpComp.append("/home/pi/nsp");
-    nomVersion="linux_rpi_version";
+    #ifdef __arm__
+        nomVersion="linux_rpi_version";
+    #else
+        nomVersion="linux_version";
+    #endif
 #endif
-#else
-    //carpComp.append(QString(UNIK_CURRENTDIR_COMPILATION));
-    //nomVersion="linux_version";
-#endif
-
 #endif
 #ifdef Q_OS_WIN
      carpComp.append(QString(UNIK_CURRENTDIR_COMPILATION));
@@ -235,24 +232,25 @@ int main(int argc, char *argv[])
         fileVersion2.open(QIODevice::WriteOnly);
         fileVersion2.write(nv.toUtf8());
         fileVersion2.close();
-    }else{
-        QString fvp;
+    }else{*/
+   QString nv;
+   QString fvp;
 #ifdef Q_OS_ANDROID
-        fvp.append("assets:");
+   fvp.append("assets:");
 #else
-        fvp.append(qApp->applicationDirPath());
+   fvp.append(qApp->applicationDirPath());
 #endif
-        fvp.append("/");
-        fvp.append(nomVersion);
-        qDebug() << "UNIK FILE VERSION: " << fvp;
-        QFile fileVersion(fvp);
-        fileVersion.open(QIODevice::ReadOnly);
-        nv = fileVersion.readAll();
-        fileVersion.close();
-    }
-    qDebug() << "UNIK VERSION: " << nv;
-    app.setApplicationVersion(nv.toUtf8());*/
-    app.setApplicationVersion("2.222");
+   fvp.append("/");
+   fvp.append(nomVersion);
+   qDebug() << "UNIK FILE VERSION: " << fvp;
+   QFile fileVersion(fvp);
+   fileVersion.open(QIODevice::ReadOnly);
+   nv = fileVersion.readAll();
+   fileVersion.close();
+
+   qDebug() << "UNIK VERSION: " << nv;
+   app.setApplicationVersion(nv.toUtf8());
+  // app.setApplicationVersion("2.222");
 
 
 
@@ -300,6 +298,7 @@ int main(int argc, char *argv[])
     bool modeGit=false;
     bool updateUnikTools=false;
     bool loadConfig=false;
+
 
 
 #ifdef Q_OS_ANDROID
@@ -431,7 +430,8 @@ int main(int argc, char *argv[])
                 }else{
                     urlGit.append(pUrlGit1);
                 }
-                QString pUrlGit2 = pUrlGit1.replace(".git", "");
+                //QString pUrlGit2 = pUrlGit1.replace(".git", "");
+                QString pUrlGit2 = pUrlGit1;
                 QStringList m100 = pUrlGit2.split("/");
                 if(m100.size()>1){
                     moduloGit="";
@@ -440,6 +440,34 @@ int main(int argc, char *argv[])
                 modeGit=true;
             }
         }
+        if(arg.contains("-ws=")){
+            QStringList marg = arg.split("-ws=");
+            QString nws;
+            nws.append(marg.at(1));
+            if(marg.size()==2){
+                qInfo()<<"Setting WorkSpace by user ws: "<<nws;
+                bool nWSExist=false;
+                QDir nWSDir(nws);
+                if(nWSDir.exists()){
+                    nWSExist=true;
+                }else{
+                    qInfo()<<"Making custom WorkSpace "<<nWSDir.currentPath();
+                    nWSDir.mkpath(".");
+                    if(nWSDir.exists()){
+                        qInfo()<<"Custom WorkSpace now is ready: "<<nws;
+                        nWSExist=true;
+                    }
+                }
+                if(nWSExist){
+                    qInfo()<<"Finishing the custom WorkSpace setting.";
+                    u.setWorkSpace(nws);
+                    pws.clear();
+                    pws.append(nws);
+                    modeGit=true;
+                }
+            }
+        }
+
         if(arg.contains("-update=")){
             QStringList marg = arg.split("-update=");
             if(marg.size()==2){
@@ -558,6 +586,7 @@ int main(int argc, char *argv[])
         bool autd=u.downloadGit("https://github.com/nextsigner/qmlandia", dupl.toUtf8());
     }
 #else
+    if(!modeGit){
     QString cut;
 #ifndef __arm__
     cut.append(u.getFile(pws+"/unik-tools/main.qml"));
@@ -581,13 +610,13 @@ int main(int argc, char *argv[])
     }else{
         qInfo("unik-tools module is ready!");
     }
+}
 #endif
     if(settings.value("ws").toString().isEmpty()){
         settings.setValue("ws", dupl);
         qInfo()<<"WorkSpace by default: "<<dupl.toUtf8();
     }else{
         qInfo()<<"Current WorkSpace: "<<settings.value("ws").toString().toUtf8();
-
         QFileInfo fi(dupl);
         if(!fi.isWritable()){
             QString ndulw;
@@ -595,8 +624,8 @@ int main(int argc, char *argv[])
             ndulw.append("/unik");
             dupl = ndulw;
             qInfo()<<"WorkSpace not writable!";
-            u.log("New WorkSpace seted: "+ndulw.toUtf8());
-        }else{
+            qInfo("New WorkSpace seted: "+ndulw.toUtf8());
+        }else{            
             pws = settings.value("ws").toString().toUtf8();
             dupl = pws;
         }
@@ -1608,6 +1637,7 @@ int main(int argc, char *argv[])
         lba.append("Downloading Zip in folder ");
         lba.append(tmpZipPath);
         qInfo()<<lba;
+        qInfo()<<"downloadGit() 1"<<urlGit;
         bool up=u.downloadGit(urlGit, tmpZipPath);
         if(up){
             lba="";
@@ -1622,7 +1652,12 @@ int main(int argc, char *argv[])
         QByteArray npq;
         npq.append(pws);
         npq.append("/");
-        npq.append(moduloGit);
+        if(moduloGit.contains(".git")||moduloGit.mid(moduloGit.size()-4, moduloGit.size())==".git"){
+            npq.append(moduloGit.mid(0, moduloGit.size()-4));
+        }else{
+            npq.append(moduloGit);
+        }
+        //npq.append(moduloGit);
         npq.append("/");
         lba="";
         lba.append("Current Application Folder: ");
@@ -1634,7 +1669,7 @@ int main(int argc, char *argv[])
         mainQml.append("main.qml");
         u.log("Updated: "+pq.toUtf8());
     }
-    if(updateUnikTools||updateDay){
+    /*if(updateUnikTools||updateDay){
         lba="";
         lba.append("Updating from github: ");
         lba.append(urlGit);
@@ -1658,66 +1693,71 @@ int main(int argc, char *argv[])
         mainQml.append(pq);
         mainQml.append("main.qml");
         u.log("Updated: "+pq.toUtf8());
-    }
+    }*/
 
     engine.rootContext()->setContextProperty("pq", pq);
+
+    QByteArray log4;
+
+    log4.append("\nExecute mode: ");
+    log4.append(modoDeEjecucion);
+    log4.append("\n");
+
+    log4.append("unik version: ");
+    log4.append(app.applicationVersion());
+    log4.append("\n");
+
+    log4.append("Work Space: ");
+    log4.append(settings.value("ws").toString());
+    log4.append("\n");
+
+
+    log4.append("updateDay: ");
+    log4.append(updateDay ? "true" : "false");
+    log4.append("\n");
+
+    log4.append("updateUnikTools: ");
+    log4.append(updateUnikTools ? "true" : "false");
+    log4.append("\n");
+
+    log4.append("modeFolder: ");
+    log4.append(modeFolder ? "true" : "false");
+    log4.append("\n");
+
+    log4.append("modeGit: ");
+    log4.append(modeGit ? "true" : "false");
+    log4.append("\n");
+
+    log4.append("modeFolderToUpk: ");
+    log4.append(modeFolderToUpk ? "true" : "false");
+    log4.append("\n");
+
+    log4.append("modeRemoteFolder: ");
+    log4.append(modeRemoteFolder ? "true" : "false");
+    log4.append("\n");
+
+    log4.append("modeAppName: ");
+    log4.append(modeAppName ? "true" : "false");
+    log4.append("\n");
+
+    log4.append("modeUpk: ");
+    log4.append(modeUpk ? "true" : "false");
+    log4.append("\n");
+
+    log4.append("makeUpk: ");
+    log4.append(makeUpk ? "true" : "false");
+    log4.append("\n");
+
+    log4.append("setPass: ");
+    log4.append(setPass ? "true" : "false");
+    log4.append("\n");
+
+    log4.append("DebugMode: ");
+    log4.append(debugLog ? "true" : "false");
+    log4.append("\n");
+
+    engine.rootContext()->setContextProperty("appStatus", log4);
     if(u.debugLog){
-        QByteArray log3;
-
-        log3.append("Execute mode: ");
-        log3.append(modoDeEjecucion);
-        qInfo()<<log3;
-
-        QByteArray log4;
-
-        log4.append("\nunik version: ");
-        log4.append(app.applicationVersion());
-        log4.append("\n");
-
-        log4.append("\nWork Space: ");
-        log4.append(settings.value("ws").toString());
-        log4.append("\n");
-
-
-        log4.append("updateDay: ");
-        log4.append(updateDay ? "true" : "false");
-        log4.append("\n");
-
-        log4.append("updateUnikTools: ");
-        log4.append(updateUnikTools ? "true" : "false");
-        log4.append("\n");
-
-        log4.append("modeFolder: ");
-        log4.append(modeFolder ? "true" : "false");
-        log4.append("\n");
-
-        log4.append("modeGit: ");
-        log4.append(modeGit ? "true" : "false");
-        log4.append("\n");
-
-        log4.append("modeFolderToUpk: ");
-        log4.append(modeFolderToUpk ? "true" : "false");
-        log4.append("\n");
-
-        log4.append("modeRemoteFolder: ");
-        log4.append(modeRemoteFolder ? "true" : "false");
-        log4.append("\n");
-
-        log4.append("modeAppName: ");
-        log4.append(modeAppName ? "true" : "false");
-        log4.append("\n");
-
-        log4.append("modeUpk: ");
-        log4.append(modeUpk ? "true" : "false");
-        log4.append("\n");
-
-        log4.append("makeUpk: ");
-        log4.append(makeUpk ? "true" : "false");
-        log4.append("\n");
-
-        log4.append("setPass: ");
-        log4.append(setPass ? "true" : "false");
-        log4.append("\n");
         qInfo()<<log4;
     }
 #ifndef Q_OS_ANDROID

@@ -11,77 +11,10 @@ CONFIG -= qmlcache
 LOCATION = $$PWD
 DEFINES += UNIK_PROJECT_LOCATION=\\\"$$LOCATION\\\"
 
+include(version.pri)
+
 linux{
-    FILE_VERSION_NAME=linux_version
-    CURRENTDIR_COMPILATION=$(HOME)/unikCurrentDirComp
-    DEFINES += UNIK_CURRENTDIR_COMPILATION=\\\"$$CURRENTDIR_COMPILATION\\\"
-    message(UNIK_CURRENTDIR_COMPILATION=$$CURRENTDIR_COMPILATION)
-    QMAKE_POST_LINK += $$quote(mkdir $$CURRENTDIR_COMPILATION$$escape_expand(\n\t))
-    !android{
-        message(Linux NO ANDROID)
-    !contains(QMAKE_HOST.arch, arm.*):{
-        QT += webengine webview
-        DESTDIR= ../build_unik_linux_64
-        message(Ubicaciòn del Ejecutable: $$DESTDIR)
-
-        #Configurar proyecto para Asterisk
-        #INCLUDEPATH+=/media/nextsigner/ZONA-A1/nsp/asterisk-cpp/asterisk-cpp
-        #INCLUDEPATH += /usr/include
-        #LIBS += -L"/usr/include/boost" -lboost_system
-
-        #Para Plugins unikSqliteCrypto
-        #message(Plugins unikSqliteCrypto INCLUDEPATH= $$PWD/unikSqliteCrypto)
-        #LIBS += -L$$PWD/../unik-recursos/build_usc_linux/ -lunikSqliteCrypto
-        #INCLUDEPATH += $$PWD/../unik-recursos/unikSqliteCrypto
-        #DEPENDPATH += $$PWD/../unik-recursos/unikSqliteCrypto
-
-        #COPIAR ARCHIVOS DENTRO DE APPIMAGE
-        EXTRA_BINFILES += \
-        $$PWD/linux_version
-        for(FILE,EXTRA_BINFILES){
-            QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}$$escape_expand(\n\t))
-            message(Copyng $${FILE} $${DESTDIR}$$escape_expand(\n\t))
-        }
-
-        #Deploy Command Line Example
-        #linuxdeployqt /media/nextsigner/ZONA-A1/nsp/build_unik_linux_64/unik -qmldir=/media/nextsigner/ZONA-A1/nsp/unik -appimage -always-overwrite -bundle-non-qt-libs -no-plugins
-        #mv /media/nextsigner/ZONA-A1/nsp/unik-recursos/build_unik_linux_64.AppImage /home/nextsigner/Escritorio/unik_v2.24.AppImage
-    }else{
-        #Set Working Directory for RPI3 compilation in /home/pi/nsp
-        DESTDIR= /home/pi/unik
-        message(Current Executable Path: $$DESTDIR)
-        message(Current Working Directory: $$PWD)
-
-        #COPIAR ARCHIVOS NECESARIOS EN RPI3
-        QMAKE_POST_LINK += $$quote(mkdir $${DESTDIR}/qml$$escape_expand(\n\t))
-        QMAKE_POST_LINK += $$quote(mkdir $${DESTDIR}/qml/LogView$$escape_expand(\n\t))
-        #LOGVIEWPATH=$$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/LogView
-        #QMAKE_POST_LINK += $$quote(cp $$LOGVIEWPATH/liblogview.so $${DESTDIR}/qml/LogView$$escape_expand(\n\t))
-        #QMAKE_POST_LINK += $$quote(cp $$LOGVIEWPATH/LogView.qml $${DESTDIR}/qml/LogView$$escape_expand(\n\t))
-        EXTRA_BINFILES += \
-        $$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/qmldir \
-        $$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/liblogview.so \
-        $$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/Boton.qml \
-        $$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/LineResizeTop.qml \
-        $$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/LogView.qml
-        for(FILE,EXTRA_BINFILES){
-            QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}/qml/LogView$$escape_expand(\n\t))
-            message(Copyng $${FILE} $${DESTDIR}$$escape_expand(\n\t))
-        }
-
-        #COPIAR ARCHIVOS NECESARIOS EN RPI3 RAIZ
-        EXTRA_BINFILES2 += \
-        $$PWD/logo_unik.png
-        for(FILE2,EXTRA_BINFILES2){
-            QMAKE_POST_LINK += $$quote(cp $${FILE2} $${DESTDIR}$$escape_expand(\n\t))
-            #message(Copyng $${FILE} $${DESTDIR}$$escape_expand(\n\t))
-        }
-    }
-
-    }else{
-        message(QT_MESSAGELOGCONTEXT defined for Android)
-        DEFINES += QT_MESSAGELOGCONTEXT
-    }
+    include(linux.pri)
 }
 mac{
     FILE_VERSION_NAME=macos_version
@@ -150,23 +83,7 @@ android{
     INSTALLS += COMMON_DATA
 }
 
-VERSION_YEAR=2016
-VERSION_MAJ1=$$system(date +%Y)
-win32 {
-    VERSION_MAJ= $$system("set /a $$VERSION_MAJ1 - $$VERSION_YEAR")
-    VERSION_MEN1= $$system("set /a $$system(date +%m) + $$system(date +%d) + $$system(date +%H) + $$system(date +%M)")
-} else:unix {
-    VERSION_MAJ= $$system("echo $(($$VERSION_MAJ1 - $$VERSION_YEAR))")
-    VERSION_MEN1= $$system("echo $(($$system(date +%m) + $$system(date +%d) + $$system(date +%H) + $$system(date +%M)))")
-}
-greaterThan(VERSION_MEN1, 99){
-    VERSION_MEN2=$$VERSION_MEN1
-}else{
-    VERSION_MEN2=0$$VERSION_MEN1
-}
-APPVERSION=$$VERSION_MAJ"."$$system(date +%W)$$VERSION_MEN2
-message(App Version $$APPVERSION)
-write_file($$PWD/$$FILE_VERSION_NAME, APPVERSION)
+message(DestDir: $$DESTDIR)
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -210,7 +127,9 @@ DISTFILES += \
     android/res/values/libs.xml \
     android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.properties \
-    android/gradlew.bat
+    android/gradlew.bat \
+    linux.pri \
+    version.pri
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

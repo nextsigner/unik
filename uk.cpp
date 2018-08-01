@@ -558,16 +558,16 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
 #ifdef Q_OS_LINUX
     QByteArray carpDestinoFinal;
 #ifndef Q_OS_ANDROID
-    carpDestinoFinal.append("\"");
+    //carpDestinoFinal.append("\"");
 #endif
     carpDestinoFinal.append(localFolder);
 #ifndef Q_OS_ANDROID
-    carpDestinoFinal.append("\"");
+    //carpDestinoFinal.append("\"");
 #endif
     qInfo()<<"Local Folder: "<<localFolder;
     QDir fdf(localFolder);
     if(!fdf.exists()){
-        fdf.mkpath(".");
+        fdf.mkdir(".");
     }
     QFile zipFile(tempFile);
     if(zipFile.exists()){
@@ -578,17 +578,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     }
 
 #ifndef Q_OS_ANDROID
-    QByteArray cl;
-    cl.append("unzip -o ");
-    cl.append("\"");
-    cl.append(tempFile);
-    cl.append("\"");
-    cl.append(" -d ");
-    cl.append("\"");
-    cl.append(getPath(2));
-    cl.append("/");
-    cl.append(carpetaDestino);
-    cl.append("\"");
+
 #else
     QByteArray cl;
     cl.append("unzip ");
@@ -633,12 +623,57 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     }
     zip.close();
 #else
-    QProcess *p1 = new QProcess(this);
-    /*connect(p1, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-            [=]  (int exitCode, QProcess::ExitStatus exitStatus)
-    {
-        //qInfo(">>>>>>>>>>>>>>>>AAAAAAAAAAAAAAAAAAAAAA");
-    });*/
+    QuaZip zip(tempFile.constData());
+    zip.open(QuaZip::mdUnzip);
+
+    QuaZipFile file(&zip);
+
+    QString carpeta="aaa";
+    int v=0;
+    for(bool f=zip.goToFirstFile(); f; f=zip.goToNextFile()) {
+        file.open(QIODevice::ReadOnly);
+        //same functionality as QIODevice::readData() -- data is a char*, maxSize is qint64
+        //file.readData(data,maxSize);
+        qInfo()<<"AAAAAAAA"<<zip.getFileNameList();
+        if(v==0){
+            carpeta=QString(zip.getFileNameList().at(0));
+            qInfo()<<"Carpeta de destino Zip: "<<carpeta;
+        }else{
+            QString nfn;
+            nfn.append(carpDestinoFinal);
+            nfn.append("/");
+            nfn.append(zip.getFileNameList().at(v));
+            QString nfn2 = nfn.replace("-master/", "/");
+            QString nfn3 = nfn2.replace(" ", "%20");
+            //nfn.append("\"");
+
+            if(nfn3.at(nfn3.size()-1)!="/"){
+               qInfo()<<"Destino de archivo: "<<nfn3;
+                QFile nfile(nfn3);
+                if(!nfile.open(QIODevice::WriteOnly)){
+                    qInfo()<<"Error al abrir archivo "<<nfn3;
+                }else{
+                    nfile.write(file.readAll());
+                    nfile.close();
+                }
+            }else{
+                qInfo()<<"Destino de carpeta: "<<nfn3;
+                QDir dnfn(nfn3);
+                dnfn.mkpath(".");
+            }
+        }
+        //qInfo()<<"SSSSSSSSSS"<<file.readAll();
+        //do something with the data
+        file.close();
+        v++;
+    }
+    zip.close();
+    /*QProcess *p1 = new QProcess(this);
+//    connect(p1, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+//            [=]  (int exitCode, QProcess::ExitStatus exitStatus)
+//    {
+//        //qInfo(">>>>>>>>>>>>>>>>AAAAAAAAAAAAAAAAAAAAAA");
+//    });
     p1->start(cl);
     p1->deleteLater();
     while (p1->waitForFinished()) {
@@ -657,7 +692,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     cl.append("/");
     cl.append(carpetaDestino);
     qInfo("Running "+cl);
-    run(cl);
+    run(cl);*/
 #endif
 #ifdef Q_OS_OSX
     QByteArray carpDestinoFinal;

@@ -141,14 +141,31 @@ ApplicationWindow {
             }
 
         }
-
-        LogView{
-            id: logView
+        Rectangle{
+            id: xTaLog
             width: parent.width-xTools.width
             height: parent.height
-            visible: app.area===0
+            color: "#333333"
+            //visible: app.area===0
             anchors.left: xTools.right
-            bgColor: app.c5
+            Flickable{
+                id:fk
+                width: parent.width
+                height: parent.height
+                contentWidth: taLog.width
+                contentHeight: taLog.height
+                Text {
+                    id: taLog
+                    text: qsTr("Unik Main Qml")
+                    width: parent.width
+                    height: contentHeight
+                    color: app.c1
+                    font.pixelSize: app.fs*0.5
+                    wrapMode: Text.WordWrap
+                    textFormat: Text.RichText
+                    Connections{target: unik;onUkStdChanged:taLog.text+=(''+unikLog).replace(/\n/g, '<br />\n')}
+                }
+            }
         }
         Rectangle{
             id: xEditor
@@ -247,19 +264,53 @@ ApplicationWindow {
             }
         }
     }
-//    Timer{
-//        running: true
-//        repeat: true
-//        interval: 1000
-//        onTriggered: unik.setProperty("logViewVisible", true)
-//    }
+    //    Timer{
+    //        running: true
+    //        repeat: true
+    //        interval: 1000
+    //        onTriggered: unik.setProperty("logViewVisible", true)
+    //    }
     Component.onCompleted: {
         if(Qt.platform.os==='windows'){
             var a1 = Screen.desktopAvailableHeight
             var altoBarra = a1-unik.frameHeight(app)
             app.height = a1-altoBarra
         }
-        console.log(unikError)
-        console.log(unik.stdErr)
+        //console.log(unikError)
+        //console.log(unik.stdErr)
+        var s=(''+unik.initStdString).replace(/\n/g, '<br />')
+        var stdinit='<br /><b>Start Unik Init Message:</b>\u21b4<br />'+s+'<br /><b>End Unik Init Message.</b><br />\n'
+        var txt =''
+        txt += "<br /> <b>OS: </b>"+Qt.platform.os
+        txt += 'Doc location: '+appsDir+'/<br />\n'
+        txt += 'user: '+ukuser+'<br />\n'
+        if(ukuser==='unik-free'){
+            txt += 'key: '+ukkey+'<br />\n'
+        }else{
+            txt += 'key: '
+            var k= (''+ukkey).split('')
+            for(var i=0;i<k.length;i++){
+                txt += '*'
+            }
+            txt += '<br />\n'
+        }
+
+        txt += "<br /><b>Unik Init Errors: </b><br />"
+        var s2=(''+unikError).replace(/\n/g, '<br />')
+        txt+=s2
+        var e;
+        if(unikError!==''){
+            txt += '\n<b>Unik Errors:</b>\n'+unikError+'<br />\n'
+        }else{
+            txt += '\n<b>Unik Errors:</b>none<br>\n'
+        }
+
+        txt += 'sourcePath: '+sourcePath+'<br />\n'
+        txt += '\n<b>config.json:</b>\n'+unik.getFile(appsDir+'/config.json')+'<br />\n'
+
+        txt+="<br />"+(''+appStatus).replace(/\n/g, '<br />')
+
+        stdinit+=txt
+        taLog.text+=stdinit
     }
 }
