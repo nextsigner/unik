@@ -266,6 +266,7 @@ public slots:
     void setMySqlDatabase(QString databaseName, int firtOrSecondDB);
 
     //Funciones de Sistema de Archivos
+    void cd(QString folder);
     void deleteFile(QByteArray f);
     bool setFile(QByteArray n, QByteArray d);
     QString getFile(QByteArray n);

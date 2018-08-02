@@ -1560,6 +1560,14 @@ void UK::setMySqlDatabase(QString databaseName, int firtOrSecondDB)
         secondDB.setDatabaseName(databaseName);
     }
 }
+
+void UK::cd(QString folder)
+{
+    QDir::setCurrent(folder);
+    _engine->addImportPath(QDir::currentPath());
+    _engine->addPluginPath(QDir::currentPath());
+    qInfo()<<"Set current dir: "<<QDir::currentPath();
+}
 void UK::deleteFile(QByteArray f)
 {
     QFile arch(f);
