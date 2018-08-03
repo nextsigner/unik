@@ -168,31 +168,6 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_ANDROID
     UK u;
 #endif
-
-
-    /*QDateTime hoy = QDateTime::currentDateTime();
-    int anio = hoy.date().year()-2016;
-    //int mes = hoy.date().month();
-    int dia = hoy.date().day();
-    int sem = hoy.date().weekNumber();
-    int hora = hoy.time().hour();
-    int min = hoy.time().minute();
-    int seg = hoy.time().second();
-    QString nv;
-    nv.append(QString::number(anio));
-    nv.append(".");
-    nv.append(QString::number(sem));
-    //nv.append(".");
-    nv.append(QString::number(dia));
-    //nv.append(".");
-    nv.append(QString::number(hora));
-    nv.append(QString::number(min));
-    nv.append(QString::number(seg));
-
-    QString currentPath="";
-    currentPath.append(QDir::currentPath());
-    QString carpComp="";*/
-
     QString nomVersion="";
 #ifdef Q_OS_LINUX
 #ifdef Q_OS_ANDROID
@@ -212,27 +187,7 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_OSX
     carpComp.append("/Users/qt/nsp/unik-recursos/build_osx_clang64/unik.app/Contents/MacOS");
    nomVersion="macos_version";
-#endif
-
-   //qDebug()<<"Current dir: "<<currentPath;
-   //qDebug()<<"Current dir compilation: "<<carpComp;
-   /*if(currentPath==carpComp){
-        qDebug() << "UNIK_PROJECT_LOCATION: " << QString(UNIK_PROJECT_LOCATION);
-        QString fvp=QString(UNIK_PROJECT_LOCATION);
-        fvp.append("/");
-        fvp.append(nomVersion);
-        QFile fileVersion(fvp);
-        fileVersion.open(QIODevice::WriteOnly);
-        fileVersion.write(nv.toUtf8());
-        fileVersion.close();
-        QString fvp2=qApp->applicationDirPath();
-        fvp2.append("/");
-         fvp2.append(nomVersion);
-        QFile fileVersion2(fvp2);
-        fileVersion2.open(QIODevice::WriteOnly);
-        fileVersion2.write(nv.toUtf8());
-        fileVersion2.close();
-    }else{*/
+#endif  
    QString nv;
    QString fvp;
 #ifdef Q_OS_ANDROID
@@ -250,12 +205,7 @@ int main(int argc, char *argv[])
 
    qDebug() << "UNIK VERSION: " << nv;
    app.setApplicationVersion(nv.toUtf8());
-  // app.setApplicationVersion("2.222");
-
-
-
     bool updateDay=false;
-
     QSettings settings;
 #ifdef _WIN32
     if (AttachConsole(ATTACH_PARENT_PROCESS)) {
@@ -293,12 +243,16 @@ int main(int argc, char *argv[])
     bool modeFolder=false;
     bool modeFolderToUpk=false;
     bool modeRemoteFolder=false;
-    bool modeAppName=false;
     bool modeUpk=false;
     bool modeGit=false;
     bool updateUnikTools=false;
     bool loadConfig=false;
-
+    bool readConfig=true;
+    bool debugLog=false;
+    bool setPass=false;
+    bool setPass1=false;
+    bool setPass2=false;
+    bool makeUpk=false;
 
 
 #ifdef Q_OS_ANDROID
@@ -364,19 +318,11 @@ int main(int argc, char *argv[])
     engine.load("://Splash.qml");
 #endif
 #endif
-
     //Example Connection for unik engine into uk.cpp method.
     //QObject::connect(&engine, SIGNAL(warnings(QList<QQmlError>)), &u, SLOT(errorQML(QList<QQmlError>)));
 
-
-    bool readConfig=true;
-    bool debugLog=false;
     debugLog=true;
-    u.debugLog=debugLog;
-    bool setPass=false;
-    bool setPass1=false;
-    bool setPass2=false;
-
+    u.debugLog=debugLog;   
     for (int i = 0; i < argc; ++i) {
         if(QByteArray(argv[i])==QByteArray("-debug")){
             debugLog=true;
@@ -508,8 +454,7 @@ int main(int argc, char *argv[])
     if(setPass1&&setPass2){
         setPass=true;
     }
-
-    //Dimensiones y Posicion de la Ventana
+    //ApplicationWindow Magnitude Data
     if(dim!=""){
         engine.rootContext()->setContextProperty("dim", dim);
     }
@@ -519,50 +464,13 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("ukuser", user);
     engine.rootContext()->setContextProperty("ukkey", key);
 
-    bool makeUpk=false;
-    bool modoAppName=false;
-    //qDebug()<<"upk user: "<<user;
-    //qDebug()<<"upk key: "<<key;
+
     lba="";
     lba.append("unik debug enabled: ");
     lba.append(debugLog ? "true" : "false");
     qInfo()<<lba;
     u.debugLog = debugLog;
-
-#ifdef Q_OS_LINUX
-#ifndef Q_OS_ANDROID
-    if(u.fileExist("/media/nextsigner/ZONA-A1/ul.txt")){
-        u.debugLog = true;
-        debugLog = true;
-    }
-#endif
-#ifdef Q_OS_ANDROID
     u.debugLog = true;
-    debugLog = true;
-#endif
-#endif
-#ifdef Q_OS_ANDROID
-    u.debugLog = true;
-    debugLog = true;
-#endif
-
-
-#ifdef Q_OS_WIN
-    if(u.fileExist("H:/ul.txt")){
-        u.debugLog = true;
-        debugLog = true;
-
-    }
-    ///media/nextsigner/ZONA-A1/ul.txt
-#endif
-#ifdef Q_OS_MAC
-    if(u.fileExist("/users/qt/Desarrollo/ul.txt")){
-        u.debugLog = true;
-        debugLog = true;
-
-    }
-    ///media/nextsigner/ZONA-A1/ul.txt
-#endif
 
     QByteArray upkFileName;
     QString upkActivo="";
@@ -589,7 +497,6 @@ int main(int argc, char *argv[])
     cut.append(u.getFile(pws+"/unik-tools/main.qml"));
     QByteArray utf;//unik-tools folder
     utf.append(pws);
-    //utf.append("/unik-tools");
     if(!cut.contains("objectName: \'unik-tools\'")){
         qInfo()<<"unik-tools have any fail! repairing..."<<pws;
         bool autd=u.downloadGit("https://github.com/nextsigner/unik-tools.git", pws);
@@ -773,7 +680,6 @@ int main(int argc, char *argv[])
 
             modeUpk=true;
             modeFolder=false;
-            modeAppName=false;
             modeRemoteFolder=false;
             modeGit=false;
             modeFolderToUpk=false;
@@ -783,20 +689,6 @@ int main(int argc, char *argv[])
         }
     }else{
         //updateUnikTools=true;
-    }
-
-    //MODO -appName
-    if((argc == 3||argc == 4||argc == 5||argc == 6) && QByteArray(argv[1])==QByteArray("-appName")){
-        modoDeEjecucion="-appName";
-        if(debugLog){
-            lba="";
-            lba.append("Run mode -appName.");
-            qInfo()<<lba;
-        }
-        makeUpk=false;
-        modoAppName=true;
-        modeAppName=true;
-        updateUnikTools=false;
     }
 
     //MODO -folder
@@ -821,33 +713,13 @@ int main(int argc, char *argv[])
         appArg1=QByteArray(argv[2]);
         appArg2=QByteArray(argv[3]);
         appArg3=QByteArray(argv[4]);
-        /*QByteArray ncf;//{"appName":"unik-installer", "mode": "-foldertoupk", "arg1": "/home/nextsigner/Escritorio/app", "arg2":"unik-free", "arg3":"free"}
-        ncf.append("{\"mode\":\"");
-        ncf.append(argv[1]);
-        ncf.append("\",");
-        ncf.append("\"arg1\":\"");
-        ncf.append(appArg1);
-        ncf.append("\",");
-        ncf.append("\"arg2\":\"");
-        ncf.append(u.encData(appArg2, "u", "k"));
-        ncf.append("\",");
-        ncf.append("\"arg3\":\"");
-        ncf.append(u.encData(appArg3, "u", "k"));
-        ncf.append("\"}");
-        QByteArray r;
-        r.append(urlConfigJson);
-        u.deleteFile(r);
-        u.setFile(r, ncf);*/
 
-        //appArg4=QByteArray(argv[4]);
         modeFolderToUpk=true;
         makeUpk=false;
-        if(debugLog){
-            lba="";
-            lba.append("Prepare mode -foldertoupk.");
-            qInfo()<<lba;
-        }
         updateUnikTools=false;
+        if(debugLog){
+            qInfo()<<"Prepare mode -foldertoupk.";
+        }        
     }
 
     //MODO -remoteFolder
@@ -856,7 +728,7 @@ int main(int argc, char *argv[])
         appArg1=QByteArray(argv[2]);
         appArg2=QByteArray(argv[3]);
         appArg3=QByteArray(argv[4]);
-        QByteArray ncf;//{"appName":"unik-installer", "mode": "-remoteFolder", "arg1": "http://unikdev.net/unik/users/unik-free/sources/onlineQMLs", "arg2":"main.qml", "arg3":"/home/nextsigner/Escritorio/onlineQMLs"}
+        QByteArray ncf;
         ncf.append("{\"mode\":\"");
         ncf.append(argv[1]);
         ncf.append("\",");
@@ -900,6 +772,8 @@ int main(int argc, char *argv[])
     }
 #endif
     //<-Finaliza configuracion OS
+
+
     engine.rootContext()->setContextProperty("engine", &engine);
 
     QByteArray tempFolder;
@@ -921,85 +795,31 @@ int main(int argc, char *argv[])
     }
     QString appName;
     QByteArray jsonConfigData;
-
-    if(argc > 1){
-        //qDebug()<<"Recibiendo "<<argc<<" argumentos: "<<argv[0];
-        QByteArray arg1;
-        arg1.append(argv[1]);
-        if(arg1=="-reset"){
-            if(debugLog){
-                lba="";
-                lba.append("Running -reset for clean config.json.");
-                qInfo()<<lba;
-            }
-            u.deleteFile(urlConfigJson.toLatin1());
-        }
-    }
-
-    //Leer config.json
-    if(readConfig&&!modoAppName&&!modeFolderToUpk&&!modeUpk&&!modeGit&&!modeFolder){
-        if(debugLog){
-            lba="";
-            lba.append("Reading config file...");
-            qInfo()<<lba;
-        }
+    //Reading config.json
+    readConfig=modeFolderToUpk||modeUpk||modeGit||modeFolder||modeRemoteFolder?false:true;
+    if(readConfig){
+        qInfo()<<"Reading config file...";
         QFile jsonConfig(urlConfigJson);
         if(jsonConfig.open(QIODevice::ReadOnly)){
             jsonConfigData.append(jsonConfig.readAll());
-            if(debugLog){
-                lba="";
-                lba.append("Loading config...");
-                qInfo()<<lba;
-            }
-
+            qInfo()<<"Loading config...";
             QJsonDocument docConf = QJsonDocument::fromJson(jsonConfigData.constData());
             QJsonObject raizConf = docConf.object();
             if(raizConf.value("appName").toString()!=""){
                 appName.append(raizConf.value("appName").toString());
             }
-
-            if(jsonConfigData=="{\"appName\":\"unik-tools\"}"){
-                lba="";
-                lba.append("Default config detected...");
-                qInfo()<<lba;
+            if(jsonConfigData=="{\"appName\":\"unik-tools\"}"){                
+                qInfo()<<"Default config detected...";
             }else{
-                //u.setHost(raizConf.value("host").toString());
-                engine.rootContext()->setContextProperty("userhost", raizConf.value("host").toString());
-                QByteArray nu;
-                nu.append(raizConf.value("user").toString());
-                QByteArray nk;
-                nk.append(raizConf.value("key").toString());
-                user = "";
-                user.append(u.decData(nu, "u", "k"));
-                key = "";
-                key.append(u.decData(nk, "u", "k"));
-                //qDebug()<<"Config VALOR x: "<<raizConf.value("ddd").toString();
-                lba="";
-                lba.append("Config set Mode: ");
-                lba.append(jsonConfigData);
-                qInfo()<<lba;
+                qInfo()<<"Config set Mode: "<<jsonConfigData;
                 if(raizConf.value("mode").toString()!=""){
                     QString vm =raizConf.value("mode").toString();
-                    if(debugLog){
-                        lba="";
-                        lba.append("Config set Mode: ");
-                        lba.append(vm);
-                        qInfo()<<lba;
-                    }
-                    lba="";
-                    lba.append("Loading config mode: ");
-                    lba.append(vm);
-                    lba.append("...");
-                    qInfo()<<lba;
-                    //qDebug("-----------------------------------------------iiiiiiiiiiiiiiiii"+vm.toUtf8());
+                    qInfo()<<"Config set Mode: "<<vm;
                     if(vm=="-folder"){
-                        //{"appName":"unik-installer", "mode": "-folder", "arg1": "/home/nextsigner/Escritorio/app"}
-                        if(!modeFolderToUpk&&!modeUpk){
-                            QDir fe(raizConf.value("arg1").toString());
-                            //modeFolder=fe.exists();
-                            if(!fe.exists()){
+                        QDir fe(raizConf.value("arg1").toString());
+                        if(!fe.exists()){
                                 u.log("ModeFolder from config aborted! - Folder not found.");
-                            }else{
+                        }else{
                                 appArg2 = "";
                                 appArg2.append(raizConf.value("arg1").toString());
                                 pq = "";
@@ -1015,18 +835,15 @@ int main(int argc, char *argv[])
                                     lba="";
                                     lba.append("Config set arg2: ");
                                     lba.append(appArg2);
-                                    lba.append("\nAppName from config.json: ");
+                                    lba.append("\nModule name from config.json: ");
                                     lba.append(appName);
                                     qInfo()<<lba;
-
                                 }
+                                modeFolder=true;
                                 updateUnikTools=false;
                             }
-                        }
-
                     }
-                    if(vm=="-foldertoupk"){
-                        //{"appName":"unik-installer", "mode": "-foldertoupk", "arg1": "/home/nextsigner/Escritorio/app", "arg2":"unik-free", "arg3":"free"}
+                    /*if(vm=="-foldertoupk"){
                         modeFolderToUpk=true;
                         appArg1 = "";
                         appArg1.append(raizConf.value("arg1").toString());
@@ -1038,14 +855,9 @@ int main(int argc, char *argv[])
                         user.append(u.decData(appArg2, "u", "k"));
                         key = "";
                         key.append(u.decData(appArg3, "u", "k"));
-                        if(debugLog){
-                            /*qDebug()<<"Mode -foldertoupk config set arg1: "<<appArg1<<" arg2: "<<appArg2<<" arg3: "<<appArg3<<" ";
-                            qDebug()<<"Dec User: "<<u.decData(appArg2, "u", "k");
-                            qDebug()<<"Dec Key: "<<u.decData(appArg3, "u", "k");*/
-                        }
-                    }
+
+                    }*/
                     if(vm=="-remoteFolder"){
-                        //{"appName":"unik-installer", "mode": "-remoteFolder", "arg1": "http://unikdev.net/unik/users/unik-free/sources/onlineQMLs", "arg2":"main.qml", "arg3":"/home/nextsigner/Escritorio/onlineQMLs"}
                         modeRemoteFolder=true;
                         appArg1 = "";
                         appArg1.append(raizConf.value("arg1").toString());
@@ -1469,6 +1281,7 @@ int main(int argc, char *argv[])
                 qInfo()<<lba;
             }
 
+            qInfo()<<"folderToUpk: "<<arg1<<" "<<nAppName<<" "<<arg2<<" "<<arg3<<" "<<dupl;
             if(u.folderToUpk(arg1, nAppName, arg2, arg3, dupl)){
                 if(setPass){
                     //user = arg2.toLatin1();
@@ -1483,7 +1296,6 @@ int main(int argc, char *argv[])
                 lba.append(".upk");
                 qInfo()<<lba;
                 appName = nAppName;
-                //return 0;
             }else{
                 lba="";
                 lba.append("Error al crear ");
@@ -1495,21 +1307,21 @@ int main(int argc, char *argv[])
             upkFileName.append("/");
             upkFileName.append(appName);
             upkFileName.append(".upk");
-            if(debugLog){
-                lba="";
-                lba.append("Upk filename: ");
-                lba.append(upkFileName);
-                qInfo()<<lba;
-            }
-            if(u.upkToFolder(upkFileName, user, key, pq.toUtf8())){
-                if(debugLog){
-                    lba="";
-                    lba.append(appName);
-                    lba.append(" extract successful...");
-                    qInfo()<<lba;
-                }
+            QByteArray fd;
+            fd.append(u.getPath(2));
+            fd.append("/");
+            fd.append(tempFolder);
+            QDir dfd(fd);
+            dfd.mkpath(".");
+            qInfo()<<"Upk filename: "<<upkFileName;
+            qInfo()<<"Upk folder: "<<fd;
+            if(u.upkToFolder(upkFileName, user, key, fd)){
+                qInfo()<<appName<<" extract successful...";
                 upkActivo = appName;
                 updateUnikTools=false;
+                pq.clear();
+                pq.append(fd);
+                pq.append("/");
                 //engine2.rootContext()->setContextProperty("upkActivo", appName);
             }
             //rewriteUpk=true;
@@ -1731,10 +1543,6 @@ int main(int argc, char *argv[])
 
     log4.append("modeRemoteFolder: ");
     log4.append(modeRemoteFolder ? "true" : "false");
-    log4.append("\n");
-
-    log4.append("modeAppName: ");
-    log4.append(modeAppName ? "true" : "false");
     log4.append("\n");
 
     log4.append("modeUpk: ");

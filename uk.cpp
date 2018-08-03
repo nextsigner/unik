@@ -148,14 +148,13 @@ bool UK::mkUpk(QByteArray folder, QByteArray upkName, QByteArray user, QByteArra
     QByteArray sep;
     sep.append(user);
     sep.append(key);
-    if(debugLog){
-        QByteArray log1;
-        log1.append("Making upk from folder ");
-        log1.append(folder);
-        log1.append(" with upkName: ");
-        log1.append(upkName);
-        log(log1);
-    }
+    QByteArray log1;
+    log1.append("Making upk from folder ");
+    log1.append(folder);
+    log1.append(" with upkName: ");
+    log1.append(upkName);
+    qInfo()<<log1;
+
     //Primeras 2 letras a hexadecimal
     QByteArray hsep;
     hsep.append(QString(QCryptographicHash::hash(sep,QCryptographicHash::Md5)));
@@ -169,26 +168,16 @@ bool UK::mkUpk(QByteArray folder, QByteArray upkName, QByteArray user, QByteArra
     QFile upk(urlUPK);
 
     //Creando carpeta destino
+    qInfo()<<"Making folder to upk: "<<folder;
     QDir dir(folder);
     if (!dir.exists()) {
         dir.mkpath(".");
     }
     dir.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
-    if(debugLog){
-        lba="";
-        lba.append("Scanning: ");
-        lba.append(dir.path());
-        log(lba);
-    }
+    qInfo()<<"Scanning: "<<dir.path();
     //Iterando la lista de archivos
     QStringList fileList = dir.entryList();
-    if(debugLog){
-        lba="";
-        lba.append("For reading ");
-        lba.append(fileList.count());
-        lba.append(" files...");
-        log(lba);
-    }
+    qInfo()<<"For reading "<<fileList.count()<<" files...";
     for (int i=0; i<fileList.count(); i++){
         //qDebug()<<"Upkando: "<<fileList[i];
         QByteArray ro;
@@ -197,22 +186,11 @@ bool UK::mkUpk(QByteArray folder, QByteArray upkName, QByteArray user, QByteArra
         ro.append(fileList[i]);
         QFile archOrig(ro);
         if(archOrig.size()>0&&!QString(fileList[i]).contains(".qmlc")){
-            //if(archOrig.size()>0){
             if(!archOrig.open(QIODevice::ReadOnly)){
-                if(debugLog){
-                    lba="";
-                    lba.append("Read error ");
-                    lba.append(ro);
-                    log(lba);
-                }
+                qInfo()<<"Read error "<<ro;
                 return false;
             }else{
-                if(debugLog){
-                    lba="";
-                    lba.append("Reading: ");
-                    lba.append(ro);
-                    log(lba);
-                }
+                qInfo()<<"Reading: "<<ro;
             }
 
             //Preparando separador
@@ -230,34 +208,18 @@ bool UK::mkUpk(QByteArray folder, QByteArray upkName, QByteArray user, QByteArra
 
             dataUpk1.append(nsep);
             dataUpk1.append(archOrig.readAll());
-
         }else{
-            if(debugLog){
-                lba="";
-                lba.append("File not has data: ");
-                lba.append(fileList[i]);
-                log(lba);
-            }
+            qInfo()<<"File not has data: "<<fileList[i];
         }
     }
 
     //Abriendo archivo upk
     QFile upk2(urlUPK);
     if(!upk2.open(QIODevice::WriteOnly)){
-        if(debugLog){
-            lba="";
-            lba.append("Error! not open upk: ");
-            lba.append(urlUPK);
-            log(lba);
-        }
+        qInfo()<<"Error! not open upk: "<<urlUPK;
         return false;
     }else{
-        if(debugLog){
-            lba="";
-            lba.append("File creation upk: ");
-            lba.append(urlUPK);
-            log(lba);
-        }
+        qInfo()<<"File creation upk: "<<urlUPK;
     }
 
     QString dataUpk2=encPrivateData(dataUpk1, user, key);
