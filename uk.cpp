@@ -2,8 +2,6 @@
 
 UK::UK(QObject *parent) : QObject(parent)
 {
-    //qInstallMessageHandler(this->unikStdOut());
-    cinj = new QTimer(this);
     lsim<<"g"<<"h"<<"i"<<"j"<<"k"<<"l"<<"m"<<"n"<<"o"<<"p"<<"q"<<"r"<<"s"<<"t"<<"u"<<"v"<<"w"<<"x"<<"y"<<"z";
     lnum<<"11"<<"33"<<"66"<<"77"<<"88"<<"99"<<"20"<<"30"<<"40"<<"60"<<"70"<<"80"<<"90"<<"12"<<"21"<<"57"<<"82"<<"92"<<"84"<<"72";
     file = new QFile();
@@ -476,6 +474,9 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
         carpetaDestino = cd0.replace(".git", "");
         QString url0=u.replace(".git", "/zip/master");
         urlZipGit=url0.replace("https://github.com/", "https://codeload.github.com/");
+        QDateTime rdt = QDateTime::currentDateTime();
+        urlZipGit.append("?r=");
+        urlZipGit.append(QString::number(rdt.currentMSecsSinceEpoch()));
         qInfo("Downloading zip file: "+urlZipGit.toUtf8());
     }
 
@@ -492,6 +493,9 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     tempFile.append(QString::number(a.toMSecsSinceEpoch()));
 #endif
     tempFile.append(".zip");
+    //tempFile.append("?r=");
+    //QDateTime rdt = QDateTime::currentDateTime();
+    //tempFile.append(QString::number(rdt.currentMSecsSinceEpoch()));
     qInfo("temp zip location "+tempFile);
     //tempFile.append("/nivelfluido-master.zip");
 
@@ -575,6 +579,41 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
         file.open(QIODevice::ReadOnly);
         //same functionality as QIODevice::readData() -- data is a char*, maxSize is qint64
         //file.readData(data,maxSize);
+        qInfo()<<"Zip filename: "<<zip.getFileNameList();
+        if(v==0){
+            carpeta=QString(zip.getFileNameList().at(0));
+            qInfo()<<"Carpeta de destino Zip: "<<carpeta;
+        }else{
+            QString nfn;
+            nfn.append(carpDestinoFinal);
+            nfn.append("/");
+            nfn.append(zip.getFileNameList().at(v));
+            QString nfn2 = nfn.replace("-master/", "/");
+            QString nfn3 = nfn2.replace(" ", "%20");
+            //nfn.append("\"");
+
+            if(nfn3.at(nfn3.size()-1)!="/"){
+               qInfo()<<"Destino de archivo: "<<nfn3;
+                QFile nfile(nfn3);
+                if(!nfile.open(QIODevice::WriteOnly)){
+                    qInfo()<<"Error al abrir archivo "<<nfn3;
+                }else{
+                    nfile.write(file.readAll());
+                    nfile.close();
+                }
+            }else{
+                qInfo()<<"Destino de carpeta: "<<nfn3;
+                QDir dnfn(nfn3);
+                dnfn.mkpath(".");
+            }
+        }
+        //qInfo()<<"SSSSSSSSSS"<<file.readAll();
+        //do something with the data
+        file.close();
+        v++;
+        /*file.open(QIODevice::ReadOnly);
+        //same functionality as QIODevice::readData() -- data is a char*, maxSize is qint64
+        //file.readData(data,maxSize);
         qInfo()<<"gfn:"<<zip.getFileNameList();
         if(v==0){
             carpeta=QString(zip.getFileNameList().at(0));
@@ -596,7 +635,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
         //qInfo()<<"SSSSSSSSSS"<<file.readAll();
         //do something with the data
         file.close();
-        v++;
+        v++;*/
     }
     zip.close();
 #else
@@ -717,54 +756,6 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
 
 
     return true;
-}
-
-bool UK::inject(QString mainQml, QString inj)
-{
-    //return true;
-    QFile m(mainQml);
-    m.open(QIODevice::ReadOnly);
-    QString data = m.readAll();
-    QString dataCorr = data.toUtf8();
-    //qDebug()<<"XXXXXXXXXXXXXXX-->"<<dataCorr;
-    QStringList m00 = data.split("ApplicationWindow");
-    if(m.size()>1){
-        QString r1 = m00.at(1);
-        QByteArray seg;
-        seg.append("ApplicationWindow");
-
-        for (int i = 0; i < r1.size()-1; ++i) {
-            QString l = r1.at(i);
-            if(!l.contains("{")){
-                seg.append(l);
-            }else{
-                break;
-            }
-        }
-        dataCorr = data.replace(seg.constData(), "ApplicationWindow ");
-    }else{
-        return false;
-    }
-    m.close();
-
-    QStringList m0 = dataCorr.split("ApplicationWindow {");
-    if(m0.size()>1){
-        QFile m2(mainQml);
-        m2.open(QIODevice::WriteOnly);
-        QString dataF;
-        dataF.append(m0.at(0));
-        dataF.append("ApplicationWindow {");
-        dataF.append("\n");
-        dataF.append(inj);
-        dataF.append("\n");
-        dataF.append(m0.at(1));
-        QTextStream e(&m2);
-        e.setCodec("UTF-8");
-        e<<dataF;
-        m2.close();
-        return true;
-    }
-    return false;
 }
 
 void UK::restartApp()

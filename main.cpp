@@ -488,7 +488,7 @@ int main(int argc, char *argv[])
     mf.append("/qmlandia/main.qml");
     QFile m(mf);
     if(!m.exists()){
-        bool autd=u.downloadGit("https://github.com/nextsigner/qmlandia", dupl.toUtf8());
+        //bool autd=u.downloadGit("https://github.com/nextsigner/qmlandia", dupl.toUtf8());
     }
 #else
     if(!modeGit){
@@ -544,29 +544,27 @@ int main(int argc, char *argv[])
     utp.append("/qmlandia");
 #endif
 #ifdef __arm__
+#ifndef Q_OS_ANDROID
     utp.append("-rpi");
+#endif
 #endif
     qInfo()<<"Checking UTP exists...";
     QDir dirUnikToolsLocation(utp);
     QFile utmain(utp+"/main.qml");
     if (!dirWS.exists()||!dirUnikToolsLocation.exists()||!utmain.exists()) {
         dirWS.mkpath(".");
-        if(debugLog){
-            lba="";
-            lba.append("Making folder ");
-            lba.append(dupl);
-            qInfo()<<lba;
-
-            if(!dirUnikToolsLocation.exists()){
-                dirUnikToolsLocation.mkpath(".");
-            }
+        qInfo()<<"Making folder "<<dupl;
+        if(!dirUnikToolsLocation.exists()){
+           dirUnikToolsLocation.mkpath(".");
+         }
+         bool unikToolDownloaded=false;
 #ifndef __arm__
-            bool unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools", dupl.toUtf8());
+            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools", dupl.toUtf8());
 #else
 #ifdef Q_OS_ANDROID
-            bool unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/qmlandia", dupl.toUtf8());
+            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/qmlandia", dupl.toUtf8());
 #else
-            bool unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi", dupl.toUtf8());
+            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi", dupl.toUtf8());
 #endif
 #endif
             lba="";
@@ -580,35 +578,15 @@ int main(int argc, char *argv[])
             }else {
                 lba.append("is not downloaded!");
             }
-            qInfo()<<lba;
-        }
+            qInfo()<<lba;        
     }else{
-        if(debugLog){
-            lba="";
-            lba.append("Folder ");
-            lba.append(dupl);
-            lba.append(" pre existent.");
-            qInfo()<<lba;
-        }
+            qInfo()<<"Folder "<<dupl<<" pre existent.";
     }
-
     if (!dirWS.exists()) {
-        if(debugLog){
-            lba="";
-            lba.append("Closing because folder ");
-            lba.append(dupl);
-            lba.append(" no existent.");
-            qInfo()<<lba;
-        }
+        qInfo()<<"Closing because folder "<<dupl<<" no existent.";
         return -5;
     }else{
-        if(debugLog){
-            lba="";
-            lba.append("Folder ");
-            lba.append(dupl);
-            lba.append(" existent.");
-            qInfo()<<lba;
-        }
+        qInfo()<<"Folder "<<dupl<<" existent.";
     }
 
     //Obteniendo url del archivo config.json
@@ -649,19 +627,11 @@ int main(int argc, char *argv[])
         argUpk.append(argv[1]);
         QString ext=argUpk.mid(argUpk.size()-4,argUpk.size());
         if(ext==".upk"){
-            if(debugLog){
-                QByteArray log8;
-                log8.append("Run mode upk direct file.");
-                u.log(log8);
-            }
+            qInfo()<<"Run mode upk direct file.";
             appArg1=QByteArray(argv[1]);
-            //appArg2=QByteArray(argv[3]);
-            //appArg3=QByteArray(argv[4]);
             modeUpk=true;
-            //modeFolderToUpk=true;
             updateUnikTools=false;
         }
-
     }else{
         //updateUnikTools=true;
     }
@@ -831,14 +801,7 @@ int main(int argc, char *argv[])
                                 }else{
                                     appName = mappn.at(0);
                                 }
-                                if(debugLog){
-                                    lba="";
-                                    lba.append("Config set arg2: ");
-                                    lba.append(appArg2);
-                                    lba.append("\nModule name from config.json: ");
-                                    lba.append(appName);
-                                    qInfo()<<lba;
-                                }
+                                qInfo()<<"Config set arg2: "<<appArg2<<"\nModule name from config.json: "<<appName;
                                 modeFolder=true;
                                 updateUnikTools=false;
                             }
@@ -906,6 +869,37 @@ int main(int argc, char *argv[])
                         modeUpk=true;
                         if(debugLog){
                             qDebug()<<"Config set -upk arg1: "<<appArg1<<" arg2: "<<appArg2<<" arg3: "<<appArg3<<" ";
+                        }
+                    }
+                    if(vm=="-git"){
+                        appArg1.clear();
+                        appArg1.append(raizConf.value("mode").toString());
+                        appArg2.clear();
+                        appArg2.append(raizConf.value("arg1").toString());
+                        if(!appArg2.isEmpty()){
+                            QString pUrlGit1;
+                            pUrlGit1.append(appArg2);
+                            urlGit = "";
+                            qInfo()<<"Updating from Git from config.json: "<<appArg1<<" "<<urlGit;
+                            //qDebug()<<"____________"<<pUrlGit1.mid(pUrlGit1.size()-4, pUrlGit1.size());
+                            if(pUrlGit1.contains(".git")||pUrlGit1.mid(pUrlGit1.size()-4, pUrlGit1.size())==".git"){
+                                urlGit.append(pUrlGit1.mid(0, pUrlGit1.size()-4));
+                            }else{
+                                urlGit.append(pUrlGit1);
+                            }
+                            //QString pUrlGit2 = pUrlGit1.replace(".git", "");
+                            QString pUrlGit2 = pUrlGit1;
+                            QStringList m100 = pUrlGit2.split("/");
+                            if(m100.size()>1){
+                                moduloGit="";
+                                moduloGit.append(m100.at(m100.size()-1));
+                            }
+                            modeGit=true;
+                            modeFolder=false;
+                            modeFolderToUpk=false;
+                            modeRemoteFolder=false;
+                        }else{
+                            qInfo()<<"Fail updating from Git from config.json: "<<appArg1<<" Arg2 is empty! "<<appArg2<<" "<<urlGit;
                         }
                     }
                 }else{

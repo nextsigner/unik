@@ -189,7 +189,6 @@ public:
         return createLink(execString, destopLocationFilename, name, comment);
     }
 #endif
-    QString inj;
     QString initStdString;
     bool debugLog=false;
     bool canCloseApp=false;
@@ -232,7 +231,6 @@ public slots:
     bool isFree(QString upk);
     bool loadUpk(QString upkLocation, bool closeAppLauncher, QString user, QString key);
     bool downloadGit(QByteArray url, QByteArray localFolder);
-    bool inject(QString mainQml, QString inj);
     void restartApp();
     void restartApp(QString args);
     bool run(QString commandLine);
@@ -305,8 +303,7 @@ private:
     QSqlDatabase secondDB;
     QStringList lsim;//=QStringList()<<"g"<<"h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z";
     QStringList lnum;//=QStringList("11,33,66,77,88,99,20,30,40,60,70,80,90,12,21,57,82,92,84,72");
-    QByteArray lba;
-    QTimer *cinj;
+    QByteArray lba;    
     QString h;
 
     //UnikSqliteCrypto dbc;

@@ -1,19 +1,16 @@
 message(linux.pri is loaded)
 
-
-FILE_VERSION_NAME=$$replace(PWD, /unik,/build_unik_linux_64/linux_version)
-FILE_VERSION_NAME2=\"$$FILE_VERSION_NAME\"
-#QMAKE_POST_LINK +=$$quote(rm $${FILE_VERSION_NAME}$$escape_expand(\n\t))
-#message($$replace(PWD, /unik,/ ))
-#message(-----___ $$PWD)
-write_file(/tmp/linux_version, APPVERSION)
-message(File version location: $$FILE_VERSION_NAME2)
 !android{
     message(Linux NO ANDROID)
     !contains(QMAKE_HOST.arch, arm.*):{
         QT += webengine webview
         DESTDIR= ../build_unik_linux_64
         message(Ubicaciòn del Ejecutable: $$DESTDIR)
+
+        FILE_VERSION_NAME=$$replace(PWD, /unik,/build_unik_linux_64/linux_version)
+        FILE_VERSION_NAME2=\"$$FILE_VERSION_NAME\"
+        write_file(/tmp/linux_version, APPVERSION)
+        message(File version location: $$FILE_VERSION_NAME2)
 
         #Building Quazip from Ubuntu 16.10
         #Compile quazip.pro and install with sudo make install from the $$OUT_PWD
@@ -45,9 +42,7 @@ message(File version location: $$FILE_VERSION_NAME2)
         #COPIAR ARCHIVOS NECESARIOS EN RPI3
         QMAKE_POST_LINK += $$quote(mkdir $${DESTDIR}/qml$$escape_expand(\n\t))
         QMAKE_POST_LINK += $$quote(mkdir $${DESTDIR}/qml/LogView$$escape_expand(\n\t))
-        #LOGVIEWPATH=$$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/LogView
-        #QMAKE_POST_LINK += $$quote(cp $$LOGVIEWPATH/liblogview.so $${DESTDIR}/qml/LogView$$escape_expand(\n\t))
-        #QMAKE_POST_LINK += $$quote(cp $$LOGVIEWPATH/LogView.qml $${DESTDIR}/qml/LogView$$escape_expand(\n\t))
+
         EXTRA_BINFILES += \
         $$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/qmldir \
         $$PWD/unikplugins/LogView/build_LogView_linux_rpi/qml/liblogview.so \
@@ -70,4 +65,11 @@ message(File version location: $$FILE_VERSION_NAME2)
 }else{
     message(QT_MESSAGELOGCONTEXT defined for Android)
     DEFINES += QT_MESSAGELOGCONTEXT
+
+    FILE_VERSION_NAME=$$PWD/android/assets/android_version
+    FILE_VERSION_NAME2=\"$$FILE_VERSION_NAME\"
+    write_file(/tmp/android_version, APPVERSION)
+    message(File version location: $$FILE_VERSION_NAME2)
+
+    QMAKE_POST_LINK += $$quote(cp /tmp/android_version $${PWD}/android/assets/android_version$$escape_expand(\n\t))
 }
