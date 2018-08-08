@@ -15,6 +15,10 @@ include(version.pri)
 linux{
     include(linux.pri)
 }
+windows{
+    include(windows.pri)
+}
+
 mac{
     FILE_VERSION_NAME=macos_version
     QT += webengine
@@ -29,31 +33,6 @@ mac{
 
     #Deploy command line example
     #/Users/qt/Qt5.9.1/5.9.1/clang_64/bin/macdeployqt /Users/qt/nsp/unik-recursos/build_osx_clang64/unik.app -qmldir=/Users/qt/nsp/unik -no-strip -dmg
-}
-windows{
-    FILE_VERSION_NAME=windows_version
-    QT += webengine
-    DESTDIR = ../build_win_unik_32
-    RC_FILE = unik.rc
-    LIBS += -L$$PWD/../libvlc-qt/lib/ -lVLCQtCore -lVLCQtWidgets -lVLCQtQml
-    INCLUDEPATH += $$PWD/../libvlc-qt/include
-    DEPENDPATH += $$PWD/../libvlc-qt/include
-
-    CURRENTDIR_COMPILATION=E:/unikCurrentDirComp
-    CURRENTDIR_COMPILATION ~= s,/,\\,g
-    DEFINES += UNIK_CURRENTDIR_COMPILATION=\\\"$$CURRENTDIR_COMPILATION\\\"
-    message(UNIK_CURRENTDIR_COMPILATION=$$CURRENTDIR_COMPILATION)
-    QMAKE_POST_LINK += $$quote(cmd /c md $$CURRENTDIR_COMPILATION$$escape_expand(\n\t))
-
-    #EXTRA_BINFILES += \
-        #$$PWD/version
-    #EXTRA_BINFILES_WIN = $${EXTRA_BINFILES}
-    #EXTRA_BINFILES_WIN ~= s,/,\\,g
-        #DESTDIR_WIN = $${DESTDIR}
-    #DESTDIR_WIN ~= s,/,\\,g
-    #for(FILE,EXTRA_BINFILES_WIN){
-                #QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${FILE} $${DESTDIR_WIN}$$escape_expand(\n\t))
-    #}
 }
 
 android{
@@ -126,7 +105,8 @@ DISTFILES += \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew.bat \
     linux.pri \
-    version.pri
+    version.pri \
+    windows.pri
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

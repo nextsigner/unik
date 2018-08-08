@@ -44,7 +44,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef Q_OS_LINUX
 #include "zlib.h"
+#else
+#include <QtZlib/zlib.h>
+#endif
 
 #if defined(USE_FILE32API)
 #define fopen64 fopen

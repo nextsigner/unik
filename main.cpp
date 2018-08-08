@@ -181,7 +181,7 @@ int main(int argc, char *argv[])
 #endif
 #endif
 #ifdef Q_OS_WIN
-     carpComp.append(QString(UNIK_CURRENTDIR_COMPILATION));
+     //carpComp.append(QString(UNIK_CURRENTDIR_COMPILATION));
     nomVersion="windows_version";
 #endif
 #ifdef Q_OS_OSX
@@ -352,8 +352,16 @@ int main(int argc, char *argv[])
             QStringList marg = arg.split("-dir=");
             if(marg.size()==2){
                 QDir::setCurrent(marg.at(1));
+#ifndef Q_OS_WIN
                 engine.addImportPath(QDir::currentPath());
                 engine.addPluginPath(QDir::currentPath());
+#else
+                QString pip;
+                pip.append("file:///");
+                pip.append(QDir::currentPath());
+                engine.addImportPath(pip);
+                engine.addPluginPath(pip);
+#endif
                 lba="";
                 lba.append("-dir=");
                 lba.append(marg.at(1));
@@ -1085,6 +1093,8 @@ int main(int argc, char *argv[])
             engine.addPluginPath(pq);
 #ifndef __arm__
             pq.append("/unik-tools/");
+            //engine.addImportPath("C:\\Users\\qt\\Documents\\unik\\unik-tools\\LogView");
+            //engine.addPluginPath("C:\\Users\\qt\\Documents\\unik\\unik-tools\\LogView");
 #else
 #ifdef Q_OS_ANDROID
             pq.append("/qmlandia/");
@@ -1574,12 +1584,18 @@ int main(int argc, char *argv[])
         engine.rootContext()->setContextProperty("splashvisible", u.splashvisible);
     }
 #ifdef Q_OS_WIN
-    qmlImportPath.append("file:/");
+    //qmlImportPath.append("C:/Users/qt/Documents/unik/unik-tools");
     qmlImportPath.append(pq);
+    engine.addImportPath(qmlImportPath);
+    engine.addPluginPath(qmlImportPath);
+    qInfo()<<"Import Path: "<<qmlImportPath;
+    qInfo()<<"Current Dir: "<<QDir::currentPath();
+    qInfo()<<"1-->.>"<<engine.importPathList();
+    qInfo()<<"2-->.>"<<engine.pluginPathList();
+    qInfo()<<"3<<"<<QLibraryInfo::Qml2ImportsPath;
+
     engine.load(QUrl::fromLocalFile(mainQml));
     QQmlComponent component(&engine, QUrl::fromLocalFile(mainQml));
-    engine.addImportPath(qmlImportPath);
-
     /*QQuickWindow *window = qobject_cast<QQuickWindow*>(engine.rootObjects().at(0));
     if (!window) {
         qFatal("Error: Your root item has to be a window.");
