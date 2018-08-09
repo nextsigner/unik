@@ -17,7 +17,6 @@ import QtWebView 1.1
 import Qt.labs.calendar 1.0
 import Qt.labs.folderlistmodel 2.2
 import Qt.labs.settings 1.0
-import LogView 1.0
 
 ApplicationWindow {
     id: app
@@ -160,7 +159,7 @@ ApplicationWindow {
                     width: parent.width
                     height: contentHeight
                     color: app.c1
-                    font.pixelSize: app.fs*0.5
+                    font.pixelSize: app.fs
                     wrapMode: Text.WordWrap
                     textFormat: Text.RichText
                     Connections{target: unik;onUkStdChanged:taLog.text+=(''+unikLog).replace(/\n/g, '<br />\n')}
