@@ -888,13 +888,14 @@ int main(int argc, char *argv[])
                             QString pUrlGit1;
                             pUrlGit1.append(appArg2);
                             urlGit = "";
-                            qInfo()<<"Updating from Git from config.json: "<<appArg1<<" "<<urlGit;
+
                             //qDebug()<<"____________"<<pUrlGit1.mid(pUrlGit1.size()-4, pUrlGit1.size());
                             if(pUrlGit1.contains(".git")||pUrlGit1.mid(pUrlGit1.size()-4, pUrlGit1.size())==".git"){
                                 urlGit.append(pUrlGit1.mid(0, pUrlGit1.size()-4));
                             }else{
                                 urlGit.append(pUrlGit1);
                             }
+                            qInfo()<<"Updating from Git from config.json: "<<appArg1<<" "<<urlGit;
                             //QString pUrlGit2 = pUrlGit1.replace(".git", "");
                             QString pUrlGit2 = pUrlGit1;
                             QStringList m100 = pUrlGit2.split("/");
