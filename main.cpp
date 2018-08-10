@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
     nomVersion="windows_version";
 #endif
 #ifdef Q_OS_OSX
-    carpComp.append("/Users/qt/nsp/unik-recursos/build_osx_clang64/unik.app/Contents/MacOS");
+    //carpComp.append("/Users/qt/nsp/unik-recursos/build_osx_clang64/unik.app/Contents/MacOS");
    nomVersion="macos_version";
 #endif  
    QString nv;

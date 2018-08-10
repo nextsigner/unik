@@ -31,7 +31,11 @@ see quazip/(un)zip.h files for details. Basically it's the zlib license.
 #ifdef Q_OS_LINUX
 #include <zlib.h>
 #else
+#ifdef Q_OS_WIN32
 #include <QtZlib/zlib.h>
+#else
+#include "zlib.h"
+#endif
 #endif
 
 class QuaGzipFilePrivate;

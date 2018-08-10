@@ -564,6 +564,66 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     }
     zip.close();   
 #endif
+#ifdef Q_OS_OSX
+    QByteArray carpDestinoFinal;
+     carpDestinoFinal.append(localFolder);
+     QDir fdf1(carpDestinoFinal);
+     if(!fdf1.exists()){
+         fdf1.mkpath(".");
+     }
+     qInfo()<<"Downloading Git Zip into: "<<carpDestinoFinal;
+     qInfo()<<"Downloading Git Zip Module: "<<module;
+    QString nfdf2;
+    nfdf2.append(carpDestinoFinal);
+    nfdf2.append("/");
+    nfdf2.append(module);
+    qInfo()<<"Downloading Git Zip Module Location: "<<nfdf2;
+    QDir fdf2(nfdf2);
+    if(!fdf2.exists()){
+        fdf2.mkpath(".");
+    }
+
+    QuaZip zip(tempFile.constData());
+    zip.open(QuaZip::mdUnzip);
+
+    QuaZipFile file(&zip);
+
+    QString carpeta="aaa";
+    int v=0;
+    for(bool f=zip.goToFirstFile(); f; f=zip.goToNextFile()) {
+        file.open(QIODevice::ReadOnly);
+        qInfo()<<"Zip filename: "<<zip.getFileNameList();
+        if(v==0){
+            carpeta=QString(zip.getFileNameList().at(0));
+            qInfo()<<"Carpeta de destino Zip: "<<carpeta;
+        }else{
+            QString nfn;
+            nfn.append(carpDestinoFinal);
+            nfn.append("/");
+            nfn.append(zip.getFileNameList().at(v));
+            QString nfn2 = nfn.replace("-master/", "/");
+            QString nfn3 = nfn2.replace(" ", "%20");
+
+            if(nfn3.at(nfn3.size()-1)!="/"){
+               qInfo()<<"Destino de archivo: "<<nfn3;
+                QFile nfile(nfn3);
+                if(!nfile.open(QIODevice::WriteOnly)){
+                    qInfo()<<"Error al abrir archivo "<<nfn3;
+                }else{
+                    nfile.write(file.readAll());
+                    nfile.close();
+                }
+            }else{
+                qInfo()<<"Destino de carpeta: "<<nfn3;
+                QDir dnfn(nfn3);
+                dnfn.mkpath(".");
+            }
+        }
+        file.close();
+        v++;
+    }
+    zip.close();
+#endif
 #ifdef Q_OS_LINUX
     QByteArray carpDestinoFinal;
 #ifndef Q_OS_ANDROID

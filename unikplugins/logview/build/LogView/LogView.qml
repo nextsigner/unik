@@ -33,7 +33,7 @@ Rectangle{
     property bool showCommandsLineInput: false
     property int commandsLineInputHeight: raiz.fontSize*2
 
-    property string help: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+    property string help: ''
 
 
     FontLoader {name: "FontAwesome";source: "qrc:/fontawesome-webfont.ttf";}

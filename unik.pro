@@ -27,6 +27,19 @@ mac{
     message(MkLevel Desarrollo en Mac)
     ICON = logo.icns
     QMAKE_INFO_PLIST = Info.plist
+
+        #Building Quazip from Ubuntu 16.10
+        #Compile quazip.pro and install with sudo make install from the $$OUT_PWD
+        INCLUDEPATH += $$PWD/quazip
+        LIBS += -lz
+        LIBS+=-L/usr/local/zlib/lib
+        INCLUDEPATH+=/usr/local/zlib/include
+        HEADERS += $$PWD/quazip/*.h
+        SOURCES += $$PWD/quazip/*.cpp
+        SOURCES += $$PWD/quazip/*.c
+
+
+
     #APP_QML_FILES.files = ffmpegsumo.so
     #APP_QML_FILES.path = Contents/Resources
     #QMAKE_BUNDLE_DATA += APP_QML_FILES

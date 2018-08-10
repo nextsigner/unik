@@ -47,7 +47,11 @@
 #ifdef Q_OS_LINUX
 #include "zlib.h"
 #else
+#ifdef Q_OS_WIN32
 #include <QtZlib/zlib.h>
+#else
+#include "zlib.h"
+#endif
 #endif
 
 #if defined(USE_FILE32API)
