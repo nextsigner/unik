@@ -20,32 +20,7 @@ windows{
 }
 
 mac{
-    FILE_VERSION_NAME=macos_version
-    QT += webengine
-    DESTDIR=../unik-recursos/build_osx_clang64
-    QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.11
-    message(MkLevel Desarrollo en Mac)
-    ICON = logo.icns
-    QMAKE_INFO_PLIST = Info.plist
-
-        #Building Quazip from Ubuntu 16.10
-        #Compile quazip.pro and install with sudo make install from the $$OUT_PWD
-        INCLUDEPATH += $$PWD/quazip
-        LIBS += -lz
-        LIBS+=-L/usr/local/zlib/lib
-        INCLUDEPATH+=/usr/local/zlib/include
-        HEADERS += $$PWD/quazip/*.h
-        SOURCES += $$PWD/quazip/*.cpp
-        SOURCES += $$PWD/quazip/*.c
-
-
-
-    #APP_QML_FILES.files = ffmpegsumo.so
-    #APP_QML_FILES.path = Contents/Resources
-    #QMAKE_BUNDLE_DATA += APP_QML_FILES
-
-    #Deploy command line example
-    #/Users/qt/Qt5.9.1/5.9.1/clang_64/bin/macdeployqt /Users/qt/nsp/unik-recursos/build_osx_clang64/unik.app -qmldir=/Users/qt/nsp/unik -no-strip -dmg
+    include(macos.pri)
 }
 
 android{
@@ -119,7 +94,8 @@ DISTFILES += \
     android/gradlew.bat \
     linux.pri \
     version.pri \
-    windows.pri
+    windows.pri \
+    macos.pri
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

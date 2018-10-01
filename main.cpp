@@ -800,6 +800,7 @@ int main(int argc, char *argv[])
                         }else{
                                 appArg2 = "";
                                 appArg2.append(raizConf.value("arg1").toString());
+                                QDir::setCurrent(appArg2);
                                 pq = "";
                                 pq.append(raizConf.value("arg1").toString());
                                 pq.append("/");
