@@ -674,6 +674,7 @@ int main(int argc, char *argv[])
         modoDeEjecucion="-folder";
         appArg1=QByteArray(argv[1]);
         appArg2=QByteArray(argv[2]);
+        QDir::setCurrent(appArg2);
         modeFolder=true;
         makeUpk=false;
         if(debugLog){
