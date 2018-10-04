@@ -4,7 +4,8 @@ message(linux.pri is loaded)
     message(Linux NO ANDROID)
     !contains(QMAKE_HOST.arch, arm.*):{
         QT += webengine webview
-        DESTDIR= ../build_unik_linux_64
+        DD1=$$replace(PWD, /unik,/build_unik_linux)
+        DESTDIR= $$DD1
         message(Ubicaciòn del Ejecutable: $$DESTDIR)
 
         FILE_VERSION_NAME=$$replace(PWD, /unik,/build_unik_linux_64/linux_version)
@@ -31,8 +32,10 @@ message(linux.pri is loaded)
         }
 
         #Deploy Command Line Example
-        #linuxdeployqt /media/nextsigner/ZONA-A1/nsp/build_unik_linux_64/unik -qmldir=/media/nextsigner/ZONA-A1/nsp/unik -appimage -always-overwrite -bundle-non-qt-libs -no-plugins
-        #mv /media/nextsigner/ZONA-A1/nsp/unik-recursos/build_unik_linux_64.AppImage /home/nextsigner/Escritorio/unik_v2.24.AppImage
+        #linuxdeployqt-continuous-x86_64.AppImage /media/nextsigner/ZONA-A1/nsp/build_unik_linux/unik -qmldir=/media/nextsigner/ZONA-A1/nsp/unik -verbose=3
+
+#linuxdeployqt /media/nextsigner/ZONA-A1/nsp/build_unik_linux/unik -qmldir=/media/nextsigner/ZONA-A1/nsp/unik -appimage -always-overwrite -bundle-non-qt-libs -no-plugins
+        #mv /media/nextsigner/ZONA-A1/nsp/build_unik_linux.AppImage /home/nextsigner/Escritorio/unik_vX.XX.AppImage
     }else{
         #Set Working Directory for RPI3 compilation in /home/pi/nsp
         DESTDIR= /home/pi/unik
