@@ -1,2 +1,0 @@
-alias="unik -folder /media/nextsigner/ZONA-A1/nsp/unik-dev-apps/qmlandia"
-alias="unik -folder /media/nextsigner/ZONA-A1/nsp/unik-dev-apps/qmlandia"
