@@ -46,13 +46,18 @@
 #include <stdlib.h>
 #ifdef Q_OS_LINUX
 #include "zlib.h"
-#else
-#ifdef Q_OS_WIN32
-#include <QtZlib/zlib.h>
-#else
+#endif
+
+#ifdef Q_OS_OSX
 #include "zlib.h"
 #endif
+
+
+#ifdef Q_OS_WIN
+#include <QtZlib/zlib.h>
 #endif
+
+
 
 #if defined(USE_FILE32API)
 #define fopen64 fopen

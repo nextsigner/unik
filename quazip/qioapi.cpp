@@ -14,13 +14,16 @@
 
 #ifdef Q_OS_LINUX
 #include "zlib.h"
-#else
-#ifdef Q_OS_WIN32
-#include <QtZlib/zlib.h>
-#else
+#endif
+#ifdef Q_OS_OSX
 #include "zlib.h"
 #endif
-#endif
+
+//#ifdef Q_OS_WIN
+#include <QtZlib/zlib.h>
+//#endif
+
+
 #include "ioapi.h"
 #include "quazip_global.h"
 #include <QIODevice>
