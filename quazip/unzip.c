@@ -80,8 +80,8 @@
 #endif
 
 //#ifdef Q_OS_WIN32
-//#include <QtZlib/zlib.h>
-#include "zlib.h"
+#include <QtZlib/zlib.h>
+//#include "zlib.h"
 //#endif
 
 
