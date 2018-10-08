@@ -183,6 +183,9 @@ public:
         _engine = e;
         //connect(_engine, SIGNAL(quit()), this, SLOT(engineQuited()));
     }
+    Q_INVOKABLE void clearComponentCache(){
+        _engine->clearComponentCache();
+    }
 
 #ifdef __arm__
     Q_INVOKABLE bool createLnk(QString execString, QString destopLocationFilename, QString name, QString comment){

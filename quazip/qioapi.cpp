@@ -20,7 +20,8 @@
 #endif
 
 //#ifdef Q_OS_WIN
-#include <QtZlib/zlib.h>
+//#include <QtZlib/zlib.h>
+#include "zlib.h"
 //#endif
 
 
