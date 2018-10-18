@@ -64,7 +64,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
     uk.cpp \
-    row.cpp
+    row.cpp \
+    unikargsproc.cpp
 
 RESOURCES += qml.qrc
 
@@ -82,7 +83,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     uk.h \
     qmlclipboardadapter.h \
-    row.h
+    row.h \
+    unikargsproc.h
 
 DISTFILES += \
     android/AndroidManifest.xml \

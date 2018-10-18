@@ -36,7 +36,7 @@
 #include <QtWebView>
 #endif
 
-//#include "uniklog.h"
+#include "unikargsproc.h"
 
 
 #ifdef Q_OS_ANDROID
@@ -165,6 +165,11 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("http://unikode.org/");
     app.setOrganizationName("nextsigner");
 
+    UnikArgsProc uap;
+    for (int i = 0; i < argc; ++i) {
+        uap.args.append(argv[i]);
+    }
+
 #ifdef Q_OS_ANDROID
     UK u;
 #endif
@@ -237,6 +242,7 @@ int main(int argc, char *argv[])
     QByteArray modoDeEjecucion="indefinido";
     QByteArray lba="";
     QString listaErrores;
+
     QString dim="";
     QString pos="";
 
@@ -324,15 +330,13 @@ int main(int argc, char *argv[])
 
     debugLog=true;
     u.debugLog=debugLog;   
-    for (int i = 0; i < argc; ++i) {
-        if(QByteArray(argv[i])==QByteArray("-debug")){
+
+    for (int i = 0; i < uap.args.length(); ++i) {
+        if(uap.args.at(i)==QByteArray("-debug")){
             debugLog=true;
         }
-        if(QByteArray(argv[i])==QByteArray("-no-config")){
-            readConfig=false;
-        }
         QString arg;
-        arg.append(argv[i]);
+        arg.append(uap.args.at(i));
         if(arg.contains("-user=")){
             QStringList marg = arg.split("-user=");
             if(marg.size()==2){
@@ -369,6 +373,29 @@ int main(int argc, char *argv[])
                 qInfo()<<lba;
             }
         }
+        //>-folder
+        if(arg.contains("-folder=")){
+            QStringList marg = arg.split("-folder=");
+            if(marg.size()==2){
+                modoDeEjecucion="-folder";
+                appArg1="";
+                appArg1.append(marg.at(0));
+                appArg2="";
+                appArg2.append(marg.at(1));
+                QDir::setCurrent(appArg2);
+                modeFolder=true;
+                makeUpk=false;
+                if(debugLog){
+                    lba="";
+                    lba.append("Prepare mode -folder.");
+                    qInfo()<<lba;
+                }
+                updateDay=false;
+                updateUnikTools=false;
+            }
+        }
+        //<-folder
+
         if(arg.contains("-git=")){
             QStringList marg = arg.split("-git=");
             if(marg.size()==2){
@@ -378,7 +405,7 @@ int main(int argc, char *argv[])
                 lba.append("-git=");
                 lba.append(marg.at(1));
                 qInfo()<<lba;
-                urlGit = "";                
+                urlGit = "";
                 if(pUrlGit1.contains(".git")||pUrlGit1.mid(pUrlGit1.size()-4, pUrlGit1.size())==".git"){
                     urlGit.append(pUrlGit1.mid(0, pUrlGit1.size()-4));
                 }else{
@@ -464,6 +491,7 @@ int main(int argc, char *argv[])
             }
         }
     }
+
     if(setPass1&&setPass2){
         setPass=true;
     }
@@ -622,21 +650,21 @@ int main(int argc, char *argv[])
     }
 
 
-    QString urlConfigJsonT;
-    urlConfigJsonT.append(dupl);
-    urlConfigJsonT.append("/temp_config.json");
-    QFile tjs(urlConfigJsonT);
-    if(tjs.exists()){
-        qInfo()<<"Prepare for "<<urlConfigJsonT;
-        urlConfigJson=urlConfigJsonT;
-    }else{
-        qInfo()<<"No exist "<<urlConfigJsonT;
-    }
+//    QString urlConfigJsonT;
+//    urlConfigJsonT.append(dupl);
+//    urlConfigJsonT.append("/temp_config.json");
+//    QFile tjs(urlConfigJsonT);
+//    if(tjs.exists()){
+//        qInfo()<<"Prepare for "<<urlConfigJsonT;
+//        urlConfigJson=urlConfigJsonT;
+//    }else{
+//        qInfo()<<"No exist "<<urlConfigJsonT;
+//    }
 
-    if(argc == 2 || argc == 4 || argc == 5  ){
-        makeUpk=false;
-        updateUnikTools=false;
-    }
+//    if(argc == 2 || argc == 4 || argc == 5  ){
+//        makeUpk=false;
+//        updateUnikTools=false;
+//    }
 
     //MODO upk directo
     if((argc == 2||argc == 3||argc == 4)&&!modeGit){
@@ -649,8 +677,6 @@ int main(int argc, char *argv[])
             modeUpk=true;
             updateUnikTools=false;
         }
-    }else{
-        //updateUnikTools=true;
     }
 
     //MODO -upk
@@ -679,21 +705,21 @@ int main(int argc, char *argv[])
     }
 
     //MODO -folder
-    if((argc == 3||argc == 4||argc == 5) && QByteArray(argv[1])==QByteArray("-folder")){
-        modoDeEjecucion="-folder";
-        appArg1=QByteArray(argv[1]);
-        appArg2=QByteArray(argv[2]);
-        QDir::setCurrent(appArg2);
-        modeFolder=true;
-        makeUpk=false;
-        if(debugLog){
-            lba="";
-            lba.append("Prepare mode -folder.");
-            qInfo()<<lba;
-        }
-        updateDay=false;
-        updateUnikTools=false;
-    }
+//    if((argc == 3||argc == 4||argc == 5) && QByteArray(argv[1])==QByteArray("-folder")){
+//        modoDeEjecucion="-folder";
+//        appArg1=QByteArray(argv[1]);
+//        appArg2=QByteArray(argv[2]);
+//        QDir::setCurrent(appArg2);
+//        modeFolder=true;
+//        makeUpk=false;
+//        if(debugLog){
+//            lba="";
+//            lba.append("Prepare mode -folder.");
+//            qInfo()<<lba;
+//        }
+//        updateDay=false;
+//        updateUnikTools=false;
+//    }
 
     //MODO -foldertoupk
     if((argc == 5||argc == 6) && QByteArray(argv[1])==QByteArray("-foldertoupk")){
@@ -782,189 +808,189 @@ int main(int argc, char *argv[])
         dir0.mkpath(".");
     }
     QString appName;
-    QByteArray jsonConfigData;
-    //Reading config.json
-    readConfig=modeFolderToUpk||modeUpk||modeGit||modeFolder||modeRemoteFolder?false:true;
-    if(readConfig){
-        qInfo()<<"Reading config file...";
-        QFile jsonConfig(urlConfigJson);
-        if(jsonConfig.open(QIODevice::ReadOnly)){
-            jsonConfigData.append(jsonConfig.readAll());
-            qInfo()<<"Loading config...";
-            QJsonDocument docConf = QJsonDocument::fromJson(jsonConfigData.constData());
-            QJsonObject raizConf = docConf.object();
-            if(raizConf.value("appName").toString()!=""){
-                appName.append(raizConf.value("appName").toString());
-            }
-            if(jsonConfigData=="{\"appName\":\"unik-tools\"}"){                
-                qInfo()<<"Default config detected...";
-            }else{
-                qInfo()<<"Config set Mode: "<<jsonConfigData;
-                if(raizConf.value("mode").toString()!=""){
-                    QString vm =raizConf.value("mode").toString();
-                    qInfo()<<"Config set Mode: "<<vm;
-                    if(vm=="-folder"){
-                        QDir fe(raizConf.value("arg1").toString());
-                        if(!fe.exists()){
-                                u.log("ModeFolder from config aborted! - Folder not found.");
-                        }else{
-                                appArg2 = "";
-                                appArg2.append(raizConf.value("arg1").toString());
-                                QDir::setCurrent(appArg2);
-                                pq = "";
-                                pq.append(raizConf.value("arg1").toString());
-                                pq.append("/");
-                                QStringList mappn = raizConf.value("arg1").toString().split("/");
-                                if(mappn.size()>1){
-                                    appName = mappn.at(mappn.size()-1);
-                                }else{
-                                    appName = mappn.at(0);
-                                }
-                                qInfo()<<"Config set arg2: "<<appArg2<<"\nModule name from config.json: "<<appName;
-                                modeFolder=true;
-                                updateUnikTools=false;
-                            }
-                    }
-                    /*if(vm=="-foldertoupk"){
-                        modeFolderToUpk=true;
-                        appArg1 = "";
-                        appArg1.append(raizConf.value("arg1").toString());
-                        appArg2 = "";
-                        appArg2.append(raizConf.value("arg2").toString());
-                        appArg3 = "";
-                        appArg3.append(raizConf.value("arg3").toString());
-                        user = "";
-                        user.append(u.decData(appArg2, "u", "k"));
-                        key = "";
-                        key.append(u.decData(appArg3, "u", "k"));
+//    QByteArray jsonConfigData;
+//    //Reading config.json
+//    readConfig=modeFolderToUpk||modeUpk||modeGit||modeFolder||modeRemoteFolder?false:true;
+//    if(readConfig){
+//        qInfo()<<"Reading config file...";
+//        QFile jsonConfig(urlConfigJson);
+//        if(jsonConfig.open(QIODevice::ReadOnly)){
+//            jsonConfigData.append(jsonConfig.readAll());
+//            qInfo()<<"Loading config...";
+//            QJsonDocument docConf = QJsonDocument::fromJson(jsonConfigData.constData());
+//            QJsonObject raizConf = docConf.object();
+//            if(raizConf.value("appName").toString()!=""){
+//                appName.append(raizConf.value("appName").toString());
+//            }
+//            if(jsonConfigData=="{\"appName\":\"unik-tools\"}"){
+//                qInfo()<<"Default config detected...";
+//            }else{
+//                qInfo()<<"Config set Mode: "<<jsonConfigData;
+//                if(raizConf.value("mode").toString()!=""){
+//                    QString vm =raizConf.value("mode").toString();
+//                    qInfo()<<"Config set Mode: "<<vm;
+//                    if(vm=="-folder"){
+//                        QDir fe(raizConf.value("arg1").toString());
+//                        if(!fe.exists()){
+//                                u.log("ModeFolder from config aborted! - Folder not found.");
+//                        }else{
+//                                appArg2 = "";
+//                                appArg2.append(raizConf.value("arg1").toString());
+//                                QDir::setCurrent(appArg2);
+//                                pq = "";
+//                                pq.append(raizConf.value("arg1").toString());
+//                                pq.append("/");
+//                                QStringList mappn = raizConf.value("arg1").toString().split("/");
+//                                if(mappn.size()>1){
+//                                    appName = mappn.at(mappn.size()-1);
+//                                }else{
+//                                    appName = mappn.at(0);
+//                                }
+//                                qInfo()<<"Config set arg2: "<<appArg2<<"\nModule name from config.json: "<<appName;
+//                                modeFolder=true;
+//                                updateUnikTools=false;
+//                            }
+//                    }
+//                    /*if(vm=="-foldertoupk"){
+//                        modeFolderToUpk=true;
+//                        appArg1 = "";
+//                        appArg1.append(raizConf.value("arg1").toString());
+//                        appArg2 = "";
+//                        appArg2.append(raizConf.value("arg2").toString());
+//                        appArg3 = "";
+//                        appArg3.append(raizConf.value("arg3").toString());
+//                        user = "";
+//                        user.append(u.decData(appArg2, "u", "k"));
+//                        key = "";
+//                        key.append(u.decData(appArg3, "u", "k"));
 
-                    }*/
-                    if(vm=="-remoteFolder"){
-                        modeRemoteFolder=true;
-                        appArg1 = "";
-                        appArg1.append(raizConf.value("arg1").toString());
-                        appArg2 = "";
-                        appArg2.append(raizConf.value("arg2").toString());
-                        appArg3 = "";
-                        appArg3.append(raizConf.value("arg3").toString());
-                        if(debugLog){
-                            lba="";
-                            lba.append("Config set arg1: ");
-                            lba.append(appArg1);
-                            lba.append(" arg2: ");
-                            lba.append(appArg2);
-                            lba.append(" arg3: ");
-                            lba.append(appArg3);
-                            qInfo()<<lba;
-                        }
-                    }
-                    if(vm=="-upk"){
-                        //{"mode": "-upk", "arg1" : "/home/nextsigner/Documentos/unik/sqlite-example.upk"}
-                        //qInfo("-----------------------------------------------iiiiiiiiiiiiiiiii");
-                        loadConfig=true;
-                        modeUpk=true;
-                        appArg1 = "";
-                        appArg1.append(raizConf.value("arg1").toString());
-                        QStringList marg = raizConf.value("arg2").toString().split("-user=");
-                        //qDebug()<<"marg: "<<marg;
-                        if(marg.size()==2){
-                            user = "";
-                            user.append(marg.at(1));
-                            appArg2 = "";
-                            appArg2.append(user);
-                        }
-                        QStringList marg2 = raizConf.value("arg3").toString().split("-key=");
-                        //qDebug()<<"marg2: "<<marg2;
-                        if(marg2.size()==2){
-                            key = "";
-                            key.append(marg2.at(1));
-                            appArg3 = "";
-                            appArg3.append(key);
-                        }
-                        setPass2=true;
-                        modeFolder=false;
-                        modeFolderToUpk=false;
-                        modeGit=false;
-                        modeUpk=true;
-                        if(debugLog){
-                            qDebug()<<"Config set -upk arg1: "<<appArg1<<" arg2: "<<appArg2<<" arg3: "<<appArg3<<" ";
-                        }
-                    }
-                    if(vm=="-git"){
-                        appArg1.clear();
-                        appArg1.append(raizConf.value("mode").toString());
-                        appArg2.clear();
-                        appArg2.append(raizConf.value("arg1").toString());
-                        if(!appArg2.isEmpty()){
-                            QString pUrlGit1;
-                            pUrlGit1.append(appArg2);
-                            urlGit = "";
+//                    }*/
+//                    if(vm=="-remoteFolder"){
+//                        modeRemoteFolder=true;
+//                        appArg1 = "";
+//                        appArg1.append(raizConf.value("arg1").toString());
+//                        appArg2 = "";
+//                        appArg2.append(raizConf.value("arg2").toString());
+//                        appArg3 = "";
+//                        appArg3.append(raizConf.value("arg3").toString());
+//                        if(debugLog){
+//                            lba="";
+//                            lba.append("Config set arg1: ");
+//                            lba.append(appArg1);
+//                            lba.append(" arg2: ");
+//                            lba.append(appArg2);
+//                            lba.append(" arg3: ");
+//                            lba.append(appArg3);
+//                            qInfo()<<lba;
+//                        }
+//                    }
+//                    if(vm=="-upk"){
+//                        //{"mode": "-upk", "arg1" : "/home/nextsigner/Documentos/unik/sqlite-example.upk"}
+//                        //qInfo("-----------------------------------------------iiiiiiiiiiiiiiiii");
+//                        loadConfig=true;
+//                        modeUpk=true;
+//                        appArg1 = "";
+//                        appArg1.append(raizConf.value("arg1").toString());
+//                        QStringList marg = raizConf.value("arg2").toString().split("-user=");
+//                        //qDebug()<<"marg: "<<marg;
+//                        if(marg.size()==2){
+//                            user = "";
+//                            user.append(marg.at(1));
+//                            appArg2 = "";
+//                            appArg2.append(user);
+//                        }
+//                        QStringList marg2 = raizConf.value("arg3").toString().split("-key=");
+//                        //qDebug()<<"marg2: "<<marg2;
+//                        if(marg2.size()==2){
+//                            key = "";
+//                            key.append(marg2.at(1));
+//                            appArg3 = "";
+//                            appArg3.append(key);
+//                        }
+//                        setPass2=true;
+//                        modeFolder=false;
+//                        modeFolderToUpk=false;
+//                        modeGit=false;
+//                        modeUpk=true;
+//                        if(debugLog){
+//                            qDebug()<<"Config set -upk arg1: "<<appArg1<<" arg2: "<<appArg2<<" arg3: "<<appArg3<<" ";
+//                        }
+//                    }
+//                    if(vm=="-git"){
+//                        appArg1.clear();
+//                        appArg1.append(raizConf.value("mode").toString());
+//                        appArg2.clear();
+//                        appArg2.append(raizConf.value("arg1").toString());
+//                        if(!appArg2.isEmpty()){
+//                            QString pUrlGit1;
+//                            pUrlGit1.append(appArg2);
+//                            urlGit = "";
 
-                            //qDebug()<<"____________"<<pUrlGit1.mid(pUrlGit1.size()-4, pUrlGit1.size());
-                            if(pUrlGit1.contains(".git")||pUrlGit1.mid(pUrlGit1.size()-4, pUrlGit1.size())==".git"){
-                                urlGit.append(pUrlGit1.mid(0, pUrlGit1.size()-4));
-                            }else{
-                                urlGit.append(pUrlGit1);
-                            }
-                            qInfo()<<"Updating from Git from  "<<urlConfigJsonT<<" "<<appArg1<<" "<<urlGit;
-                            //QString pUrlGit2 = pUrlGit1.replace(".git", "");
-                            QString pUrlGit2 = pUrlGit1;
-                            QStringList m100 = pUrlGit2.split("/");
-                            if(m100.size()>1){
-                                QString mg1=QString(m100.at(m100.size()-1));
-                                QString mg2=mg1.replace(".git","");
-                                moduloGit="";
-                                moduloGit.append(mg2);
-                                modeGitArg=true;
-                                /*QString ncp;
-                                ncp.append(dupl);
-                                ncp.append("/");
-                                ncp.append(moduloGit);
-                                qInfo()<<"Set current path from -git: "<<ncp;
-                                QDir::setCurrent(ncp);*/
-                            }
-                            modeGit=true;
-                            modeFolder=false;
-                            modeFolderToUpk=false;
-                            modeRemoteFolder=false;
-                        }else{
-                            qInfo()<<"Fail updating from Git from config.json: "<<appArg1<<" Arg2 is empty! "<<appArg2<<" "<<urlGit;
-                        }
-                    }
-                }else{
-                    lba="";
-                    lba.append("Loading config fail mode ");
-                    lba.append(raizConf.value("mode").toString());
-                }
+//                            //qDebug()<<"____________"<<pUrlGit1.mid(pUrlGit1.size()-4, pUrlGit1.size());
+//                            if(pUrlGit1.contains(".git")||pUrlGit1.mid(pUrlGit1.size()-4, pUrlGit1.size())==".git"){
+//                                urlGit.append(pUrlGit1.mid(0, pUrlGit1.size()-4));
+//                            }else{
+//                                urlGit.append(pUrlGit1);
+//                            }
+//                            qInfo()<<"Updating from Git from  "<<urlConfigJsonT<<" "<<appArg1<<" "<<urlGit;
+//                            //QString pUrlGit2 = pUrlGit1.replace(".git", "");
+//                            QString pUrlGit2 = pUrlGit1;
+//                            QStringList m100 = pUrlGit2.split("/");
+//                            if(m100.size()>1){
+//                                QString mg1=QString(m100.at(m100.size()-1));
+//                                QString mg2=mg1.replace(".git","");
+//                                moduloGit="";
+//                                moduloGit.append(mg2);
+//                                modeGitArg=true;
+//                                /*QString ncp;
+//                                ncp.append(dupl);
+//                                ncp.append("/");
+//                                ncp.append(moduloGit);
+//                                qInfo()<<"Set current path from -git: "<<ncp;
+//                                QDir::setCurrent(ncp);*/
+//                            }
+//                            modeGit=true;
+//                            modeFolder=false;
+//                            modeFolderToUpk=false;
+//                            modeRemoteFolder=false;
+//                        }else{
+//                            qInfo()<<"Fail updating from Git from config.json: "<<appArg1<<" Arg2 is empty! "<<appArg2<<" "<<urlGit;
+//                        }
+//                    }
+//                }else{
+//                    lba="";
+//                    lba.append("Loading config fail mode ");
+//                    lba.append(raizConf.value("mode").toString());
+//                }
 
-            }
-        }else{
-            if(debugLog){
-                lba="";
-                lba.append("Loading unik-installer by default.");
-                qInfo()<<lba;
-            }
-            QFile nuevoJsonConfig(urlConfigJson);
+//            }
+//        }else{
+//            if(debugLog){
+//                lba="";
+//                lba.append("Loading unik-installer by default.");
+//                qInfo()<<lba;
+//            }
+//            QFile nuevoJsonConfig(urlConfigJson);
 
-            if(!nuevoJsonConfig.exists()&&nuevoJsonConfig.open(QIODevice::WriteOnly)){
-                QTextStream e(&nuevoJsonConfig);
-                e.setCodec("UTF-8");
-                QByteArray jsonPorDefecto;
-                jsonPorDefecto.append("{\"-folder\":\""+settings.value("ws").toString()+"/unik-tools"+"\"}");
-                e<<jsonPorDefecto;
-                nuevoJsonConfig.close();
-            }
-            appName.append("unik-installer");
-        }
-    }else{
-        upkFileName = "";
-        if(debugLog){
-            lba="";
-            lba.append("Upk filename reset: ");
-            lba.append(upkFileName);
-            qInfo()<<lba;
-        }
-    }
+//            if(!nuevoJsonConfig.exists()&&nuevoJsonConfig.open(QIODevice::WriteOnly)){
+//                QTextStream e(&nuevoJsonConfig);
+//                e.setCodec("UTF-8");
+//                QByteArray jsonPorDefecto;
+//                jsonPorDefecto.append("{\"-folder\":\""+settings.value("ws").toString()+"/unik-tools"+"\"}");
+//                e<<jsonPorDefecto;
+//                nuevoJsonConfig.close();
+//            }
+//            appName.append("unik-installer");
+//        }
+//    }else{
+//        upkFileName = "";
+//        if(debugLog){
+//            lba="";
+//            lba.append("Upk filename reset: ");
+//            lba.append(upkFileName);
+//            qInfo()<<lba;
+//        }
+//    }
 
     if(moduloGit!=""&&modeGitArg){
         dupl.append("/");
@@ -1694,7 +1720,7 @@ int main(int argc, char *argv[])
 #endif
 #endif
     }
-    u.deleteFile(urlConfigJsonT.toUtf8());
+    //u.deleteFile(urlConfigJsonT.toUtf8());
  #ifdef Q_OS_ANDROID
     QObject *aw = engine.rootObjects().at(0);//En Android es 0 cuando no carga splash.
 #else
