@@ -245,6 +245,7 @@ int main(int argc, char *argv[])
     bool modeRemoteFolder=false;
     bool modeUpk=false;
     bool modeGit=false;
+    bool modeGitArg=false;
     bool updateUnikTools=false;
     bool loadConfig=false;
     bool readConfig=true;
@@ -377,20 +378,24 @@ int main(int argc, char *argv[])
                 lba.append("-git=");
                 lba.append(marg.at(1));
                 qInfo()<<lba;
-                urlGit = "";
-                //qDebug()<<"____________"<<pUrlGit1.mid(pUrlGit1.size()-4, pUrlGit1.size());
+                urlGit = "";                
                 if(pUrlGit1.contains(".git")||pUrlGit1.mid(pUrlGit1.size()-4, pUrlGit1.size())==".git"){
                     urlGit.append(pUrlGit1.mid(0, pUrlGit1.size()-4));
                 }else{
                     urlGit.append(pUrlGit1);
                 }
-                //QString pUrlGit2 = pUrlGit1.replace(".git", "");
                 QString pUrlGit2 = pUrlGit1;
                 QStringList m100 = pUrlGit2.split("/");
                 if(m100.size()>1){
+                    //moduloGit="";
+                    //moduloGit.append(m100.at(m100.size()-1));
+                    QString mg1=QString(m100.at(m100.size()-1));
+                    QString mg2=mg1.replace(".git","");
                     moduloGit="";
-                    moduloGit.append(m100.at(m100.size()-1));
+                    moduloGit.append(mg2);
+                    modeGitArg=true;
                 }
+
                 modeGit=true;
             }
         }
@@ -537,7 +542,7 @@ int main(int argc, char *argv[])
             dupl = ndulw;
             qInfo()<<"WorkSpace not writable!";
             qInfo("New WorkSpace seted: "+ndulw.toUtf8());
-        }else{            
+        }else{
             pws = settings.value("ws").toString().toUtf8();
             dupl = pws;
         }
@@ -590,6 +595,7 @@ int main(int argc, char *argv[])
     }else{
             qInfo()<<"Folder "<<dupl<<" pre existent.";
     }
+
     if (!dirWS.exists()) {
         qInfo()<<"Closing because folder "<<dupl<<" no existent.";
         return -5;
@@ -621,7 +627,10 @@ int main(int argc, char *argv[])
     urlConfigJsonT.append("/temp_config.json");
     QFile tjs(urlConfigJsonT);
     if(tjs.exists()){
+        qInfo()<<"Prepare for "<<urlConfigJsonT;
         urlConfigJson=urlConfigJsonT;
+    }else{
+        qInfo()<<"No exist "<<urlConfigJsonT;
     }
 
     if(argc == 2 || argc == 4 || argc == 5  ){
@@ -897,13 +906,22 @@ int main(int argc, char *argv[])
                             }else{
                                 urlGit.append(pUrlGit1);
                             }
-                            qInfo()<<"Updating from Git from config.json: "<<appArg1<<" "<<urlGit;
+                            qInfo()<<"Updating from Git from  "<<urlConfigJsonT<<" "<<appArg1<<" "<<urlGit;
                             //QString pUrlGit2 = pUrlGit1.replace(".git", "");
                             QString pUrlGit2 = pUrlGit1;
                             QStringList m100 = pUrlGit2.split("/");
                             if(m100.size()>1){
+                                QString mg1=QString(m100.at(m100.size()-1));
+                                QString mg2=mg1.replace(".git","");
                                 moduloGit="";
-                                moduloGit.append(m100.at(m100.size()-1));
+                                moduloGit.append(mg2);
+                                modeGitArg=true;
+                                /*QString ncp;
+                                ncp.append(dupl);
+                                ncp.append("/");
+                                ncp.append(moduloGit);
+                                qInfo()<<"Set current path from -git: "<<ncp;
+                                QDir::setCurrent(ncp);*/
                             }
                             modeGit=true;
                             modeFolder=false;
@@ -947,6 +965,14 @@ int main(int argc, char *argv[])
             qInfo()<<lba;
         }
     }
+
+    if(moduloGit!=""&&modeGitArg){
+        dupl.append("/");
+        dupl.append(moduloGit);
+        qInfo()<<"Set current path from parameter -git: "<<dupl;
+        QDir::setCurrent(dupl);
+    }
+
     lba="";
     lba.append("Count arguments: ");
     lba.append(QString::number(argc));
@@ -1692,7 +1718,8 @@ int main(int argc, char *argv[])
     }
 #endif
 
-
+    qInfo()<<"Executing from: "<<QDir::currentPath();
+    qInfo()<<"unik.getPath(5)= "<<u.getPath(5);
     //Probe u.createLink();
     //u.createLink("C:/Windows/notepad.exe", "C:/Users/Nico/Desktop/unik2.lnk", "Pequeña 222descripción para saber que hace el archivo", "E:/");
    //u.createLink("/home/nextsigner/Escritorio/unik_v2.22.2.AppImage", "/home/nextsigner/Escritorio/eee4.desktop",  "rrr777", "Pequeña 222vo", "/home/nextsigner/Imàgenes/ladaga.jpg");

@@ -743,7 +743,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
         file.open(QIODevice::ReadOnly);
         //same functionality as QIODevice::readData() -- data is a char*, maxSize is qint64
         //file.readData(data,maxSize);
-        qInfo()<<"Zip filename: "<<zip.getFileNameList();
+        //qInfo()<<"Zip filename: "<<zip.getFileNameList();
         if(v==0){
             carpeta=QString(zip.getFileNameList().at(0));
             qInfo()<<"Carpeta de destino Zip: "<<carpeta;

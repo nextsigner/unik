@@ -32,9 +32,11 @@ message(linux.pri is loaded)
         }
 
         #Deploy Command Line Example
-        #linuxdeployqt-continuous-x86_64.AppImage /media/nextsigner/ZONA-A1/nsp/build_unik_linux/unik -qmldir=/media/nextsigner/ZONA-A1/nsp/unik -verbose=3
+        #linuxdeployqt /media/nextsigner/ZONA-A1/nsp/build_unik_linux/unik -qmldir=/media/nextsigner/ZONA-A1/nsp/unik -verbose=3
 
-#linuxdeployqt /media/nextsigner/ZONA-A1/nsp/build_unik_linux/unik -qmldir=/media/nextsigner/ZONA-A1/nsp/unik -appimage -always-overwrite -bundle-non-qt-libs -no-plugins
+    #Copy resourses and translation folder manualy
+
+#linuxdeployqt /media/nextsigner/ZONA-A1/nsp/build_unik_linux/unik -qmldir=/media/nextsigner/ZONA-A1/nsp/unik -appimage -always-overwrite -bundle-non-qt-libs -no-plugins  -verbose=3
         #mv /media/nextsigner/ZONA-A1/nsp/build_unik_linux.AppImage /home/nextsigner/Escritorio/unik_vX.XX.AppImage
     }else{
         #Set Working Directory for RPI3 compilation in /home/pi/nsp
