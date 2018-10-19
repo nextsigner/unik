@@ -1342,12 +1342,29 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
 {
     log("downloading zip file from: "+url);
     uZipUrl=QString(url);
+
+    QEventLoop eventLoop0;
+    QNetworkAccessManager mgr0;
+    QObject::connect(&mgr0, SIGNAL(finished(QNetworkReply*)), &eventLoop0, SLOT(quit()));
+    QNetworkRequest req0(QUrl(url.constData()));
+    QNetworkReply *reply0 = mgr0.get(req0);
+
+    connect(
+                reply0, &QNetworkReply::metaDataChanged,
+                [=]( ) {
+        uZipSize=reply0->header(QNetworkRequest::ContentLengthHeader).toInt();
+        reply0->deleteLater();
+    }
+    );
+
     QEventLoop eventLoop;
     QNetworkAccessManager mgr;
     QObject::connect(&mgr, SIGNAL(finished(QNetworkReply*)), &eventLoop, SLOT(quit()));
     QNetworkRequest req(QUrl(url.constData()));
     QNetworkReply *reply = mgr.get(req);
     connect(reply,SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadZipProgress(qint64,qint64)));
+    //QNetworkReply *reply = mgr.get(req);
+   // QThread::sleep(3000);
     eventLoop.exec();
     if (reply->error() == QNetworkReply::NoError) {
         QFile other(ubicacion);
@@ -2048,7 +2065,11 @@ QString UK::desCompData(QString d)
 
 void UK::downloadZipProgress(qint64 bytesSend, qint64 bytesTotal)
 {
-    int porc= (int)((bytesSend * 100) / bytesTotal);
+    qint64 bt=bytesTotal;
+    if(bt<0){
+        bt=uZipSize;
+    }
+    int porc= (int)((bytesSend * 100) / bt);
     QString d1;
     d1.append(QString::number(porc));
     QStringList sd1=d1.split(".");
