@@ -61,6 +61,28 @@ void UnikArgsProc::procCfgArgs()
         QFile cfgf(cfgp);
         if(cfgf.exists()){
              loadConfig=true;
+        }else{
+            QByteArray dc;
+            dc.append("{\n");
+
+            dc.append("{\"arg0\":\"");
+            dc.append("-folder=");
+            dc.append(ws);
+#ifndef Q_OS_ANDROID
+            dc.append("/unik-tools");
+#else
+            dc.append("/qmlandia");
+#endif
+            dc.append("\"");
+
+            dc.append("}\n");
+            if(cfgf.open(QIODevice::WriteOnly)){
+                cfgf.write(dc);
+                cfgf.close();
+                qInfo()<<"UAP: Making cfg.json  "<<cfgp<<" code: "<<dc;
+            }else{
+                qInfo()<<"UAP: Error! cfg.json not exist "<<cfgp;
+            }
         }
     }
     if(loadConfig){
