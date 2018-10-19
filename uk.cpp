@@ -592,7 +592,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     int v=0;
     for(bool f=zip.goToFirstFile(); f; f=zip.goToNextFile()) {
         file.open(QIODevice::ReadOnly);
-        qInfo()<<"Zip filename: "<<zip.getFileNameList();
+        //qInfo()<<"Zip filename: "<<zip.getFileNameList();
         if(v==0){
             carpeta=QString(zip.getFileNameList().at(0));
             qInfo()<<"Carpeta de destino Zip: "<<carpeta;
