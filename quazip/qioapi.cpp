@@ -18,7 +18,6 @@
 #include <QtZlib/zlib.h>
 #endif
 
-
 #include "ioapi.h"
 #include "quazip_global.h"
 #include <QIODevice>

@@ -11,8 +11,8 @@ ApplicationWindow {
     property bool ver: true
     property color c1: "#1fbc05"
     property color c2: "#4fec35"
-    Connections {target: unik;onUkStdChanged: logtxt.text=(''+unik.ukStd).replace(/\n/g, ' ');}
-    Connections {target: unik;onStdErrChanged: logtxt.text=(''+unik.getStdErr()).replace(/\n/g, ' ');}
+    Connections {target: unik;onUkStdChanged: logtxt.setTxtLog(''+unik.ukStd);}
+    Connections {target: unik;onStdErrChanged: logtxt.setTxtLog(''+unik.getStdErr());}
     onVerChanged: r.opacity=0.0
     onVisibleChanged: {
         if(!visible){
@@ -66,19 +66,45 @@ ApplicationWindow {
     Rectangle{
         id:xLogTxt
         width: logtxt.contentWidth+20
-        height: 20
+        height: logtxt.contentHeight
         anchors.top: r.bottom
         anchors.topMargin: -4
         anchors.horizontalCenter: r.horizontalCenter
         color: "#333333"
         radius: 6
         border.color: appSplash.c1
+        Rectangle{
+            id:pb
+            height: parent.height*0.1
+            width: 0
+            color: 'red'
+            anchors.bottom: parent.bottom
+        }
         Text{
             id: logtxt
             color: appSplash.c2
             font.pixelSize: 10
             anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: 5
             anchors.horizontalCenter: parent.horizontalCenter
+            verticalAlignment: Text.AlignBottom
+            function setTxtLog(t){
+                var  d=(''+t).replace(/\n/g, ' ')
+                var p=true
+                if(d.indexOf('Socket')>=0){
+                    p=false
+                }else if(d.indexOf('download git')>=0){
+                    var m0=''+d.replace('download git ','')
+                    var m1=m0.split(' ')
+                    var m2=(''+m1[1]).replace('%','')
+                    //unik.setFile('/home/nextsigner/nnn', ''+m2)
+                    var m3=parseInt(m2.replace(/ /g,''))
+                    pb.width=pb.parent.width/100*m3
+                }
+                if(p){
+                    logtxt.text=t
+                }
+            }
         }
         Component.onCompleted: {
             if(!unik.isRPI()){

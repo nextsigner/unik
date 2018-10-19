@@ -123,9 +123,10 @@ public:
             }
             porcent.append("%");
             porcent.append(QString::number(porc));
-            if(debugLog){
-                log(porcent);
-            }
+            //if(debugLog){
+            //qInfo()<<"download";
+            log(porcent);
+            //}
         }
     }
     Q_INVOKABLE QString getUploadState(){
@@ -311,7 +312,8 @@ private:
 
     //UnikSqliteCrypto dbc;
 
-   bool doResume;
+   QString uZipUrl;
+    bool doResume;
    bool httpRequestAborted;
    bool retried;
    int bytesWritten;
