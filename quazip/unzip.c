@@ -71,18 +71,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef Q_OS_LINUX
+#ifndef _WIN32
 #include "zlib.h"
+#else
+#include <QtZlib/zlib.h>
 #endif
-
-#ifdef Q_OS_OSX
-#include "zlib.h"
-#endif
-
-//#ifdef Q_OS_WIN32
-//#include <QtZlib/zlib.h>
-#include "zlib.h"
-//#endif
 
 
 

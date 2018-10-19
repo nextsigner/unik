@@ -30,17 +30,11 @@
 #include <string.h>
 #include <time.h>
 
-#ifdef Q_OS_LINUX
+#ifndef _WIN32
 #include "zlib.h"
+#else
+#include <QtZlib/zlib.h>
 #endif
-#ifdef Q_OS_OSX
-#include "zlib.h"
-#endif
-
-//#ifdef Q_OS_WIN
-//#include <QtZlib/zlib.h>
-#include "zlib.h"
-//#endif
 
 #if (ZLIB_VERNUM < 0x1270)
 typedef uLongf z_crc_t;
