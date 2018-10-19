@@ -313,7 +313,7 @@ private:
     //UnikSqliteCrypto dbc;
 
    QString uZipUrl;
-   qint64 uZipSize;
+   int uZipSize;
    bool doResume;
    bool httpRequestAborted;
    bool retried;

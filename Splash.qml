@@ -96,10 +96,13 @@ ApplicationWindow {
                 }else if(d.indexOf('download git')>=0){
                     var m0=''+d.replace('download git ','')
                     var m1=m0.split(' ')
-                    var m2=(''+m1[1]).replace('%','')
-                    //unik.setFile('/home/nextsigner/nnn', ''+m2)
-                    var m3=parseInt(m2.replace(/ /g,''))
-                    pb.width=pb.parent.width/100*m3
+                    if(m1.length>1){
+                        var m2=(''+m1[1]).replace('%','')
+                        //unik.setFile('/home/nextsigner/nnn', ''+m2)
+                        var m3=parseInt(m2.replace(/ /g,''))
+                        pb.width=pb.parent.width/100*m3
+                    }
+
                 }
                 if(p){
                     logtxt.text=t
