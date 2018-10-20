@@ -81,6 +81,7 @@ ApplicationWindow{
             radius: 6
             border.width: 1
             border.color: appSplash.c1
+            clip:true
             Rectangle{
                 id:pb
                 height: parent.height*0.1

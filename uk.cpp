@@ -1342,7 +1342,6 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
 {
     log("downloading zip file from: "+url);
     uZipUrl=QString(url);
-#ifndef Q_OS_ANDROID
     QEventLoop eventLoop0;
     QNetworkAccessManager mgr0;
     QObject::connect(&mgr0, SIGNAL(finished(QNetworkReply*)), &eventLoop0, SLOT(quit()));
@@ -1356,7 +1355,7 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
         reply0->deleteLater();
     }
     );
-#endif
+
 
     QEventLoop eventLoop;
     QNetworkAccessManager mgr;
@@ -2066,14 +2065,15 @@ QString UK::desCompData(QString d)
 
 void UK::downloadZipProgress(qint64 bytesSend, qint64 bytesTotal)
 {
-    #ifndef Q_OS_ANDROID
+
     qint64 bt=bytesTotal;
     if(bt<0){
         bt=uZipSize;
     }
+#ifndef Q_OS_ANDROID
     int porc= (int)((bytesSend * 100) / bt);
 #else
-    double porc = (((double)bytesSend)/bytesTotal)*100;
+    double porc = (((double)bytesSend)/bt)*100;
 #endif
     QString d1;
     d1.append(QString::number(porc));
@@ -2082,9 +2082,8 @@ void UK::downloadZipProgress(qint64 bytesSend, qint64 bytesTotal)
     nl.append("download git ");
     nl.append(uZipUrl);
     nl.append(" %");
-    nl.append(d1);
+    nl.append(sd1.at(0));
     log(nl);
-    //setPorc(QString(sd1.at(0)).toInt(), 0);
 }
 
 #ifdef Q_OS_WIN

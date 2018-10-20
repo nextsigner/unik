@@ -77,7 +77,7 @@ ApplicationWindow {
                     w:parent.width
                     h: w
                     t: '\uf013'
-                    d:'Editar config.json de unik y unik-tools'
+                    d:'Editar cfg.json de unik y unik-tools'
                     b:app.area===1?app.c2:'#444'
                     c: app.area===1?'black':'#ccc'
                     visible: parseFloat(version)>2.12
@@ -100,8 +100,8 @@ ApplicationWindow {
                         }else{
                             var gitDownloaded=unik.downloadGit('https://github.com/nextsigner/unik-tools', appsDir+'/unik-tools')
                             if(gitDownloaded){
-                                var j=appsDir+'/temp_config.json'
-                                var c='{"mode":"-folder", "arg1": "'+appsDir+'/unik-tools'+'"}'
+                                var j=appsDir+'/temp_cfg.json'
+                                var c='{"arg0":"-folder='+appsDir+'/unik-tools'+'"}'
                                 unik.setFile(j, c)
                                 unik.restartApp()
                             }
@@ -175,7 +175,7 @@ ApplicationWindow {
             anchors.left: xTools.right
             onVisibleChanged: {
                 if(visible){
-                    txtEdit.text = unik.getFile(appsDir+'/config.json')
+                    txtEdit.text = unik.getFile(appsDir+'/cfg.json')
                 }
             }
             TextEdit{
@@ -226,7 +226,7 @@ ApplicationWindow {
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        var p = appsDir+'/config.json'
+                        var p = appsDir+'/cfg.json'
                         console.log("Config File Deleted: "+p)
                         console.log("Unik have unik-tools a default app.")
                         unik.deleteFile(p)
@@ -251,7 +251,7 @@ ApplicationWindow {
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        var p = appsDir+'/config.json'
+                        var p = appsDir+'/cfg.json'
                         console.log("Config Path: "+p)
                         console.log("New Config Data: "+txtEdit.text)
                         unik.setFile(p, txtEdit.text)
@@ -305,7 +305,7 @@ ApplicationWindow {
         }
 
         txt += 'sourcePath: '+sourcePath+'<br />\n'
-        txt += '\n<b>config.json:</b>\n'+unik.getFile(appsDir+'/config.json')+'<br />\n'
+        txt += '\n<b>cfg.json:</b>\n'+unik.getFile(appsDir+'/cfg.json')+'<br />\n'
 
         txt+="<br />"+(''+appStatus).replace(/\n/g, '<br />')
 

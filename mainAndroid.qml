@@ -99,7 +99,7 @@ ApplicationWindow {
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        unik.deleteFile(appsDir+'/config.json')
+                        unik.deleteFile(appsDir+'/cfg.json')
                         unik.restartApp()
                     }
                 }
@@ -117,8 +117,8 @@ ApplicationWindow {
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        var p=''+appsDir+'/config.json'
-                        var c = '{"mode":"-folder", "arg1": "'+appsDir+'/unik-tools'+'"}'
+                        var p=''+appsDir+'/cfg.json'
+                        var c = '{"arg0":"-folder='+appsDir+'/unik-tools'+'"}'
                         unik.setFile(p, c)
                         unik.restartApp()
                     }
@@ -150,7 +150,7 @@ ApplicationWindow {
             visible: false
             onVisibleChanged: {
                 if(visible){
-                    txtEdit.text = uk.getFile(appsDir+'/config.json')
+                    txtEdit.text = uk.getFile(appsDir+'/cfg.json')
                 }
             }
             TextEdit{
@@ -200,7 +200,7 @@ ApplicationWindow {
                 MouseArea{
                     anchors.fill: parent
                     onClicked: {
-                        var p = appsDir+'/config.json'
+                        var p = appsDir+'/cfg.json'
                         console.log("Config Path: "+p)
                         console.log("New Config Data: "+txtEdit.text)
                         uk.setFile(p, txtEdit.text)
@@ -247,7 +247,7 @@ ApplicationWindow {
         txt += 'user: '+ukuser+'\n'
         txt += 'key: '+ukkey+'\n'
         txt += 'sourcePath: '+sourcePath+'\n'
-        txt += '\nconfig.json:\n'+uk.getFile(appsDir+'/config.json')+'\n'
+        txt += '\ncfg.json:\n'+uk.getFile(appsDir+'/cfg.json')+'\n'
 
         //txt += '\nuserhost: ['+userhost+']\n'
 
