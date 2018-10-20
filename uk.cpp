@@ -1342,6 +1342,7 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
 {
     log("downloading zip file from: "+url);
     uZipUrl=QString(url);
+    uZipSize=-1;
     QEventLoop eventLoop0;
     QNetworkAccessManager mgr0;
     QObject::connect(&mgr0, SIGNAL(finished(QNetworkReply*)), &eventLoop0, SLOT(quit()));
@@ -1469,21 +1470,71 @@ void UK::sendFile(QString file, QString phpReceiver)
 void UK::uploadProgress(qint64 bytesSend, qint64 bytesTotal)
 {
     //double porc = (((double)bytesSend)/bytesTotal)*100;
+   // int porc= (int)((bytesSend * 100) / bytesTotal);
+/*#ifdef Q_OS_LINUX
+
+#ifdef Q_OS_ANDROID
+    double porc = (((double)bytesSend)/bytesTotal)*100;
+#else
     int porc= (int)((bytesSend * 100) / bytesTotal);
+#endif
+
+#endif
+#ifdef Q_OS_WIN
+    double porc = (((double)bytesSend)/bytesTotal)*100;
+#endif
+#ifdef Q_OS_OSX
+    double porc = (((double)bytesSend)/bytesTotal)*100;
+#endif
     QString d1;
     d1.append(QString::number(porc));
     QStringList sd1=d1.split(".");
-    setPorc(QString(sd1.at(0)).toInt(), 1);
+    setPorc(QString(sd1.at(0)).toInt(), 1);*/
+    double porc = (((double)bytesSend)/bytesTotal)*100;
+    QString d1;
+    d1.append(QString::number(porc));
+    QStringList sd1=d1.split(".");
+    QByteArray nl;
+    nl.append("upload ");
+    nl.append(uZipUrl);
+    nl.append(" %");
+    nl.append(sd1.at(0));
+    log(nl);
 }
 
 void UK::downloadProgress(qint64 bytesSend, qint64 bytesTotal)
 {
     //double porc = (((double)bytesSend)/bytesTotal)*100;
+    //int porc= (int)((bytesSend * 100) / bytesTotal);
+    /*qint32 bs=qint32(bytesSend);
+    qint32 bt=qint32(bytesTotal);
+#ifdef Q_OS_LINUX
+#ifdef Q_OS_ANDROID
+    double porc = (((double)bs)/bt)*100;
+#else
     int porc= (int)((bytesSend * 100) / bytesTotal);
+#endif
+#endif
+#ifdef Q_OS_WIN
+    double porc = (((double)bytesSend)/bytesTotal)*100;
+#endif
+#ifdef Q_OS_OSX
+    double porc = (((double)bytesSend)/bytesTotal)*100;
+#endif
     QString d1;
     d1.append(QString::number(porc));
     QStringList sd1=d1.split(".");
-    setPorc(QString(sd1.at(0)).toInt(), 0);
+    setPorc(QString(sd1.at(0)).toInt(), 0);*/
+    double porc = (((double)bytesSend)/bytesTotal)*100;
+    QString d1;
+    d1.append(QString::number(porc));
+    QStringList sd1=d1.split(".");
+    QByteArray nl;
+    nl.append("download ");
+    nl.append(uZipUrl);
+    nl.append(" %");
+    nl.append(sd1.at(0));
+    log(nl);
 }
 void UK::sendFinished()
 {
@@ -2066,15 +2117,33 @@ QString UK::desCompData(QString d)
 void UK::downloadZipProgress(qint64 bytesSend, qint64 bytesTotal)
 {
 
-    qint64 bt=bytesTotal;
+    /*qint32 bs=qint32(bytesSend);
+    qint32 bt=qint32(bytesTotal);
     if(bt<0){
         bt=uZipSize;
     }
-#ifndef Q_OS_ANDROID
-    int porc= (int)((bytesSend * 100) / bt);
+#ifdef Q_OS_LINUX
+#ifdef Q_OS_ANDROID
+     double porc = (((double)bs)/bt)*100;
 #else
+    int porc= (int)((bytesSend * 100) / bt);
+#endif
+
+#endif
+#ifdef Q_OS_WIN
     double porc = (((double)bytesSend)/bt)*100;
 #endif
+#ifdef Q_OS_OSX
+    double porc = (((double)bytesSend)/bt)*100;
+#endif*/
+    double porc;
+    if(bytesTotal==-1){
+        porc = 1.0;
+    }else if(bytesTotal==-1&&uZipUrl!=-1){
+        porc = (((double)bytesSend)/uZipSize)*100;
+    }else{
+         porc = (((double)bytesSend)/bytesTotal)*100;
+    }
     QString d1;
     d1.append(QString::number(porc));
     QStringList sd1=d1.split(".");
