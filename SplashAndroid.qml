@@ -11,8 +11,8 @@ ApplicationWindow{
     property color c1: "#1fbc05"
     property color c2: "#4fec35"
 
-    Connections {target: unik;onUkStdChanged:log.text=(''+unik.ukStd).replace(/\n/g, ' ');}
-    Connections {target: unik;onUkStdChanged: log.text=(''+unik.ukStd).replace(/\n/g, ' '); }
+    Connections {target: unik;onUkStdChanged:log.setTxtLog(''+unik.ukStd);}
+    Connections {target: unik;onUkStdChanged: log.setTxtLog(''+unik.ukStd); }
 
     onClosing: {
         close.accepted = false
@@ -81,6 +81,13 @@ ApplicationWindow{
             radius: 6
             border.width: 1
             border.color: appSplash.c1
+            Rectangle{
+                id:pb
+                height: parent.height*0.1
+                width: 0
+                color: 'red'
+                anchors.bottom: parent.bottom
+            }
             Text{
                 id: log
                 color: appSplash.c2
@@ -90,6 +97,26 @@ ApplicationWindow{
                 font.pixelSize: 10
                 anchors.centerIn: parent
                 horizontalAlignment: Text.AlignHCenter
+                function setTxtLog(t){
+                    var  d=(''+t).replace(/\n/g, ' ')
+                    var p=true
+                    if(d.indexOf('Socket')>=0){
+                        p=false
+                    }else if(d.indexOf('download git')>=0){
+                        var m0=''+d.replace('download git ','')
+                        var m1=m0.split(' ')
+                        if(m1.length>1){
+                            var m2=(''+m1[1]).replace('%','')
+                            //unik.setFile('/home/nextsigner/nnn', ''+m2)
+                            var m3=parseInt(m2.replace(/ /g,''))
+                            pb.width=pb.parent.width/100*m3
+                        }
+
+                    }
+                    if(p){
+                        log.text=t
+                    }
+                }
             }
         }
         MouseArea{
