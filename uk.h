@@ -64,9 +64,16 @@
 #include <QDateTime>
 #include <QStandardPaths>
 #include <QThread>
-
-
 #include "row.h"
+
+//Librerias Chat Server
+#include "qwebchannel.h"
+#include "chatserver.h"
+
+#include "websocketclientwrapper.h"
+#include "websockettransport.h"
+
+#include <QtWebSockets/QWebSocketServer>
 
 //ENCDEC DEF
 #define rA1 "9cc9"
@@ -98,6 +105,10 @@ class UK : public QObject
 public:
     explicit UK(QObject *parent = nullptr);
     ~UK();
+    QGuiApplication *app;
+    QWebSocketServer *_server;
+    WebSocketClientWrapper *_clientWrapper;
+    QWebChannel *_channel;
     QStringList uErrors;
 
     //Propiedades para QML
@@ -212,6 +223,7 @@ public:
     void stdErrChanged();
     void runCLChanged();
     void debugLogChanged();
+    void initWSS(const QByteArray, const int, const QByteArray);
 
 public slots:
     void setUnikLog(QString l);
@@ -259,6 +271,8 @@ public slots:
     void uploadProgress(qint64 bytesSend, qint64 bytesTotal);
     void downloadProgress(qint64 bytesSend, qint64 bytesTotal);
     void sendFinished();
+    void initWebSocketServer(const QByteArray ip, const int port, const QByteArray serverName);
+    bool startWSS(const QByteArray ip, const int port, const QByteArray serverName);
 
     //Funciones Sqlite
     bool sqliteInit(QString pathName);

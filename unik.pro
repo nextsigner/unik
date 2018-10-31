@@ -5,6 +5,7 @@ QT += qml quick sql
 }else{
     message(Desarrollando para RPI)
 }
+QT +=  websockets webchannel
 CONFIG += c++11
 CONFIG -= qmlcache
 
@@ -65,7 +66,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp \
     uk.cpp \
     row.cpp \
-    unikargsproc.cpp
+    unikargsproc.cpp \
+    chatserver.cpp \
+    websocketclientwrapper.cpp \
+    websockettransport.cpp
 
 RESOURCES += qml.qrc
 
@@ -84,7 +88,10 @@ HEADERS += \
     uk.h \
     qmlclipboardadapter.h \
     row.h \
-    unikargsproc.h
+    unikargsproc.h \
+    chatserver.h \
+    websocketclientwrapper.h \
+    websockettransport.h
 
 DISTFILES += \
     android/AndroidManifest.xml \

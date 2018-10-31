@@ -36,6 +36,7 @@
 #include <QtWebView>
 #endif
 
+#include "chatserver.h"
 #include "unikargsproc.h"
 
 
@@ -1441,6 +1442,21 @@ int main(int argc, char *argv[])
     //Probe u.createLink();
     //u.createLink("C:/Windows/notepad.exe", "C:/Users/Nico/Desktop/unik2.lnk", "Pequeña 222descripción para saber que hace el archivo", "E:/");
    //u.createLink("/home/nextsigner/Escritorio/unik_v2.22.2.AppImage", "/home/nextsigner/Escritorio/eee4.desktop",  "rrr777", "Pequeña 222vo", "/home/nextsigner/Imàgenes/ladaga.jpg");
+
+
+    QWebChannel channel;
+    u._channel=&channel;
+    QObject::connect(&u, &UK::initWSS, [=](const QByteArray ip, const int port, const QByteArray serverName){
+
+        qInfo()<<"Unik Server Request: "<<ip<<":"<<port<<" Server Name: "<<serverName;
+        QWebSocketServer *server;
+        WebSocketClientWrapper *clientWrapper;
+        u._server=server;
+        u._clientWrapper=clientWrapper;
+        bool wsss=u.startWSS(ip, port, serverName);//WebSocketsServerStarted
+        qInfo()<<"Unik WebSockets Server Started: "<<wsss;
+    });
+    //u.initWebSocketServer("127.0.0.1", 12345, "chatserver");
 
 
     return app.exec();

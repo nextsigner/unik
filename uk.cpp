@@ -1546,6 +1546,28 @@ void UK::sendFinished()
     }
     setUploadState(respuentaSendDatos->readAll());
 }
+
+void UK::initWebSocketServer(const QByteArray ip, const int port, const QByteArray serverName)
+{
+    emit initWSS(ip, port, serverName);
+}
+
+bool UK::startWSS(const QByteArray ip, const int port, const QByteArray serverName)
+{
+    QHostAddress addr(ip.constData());
+    _server=new QWebSocketServer(QStringLiteral("Unik QWebChannel Standalone Server"),
+                            QWebSocketServer::NonSecureMode);
+    if (!_server->listen(addr, port)) {
+        qFatal("Failed to open web socket server.");
+        return false;
+    }
+    _clientWrapper=new WebSocketClientWrapper(_server);
+    QObject::connect(_clientWrapper, &WebSocketClientWrapper::clientConnected,
+                     _channel, &QWebChannel::connectTo);
+    ChatServer* chatserver = new ChatServer(QGuiApplication::instance());
+    _channel->registerObject(serverName.constData(), chatserver);
+    return true;
+}
 bool UK::sqliteInit(QString pathName)
 {
     bool ret=false;
