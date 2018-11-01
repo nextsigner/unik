@@ -109,6 +109,7 @@ public:
     QWebSocketServer *_server;
     WebSocketClientWrapper *_clientWrapper;
     QWebChannel *_channel;
+    ChatServer* _chatserver;
     QStringList uErrors;
 
     //Propiedades para QML

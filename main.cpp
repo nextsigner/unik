@@ -1134,6 +1134,23 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("sourcePath", pq);
     engine.rootContext()->setContextProperty("unikDocs", dupl);
 
+    QWebChannel channel;
+    u._channel=&channel;
+    WebSocketClientWrapper *clientWrapper;
+    u._clientWrapper=clientWrapper;
+    ChatServer* chatserver = new ChatServer(&app);
+    u._chatserver=chatserver;
+    engine.rootContext()->setContextProperty("cs", u._chatserver);
+    engine.rootContext()->setContextProperty("cw", u._clientWrapper);
+    QObject::connect(&u, &UK::initWSS, [=](const QByteArray ip, const int port, const QByteArray serverName){
+        qInfo()<<"Unik Server Request: "<<ip<<":"<<port<<" Server Name: "<<serverName;
+        QWebSocketServer *server;
+        u._server=server;
+        bool wsss=u.startWSS(ip, port, serverName);//WebSocketsServerStarted
+        u._channel->registerObject(serverName.constData(), chatserver);
+        qInfo()<<"Unik WebSockets Server Started: "<<wsss;
+    });
+
 
     QString duplFolderModel;
 #ifdef Q_OS_WIN
@@ -1444,18 +1461,8 @@ int main(int argc, char *argv[])
    //u.createLink("/home/nextsigner/Escritorio/unik_v2.22.2.AppImage", "/home/nextsigner/Escritorio/eee4.desktop",  "rrr777", "Pequeña 222vo", "/home/nextsigner/Imàgenes/ladaga.jpg");
 
 
-    QWebChannel channel;
-    u._channel=&channel;
-    QObject::connect(&u, &UK::initWSS, [=](const QByteArray ip, const int port, const QByteArray serverName){
 
-        qInfo()<<"Unik Server Request: "<<ip<<":"<<port<<" Server Name: "<<serverName;
-        QWebSocketServer *server;
-        WebSocketClientWrapper *clientWrapper;
-        u._server=server;
-        u._clientWrapper=clientWrapper;
-        bool wsss=u.startWSS(ip, port, serverName);//WebSocketsServerStarted
-        qInfo()<<"Unik WebSockets Server Started: "<<wsss;
-    });
+    /*Atention! Not ejecute this method u.initWebSocketServer() with out the a correct load of the UnikWebSocketServerView or similar.*/
     //u.initWebSocketServer("127.0.0.1", 12345, "chatserver");
 
 
