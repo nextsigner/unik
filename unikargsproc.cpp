@@ -24,7 +24,7 @@ UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
         }
     }
     qInfo()<<"UAP: WorkSpace defined as "<<ws;
-    init();
+    // init();
 }
 
 void UnikArgsProc::init()

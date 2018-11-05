@@ -172,7 +172,9 @@ int main(int argc, char *argv[])
     UnikArgsProc uap;//Object for to process arguments
     for (int i = 0; i < argc; ++i) {
         uap.args.append(argv[i]);
+        qInfo()<<"UAP ADDING ARG "<<i<<" : "<<argv[i];
     }
+    uap.init();
 
 #ifdef Q_OS_ANDROID
     UK u; //For other OS this declaration is defined previus the main function
