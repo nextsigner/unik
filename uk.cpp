@@ -853,10 +853,12 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
 
 void UK::restartApp()
 {
+    emit restartingApp();
 #ifndef Q_OS_ANDROID
 #ifndef Q_OS_IOS
     qApp->quit();
-    QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+    //QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+    QProcess::startDetached(qApp->arguments()[0], QStringList());
 #endif
 #else
     //qApp->quit();

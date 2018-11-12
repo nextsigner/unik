@@ -319,8 +319,9 @@ int main(int argc, char *argv[])
 
 
     //Path WorkSpace
-    QByteArray pws=u.getPath(3).toUtf8();
-    pws.append("/unik");
+    QByteArray pws;
+    pws.append(uap.ws);
+    qInfo()<<"Path Unik: "<<pws;
 
     //Setting the application executable name.
     QString appExec = argv[0];
@@ -1152,6 +1153,12 @@ int main(int argc, char *argv[])
         u._channel->registerObject(serverName.constData(), chatserver);
         qInfo()<<"Unik WebSockets Server Started: "<<wsss;
     });
+    /*QObject::connect(&u, &UK::restartingApp, [=](){
+        delete chatserver;
+        //delete channel;
+        delete clientWrapper;
+        qInfo()<<"Unik restarting...";
+    });*/
 
 
     QString duplFolderModel;

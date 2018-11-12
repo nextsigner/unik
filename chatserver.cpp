@@ -70,7 +70,9 @@ ChatServer::ChatServer(QObject *parent)
 }
 
 ChatServer::~ChatServer()
-{}
+{
+
+}
 
 
 bool ChatServer::login(const QString& userName)

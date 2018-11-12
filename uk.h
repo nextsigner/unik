@@ -225,6 +225,7 @@ public:
     void runCLChanged();
     void debugLogChanged();
     void initWSS(const QByteArray, const int, const QByteArray);
+    void restartingApp();
 
 public slots:
     void setUnikLog(QString l);
