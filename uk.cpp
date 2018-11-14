@@ -1585,6 +1585,7 @@ bool UK::startWSS(const QByteArray ip, const int port, const QByteArray serverNa
     _clientWrapper=new WebSocketClientWrapper(_server);
     QObject::connect(_clientWrapper, &WebSocketClientWrapper::clientConnected,
                      _channel, &QWebChannel::connectTo);
+    _engine->rootContext()->setContextProperty("cw", _clientWrapper);
     return true;
 }
 bool UK::sqliteInit(QString pathName)
