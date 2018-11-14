@@ -1466,8 +1466,11 @@ int main(int argc, char *argv[])
     qInfo()<<"Executing from: "<<QDir::currentPath();
     qInfo()<<"unik.getPath(5)= "<<u.getPath(5);
     //Probe u.createLink();
-    //u.createLink("C:/Windows/notepad.exe", "C:/Users/Nico/Desktop/unik2.lnk", "Pequeña 222descripción para saber que hace el archivo", "E:/");
-   //u.createLink("/home/nextsigner/Escritorio/unik_v2.22.2.AppImage", "/home/nextsigner/Escritorio/eee4.desktop",  "rrr777", "Pequeña 222vo", "/home/nextsigner/Imàgenes/ladaga.jpg");
+
+#ifdef Q_OS_WIN
+    u.createLink(u.getPath(1)+"/unik.exe", "-git=https://github.com/nextsigner/unik-tools.git -dir="+pws+"/unik-tools",  u.getPath(6)+"/Unik-Tools.lnk", "Ejecutar Unik con el Modulo Unik-Tools", "C:/");
+#endif
+    //u.createLink("unik", "/home/nextsigner/Escritorio/eee4.desktop",  "rrr777", "Pequeña 222vo", "/home/nextsigner/Imàgenes/ladaga.jpg");
 
 
 
