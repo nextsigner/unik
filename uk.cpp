@@ -925,6 +925,25 @@ bool UK::run(QString commandLine)
     return false;
 }
 
+bool UK::ejecutarLineaDeComandoAparte(QString lineaDeComando)
+{
+#ifndef Q_OS_ANDROID
+ proc = new QProcess(this);
+ connect(proc, SIGNAL(readyReadStandardOutput()),this, SLOT(salidaRun()));
+ connect(proc, SIGNAL(readyReadStandardError()),this, SLOT(salidaRunError()));
+ proc->startDetached(lineaDeComando);
+ if(proc->isOpen()){
+     setRunCL(true);
+     qInfo()<<"Ejecutando "<<lineaDeComando;
+     return true;
+ }else{
+     qInfo()<<"No se està ejecutando "<<lineaDeComando;
+     setRunCL(false);
+ }
+#endif
+ return false;
+}
+
 void UK::salidaRun()
 {
     log(proc->readAllStandardOutput());
