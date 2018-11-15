@@ -270,6 +270,7 @@ int main(int argc, char *argv[])
     bool setPass1=false;
     bool setPass2=false;
     bool makeUpk=false;
+    bool wss=false;
 
 
 #ifdef Q_OS_ANDROID
@@ -485,7 +486,6 @@ int main(int argc, char *argv[])
                 }
             }
         }
-
         if(arg.contains("-update=")){
             QStringList marg = arg.split("-update=");
             if(marg.size()==2){
@@ -522,7 +522,37 @@ int main(int argc, char *argv[])
                 }
             }
         }
+        if(arg.contains("-wss")){
+            wss=true;
+            qInfo()<<"WebSocket Server init request...";
+        }
     }
+
+    QWebChannel channel;
+    u._channel=&channel;
+    WebSocketClientWrapper *clientWrapper;
+    u._clientWrapper=clientWrapper;
+    ChatServer* chatserver = new ChatServer(&app);
+    u._chatserver=chatserver;
+    engine.rootContext()->setContextProperty("cs", u._chatserver);
+    engine.rootContext()->setContextProperty("cw", u._clientWrapper);
+    if(wss){
+        QObject::connect(&u, &UK::initWSS, [=](const QByteArray ip, const int port, const QByteArray serverName){
+            qInfo()<<"Unik Server Request: "<<ip<<":"<<port<<" Server Name: "<<serverName;
+            QWebSocketServer *server;
+            u._server=server;
+            bool wsss=u.startWSS(ip, port, serverName);//WebSocketsServerStarted
+            u._channel->registerObject(serverName.constData(), chatserver);
+            qInfo()<<"Unik WebSockets Server Started: "<<wsss;
+        });
+    }
+    /*QObject::connect(&u, &UK::restartingApp, [=](){
+        delete chatserver;
+        //delete channel;
+        delete clientWrapper;
+        qInfo()<<"Unik restarting...";
+    });*/
+
 
 
     //Setting debugLog as true by default.
@@ -1137,28 +1167,6 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("sourcePath", pq);
     engine.rootContext()->setContextProperty("unikDocs", dupl);
 
-    QWebChannel channel;
-    u._channel=&channel;
-    WebSocketClientWrapper *clientWrapper;
-    u._clientWrapper=clientWrapper;
-    ChatServer* chatserver = new ChatServer(&app);
-    u._chatserver=chatserver;
-    engine.rootContext()->setContextProperty("cs", u._chatserver);
-    engine.rootContext()->setContextProperty("cw", u._clientWrapper);
-    QObject::connect(&u, &UK::initWSS, [=](const QByteArray ip, const int port, const QByteArray serverName){
-        qInfo()<<"Unik Server Request: "<<ip<<":"<<port<<" Server Name: "<<serverName;
-        QWebSocketServer *server;
-        u._server=server;
-        bool wsss=u.startWSS(ip, port, serverName);//WebSocketsServerStarted
-        u._channel->registerObject(serverName.constData(), chatserver);
-        qInfo()<<"Unik WebSockets Server Started: "<<wsss;
-    });
-    /*QObject::connect(&u, &UK::restartingApp, [=](){
-        delete chatserver;
-        //delete channel;
-        delete clientWrapper;
-        qInfo()<<"Unik restarting...";
-    });*/
 
 
     QString duplFolderModel;

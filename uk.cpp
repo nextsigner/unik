@@ -1848,7 +1848,8 @@ bool UK::createLink(QString execString, QString arguments, QString lnkLocationFi
     url.append("/createLnk.vbs");
     setFile(url, vbs);
     run("cmd /c start "+url);
-    qDebug()<<"vbs... "<<url;
+    qDebug()<<"vbs: "<<url;
+    qDebug()<<"vbs data: "<<vbs;
     return true;
 }
 #endif

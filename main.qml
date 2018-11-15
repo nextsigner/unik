@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.7
 
 import QtQuick.Controls 2.0
 
@@ -17,6 +17,12 @@ import QtWebView 1.1
 import Qt.labs.calendar 1.0
 import Qt.labs.folderlistmodel 2.2
 import Qt.labs.settings 1.0
+
+import QtGraphicalEffects 1.0
+import QtCanvas3D 1.1
+
+import QtPositioning 5.9
+import QtLocation 5.9
 
 ApplicationWindow {
     id: app
