@@ -7,7 +7,7 @@ ApplicationWindow {
     objectName: 'awll'
     visible: true
     visibility:  "FullScreen"
-    color: appListLaucher.c4
+    color: 'transparent'
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     property int fs: Qt.platform.os !=='android'?appListLaucher.width*0.02:appListLaucher.width*0.03
     property color c1: "#1fbc05"
@@ -55,17 +55,35 @@ ApplicationWindow {
         id:r
         width: appListLaucher.width-appListLaucher.fs
         height:parent.height
-        color: appListLaucher.c4
+        color: 'transparent'
         anchors.centerIn: parent
         focus: true
         Keys.onReturnPressed: {
             run()
         }
+        Rectangle{
+             width:parent.width*0.33
+             height: appListLaucher.fs*0.125
+             color: appListLaucher.c2
+             anchors.horizontalCenter: parent.horizontalCenter
+             anchors.verticalCenter: parent.verticalCenter
+             anchors.verticalCenterOffset: appListLaucher.fs*2+appListLaucher.fs*0.125
+             Rectangle{
+                 id:psec
+                 width: 1
+                 height: parent.height
+                 color: 'red'
+             }
+        }
+
         Flickable{
            id:flick
            width: appListLaucher.width
            height: appListLaucher.height
            contentHeight: lv.height
+           opacity:0.0
+           Behavior on opacity{NumberAnimation{duration: 500}}
+           Behavior on contentY{NumberAnimation{duration: 500}}
            ListView{
             id:lv
             spacing: appListLaucher.fs*0.25
@@ -123,6 +141,7 @@ ApplicationWindow {
                     if((''+fileName).indexOf('link')===0&&(''+fileName).indexOf('.json')>0&&!appListLaucher.prima){
                         appListLaucher.ca=appListLaucher.al[index]
                         appListLaucher.prima=true
+                        tap.color='black'
                     }
                     tinit.restart()
                 }
@@ -139,19 +158,7 @@ ApplicationWindow {
             }
         }
 
-       Rectangle{
-            width:parent.width
-            height: 6
-            color: appListLaucher.c2
-            anchors.bottom: parent.bottom
-            Rectangle{
-                id:psec
-                width: 1
-                height: parent.height
-                color: 'red'
-            }
        }
-    }
     Shortcut{
         sequence: 'Esc'
         onActivated: Qt.quit()
@@ -181,7 +188,8 @@ ApplicationWindow {
     Rectangle{
         id:tap
         anchors.fill: parent
-        color: 'black'
+        color: 'transparent'
+        opacity:0.0
         Behavior on opacity{NumberAnimation{duration:500}
         }
     }
@@ -189,8 +197,11 @@ ApplicationWindow {
         id: tinit
         running: false
         repeat: false
-        interval: 1500
+        interval: 1000
         onTriggered: {
+            if(appListLaucher.al.length===0){
+                run()
+            }
             tap.opacity=0.0
             if(appSettings.uApp===''){
                 appSettings.uApp=appListLaucher.al[0]
@@ -200,7 +211,9 @@ ApplicationWindow {
                     appListLaucher.ca=appListLaucher.al[i]
                 }
             }
+            flick.opacity=1.0
         }
+
     }
     Timer{
         id: tlaunch
@@ -223,6 +236,7 @@ ApplicationWindow {
         appListLaucher.close()
     }
     Component.onCompleted: {
+        tap.opacity=1.0
         //appListLaucher.ca=appListLaucher.al[0]
     }
 
