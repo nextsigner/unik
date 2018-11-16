@@ -170,11 +170,24 @@ int main(int argc, char *argv[])
     QDir cAppPath=QDir::current();
 
     UnikArgsProc uap;//Object for to process arguments
+    bool loadCfg=false;
     for (int i = 0; i < argc; ++i) {
-        uap.args.append(argv[i]);
+        QByteArray a=argv[i];
+        uap.args.append(a);
+        if(a=="-cfg"){
+            loadCfg=true;
+        }
         qInfo()<<"UAP ADDING ARG "<<i<<" : "<<argv[i];
     }
-    uap.init();
+
+    if(loadCfg){
+        qInfo()<<"Starting with cfg.json config into ws: "<<uap.ws;
+        uap.init();
+    }else{
+        qInfo()<<"Starting with out cfg.json config into ws: "<<uap.ws;
+        uap.args.clear();
+    }
+
 
 #ifdef Q_OS_ANDROID
     UK u; //For other OS this declaration is defined previus the main function
@@ -271,6 +284,7 @@ int main(int argc, char *argv[])
     bool setPass2=false;
     bool makeUpk=false;
     bool wss=false;
+    bool params=false;
 
 
 #ifdef Q_OS_ANDROID
@@ -425,6 +439,7 @@ int main(int argc, char *argv[])
                 }
                 updateDay=false;
                 updateUnikTools=false;
+                params=true;
             }
         }
         //<-folder
@@ -457,6 +472,7 @@ int main(int argc, char *argv[])
                 }
 
                 modeGit=true;
+                params=true;
             }
         }
         if(arg.contains("-ws=")){
@@ -484,6 +500,7 @@ int main(int argc, char *argv[])
                     pws.append(nws);
                     modeGit=true;
                 }
+                params=true;
             }
         }
         if(arg.contains("-update=")){
@@ -496,6 +513,7 @@ int main(int argc, char *argv[])
                     updateDay=true;
                     updateUnikTools=true;
                 }
+                params=true;
             }
         }
         if(arg.contains("-dim=")){
@@ -509,6 +527,7 @@ int main(int argc, char *argv[])
                     dim=md1.at(0)+"x"+md1.at(1);
                 }
             }
+            params=true;
         }
         if(arg.contains("-pos=")){
             QStringList marg = arg.split("-pos=");
@@ -520,11 +539,13 @@ int main(int argc, char *argv[])
                     u.log("Pos: x="+mp0.toUtf8());
                     pos=mp1.at(0)+"x"+mp1.at(1);
                 }
+                params=true;
             }
         }
         if(arg.contains("-wss")){
             wss=true;
             qInfo()<<"WebSocket Server init request...";
+            params=true;
         }
     }
 
@@ -1419,6 +1440,10 @@ int main(int argc, char *argv[])
     //Probe file is for debug any components in the build operations. Set empty for release.
     QByteArray probe = "";
     //probe.append("qrc:/probe.qml");
+    if(!loadCfg){
+        mainQml="qrc:/appsListLauncher.qml";
+    }
+    qInfo()<<"Init unik: "<<mainQml;
     engine.load(probe.isEmpty() ? QUrl(mainQml) : QUrl(probe));
     QQmlComponent component(&engine, probe.isEmpty() ? QUrl(mainQml) : QUrl(probe));
 

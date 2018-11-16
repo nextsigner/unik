@@ -10,5 +10,6 @@
         <file>resources/logo_unik_300.png</file>
         <file>main_rpi.qml</file>
         <file>probe.qml</file>
+        <file>appsListLauncher.qml</file>
     </qresource>
 </RCC>
