@@ -1,6 +1,7 @@
 ﻿import QtQuick 2.7
 import QtQuick.Controls 2.0
 import Qt.labs.folderlistmodel 2.2
+import Qt.labs.settings 1.0
 ApplicationWindow {
     id: appListLaucher
     objectName: 'awll'
@@ -16,6 +17,7 @@ ApplicationWindow {
     property color c5: "#333333"
 
     property bool prima: false
+    property int sec: 0
     property int ci: 0
     property var al: []
     property string ca: ''
@@ -28,6 +30,11 @@ ApplicationWindow {
     }
     onCiChanged: appListLaucher.ca=appListLaucher.al[appListLaucher.ci]
     FontLoader {name: "FontAwesome";source: "qrc:/fontawesome-webfont.ttf";}
+    Settings{
+        id: appSettings
+        category: 'conf-appsListLauncher'
+        property string uApp
+    }
     FolderListModel{
         folder: Qt.platform.os!=='windows'?'file://'+appsDir:'file:///'+appDirs
         id:fl
@@ -50,7 +57,11 @@ ApplicationWindow {
         height:parent.height
         color: appListLaucher.c4
         anchors.centerIn: parent
-       Flickable{
+        focus: true
+        Keys.onReturnPressed: {
+            run()
+        }
+        Flickable{
            id:flick
            width: appListLaucher.width
            height: appListLaucher.height
@@ -113,6 +124,7 @@ ApplicationWindow {
                         appListLaucher.ca=appListLaucher.al[index]
                         appListLaucher.prima=true
                     }
+                    tinit.restart()
                 }
                 Text {
                     text: '\uf061'
@@ -127,12 +139,18 @@ ApplicationWindow {
             }
         }
 
-        focus: true
-        Keys.onReturnPressed: {
-            var p=unik.getFile(appsDir+'/'+appListLaucher.ca)
-            unik.ejecutarLineaDeComandoAparte(appExec+' -cfg '+p)
-            appListLaucher.close()
-        }
+       Rectangle{
+            width:parent.width
+            height: 6
+            color: appListLaucher.c2
+            anchors.bottom: parent.bottom
+            Rectangle{
+                id:psec
+                width: 1
+                height: parent.height
+                color: 'red'
+            }
+       }
     }
     Shortcut{
         sequence: 'Esc'
@@ -146,6 +164,7 @@ ApplicationWindow {
             }else{
                 appListLaucher.ci=0
             }
+            tlaunch.stop()
         }
     }
     Shortcut{
@@ -156,17 +175,53 @@ ApplicationWindow {
             }else{
                 appListLaucher.ci=appListLaucher.al.length-1
             }
+            tlaunch.stop()
         }
     }
-
-    /*Shortcut{
-        sequence: ''
-        onActivated: {
-            var p=unik.getFile(appsDir+'/link_'+fl.get(appListLaucher.ci, "fileName")+'.ukl')
-            unik.ejecutarLineaDeComandoAparte(appExec+' -cfg '+p)
-            appListLaucher.close()
+    Rectangle{
+        id:tap
+        anchors.fill: parent
+        color: 'black'
+        Behavior on opacity{NumberAnimation{duration:500}
         }
-    }*/
+    }
+    Timer{
+        id: tinit
+        running: false
+        repeat: false
+        interval: 1500
+        onTriggered: {
+            tap.opacity=0.0
+            if(appSettings.uApp===''){
+                appSettings.uApp=appListLaucher.al[0]
+            }
+            for(var i=0;i<appListLaucher.al.length;i++){
+                if(appSettings.uApp===appListLaucher.al[i]){
+                    appListLaucher.ca=appListLaucher.al[i]
+                }
+            }
+        }
+    }
+    Timer{
+        id: tlaunch
+        running: true
+        repeat: true
+        interval: 1000
+        onTriggered: {
+            appListLaucher.sec++
+            if(appListLaucher.sec===7){
+                run()
+            }
+            psec.width=psec.parent.width/5*(appListLaucher.sec-1)
+
+        }
+    }
+    function run(){
+        appSettings.uApp=appListLaucher.ca
+        var p=unik.getFile(appsDir+'/'+appListLaucher.ca)
+        unik.ejecutarLineaDeComandoAparte(appExec+' -cfg '+p)
+        appListLaucher.close()
+    }
     Component.onCompleted: {
         //appListLaucher.ca=appListLaucher.al[0]
     }
