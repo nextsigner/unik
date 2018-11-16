@@ -11,7 +11,7 @@ write_file(/tmp/macos_version, APPVERSION)
 message(File version location: $$FILE_VERSION_NAME2)
 
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.11
-message(MkLevel Desarrollo en Mac)
+message(Unikode Desarrollo en Mac)
 ICON = logo.icns
 QMAKE_INFO_PLIST = Info.plist
 
