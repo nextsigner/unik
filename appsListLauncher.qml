@@ -5,9 +5,8 @@ import Qt.labs.settings 1.0
 ApplicationWindow {
     id: appListLaucher
     objectName: 'awll'
-    visible: true
-    visibility:  "FullScreen"
-    color: 'transparent'
+    visibility:  "Maximized"
+    color: "transparent"
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     property int fs: Qt.platform.os !=='android'?appListLaucher.width*0.02:appListLaucher.width*0.03
     property color c1: "#1fbc05"
@@ -25,7 +24,6 @@ ApplicationWindow {
     onClosing: {
         if(Qt.platform.os==='android'){
             close.accepted = false;
-            Qt.quit()
         }
     }
     onCiChanged: appListLaucher.ca=appListLaucher.al[appListLaucher.ci]
@@ -36,7 +34,7 @@ ApplicationWindow {
         property string uApp
     }
     FolderListModel{
-        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'file:///'+appDirs
+        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'/'+appsDir
         id:fl
         showDirs:  false
         showDotAndDotDot: false
@@ -62,6 +60,8 @@ ApplicationWindow {
             run()
         }
         Rectangle{
+            id:xP
+            visible: false
              width:parent.width*0.33
              height: appListLaucher.fs*0.125
              color: appListLaucher.c2
@@ -106,7 +106,7 @@ ApplicationWindow {
                 color: xItem.border.width!==0?appListLaucher.c4:appListLaucher.c2
                 radius: appListLaucher.fs*0.25
                 border.width: fileName===appListLaucher.ca?2:0
-                border.color: xItem.border.width!==0?appListLaucher.c2:appListLaucher.c4
+                border.color: fileName===appListLaucher.ca?appListLaucher.c2:appListLaucher.c4
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible:(''+fileName).indexOf('link')===0&&(''+fileName).indexOf('.ukl')>0
                 onColorChanged: {
@@ -142,8 +142,11 @@ ApplicationWindow {
                         appListLaucher.ca=appListLaucher.al[index]
                         appListLaucher.prima=true
                         tap.color='black'
+                        xP.visible=true
                     }
-                    tinit.restart()
+                    if( tlaunch.enabled){
+                        tinit.restart()
+                    }
                 }
                 Text {
                     text: '\uf061'
@@ -195,22 +198,33 @@ ApplicationWindow {
     }
     Timer{
         id: tinit
-        running: false
+        running: true
         repeat: false
         interval: 1000
         onTriggered: {
-            if(appListLaucher.al.length===0){
-                run()
-            }
             tap.opacity=0.0
-            if(appSettings.uApp===''){
+            if(appSettings.uApp===''&&appListLaucher.al.length>0){
                 appSettings.uApp=appListLaucher.al[0]
             }
+            var vacio=true
             for(var i=0;i<appListLaucher.al.length;i++){
+                if((''+appListLaucher.al[i]).indexOf('.ukl')>0){
+                    //appListLaucher.visible=true
+                    vacio=false
+                }
                 if(appSettings.uApp===appListLaucher.al[i]){
                     appListLaucher.ca=appListLaucher.al[i]
                 }
             }
+            if(vacio){
+                tlaunch.enabled=false
+                tlaunch.stop()
+                appListLaucher.close()
+                engine.load(appsDir+'/unik-tools/main.qml')
+            }else{
+                xP.visible=true
+            }
+
             flick.opacity=1.0
         }
 
@@ -220,6 +234,7 @@ ApplicationWindow {
         running: true
         repeat: true
         interval: 1000
+        property bool enabled: true
         onTriggered: {
             appListLaucher.sec++
             if(appListLaucher.sec===7){
@@ -236,7 +251,7 @@ ApplicationWindow {
         appListLaucher.close()
     }
     Component.onCompleted: {
-        tap.opacity=1.0
+        //tap.opacity=1.0
         //appListLaucher.ca=appListLaucher.al[0]
     }
 
