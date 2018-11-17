@@ -172,7 +172,8 @@ int main(int argc, char *argv[])
     UnikArgsProc uap;//Object for to process arguments
     bool loadCfg=false;
     for (int i = 0; i < argc; ++i) {
-        QByteArray a=argv[i];
+        QByteArray a;
+        a.append(argv[i]);
         uap.args.append(a);
         if(a=="-cfg"){
             loadCfg=true;
@@ -1239,8 +1240,6 @@ int main(int argc, char *argv[])
     mainQml.append(pq);
     mainQml.append("main.qml");
 
-
-
     if(modeGit){
         lba="";
         lba.append("Updating from github: ");
@@ -1264,53 +1263,12 @@ int main(int argc, char *argv[])
             lba.append("Fail Zip download: ");
             lba.append(urlGit);
             qInfo()<<lba;
-        }
-        /*QByteArray npq;
-        npq.append(pws);
-        npq.append("/");
-        if(moduloGit.contains(".git")||moduloGit.mid(moduloGit.size()-4, moduloGit.size())==".git"){
-            npq.append(moduloGit.mid(0, moduloGit.size()-4));
-        }else{
-            npq.append(moduloGit);
-        }
-        //npq.append(moduloGit);
-        npq.append("/");
-        lba="";
-        lba.append("Current Application Folder: ");
-        lba.append(npq);
-        qInfo()<<lba;
-        pq = npq;*/
+        }       
         mainQml="";
         mainQml.append(QDir::currentPath());
         mainQml.append("/main.qml");
         u.log("Updated: "+pq.toUtf8());
     }
-    /*if(updateUnikTools||updateDay){
-        lba="";
-        lba.append("Updating from github: ");
-        lba.append(urlGit);
-        lba.append("\nupdateUnikTools: ");
-        lba.append(updateUnikTools ? "true" : "false");
-        lba.append("\nupdateDay: ");
-        lba.append(updateDay ? "true" : "false");
-        qInfo()<<lba;
-        QByteArray unikOsPath;
-        unikOsPath.append(pws);
-        u.mkdir(unikOsPath);
-        bool up=u.downloadZipFile(urlGit, unikOsPath);
-        if(up){
-            qInfo()<<"Updated from github...";
-        }else{
-            qInfo()<<"Fail Update from github...";
-        }
-        unikOsPath.append("/"+moduloGit+"/");
-        pq = unikOsPath;
-        mainQml="";
-        mainQml.append(pq);
-        mainQml.append("main.qml");
-        u.log("Updated: "+pq.toUtf8());
-    }*/
-
     engine.rootContext()->setContextProperty("pq", pq);
 
     QByteArray log4;
@@ -1396,6 +1354,11 @@ int main(int argc, char *argv[])
     qInfo()<<"1-->.>"<<engine.importPathList();
     qInfo()<<"2-->.>"<<engine.pluginPathList();
     qInfo()<<"3<<"<<QLibraryInfo::Qml2ImportsPath;
+
+    if(!loadCfg){
+        mainQml=":/appsListLauncher.qml";
+    }
+    qInfo()<<"Init unik: "<<mainQml;
 
     engine.load(QUrl::fromLocalFile(mainQml));
     QQmlComponent component(&engine, QUrl::fromLocalFile(mainQml));

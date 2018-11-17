@@ -29,7 +29,7 @@ UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
 
 void UnikArgsProc::init()
 {
-    if(args.length()>1){
+    if(args.length()>2){
         procArgs();
     }else{
         procCfgArgs();
