@@ -16,22 +16,15 @@ win32 {
     }else{
         MDIA4=$$member(MDIA2, 1)
     }
-    MMES1=$$member(VERSION_MAJ2, 1)
-    MMES2=$$split(MMES1, "")
-    MMES3=$$member(MMES2, 0)
-    greaterThan(MMES3, 9){
-        MMES4=$$MMES3
-    }else{
-        MMES4=$$member(MMES2, 1)
-    }
-
-   # message(Dia: $$MDIA4)
-    #message(Mes: $$MMES4)
-
     VERSION_MEN1=$$system("echo  %time%")
     VERSION_MEN2 =$$split(VERSION_MEN1, ":")#07 08 2018
     VERSION_MEN3 =$$member(VERSION_MEN2, 1)
-    VERSION_MEN4=$$system("resources\\week.bat $$MDIA4 $$MMES4 $$member(VERSION_MAJ2, 2)")
+    VERSION_MEN4=$$system("resources\\week.bat $$MDIA4 $$member(VERSION_MAJ2, 1) $$member(VERSION_MAJ2, 2)")
+    NUMWEEK=$$system("set /a  $$VERSION_MEN4 + 1")
+
+    #message(Date: $$MDIA1)
+    #message(Month: $$member(VERSION_MAJ2, 1))
+    #message(Week: $$NUMWEEK)
 
     VERSION_MEN5=$$system("echo  %time%")
     VERSION_MEN6 =$$split(VERSION_MEN5, ":")
@@ -43,7 +36,7 @@ win32 {
     }else{
         VERSION_MEN10=0$$VERSION_MEN9
     }
-    APPVERSION=$$VERSION_MAJ7"."$$VERSION_MEN4$$VERSION_MEN10
+    APPVERSION=$$VERSION_MAJ7"."$$NUMWEEK$$VERSION_MEN10
     message(Windows App Version $$APPVERSION)
 } else:unix {
     VERSION_MAJ1=$$system(date +%Y)
