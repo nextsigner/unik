@@ -535,10 +535,10 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
             break;
         }
         file.open(QIODevice::ReadOnly);
-        qInfo()<<"Zip filename: "<<zip.getFileNameList();
+        //qInfo()<<"Zip filename: "<<zip.getFileNameList();
         if(v==0){
             carpeta=QString(zip.getFileNameList().at(0));
-            qInfo()<<"Carpeta de destino Zip: "<<carpeta;
+            //qInfo()<<"Carpeta de destino Zip: "<<carpeta;
         }else{
             QString nfn;
             nfn.append(carpDestinoFinal);
