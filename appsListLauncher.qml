@@ -247,7 +247,7 @@ ApplicationWindow {
     function run(){
         appSettings.uApp=appListLaucher.ca
         var p=unik.getFile(appsDir+'/'+appListLaucher.ca)
-        unik.ejecutarLineaDeComandoAparte(appExec+' -cfg '+p)
+        unik.ejecutarLineaDeComandoAparte('"'+appExec+'" -cfg '+p)
         appListLaucher.close()
     }
     Component.onCompleted: {
