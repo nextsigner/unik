@@ -125,7 +125,7 @@ ApplicationWindow {
                     }
                     onDoubleClicked: {
                         var p=unik.getFile(appsDir+'/'+fileName)
-                        unik.ejecutarLineaDeComandoAparte(appExec+' -cfg '+p)
+                        unik.ejecutarLineaDeComandoAparte('"'+appExec+'" -cfg '+p)
                         appListLaucher.close()
                     }
                 }
