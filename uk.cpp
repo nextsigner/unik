@@ -746,10 +746,10 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     QString carpeta="aaa";
     int v=0;
     for(bool f=zip.goToFirstFile(); f; f=zip.goToNextFile()) {
+        if(v>=zip.getFileNameList().size()){
+            break;
+        }
         file.open(QIODevice::ReadOnly);
-        //same functionality as QIODevice::readData() -- data is a char*, maxSize is qint64
-        //file.readData(data,maxSize);
-        //qInfo()<<"Zip filename: "<<zip.getFileNameList();
         if(v==0){
             carpeta=QString(zip.getFileNameList().at(0));
             qInfo()<<"Carpeta de destino Zip: "<<carpeta;
@@ -760,9 +760,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
             nfn.append(zip.getFileNameList().at(v));
             QString nfn2 = nfn.replace("-master/", "/");
             QString nfn3 = nfn2.replace(" ", "%20");
-            //nfn.append("\"");
-
-            if(nfn3.at(nfn3.size()-1)!="/"){
+             if(nfn3.at(nfn3.size()-1)!="/"){
                qInfo()<<"Destino de archivo: "<<nfn3;
                 QFile nfile(nfn3);
                 if(!nfile.open(QIODevice::WriteOnly)){
@@ -777,37 +775,10 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
                 dnfn.mkpath(".");
             }
         }
-        //qInfo()<<"SSSSSSSSSS"<<file.readAll();
-        //do something with the data
         file.close();
         v++;
     }
-    zip.close();
-    /*QProcess *p1 = new QProcess(this);
-//    connect(p1, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
-//            [=]  (int exitCode, QProcess::ExitStatus exitStatus)
-//    {
-//        //qInfo("!--!");
-//    });
-    p1->start(cl);
-    p1->deleteLater();
-    while (p1->waitForFinished()) {
-        qInfo("waiting where git dowloading...");
-    }
-    cl="";
-    cl.append("cp -TRv ");
-    cl.append(getPath(2));
-    cl.append("/");
-    cl.append(carpetaDestino);
-    cl.append("/");
-    cl.append(carpetaDestino);
-    cl.append("-master");
-    cl.append(" ");
-    cl.append(carpDestinoFinal.replace("\"",""));
-    cl.append("/");
-    cl.append(carpetaDestino);
-    qInfo("Running "+cl);
-    run(cl);*/
+    zip.close();    
 #endif
 #ifdef Q_OS_OSX
     QByteArray carpDestinoFinal;
@@ -902,7 +873,7 @@ void UK::restartApp()
 void UK::restartApp(QString args)
 {
     qApp->quit();
-    QStringList al = args.split(" ");
+    QStringList al = args.split(",");
     QProcess::startDetached(qApp->arguments()[0], al);
 }
 
