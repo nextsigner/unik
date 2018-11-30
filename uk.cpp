@@ -902,6 +902,11 @@ bool UK::run(QString commandLine)
     return false;
 }
 
+void UK::writeRun(QString data)
+{
+    proc->write(data.toUtf8());
+}
+
 bool UK::ejecutarLineaDeComandoAparte(QString lineaDeComando)
 {
 #ifndef Q_OS_ANDROID

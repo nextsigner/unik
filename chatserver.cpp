@@ -126,7 +126,7 @@ void ChatServer::sendKeepAlive()
 
 void ChatServer::checkKeepAliveResponses()
 {
-    qDebug() << "Keep Alive Check" << m_stillAliveUsers;
+    //qDebug() << "Keep Alive Check" << m_stillAliveUsers;
     m_userList = m_stillAliveUsers;
     m_stillAliveUsers.clear();
     m_userList.sort();

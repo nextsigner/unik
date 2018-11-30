@@ -252,6 +252,7 @@ public slots:
     void restartApp();
     void restartApp(QString args);
     bool run(QString commandLine);
+    void writeRun(QString data);
     bool ejecutarLineaDeComandoAparte(QString lineaDeComando);
     void salidaRun();
     void salidaRunError();
