@@ -24,12 +24,6 @@ QString UK::host()
 {
     return h;
 }
-
-void UK::setUnikLog(QString l)
-{
-    log(l.toUtf8());
-}
-
 void UK::ukClose(QQuickCloseEvent *close){
     if(close){
         qInfo("ApplicationWindow closed.");
@@ -56,6 +50,13 @@ int UK::getScreenWidth()
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect  screenGeometry = screen->geometry();
     return screenGeometry.width();
+}
+
+int UK::getScreenHeight()
+{
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect  screenGeometry = screen->geometry();
+    return screenGeometry.height();
 }
 
 void UK::setWorkSpace(QString ws)

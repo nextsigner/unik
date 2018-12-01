@@ -135,11 +135,8 @@ public:
             }
             porcent.append("%");
             porcent.append(QString::number(porc));
-            //if(debugLog){
-            //qInfo()<<"download";
             log(porcent);
-            //}
-        }
+            }
     }
     Q_INVOKABLE QString getUploadState(){
         return uploadState;
@@ -228,18 +225,17 @@ public:
     void restartingApp();
 
 public slots:
-    void setUnikLog(QString l);
     void ukClose(QQuickCloseEvent *close);
     void engineExited(int n);
     void engineQuited(QObject*);
 
     //Funciones del OS
     int getScreenWidth();
+    int getScreenHeight();
 
     //Funciones del Sistema Unik
     void setWorkSpace(QString ws);
     void definirCarpetaTrabajo(QString et);
-    //void setSRC(QString c);
     bool folderToUpk(QString folder, QString upkName, QString user, QString key, QString folderDestination);
     bool carpetaAUpk(QString carpeta, QString nombreUpk, QString usuario, QString clave, QString carpetaDestino);
     bool downloadRemoteFolder(QString urlFolder, QString list, QString dirDestination);

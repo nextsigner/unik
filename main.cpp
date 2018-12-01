@@ -1459,9 +1459,18 @@ int main(int argc, char *argv[])
     }
 #endif
 
-    qInfo()<<"Executing from: "<<QDir::currentPath();
-    qInfo()<<"unik.getPath(5)= "<<u.getPath(5);
-    //Probe u.createLink();
+    //qInfo()<<"Executing from: "<<QDir::currentPath();
+    //qInfo()<<"unik.getPath(5)= "<<u.getPath(5);
+
+    QByteArray uklData;
+    uklData.append("-folder=");
+    uklData.append(pws);
+    uklData.append("/unik-tools");
+    QByteArray uklUrl;
+    uklUrl.append(pws);
+    uklUrl.append("/link_unik-tools.ukl");
+    u.setFile(uklUrl, uklData);
+
 
 #ifdef Q_OS_WIN
     u.createLink(u.getPath(1)+"/unik.exe", "-git=https://github.com/nextsigner/unik-tools.git -folder="+pws+"/unik-tools -cfg",  u.getPath(6)+"/Unik-Tools.lnk", "Ejecutar Unik con el Modulo Unik-Tools", "C:/");
