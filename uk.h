@@ -280,6 +280,7 @@ public slots:
     QList<QObject *> getSqlData(QString query);
     bool mysqlInit(QString hostName, QString dataBaseName, QString userName, QString password, int firtOrSecondDB);
     void setMySqlDatabase(QString databaseName, int firtOrSecondDB);
+    void sqliteClose();
 
     //Funciones de Sistema de Archivos
     void cd(QString folder);

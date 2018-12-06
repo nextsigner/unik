@@ -1703,6 +1703,13 @@ void UK::setMySqlDatabase(QString databaseName, int firtOrSecondDB)
     }
 }
 
+void UK::sqliteClose()
+{
+    db.removeDatabase(QSqlDatabase::database().connectionName());
+    db.close();
+
+}
+
 void UK::cd(QString folder)
 {
     QDir::setCurrent(folder);
