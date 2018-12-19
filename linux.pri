@@ -44,6 +44,26 @@ message(linux.pri is loaded)
         message(Current Executable Path: $$DESTDIR)
         message(Current Working Directory: $$PWD)
 
+        #QMAKE_CXXFLAGS += -mthumb
+        #QMAKE_CXXFLAGS += -mthumb-interwork
+
+#QMAKE_CFLAGS           += \
+ #                     -mthumb \
+  #                    -mfpu=vfp \
+   #                   -mtune=arm1176jzf-s \
+    #                  -march=armv6zk \
+     #                 -mabi=aapcs-linux
+
+        #Building Quazip from Ubuntu 16.10
+        #Compile quazip.pro and install with sudo make install from the $$OUT_PWD
+        INCLUDEPATH += $$PWD/quazip
+        LIBS += -lz
+        LIBS+=-L/usr/local/zlib/lib
+        INCLUDEPATH+=/usr/local/zlib/include
+        HEADERS += $$PWD/quazip/*.h
+        SOURCES += $$PWD/quazip/*.cpp
+        SOURCES += $$PWD/quazip/*.c
+
         #COPIAR ARCHIVOS NECESARIOS EN RPI3
         QMAKE_POST_LINK += $$quote(mkdir $${DESTDIR}/qml$$escape_expand(\n\t))
         QMAKE_POST_LINK += $$quote(mkdir $${DESTDIR}/qml/LogView$$escape_expand(\n\t))

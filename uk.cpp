@@ -761,7 +761,9 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
             nfn.append(zip.getFileNameList().at(v));
             QString nfn2 = nfn.replace("-master/", "/");
             QString nfn3 = nfn2.replace(" ", "%20");
-             if(nfn3.at(nfn3.size()-1)!="/"){
+            QByteArray banfn3;
+            banfn3.append(nfn3.at(nfn3.size()-1));
+            if(banfn3!="/"){
                qInfo()<<"Destino de archivo: "<<nfn3;
                 QFile nfile(nfn3);
                 if(!nfile.open(QIODevice::WriteOnly)){
@@ -2188,7 +2190,7 @@ void UK::downloadZipProgress(qint64 bytesSend, qint64 bytesTotal)
     double porc;
     if(bytesTotal==-1){
         porc = 1.0;
-    }else if(bytesTotal==-1&&uZipUrl!=-1){
+    }else if(bytesTotal==-1&&uZipSize!=-1){
         porc = (((double)bytesSend)/uZipSize)*100;
     }else{
          porc = (((double)bytesSend)/bytesTotal)*100;
