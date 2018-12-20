@@ -69,7 +69,8 @@ SOURCES += main.cpp \
     unikargsproc.cpp \
     chatserver.cpp \
     websocketclientwrapper.cpp \
-    websockettransport.cpp
+    websockettransport.cpp \
+    mmapGpio.cpp
 
 RESOURCES += qml.qrc
 
@@ -91,7 +92,8 @@ HEADERS += \
     unikargsproc.h \
     chatserver.h \
     websocketclientwrapper.h \
-    websockettransport.h
+    websockettransport.h \
+    mmapGpio.h
 
 DISTFILES += \
     android/AndroidManifest.xml \

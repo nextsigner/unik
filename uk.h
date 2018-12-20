@@ -92,6 +92,10 @@
 
 //#include "uniksqlitecrypto.h"
 
+#ifdef __arm__
+#include "mmapGpio.h"
+#endif
+
 class UK : public QObject
 {
     Q_OBJECT
@@ -306,6 +310,12 @@ public slots:
     int frameHeight(QObject *window);
     int frameWidth(QObject *window);
 #endif
+#ifdef __arm__
+    void initRpiGpio();
+    void setPinType(int pin, int type);
+    void setPinState(int pin, int state);
+    bool pinIsHigh(int pin);
+#endif
 
 private slots:
     QString encPrivateData(QByteArray d, QString user, QString key);
@@ -345,8 +355,9 @@ private:
     QNetworkReply *respuentaSendDatos;
     QImage *frame;
 
-
-
+#ifdef __arm__
+    mmapGpio *rpiGpio;
+#endif
 };
 
 /*void UK::unikStdOut(QtMsgType type,

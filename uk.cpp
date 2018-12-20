@@ -5,6 +5,9 @@ UK::UK(QObject *parent) : QObject(parent)
     lsim<<"g"<<"h"<<"i"<<"j"<<"k"<<"l"<<"m"<<"n"<<"o"<<"p"<<"q"<<"r"<<"s"<<"t"<<"u"<<"v"<<"w"<<"x"<<"y"<<"z";
     lnum<<"11"<<"33"<<"66"<<"77"<<"88"<<"99"<<"20"<<"30"<<"40"<<"60"<<"70"<<"80"<<"90"<<"12"<<"21"<<"57"<<"82"<<"92"<<"84"<<"72";
     file = new QFile();
+#ifdef __arm__
+    rpiGpio = new mmapGpio();
+#endif
 }
 
 UK::~UK()
@@ -507,13 +510,13 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
 
 #ifdef Q_OS_WIN32
     QByteArray carpDestinoFinal;
-     carpDestinoFinal.append(localFolder);
-     QDir fdf1(carpDestinoFinal);
-     if(!fdf1.exists()){
-         fdf1.mkpath(".");
-     }
-     qInfo()<<"Downloading Git Zip into: "<<carpDestinoFinal;
-     qInfo()<<"Downloading Git Zip Module: "<<module;
+    carpDestinoFinal.append(localFolder);
+    QDir fdf1(carpDestinoFinal);
+    if(!fdf1.exists()){
+        fdf1.mkpath(".");
+    }
+    qInfo()<<"Downloading Git Zip into: "<<carpDestinoFinal;
+    qInfo()<<"Downloading Git Zip Module: "<<module;
     QString nfdf2;
     nfdf2.append(carpDestinoFinal);
     nfdf2.append("/");
@@ -549,7 +552,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
             QString nfn3 = nfn2.replace(" ", "%20");
 
             if(nfn3.at(nfn3.size()-1)!="/"){
-               qInfo()<<"Destino de archivo: "<<nfn3;
+                qInfo()<<"Destino de archivo: "<<nfn3;
                 QFile nfile(nfn3);
                 if(!nfile.open(QIODevice::WriteOnly)){
                     qInfo()<<"Error al abrir archivo "<<nfn3;
@@ -570,13 +573,13 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
 #endif
 #ifdef Q_OS_OSX
     QByteArray carpDestinoFinal;
-     carpDestinoFinal.append(localFolder);
-     QDir fdf1(carpDestinoFinal);
-     if(!fdf1.exists()){
-         fdf1.mkpath(".");
-     }
-     qInfo()<<"Downloading Git Zip into: "<<carpDestinoFinal;
-     qInfo()<<"Downloading Git Zip Module: "<<module;
+    carpDestinoFinal.append(localFolder);
+    QDir fdf1(carpDestinoFinal);
+    if(!fdf1.exists()){
+        fdf1.mkpath(".");
+    }
+    qInfo()<<"Downloading Git Zip into: "<<carpDestinoFinal;
+    qInfo()<<"Downloading Git Zip Module: "<<module;
     QString nfdf2;
     nfdf2.append(carpDestinoFinal);
     nfdf2.append("/");
@@ -612,7 +615,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
             QString nfn3 = nfn2.replace(" ", "%20");
 
             if(nfn3.at(nfn3.size()-1)!="/"){
-               qInfo()<<"Destino de archivo: "<<nfn3;
+                qInfo()<<"Destino de archivo: "<<nfn3;
                 QFile nfile(nfn3);
                 if(!nfile.open(QIODevice::WriteOnly)){
                     qInfo()<<"Error al abrir archivo "<<nfn3;
@@ -693,7 +696,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
             //nfn.append("\"");
 
             if(nfn3.at(nfn3.size()-1)!="/"){
-               qInfo()<<"Destino de archivo: "<<nfn3;
+                qInfo()<<"Destino de archivo: "<<nfn3;
                 QFile nfile(nfn3);
                 if(!nfile.open(QIODevice::WriteOnly)){
                     qInfo()<<"Error al abrir archivo "<<nfn3;
@@ -764,7 +767,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
             QByteArray banfn3;
             banfn3.append(nfn3.at(nfn3.size()-1));
             if(banfn3!="/"){
-               qInfo()<<"Destino de archivo: "<<nfn3;
+                qInfo()<<"Destino de archivo: "<<nfn3;
                 QFile nfile(nfn3);
                 if(!nfile.open(QIODevice::WriteOnly)){
                     qInfo()<<"Error al abrir archivo "<<nfn3;
@@ -781,7 +784,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
         file.close();
         v++;
     }
-    zip.close();    
+    zip.close();
 #endif
 #ifdef Q_OS_OSX
     QByteArray carpDestinoFinal;
@@ -882,7 +885,7 @@ void UK::restartApp(QString args)
 
 bool UK::run(QString commandLine)
 {
-   #ifndef Q_OS_ANDROID
+#ifndef Q_OS_ANDROID
     proc = new QProcess(this);
     connect(proc, SIGNAL(readyReadStandardOutput()),this, SLOT(salidaRun()));
     connect(proc, SIGNAL(readyReadStandardError()),this, SLOT(salidaRunError()));
@@ -913,20 +916,20 @@ void UK::writeRun(QString data)
 bool UK::ejecutarLineaDeComandoAparte(QString lineaDeComando)
 {
 #ifndef Q_OS_ANDROID
- proc = new QProcess(this);
- connect(proc, SIGNAL(readyReadStandardOutput()),this, SLOT(salidaRun()));
- connect(proc, SIGNAL(readyReadStandardError()),this, SLOT(salidaRunError()));
- proc->startDetached(lineaDeComando);
- if(proc->isOpen()){
-     setRunCL(true);
-     qInfo()<<"Ejecutando "<<lineaDeComando;
-     return true;
- }else{
-     qInfo()<<"No se està ejecutando "<<lineaDeComando;
-     setRunCL(false);
- }
+    proc = new QProcess(this);
+    connect(proc, SIGNAL(readyReadStandardOutput()),this, SLOT(salidaRun()));
+    connect(proc, SIGNAL(readyReadStandardError()),this, SLOT(salidaRunError()));
+    proc->startDetached(lineaDeComando);
+    if(proc->isOpen()){
+        setRunCL(true);
+        qInfo()<<"Ejecutando "<<lineaDeComando;
+        return true;
+    }else{
+        qInfo()<<"No se està ejecutando "<<lineaDeComando;
+        setRunCL(false);
+    }
 #endif
- return false;
+    return false;
 }
 
 void UK::salidaRun()
@@ -1371,7 +1374,7 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
     QNetworkReply *reply = mgr.get(req);
     connect(reply,SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadZipProgress(qint64,qint64)));
     //QNetworkReply *reply = mgr.get(req);
-   // QThread::sleep(3000);
+    // QThread::sleep(3000);
     eventLoop.exec();
     if (reply->error() == QNetworkReply::NoError) {
         QFile other(ubicacion);
@@ -1476,8 +1479,8 @@ void UK::sendFile(QString file, QString phpReceiver)
 void UK::uploadProgress(qint64 bytesSend, qint64 bytesTotal)
 {
     //double porc = (((double)bytesSend)/bytesTotal)*100;
-   // int porc= (int)((bytesSend * 100) / bytesTotal);
-/*#ifdef Q_OS_LINUX
+    // int porc= (int)((bytesSend * 100) / bytesTotal);
+    /*#ifdef Q_OS_LINUX
 
 #ifdef Q_OS_ANDROID
     double porc = (((double)bytesSend)/bytesTotal)*100;
@@ -1562,7 +1565,7 @@ bool UK::startWSS(const QByteArray ip, const int port, const QByteArray serverNa
 {
     QHostAddress addr(ip.constData());
     _server=new QWebSocketServer(QStringLiteral("Unik QWebChannel Standalone Server"),
-                            QWebSocketServer::NonSecureMode);
+                                 QWebSocketServer::NonSecureMode);
     if (!_server->listen(addr, port)) {
         qFatal("Failed to open web socket server.");
         return false;
@@ -1813,7 +1816,7 @@ bool UK::createLink(QString execString, QString arguments, QString lnkLocationFi
     QByteArray upf;
     upf.append(up);
     QByteArray vbs = "";
-   /*vbs.append("set WshShell = WScript.CreateObject(\"WScript.Shell\") \n") ;
+    /*vbs.append("set WshShell = WScript.CreateObject(\"WScript.Shell\") \n") ;
     vbs.append("strDesktop = WshShell.SpecialFolders(\"Desktop\")  \n") ;
      vbs.append("set oShellLink = WshShell.CreateShortcut( \""+lnkLocationFileName+"\")  \n") ;
               vbs.append("oShellLink.TargetPath = \""+upf+"\"  \n") ;
@@ -1909,6 +1912,46 @@ void UK::crearPDF(QString captura, QString url, int orientacion)
     }
     painter.end();
 }
+
+
+#ifdef __arm__
+void UK::initRpiGpio()
+{
+    rpiGpio = new mmapGpio();
+}
+
+void UK::setPinType(int pin, int type)
+{
+    if(type!=0&&type!=1){
+        return;
+    }
+    if(type==0){
+       rpiGpio->setPinDir(pin,mmapGpio::OUTPUT);
+    }else{
+       rpiGpio->setPinDir(pin,mmapGpio::INPUT);
+    }
+}
+
+void UK::setPinState(int pin, int state)
+{
+    if(state!=0&&state!=1){
+        return;
+    }
+    if(state==0){
+       rpiGpio->writePinLow(pin);
+    }else{
+        rpiGpio->writePinHigh(pin);
+    }
+}
+bool UK::pinIsHigh(int pin){
+    unsigned int pinVal;
+    pinVal = rpiGpio->readPin(pin);
+    if(pinVal == mmapGpio::HIGH){
+        return false;
+    }
+    return true;
+}
+#endif
 
 QString UK::encPrivateData(QByteArray d, QString user, QString key)
 {
@@ -2193,7 +2236,7 @@ void UK::downloadZipProgress(qint64 bytesSend, qint64 bytesTotal)
     }else if(bytesTotal==-1&&uZipSize!=-1){
         porc = (((double)bytesSend)/uZipSize)*100;
     }else{
-         porc = (((double)bytesSend)/bytesTotal)*100;
+        porc = (((double)bytesSend)/bytesTotal)*100;
     }
     QString d1;
     d1.append(QString::number(porc));
