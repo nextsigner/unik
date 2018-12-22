@@ -1482,6 +1482,9 @@ int main(int argc, char *argv[])
     /*Atention! Not ejecute this method u.initWebSocketServer() with out the a correct load of the UnikWebSocketServerView or similar.*/
     //u.initWebSocketServer("127.0.0.1", 12345, "chatserver");
 
+#ifdef UNIK_COMPILE_RPI
+        qInfo()<<"Estamos compilando en RPI!";
+#endif
 
     return app.exec();
 }

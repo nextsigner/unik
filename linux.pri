@@ -44,15 +44,8 @@ message(linux.pri is loaded)
         message(Current Executable Path: $$DESTDIR)
         message(Current Working Directory: $$PWD)
 
-        #QMAKE_CXXFLAGS += -mthumb
-        #QMAKE_CXXFLAGS += -mthumb-interwork
-
-#QMAKE_CFLAGS           += \
- #                     -mthumb \
-  #                    -mfpu=vfp \
-   #                   -mtune=arm1176jzf-s \
-    #                  -march=armv6zk \
-     #                 -mabi=aapcs-linux
+    COMPILEINRPI = 1
+    DEFINES += UNIK_COMPILE_RPI=\\\"$$COMPILEINRPI\\\"
 
         #Building Quazip from Ubuntu 16.10
         #Compile quazip.pro and install with sudo make install from the $$OUT_PWD

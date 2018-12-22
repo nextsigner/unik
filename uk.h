@@ -215,6 +215,12 @@ public:
     bool wait=false;
     bool splashvisible=true;
     bool setInitString=false;
+#ifdef UNIK_COMPILE_RPI
+    Q_INVOKABLE void initRpiGpio();
+    Q_INVOKABLE void setPinType(int pin, int type);
+    Q_INVOKABLE void setPinState(int pin, int state);
+    Q_INVOKABLE bool pinIsHigh(int pin);
+#endif
 
  signals:
     //Señales para QML
@@ -310,12 +316,7 @@ public slots:
     int frameHeight(QObject *window);
     int frameWidth(QObject *window);
 #endif
-#ifdef __arm__
-    void initRpiGpio();
-    void setPinType(int pin, int type);
-    void setPinState(int pin, int state);
-    bool pinIsHigh(int pin);
-#endif
+
 
 private slots:
     QString encPrivateData(QByteArray d, QString user, QString key);
