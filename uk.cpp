@@ -1943,6 +1943,21 @@ Q_INVOKABLE void UK::setPinState(int pin, int state)
         rpiGpio->writePinHigh(pin);
     }
 }
+
+Q_INVOKABLE unsigned int UK::readPin(unsigned int pin)
+{
+    return rpiGpio->readPin(pin);
+}
+
+Q_INVOKABLE void UK::writePinHigh(unsigned int pinnum)
+{
+    rpiGpio->writePinHigh(pinnum);
+}
+
+Q_INVOKABLE void UK::writePinLow(unsigned int pinnum)
+{
+    rpiGpio->writePinLow(pinnum);
+}
 Q_INVOKABLE bool UK::pinIsHigh(int pin){
     unsigned int pinVal;
     pinVal = rpiGpio->readPin(pin);

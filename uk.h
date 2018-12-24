@@ -219,6 +219,9 @@ public:
     Q_INVOKABLE void initRpiGpio();
     Q_INVOKABLE void setPinType(int pin, int type);
     Q_INVOKABLE void setPinState(int pin, int state);
+    Q_INVOKABLE unsigned int readPin(unsigned int pin);
+    Q_INVOKABLE void writePinHigh(unsigned int pinnum);
+    Q_INVOKABLE void writePinLow(unsigned int pinnum);
     Q_INVOKABLE bool pinIsHigh(int pin);
 #endif
 
