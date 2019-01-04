@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QSettings>
 #include <QFileInfo>
+#include <QDir>
+#include <QProcess>
 #include <QStandardPaths>
 #include <QDebug>
 
@@ -27,6 +29,7 @@ public:
     QString dim="";
     QString pos="";
 
+    bool showLaunch=true;
     bool modeFolder=false;
     bool modeFolderToUpk=false;
     bool modeRemoteFolder=false;
@@ -48,6 +51,7 @@ public slots:
     void init();
     void procArgs();
     void procCfgArgs();
+    void procUSSArgs();
 
 private:
     QSettings settings;

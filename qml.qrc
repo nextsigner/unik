@@ -11,5 +11,6 @@
         <file>main_rpi.qml</file>
         <file>probe.qml</file>
         <file>appsListLauncher.qml</file>
+        <file>apd.qml</file>
     </qresource>
 </RCC>

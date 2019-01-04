@@ -5,8 +5,10 @@ UK::UK(QObject *parent) : QObject(parent)
     lsim<<"g"<<"h"<<"i"<<"j"<<"k"<<"l"<<"m"<<"n"<<"o"<<"p"<<"q"<<"r"<<"s"<<"t"<<"u"<<"v"<<"w"<<"x"<<"y"<<"z";
     lnum<<"11"<<"33"<<"66"<<"77"<<"88"<<"99"<<"20"<<"30"<<"40"<<"60"<<"70"<<"80"<<"90"<<"12"<<"21"<<"57"<<"82"<<"92"<<"84"<<"72";
     file = new QFile();
+#ifndef Q_OS_ANDROID
 #ifdef __arm__
     rpiGpio = new mmapGpio();
+#endif
 #endif
 }
 
@@ -60,6 +62,23 @@ int UK::getScreenHeight()
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect  screenGeometry = screen->geometry();
     return screenGeometry.height();
+}
+
+void UK::setUnikStartSettings(const QString params)
+{
+    QSettings settings;
+    settings.setValue("uss",params);
+}
+
+QList<QString> UK::getUnikStartSetting()
+{
+    QSettings settings;
+    QList<QString> ret;
+    QStringList p=settings.value("uss").toString().split(",");
+    for (int i = 0; i < p.size(); ++i) {
+        ret.append(p.at(i));
+    }
+    return ret;
 }
 
 void UK::setWorkSpace(QString ws)
@@ -679,13 +698,14 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     QString carpeta="aaa";
     int v=0;
     for(bool f=zip.goToFirstFile(); f; f=zip.goToNextFile()) {
+        if(v>=zip.getFileNameList().size()){
+            break;
+        }
         file.open(QIODevice::ReadOnly);
-        //same functionality as QIODevice::readData() -- data is a char*, maxSize is qint64
-        //file.readData(data,maxSize);
-        qInfo()<<"Zip filename: "<<zip.getFileNameList();
+        //qInfo()<<"Zip filename: "<<zip.getFileNameList();
         if(v==0){
             carpeta=QString(zip.getFileNameList().at(0));
-            qInfo()<<"Carpeta de destino Zip: "<<carpeta;
+            //qInfo()<<"Carpeta de destino Zip: "<<carpeta;
         }else{
             QString nfn;
             nfn.append(carpDestinoFinal);
@@ -693,7 +713,6 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
             nfn.append(zip.getFileNameList().at(v));
             QString nfn2 = nfn.replace("-master/", "/");
             QString nfn3 = nfn2.replace(" ", "%20");
-            //nfn.append("\"");
 
             if(nfn3.at(nfn3.size()-1)!="/"){
                 qInfo()<<"Destino de archivo: "<<nfn3;
@@ -710,35 +729,8 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
                 dnfn.mkpath(".");
             }
         }
-        //qInfo()<<"SSSSSSSSSS"<<file.readAll();
-        //do something with the data
         file.close();
-        v++;
-        /*file.open(QIODevice::ReadOnly);
-        //same functionality as QIODevice::readData() -- data is a char*, maxSize is qint64
-        //file.readData(data,maxSize);
-        qInfo()<<"gfn:"<<zip.getFileNameList();
-        if(v==0){
-            carpeta=QString(zip.getFileNameList().at(0));
-            qInfo()<<"Carpeta de destino Zip: "<<carpeta;
-        }else{
-            QString nfn;
-            nfn.append(carpDestinoFinal);
-            nfn.append("/");
-            nfn.append(zip.getFileNameList().at(v));
-            qInfo()<<"Destino de archivo: "<<nfn.replace("-master/", "/");
-            QFile nfile(nfn.replace("-master/", "/"));
-            if(!nfile.open(QIODevice::WriteOnly)){
-                qInfo()<<"Error al abrir archivo "<<nfn.replace("-master/", "/");
-            }else{
-                nfile.write(file.readAll());
-                nfile.close();
-            }
-        }
-        //qInfo()<<"SSSSSSSSSS"<<file.readAll();
-        //do something with the data
-        file.close();
-        v++;*/
+        v++;       
     }
     zip.close();
 #else
@@ -996,31 +988,37 @@ QString UK::getPath(int path)
 #ifndef Q_OS_ANDROID
         r = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
 #else
-        /*QStringList pl=QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
-        QByteArray d100;
-        for (int i = 0; i < pl.size(); ++i) {
-            d100.append(pl.at(i));
-            d100.append(" --- ");
+        //r="/sdcard/Documents";
+        QStringList systemEnvironment = QProcess::systemEnvironment();
+        bool sdcard=false;
+        for (int i = 0; i < systemEnvironment.size(); ++i) {
+            QString cad;
+            cad.append(systemEnvironment.at(i));
+            if(cad.contains("EXTERNAL_STORAGE=/sdcard")){
+                sdcard=true;
+            }
         }
-
-        log("Android Docs Paths: "+d100);
-        //r=pl.at(1);
+        qInfo()<<"uap systemEnvironment: "<<systemEnvironment;
+        qInfo()<<"uap sdcard: "<<sdcard;
+        if(sdcard){
+            r="/sdcard/Documents";
+        }else{
+            r="/storage/emulated/0/Documents";
+        }
         QDir doc(r);
         if(!doc.exists()){
+            qInfo()<<"[1] /sdcard/Documents no exists";
             doc.mkdir(".");
-        }*/
-
-        /*r = "/sdcard/Documents";
-        QDir doc(r);
-        if(!doc.exists()){
-            doc.mkdir(".");
-        }*/
-        //r = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
-        r = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-        //r = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-        QDir doc(r);
-        if(!doc.exists()){
-            doc.mkdir(".");
+            /*if(!doc.exists()){
+                r="/storage/emulated/0/Documents";
+                doc.setCurrent(r);
+                doc.mkdir(".");
+                qInfo()<<"[2] /storage/emulated/0/Documents no exists";
+            }else{
+                qInfo()<<"[2] /storage/emulated/0/Documents exists";
+            }*/
+        }else{
+            qInfo()<<"[1] /sdcard/Documents exists";
         }
 #endif
 
@@ -1556,6 +1554,7 @@ void UK::sendFinished()
     setUploadState(respuentaSendDatos->readAll());
 }
 
+#ifndef Q_OS_ANDROID
 void UK::initWebSocketServer(const QByteArray ip, const int port, const QByteArray serverName)
 {
     emit initWSS(ip, port, serverName);
@@ -1576,6 +1575,7 @@ bool UK::startWSS(const QByteArray ip, const int port, const QByteArray serverNa
     _engine->rootContext()->setContextProperty("cw", _clientWrapper);
     return true;
 }
+#endif
 bool UK::sqliteInit(QString pathName)
 {
     bool ret=false;

@@ -170,25 +170,20 @@ int main(int argc, char *argv[])
     QDir cAppPath=QDir::current();
 
     UnikArgsProc uap;//Object for to process arguments
-    bool loadCfg=false;
+    bool showLaunch=true;
     for (int i = 0; i < argc; ++i) {
         QByteArray a;
         a.append(argv[i]);
         uap.args.append(a);
-        if(a=="-cfg"){
-            loadCfg=true;
+        if(a=="-nl"){
+            showLaunch=false;
         }
         qInfo()<<"UAP ADDING ARG "<<i<<" : "<<argv[i];
     }
-
-    if(loadCfg){
-        qInfo()<<"Starting with cfg.json config into ws: "<<uap.ws;
-        uap.init();
-    }else{
-        qInfo()<<"Starting with out cfg.json config into ws: "<<uap.ws;
-        uap.args.clear();
-    }
-
+    uap.init();
+    showLaunch=uap.showLaunch;
+    qInfo()<<"UAP argv: "<<uap.args;
+    qInfo()<<"UAP showLaunch: "<<uap.showLaunch;
 
 #ifdef Q_OS_ANDROID
     UK u; //For other OS this declaration is defined previus the main function
@@ -550,6 +545,7 @@ int main(int argc, char *argv[])
         }
     }
 
+#ifndef Q_OS_ANDROID
     QWebChannel channel;
     u._channel=&channel;
     WebSocketClientWrapper *clientWrapper;
@@ -561,13 +557,16 @@ int main(int argc, char *argv[])
     if(wss){
         QObject::connect(&u, &UK::initWSS, [=](const QByteArray ip, const int port, const QByteArray serverName){
             qInfo()<<"Unik Server Request: "<<ip<<":"<<port<<" Server Name: "<<serverName;
+
             QWebSocketServer *server;
             u._server=server;
             bool wsss=u.startWSS(ip, port, serverName);//WebSocketsServerStarted
             u._channel->registerObject(serverName.constData(), chatserver);
             qInfo()<<"Unik WebSockets Server Started: "<<wsss;
+
         });
-    }
+    }    
+#endif
     /*QObject::connect(&u, &UK::restartingApp, [=](){
         delete chatserver;
         //delete channel;
@@ -611,6 +610,10 @@ int main(int argc, char *argv[])
     dupl.append(u.getPath(3));
 #endif
     dupl.append("/unik");
+    QDir dirUnik(dupl);
+    if(!dirUnik.exists()){
+        dirUnik.mkpath(".");
+    }
 #ifdef Q_OS_ANDROID
     QByteArray mf;
     mf.append(dupl);
@@ -1188,6 +1191,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("upkExtractLocation", pq);
     engine.rootContext()->setContextProperty("sourcePath", pq);
     engine.rootContext()->setContextProperty("unikDocs", dupl);
+    engine.rootContext()->setContextProperty("pws", pws);
 
 
 
@@ -1403,9 +1407,20 @@ int main(int argc, char *argv[])
     //Probe file is for debug any components in the build operations. Set empty for release.
     QByteArray probe = "";
     //probe.append("qrc:/probe.qml");
-    if(!loadCfg){
+    if(uap.showLaunch||showLaunch){
         mainQml="qrc:/appsListLauncher.qml";
     }
+#ifdef Q_OS_ANDROID
+    QByteArray dat="01";
+    QByteArray datFile;
+    datFile.append(pws);
+    datFile.append("/dat");
+    u.deleteFile(datFile);
+    u.setFile(datFile, dat);
+    if(!u.fileExist(datFile)){
+        mainQml="qrc:/apd.qml";
+    }
+#endif
     qInfo()<<"Init unik: "<<mainQml;
     engine.load(probe.isEmpty() ? QUrl(mainQml) : QUrl(probe));
     QQmlComponent component(&engine, probe.isEmpty() ? QUrl(mainQml) : QUrl(probe));
@@ -1461,7 +1476,7 @@ int main(int argc, char *argv[])
 
     //qInfo()<<"Executing from: "<<QDir::currentPath();
     //qInfo()<<"unik.getPath(5)= "<<u.getPath(5);
-
+#ifndef Q_OS_ANDROID
     QByteArray uklData;
     uklData.append("-folder=");
     uklData.append(pws);
@@ -1470,10 +1485,20 @@ int main(int argc, char *argv[])
     uklUrl.append(pws);
     uklUrl.append("/link_unik-tools.ukl");
     u.setFile(uklUrl, uklData);
-
+#else
+    QByteArray uklData;
+    uklData.append("-git=https://github.com/nextsigner/unik-android-apps.git");
+    uklData.append(" -dir=");
+    uklData.append(pws);
+    uklData.append("/unik-android-apps");
+    QByteArray uklUrl;
+    uklUrl.append(pws);
+    uklUrl.append("/link_android-apps.ukl");
+    u.setFile(uklUrl, uklData);
+#endif
 
 #ifdef Q_OS_WIN
-    u.createLink(u.getPath(1)+"/unik.exe", "-git=https://github.com/nextsigner/unik-tools.git -folder="+pws+"/unik-tools -cfg",  u.getPath(6)+"/Unik-Tools.lnk", "Ejecutar Unik con el Modulo Unik-Tools", "C:/");
+    u.createLink(u.getPath(1)+"/unik.exe", "-git=https://github.com/nextsigner/unik-tools.git -folder="+pws+"/unik-tools -nl",  u.getPath(6)+"/Unik-Tools.lnk", "Ejecutar Unik con el Modulo Unik-Tools", "C:/");
 #endif
     //u.createLink("unik", "/home/nextsigner/Escritorio/eee4.desktop",  "rrr777", "Pequeña 222vo", "/home/nextsigner/Imàgenes/ladaga.jpg");
 
@@ -1481,6 +1506,10 @@ int main(int argc, char *argv[])
 
     /*Atention! Not ejecute this method u.initWebSocketServer() with out the a correct load of the UnikWebSocketServerView or similar.*/
     //u.initWebSocketServer("127.0.0.1", 12345, "chatserver");
+
+    //Set Unik Start Setting
+    //u.setUnikStartSettings("-git=https://github.com/nextsigner/qmlandia.git, -nl");
+
 
 #ifdef UNIK_COMPILE_RPI
         qInfo()<<"Estamos compilando en RPI!";

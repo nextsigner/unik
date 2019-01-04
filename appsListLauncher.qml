@@ -8,7 +8,7 @@ ApplicationWindow {
     visibility:  "Maximized"
     color: "transparent"
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
-    property int fs: Qt.platform.os !=='android'?appListLaucher.width*0.02:appListLaucher.width*0.03
+    property int fs: width<height?(Qt.platform.os !=='android'?appListLaucher.width*0.02:appListLaucher.width*0.06):(Qt.platform.os !=='android'?appListLaucher.width*0.02:appListLaucher.width*0.03)
     property color c1: "#1fbc05"
     property color c2: "#4fec35"
     property color c3: "white"
@@ -91,7 +91,7 @@ ApplicationWindow {
             delegate: delegate
             width: appListLaucher.width-appListLaucher.fs*2
             height: (appListLaucher.fs*2+appListLaucher.fs*0.25)*lv.count
-            anchors.horizontalCenter: r.horizontalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
             onCurrentIndexChanged: {
                 flick.contentY=(appListLaucher.fs*2+appListLaucher.fs*0.25)*currentIndex-appListLaucher.height/2
             }
@@ -247,14 +247,42 @@ ApplicationWindow {
     function run(){
         appSettings.uApp=appListLaucher.ca
         var p=unik.getFile(appsDir+'/'+appListLaucher.ca)
-        unik.ejecutarLineaDeComandoAparte('"'+appExec+'" -cfg '+p)
+        var args=(''+p).split(' ')
+        var params=''
+        for(var i=0; i<args.length;i++){
+            if(i===0){
+                params+=args[i]
+            }else{
+                params+=','+args[i]
+            }
+        }
+       //params+=', -cfg'
+        unik.setUnikStartSettings(params)
+        console.log('New USS params: '+params)
+        unik.restartApp()
+        /*if(Qt.platform.os!=='android'){
+            unik.ejecutarLineaDeComandoAparte('"'+appExec+'" -cfg '+p)
+        }else{
+            var args=(''+p).split(' ')
+            var params=''
+            for(var i=0; i<args.length;i++){
+                if(i===0){
+                    params+=args[i]
+                }else{
+                    params+=','+args[i]
+                }
+            }
+           //params+=', -cfg'
+            unik.setUnikStartSettings(params)
+            console.log('New USS params: '+params)
+            unik.restartApp()
+        }*/
         appListLaucher.close()
     }
     Component.onCompleted: {
         //tap.opacity=1.0
         //appListLaucher.ca=appListLaucher.al[0]
     }
-
 }
 
 

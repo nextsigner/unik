@@ -92,8 +92,10 @@
 
 //#include "uniksqlitecrypto.h"
 
+#ifndef Q_OS_ANDROID
 #ifdef __arm__
 #include "mmapGpio.h"
+#endif
 #endif
 
 class UK : public QObject
@@ -110,10 +112,12 @@ public:
     explicit UK(QObject *parent = nullptr);
     ~UK();
     QGuiApplication *app;
+#ifndef Q_OS_ANDROID
     QWebSocketServer *_server;
     WebSocketClientWrapper *_clientWrapper;
     QWebChannel *_channel;
     ChatServer* _chatserver;
+#endif
     QStringList uErrors;
 
     //Propiedades para QML
@@ -201,10 +205,12 @@ public:
         _engine->clearComponentCache();
     }
 
+#ifndef Q_OS_ANDROID
 #ifdef __arm__
     Q_INVOKABLE bool createLnk(QString execString, QString destopLocationFilename, QString name, QString comment){
         return createLink(execString, destopLocationFilename, name, comment);
     }
+#endif
 #endif
     QString initStdString;
     bool debugLog=false;
@@ -234,7 +240,9 @@ public:
     void stdErrChanged();
     void runCLChanged();
     void debugLogChanged();
+#ifndef Q_OS_ANDROID
     void initWSS(const QByteArray, const int, const QByteArray);
+#endif
     void restartingApp();
 
 public slots:
@@ -247,6 +255,8 @@ public slots:
     int getScreenHeight();
 
     //Funciones del Sistema Unik
+    void setUnikStartSettings(const QString params);
+    QList<QString> getUnikStartSetting();
     void setWorkSpace(QString ws);
     void definirCarpetaTrabajo(QString et);
     bool folderToUpk(QString folder, QString upkName, QString user, QString key, QString folderDestination);
@@ -284,9 +294,10 @@ public slots:
     void uploadProgress(qint64 bytesSend, qint64 bytesTotal);
     void downloadProgress(qint64 bytesSend, qint64 bytesTotal);
     void sendFinished();
+#ifndef Q_OS_ANDROID
     void initWebSocketServer(const QByteArray ip, const int port, const QByteArray serverName);
     bool startWSS(const QByteArray ip, const int port, const QByteArray serverName);
-
+#endif
     //Funciones Sqlite
     bool sqliteInit(QString pathName);
     bool sqlQuery(QString query);
@@ -359,8 +370,10 @@ private:
     QNetworkReply *respuentaSendDatos;
     QImage *frame;
 
+#ifndef Q_OS_ANDROID
 #ifdef __arm__
     mmapGpio *rpiGpio;
+#endif
 #endif
 };
 

@@ -3,7 +3,42 @@
 UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
 {
     qInfo()<<"\n\n\nUAP: init... ";
+#ifdef Q_OS_ANDROID
+    QStringList systemEnvironment = QProcess::systemEnvironment();
+    bool sdcard=false;
+    for (int i = 0; i < systemEnvironment.size(); ++i) {
+        QString cad;
+        cad.append(systemEnvironment.at(i));
+        if(cad.contains("EXTERNAL_STORAGE=/sdcard")){
+            sdcard=true;
+        }
+    }
+    qInfo()<<"uap systemEnvironment: "<<systemEnvironment;
+    qInfo()<<"uap sdcard: "<<sdcard;
+    if(sdcard){
+        dp="/sdcard/Documents";
+    }else{
+        dp="/storage/emulated/0/Documents";
+    }
+
+    QDir doc(dp);
+    if(!doc.exists()){
+        qInfo()<<"uap [1] "<<dp<<" no exists";
+        /*doc.mkdir(".");
+        if(!doc.exists()){
+            dp="/storage/emulated/0/Documents";
+            doc.setCurrent(dp);
+            doc.mkdir(".");
+            qInfo()<<"uap [2] /storage/emulated/0/Documents no exists";
+        }else{
+            qInfo()<<"uap [2] /storage/emulated/0/Documents exists";
+        }*/
+    }else{
+        qInfo()<<"uap [1] "<<dp<<" exists";
+    }
+#else
     dp = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+#endif
     qInfo()<<"UAP: Prepare WorkSpace...";
     if(settings.value("ws").toString().isEmpty()){
         settings.setValue("ws", dp.toUtf8()+"/unik");
@@ -20,7 +55,11 @@ UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
             qInfo()<<"WorkSpace not writable!";
             qInfo("New WorkSpace seted: "+ndulw.toUtf8());
         }else{
+#ifndef Q_OS_ANDROID
             ws = settings.value("ws").toString().toUtf8();
+#else
+            ws=dp.toUtf8()+"/unik";
+#endif
         }
     }
     qInfo()<<"UAP: WorkSpace defined as "<<ws;
@@ -29,12 +68,23 @@ UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
 
 void UnikArgsProc::init()
 {
-    if(args.length()>2){
-        procArgs();
+    QString cfgp=ws.toUtf8()+"/cfg.json";
+    QFile cfgf(cfgp);
+    QSettings settings;
+    if(settings.value("uss").toString().isEmpty()||settings.value("uss").toString().size()<=1||settings.value("uss").toString()==""){
+        if(!cfgf.exists()){
+            showLaunch=true;
+            procArgs();
+        }else{
+            showLaunch=false;
+            procCfgArgs();
+        }
     }else{
-        procCfgArgs();
+        showLaunch=false;
+        procUSSArgs();
     }
     qInfo()<<"UAP finished. "<<ws<<"\n\n\n";
+    settings.setValue("uss",QString(""));
 }
 
 void UnikArgsProc::procArgs()
@@ -51,7 +101,7 @@ void UnikArgsProc::procCfgArgs()
     qInfo()<<"UAP: Checking temp config file "<<tcfgp;
     QFile tcfgf(tcfgp);
     if(tcfgf.exists()){
-       qInfo()<<"UAP: Temp config file detected.";
+        qInfo()<<"UAP: Temp config file detected.";
         loadConfig=true;
         cfgp.append(tcfgp);
     }else{
@@ -60,7 +110,7 @@ void UnikArgsProc::procCfgArgs()
         qInfo()<<"UAP: Checking config file "<<cfgp;
         QFile cfgf(cfgp);
         if(cfgf.exists()){
-             loadConfig=true;
+            loadConfig=true;
         }else{
             QByteArray dc;
             dc.append("{\n");
@@ -113,4 +163,12 @@ void UnikArgsProc::procCfgArgs()
             }*/
         }
     }
+}
+
+void UnikArgsProc::procUSSArgs()
+{
+    QSettings settings;
+    args=settings.value("uss").toString().split(",");
+    settings.setValue("uss",QString(""));
+    qInfo()<<"UAP USS Arguments: "<<args;
 }
