@@ -617,24 +617,24 @@ int main(int argc, char *argv[])
     QByteArray upkFileName;
     QString upkActivo="";
 
-    QString dupl;
+    QString unikFolder;
 #ifndef Q_OS_ANDROID
-    dupl.append(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
+    unikFolder.append(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation));
 #else
-    dupl.append(u.getPath(3));
+    unikFolder.append(u.getPath(3));
 #endif
-    dupl.append("/unik");
-    QDir dirUnik(dupl);
+    unikFolder.append("/unik");
+    QDir dirUnik(unikFolder);
     if(!dirUnik.exists()){
         dirUnik.mkpath(".");
     }
 #ifdef Q_OS_ANDROID
     QByteArray mf;
-    mf.append(dupl);
+    mf.append(unikFolder);
     mf.append("/unik-android-apps/main.qml");
     QFile m(mf);
     if(!m.exists()){
-        //bool autd=u.downloadGit("https://github.com/nextsigner/unik-android-apps", dupl.toUtf8());
+        //bool autd=u.downloadGit("https://github.com/nextsigner/unik-android-apps", unikFolder.toUtf8());
     }
 #else
     if(!modeGit){
@@ -649,8 +649,8 @@ int main(int argc, char *argv[])
 #else
     cut.append(u.getFile(pws+"/unik-tools-rpi/main.qml"));
     if(!cut.contains("objectName: \'unik-tools\'")){
-        qInfo("unik-tools have any fail! repairing..."+dupl.toUtf8());
-        bool autd=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi.git", dupl.toUtf8());
+        qInfo("unik-tools have any fail! repairing..."+unikFolder.toUtf8());
+        bool autd=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi.git", unikFolder.toUtf8());
 #endif
         if(autd){
             qInfo()<<"unik-tools repared.";
@@ -666,7 +666,7 @@ int main(int argc, char *argv[])
 
     //Define the Main Module Location
     QString mainModName;
-    mainModName.append(dupl);
+    mainModName.append(unikFolder);
 #ifndef Q_OS_ANDROID
     mainModName.append("/unik-tools");
 #else
@@ -679,35 +679,28 @@ int main(int argc, char *argv[])
 #endif
 #endif
 
-    //Process the WorkSpace Path
-    QDir dirWS(dupl);
-    if (!dirWS.exists()) {
-        qInfo()<<"Closing because folder "<<dupl<<" no existent.";
-        return -5;
-    }else{
-        qInfo()<<"Folder "<<dupl<<" existent.";
-    }
 
     //Checking if exist the Main Module Path.
     qInfo()<<"Checking UTP exists...";
+    QDir dirWS(unikFolder);
     QDir dirUnikToolsLocation(mainModName);
     QFile mainFile(mainModName+"/main.qml");
     if (!dirWS.exists()||!dirUnikToolsLocation.exists()||!mainFile.exists()) {
         dirWS.mkpath(".");
-        qInfo()<<"Making folder "<<dupl;
+        qInfo()<<"Making folder "<<unikFolder;
         if(!dirUnikToolsLocation.exists()){
            dirUnikToolsLocation.mkpath(".");
          }
          bool unikToolDownloaded=false;
 #ifndef __arm__
-            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools", dupl.toUtf8());
+            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools", unikFolder.toUtf8());
 #else
 #ifdef Q_OS_ANDROID
-         if(showLaunch){
-            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-android-apps", dupl.toUtf8());
+         if(showLaunch||uap.showLaunch){
+            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-android-apps", unikFolder.toUtf8());
          }
 #else
-            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi", dupl.toUtf8());
+            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi", unikFolder.toUtf8());
 #endif
 #endif
 
@@ -726,7 +719,7 @@ int main(int argc, char *argv[])
             }
             qInfo()<<lba;        
     }else{
-            qInfo()<<"Folder "<<dupl<<" pre existent.";
+            qInfo()<<"Folder "<<unikFolder<<" pre existent.";
     }
 
     //Direct upk mode.
@@ -1030,7 +1023,7 @@ int main(int argc, char *argv[])
                 lba="";
                 lba.append(nAppName);
                 lba.append(".upk extraido: ");
-                lba.append(dupl);
+                lba.append(unikFolder);
                 lba.append("/");
                 lba.append(nAppName);
                 lba.append(".upk");
@@ -1044,7 +1037,7 @@ int main(int argc, char *argv[])
                 lba.append(".upk");
                 qInfo()<<lba;
             }
-            upkFileName.append(dupl);
+            upkFileName.append(unikFolder);
             upkFileName.append("/");
             upkFileName.append(nAppName);
             upkFileName.append(".upk");
@@ -1120,7 +1113,7 @@ int main(int argc, char *argv[])
                 lba.append("\", \"");
                 lba.append(arg3);
                 lba.append("\", \"");
-                lba.append(dupl);
+                lba.append(unikFolder);
                 lba.append("\");");
                 lba.append(" user: ");
                 lba.append(user);
@@ -1129,8 +1122,8 @@ int main(int argc, char *argv[])
                 qInfo()<<lba;
             }
 
-            qInfo()<<"folderToUpk: "<<arg1<<" "<<nAppName<<" "<<arg2<<" "<<arg3<<" "<<dupl;
-            if(u.folderToUpk(arg1, nAppName, arg2, arg3, dupl)){
+            qInfo()<<"folderToUpk: "<<arg1<<" "<<nAppName<<" "<<arg2<<" "<<arg3<<" "<<unikFolder;
+            if(u.folderToUpk(arg1, nAppName, arg2, arg3, unikFolder)){
                 if(setPass){
                     //user = arg2.toLatin1();
                     //key = arg3.toLatin1();
@@ -1138,7 +1131,7 @@ int main(int argc, char *argv[])
                 lba="";
                 lba.append(nAppName);
                 lba.append(".upk creado: ");
-                lba.append(dupl);
+                lba.append(unikFolder);
                 lba.append("/");
                 lba.append(nAppName);
                 lba.append(".upk");
@@ -1151,7 +1144,7 @@ int main(int argc, char *argv[])
                 lba.append(".upk");
                 qInfo()<<lba;
             }
-            upkFileName.append(dupl);
+            upkFileName.append(unikFolder);
             upkFileName.append("/");
             upkFileName.append(appName);
             upkFileName.append(".upk");
@@ -1196,18 +1189,18 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("appName", appName);
     engine.rootContext()->setContextProperty("upkExtractLocation", pq);
     engine.rootContext()->setContextProperty("sourcePath", pq);
-    engine.rootContext()->setContextProperty("unikDocs", dupl);
+    engine.rootContext()->setContextProperty("unikDocs", unikFolder);
     engine.rootContext()->setContextProperty("pws", pws);
 
 
 
-    QString duplFolderModel;
+    QString unikFolderFolderModel;
 #ifdef Q_OS_WIN
-    //duplFolderModel.append("file:///");
-    duplFolderModel.append(dupl);
-    engine.rootContext()->setContextProperty("appsDir", duplFolderModel);
+    //unikFolderFolderModel.append("file:///");
+    unikFolderFolderModel.append(unikFolder);
+    engine.rootContext()->setContextProperty("appsDir", unikFolderFolderModel);
 #else
-    engine.rootContext()->setContextProperty("appsDir", dupl);
+    engine.rootContext()->setContextProperty("appsDir", unikFolder);
 #endif
     //'file:///C:/Users/qt/Documents/unik'
 #ifdef QT_DEBUG
@@ -1418,17 +1411,18 @@ int main(int argc, char *argv[])
     if(uap.showLaunch||showLaunch){
         mainQml="qrc:/appsListLauncher.qml";
     }
-#ifdef Q_OS_ANDROID
+
     QByteArray dat="01";
     QByteArray datFile;
     datFile.append(pws);
     datFile.append("/dat");
     u.deleteFile(datFile);
     u.setFile(datFile, dat);
-    if(!u.fileExist(datFile)){
+    if(!u.fileExist(datFile)||uap.errorWritePermission||!dirWS.exists()){
         mainQml="qrc:/apd.qml";
     }
-#endif
+    u.deleteFile(datFile);
+
     qInfo()<<"Init unik: "<<mainQml;
     engine.load(probe.isEmpty() ? QUrl(mainQml) : QUrl(probe));
     QQmlComponent component(&engine, probe.isEmpty() ? QUrl(mainQml) : QUrl(probe));

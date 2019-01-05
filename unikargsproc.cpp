@@ -22,7 +22,6 @@ UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
     }else{
         dp="/storage/emulated/0/Documents";
     }
-
     QDir doc(dp);
     if(!doc.exists()){
         qInfo()<<"uap [1] "<<dp<<" no exists";
@@ -41,6 +40,14 @@ UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
     ws="";
     ws.append(dp);
     ws.append("/unik");
+    QDir dws(ws);
+    if(!dws.exists()){
+        dws.mkdir(".");
+    }
+    if(!doc.exists()||!dws.exists()){
+        errorWritePermission=true;
+        qInfo()<<"uap errorWritePermission: "<<errorWritePermission;
+    }
 #else
     dp = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     if(settings.value("ws").toString().isEmpty()){

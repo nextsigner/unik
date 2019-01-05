@@ -29,6 +29,7 @@ public:
     QString dim="";
     QString pos="";
 
+    bool errorWritePermission=false;
     bool showLaunch=true;
     bool modeFolder=false;
     bool modeFolderToUpk=false;

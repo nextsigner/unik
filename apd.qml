@@ -6,7 +6,7 @@ ApplicationWindow {
     objectName: 'apd'
     visibility:  "Maximized"
     color: "red"
-    property int fs: width<height?(Qt.platform.os !=='android'?appListLaucher.width*0.02:appListLaucher.width*0.06):(Qt.platform.os !=='android'?appListLaucher.width*0.02:appListLaucher.width*0.03)
+    property int fs: width<height?(Qt.platform.os !=='android'?apd.width*0.02:apd.width*0.06):(Qt.platform.os !=='android'?apd.width*0.02:apd.width*0.03)
     property color c1: "#1fbc05"
     property color c2: "#4fec35"
     property color c3: "white"
@@ -22,6 +22,10 @@ ApplicationWindow {
         property bool span: true
         width: apd.width*0.85
         wrapMode: Text.WordWrap
+    }
+    MouseArea{
+        anchors.fill: parent
+        onClicked: Qt.quit()
     }
     Timer{
         running: true
