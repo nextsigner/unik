@@ -70,7 +70,7 @@ SOURCES += main.cpp \
     chatserver.cpp \
     websocketclientwrapper.cpp \
     websockettransport.cpp \
-    mmapGpio.cpp
+
 
 RESOURCES += qml.qrc
 
@@ -93,7 +93,7 @@ HEADERS += \
     chatserver.h \
     websocketclientwrapper.h \
     websockettransport.h \
-    mmapGpio.h
+
 
 DISTFILES += \
     android/AndroidManifest.xml \

@@ -43,6 +43,8 @@ message(linux.pri is loaded)
         DESTDIR= /home/pi/unik
         message(Current Executable Path: $$DESTDIR)
         message(Current Working Directory: $$PWD)
+        SOURCES += mmapGpio.cpp
+        HEADERS += mmapGpio.h
 
     COMPILEINRPI = 1
     DEFINES += UNIK_COMPILE_RPI=\\\"$$COMPILEINRPI\\\"
