@@ -46,7 +46,6 @@ ApplicationWindow {
         onCountChanged: {
             console.log('File: '+fl.get(f,"fileName"))
             f++
-            //tf.restart()
         }
     }
     Rectangle{
@@ -256,33 +255,15 @@ ApplicationWindow {
                 params+=','+args[i]
             }
         }
-       //params+=', -cfg'
         unik.setUnikStartSettings(params)
         console.log('New USS params: '+params)
-        unik.restartApp()
-        /*if(Qt.platform.os!=='android'){
-            unik.ejecutarLineaDeComandoAparte('"'+appExec+'" -cfg '+p)
-        }else{
-            var args=(''+p).split(' ')
-            var params=''
-            for(var i=0; i<args.length;i++){
-                if(i===0){
-                    params+=args[i]
-                }else{
-                    params+=','+args[i]
-                }
-            }
-           //params+=', -cfg'
-            unik.setUnikStartSettings(params)
-            console.log('New USS params: '+params)
+        if(Qt.platform.os==='android'){
             unik.restartApp()
-        }*/
+        }else{
+            unik.restartApp("")
+        }
         appListLaucher.close()
-    }
-    Component.onCompleted: {
-        //tap.opacity=1.0
-        //appListLaucher.ca=appListLaucher.al[0]
-    }
+    }    
 }
 
 

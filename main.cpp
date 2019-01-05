@@ -417,10 +417,9 @@ int main(int argc, char *argv[])
                 engine.addImportPath(pip);
                 engine.addPluginPath(pip);
 #endif
-                lba="";
-                lba.append("-dir=");
-                lba.append(marg.at(1));
-                qInfo()<<lba;
+                qInfo()<<"-dir="<<marg.at(1);
+                showLaunch=false;
+                uap.showLaunch=false;
             }
         }
         //>-folder
@@ -439,14 +438,12 @@ int main(int argc, char *argv[])
                     fscd.mkdir(ncp);
                 }
                 QDir::setCurrent(ncp);
-                //QDir::setCurrent(appArg2);
+                showLaunch=false;
+                uap.showLaunch=false;
                 modeFolder=true;
                 makeUpk=false;
-                if(debugLog){
-                    lba="";
-                    lba.append("Prepare mode -folder.");
-                    qInfo()<<lba;
-                }
+                qInfo()<<"[-folder 1] Running in mode -folder="<<ncp;
+                qInfo()<<"[-folder 2] Current application directory: "<<QDir::currentPath();
                 updateDay=false;
                 updateUnikTools=false;
                 params=true;
@@ -480,7 +477,8 @@ int main(int argc, char *argv[])
                     moduloGit.append(mg2);
                     modeGitArg=true;
                 }
-
+                showLaunch=false;
+                uap.showLaunch=false;
                 modeGit=true;
                 params=true;
             }
@@ -928,6 +926,8 @@ int main(int argc, char *argv[])
         }
         pq = "";
         pq.append(appArg2);
+        qInfo()<<"[-folder 3] PQ="<<pq;
+        qInfo()<<"[-folder 4] PWS="<<pws;
         QDir carpetaModeFolder(appArg2);
         QFile mainModeFolder(appArg2+"/main.qml");
         if(carpetaModeFolder.exists()&&mainModeFolder.exists()){
@@ -942,6 +942,7 @@ int main(int argc, char *argv[])
             }
             pq="";
             pq.append(pws);
+            qInfo()<<"[-folder 5] PQ="<<pq;
             engine.addImportPath(pq);
             engine.addPluginPath(pq);
 #ifndef __arm__
@@ -956,6 +957,7 @@ int main(int argc, char *argv[])
 #endif
 #endif
         }
+        qInfo()<<"[-folder 6] PQ="<<pq;
         u.mkdir(pq);
     }
 
@@ -1408,6 +1410,8 @@ int main(int argc, char *argv[])
     //Probe file is for debug any components in the build operations. Set empty for release.
     QByteArray probe = "";
     //probe.append("qrc:/probe.qml");
+    qInfo()<<"showLaunch: "<<showLaunch;
+    qInfo()<<"uap.showLaunch: "<<uap.showLaunch;
     if(uap.showLaunch||showLaunch){
         mainQml="qrc:/appsListLauncher.qml";
     }
