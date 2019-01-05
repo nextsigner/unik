@@ -57,7 +57,7 @@ void unikStdOutPut(QtMsgType type, const QMessageLogContext &context, const QStr
     debugData="";
     abortar=false;
     switch (type) {
-    case QtDebugMsg:        
+    case QtDebugMsg:
         debugData.append("Unik Debug: (");
         debugData.append(msg);
         if(context.file!=NULL){
@@ -132,7 +132,7 @@ void unikStdOutPut(QtMsgType type, const QMessageLogContext &context, const QStr
         debugData.append(context.function);
         debugData.append(")\n");
         abortar=true;
-    }    
+    }
     u.log(debugData);
 #ifdef Q_OS_WIN
     out << debugData;
@@ -143,8 +143,8 @@ void unikStdOutPut(QtMsgType type, const QMessageLogContext &context, const QStr
 }
 #else
 static void android_message_handler(QtMsgType type,
-                                  const QMessageLogContext &context,
-                                  const QString &message)
+                                    const QMessageLogContext &context,
+                                    const QString &message)
 {
     android_LogPriority priority = ANDROID_LOG_DEBUG;
     switch (type) {
@@ -195,38 +195,38 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_ANDROID
     nomVersion="android_version";
 #else
-    #ifdef __arm__
-        nomVersion="linux_rpi_version";
-    #else
-        nomVersion="linux_version";
-    #endif
+#ifdef __arm__
+    nomVersion="linux_rpi_version";
+#else
+    nomVersion="linux_version";
+#endif
 #endif
 #endif
 #ifdef Q_OS_WIN
-     //carpComp.append(QString(UNIK_CURRENTDIR_COMPILATION));
+    //carpComp.append(QString(UNIK_CURRENTDIR_COMPILATION));
     nomVersion="windows_version";
 #endif
 #ifdef Q_OS_OSX
     //carpComp.append("/Users/qt/nsp/unik-recursos/build_osx_clang64/unik.app/Contents/MacOS");
-   nomVersion="macos_version";
+    nomVersion="macos_version";
 #endif  
-   QString nv;
-   QString fvp;
+    QString nv;
+    QString fvp;
 #ifdef Q_OS_ANDROID
-   fvp.append("assets:");
+    fvp.append("assets:");
 #else
-   fvp.append(qApp->applicationDirPath());
+    fvp.append(qApp->applicationDirPath());
 #endif
-   fvp.append("/");
-   fvp.append(nomVersion);
-   qDebug() << "UNIK FILE VERSION: " << fvp;
-   QFile fileVersion(fvp);
-   fileVersion.open(QIODevice::ReadOnly);
-   nv = fileVersion.readAll();
-   fileVersion.close();
+    fvp.append("/");
+    fvp.append(nomVersion);
+    qDebug() << "UNIK FILE VERSION: " << fvp;
+    QFile fileVersion(fvp);
+    fileVersion.open(QIODevice::ReadOnly);
+    nv = fileVersion.readAll();
+    fileVersion.close();
 
-   qDebug() << "UNIK VERSION: " << nv;
-   app.setApplicationVersion(nv.toUtf8());
+    qDebug() << "UNIK VERSION: " << nv;
+    app.setApplicationVersion(nv.toUtf8());
     bool updateDay=false;
     QSettings settings;
 #ifdef _WIN32
@@ -286,9 +286,9 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_ANDROID
     QtWebView::initialize();
 #else
-    #ifndef __arm__
+#ifndef __arm__
     QtWebEngine::initialize();
-    #endif
+#endif
 #endif
 
     QQmlApplicationEngine engine;
@@ -306,24 +306,24 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("splashvisible", u.splashvisible);
     engine.rootContext()->setContextProperty("setInitString", u.setInitString);
 
-//Clipboard function for GNU/Linux, Windows and Macos
+    //Clipboard function for GNU/Linux, Windows and Macos
 #ifndef Q_OS_ANDROID
     QmlClipboardAdapter clipboard;
     engine.rootContext()->setContextProperty("clipboard", &clipboard);
 #endif
 
 
-//Register VLC Video Player for Windows
+    //Register VLC Video Player for Windows
 #ifdef Q_OS_WIN
     qmlRegisterType<VlcQmlVideoPlayer>("VLCQt", 1, 0, "VlcVideoPlayer");
 #endif
 
 
-//Install a Message Handler for GNU/Linux, Windows and Macos
+    //Install a Message Handler for GNU/Linux, Windows and Macos
 #ifndef Q_OS_ANDROID
     qInstallMessageHandler(unikStdOutPut);
 #else
-   u0=&u;
+    u0=&u;
     qInstallMessageHandler(android_message_handler);
 #endif
 
@@ -345,7 +345,7 @@ int main(int argc, char *argv[])
     pq.append("/unik-tools-rpi/");
 #endif
 #endif
-     QDir::setCurrent(pq);
+    QDir::setCurrent(pq);
 
 
     //Setting the application executable name.
@@ -358,7 +358,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<UK>("uk", 1, 0, "UK");
 
 
-//Load the splah QML file.
+    //Load the splah QML file.
 #ifdef Q_OS_ANDROID
     engine.load("qrc:/SplashAndroid.qml");
 #else
@@ -577,7 +577,7 @@ int main(int argc, char *argv[])
             qInfo()<<"Unik WebSockets Server Started: "<<wsss;
 
         });
-    }    
+    }
 #endif
     /*QObject::connect(&u, &UK::restartingApp, [=](){
         delete chatserver;
@@ -636,29 +636,29 @@ int main(int argc, char *argv[])
     }
 #else
     if(!modeGit){
-    QString cut;
+        QString cut;
 #ifndef __arm__
-    cut.append(u.getFile(pws+"/unik-tools/main.qml"));
-    QByteArray utf;//unik-tools folder
-    utf.append(pws);
-    if(!cut.contains("objectName: \'unik-tools\'")){
-        qInfo()<<"unik-tools have any fail! repairing..."<<pws;
-        bool autd=u.downloadGit("https://github.com/nextsigner/unik-tools.git", pws);
+        cut.append(u.getFile(pws+"/unik-tools/main.qml"));
+        QByteArray utf;//unik-tools folder
+        utf.append(pws);
+        if(!cut.contains("objectName: \'unik-tools\'")){
+            qInfo()<<"unik-tools have any fail! repairing..."<<pws;
+            bool autd=u.downloadGit("https://github.com/nextsigner/unik-tools.git", pws);
 #else
-    cut.append(u.getFile(pws+"/unik-tools-rpi/main.qml"));
-    if(!cut.contains("objectName: \'unik-tools\'")){
-        qInfo("unik-tools have any fail! repairing..."+unikFolder.toUtf8());
-        bool autd=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi.git", unikFolder.toUtf8());
+        cut.append(u.getFile(pws+"/unik-tools-rpi/main.qml"));
+        if(!cut.contains("objectName: \'unik-tools\'")){
+            qInfo("unik-tools have any fail! repairing..."+unikFolder.toUtf8());
+            bool autd=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi.git", unikFolder.toUtf8());
 #endif
-        if(autd){
-            qInfo()<<"unik-tools repared.";
+            if(autd){
+                qInfo()<<"unik-tools repared.";
+            }else{
+                qInfo()<<"unik-tools is not repared.";
+            }
         }else{
-            qInfo()<<"unik-tools is not repared.";
+            qInfo("unik-tools module is ready!");
         }
-    }else{
-        qInfo("unik-tools module is ready!");
     }
-}
 #endif
 
 
@@ -687,37 +687,37 @@ int main(int argc, char *argv[])
         dirWS.mkpath(".");
         qInfo()<<"Making folder "<<unikFolder;
         if(!dirUnikToolsLocation.exists()){
-           dirUnikToolsLocation.mkpath(".");
-         }
-         bool unikToolDownloaded=false;
+            dirUnikToolsLocation.mkpath(".");
+        }
+        bool unikToolDownloaded=false;
 #ifndef __arm__
-            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools", unikFolder.toUtf8());
+        unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools", unikFolder.toUtf8());
 #else
 #ifdef Q_OS_ANDROID
-         if(showLaunch||uap.showLaunch){
+        if(showLaunch||uap.showLaunch){
             unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-android-apps", unikFolder.toUtf8());
-         }
+        }
 #else
-            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi", unikFolder.toUtf8());
+        unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi", unikFolder.toUtf8());
 #endif
 #endif
 
 
-            //Log the Main Module Download Status.
-            lba="";
+        //Log the Main Module Download Status.
+        lba="";
 #ifndef Q_OS_ANDROID
-            lba.append("Unik-Tools ");
+        lba.append("Unik-Tools ");
 #else
-            lba.append("unik-android-apps ");
+        lba.append("unik-android-apps ");
 #endif
-            if(unikToolDownloaded){
-                lba.append("downloaded.");
-            }else {
-                lba.append("is not downloaded!");
-            }
-            qInfo()<<lba;        
+        if(unikToolDownloaded){
+            lba.append("downloaded.");
+        }else {
+            lba.append("is not downloaded!");
+        }
+        qInfo()<<lba;
     }else{
-            qInfo()<<"Folder "<<unikFolder<<" pre existent.";
+        qInfo()<<"Folder "<<unikFolder<<" pre existent.";
     }
 
     //Direct upk mode.
@@ -754,7 +754,7 @@ int main(int argc, char *argv[])
         }else{
             u.log("Upk file not valid: "+argUpk.toUtf8());
         }
-    }   
+    }
 
     //MODO -foldertoupk
     if((argc == 5||argc == 6) && QByteArray(argv[1])==QByteArray("-foldertoupk")){
@@ -768,7 +768,7 @@ int main(int argc, char *argv[])
         updateUnikTools=false;
         if(debugLog){
             qInfo()<<"Prepare mode -foldertoupk.";
-        }        
+        }
     }
 
     //MODO -remoteFolder
@@ -913,22 +913,22 @@ int main(int argc, char *argv[])
     }
 
     if(modeFolder){
-        if(debugLog){
-            lba="";
-            lba.append("Running in folder mode: ");
-            lba.append(appArg1);
-            lba.append(" ");
-            lba.append(appArg2);
-            lba.append(" ");
-            lba.append(appArg3);
-            lba.append(" ");
-            qInfo()<<lba;
-        }
+        lba="";
+        lba.append("Running in folder mode: ");
+        lba.append(appArg1);
+        lba.append(" ");
+        lba.append(appArg2);
+        lba.append(" ");
+        lba.append(appArg3);
+        lba.append(" ");
+        qInfo()<<lba;
         pq = "";
         pq.append(appArg2);
+        pq.append("/");
+        qInfo()<<"[-folder 22] appArg2="<<appArg2;
         qInfo()<<"[-folder 3] PQ="<<pq;
         qInfo()<<"[-folder 4] PWS="<<pws;
-        QDir carpetaModeFolder(appArg2);
+        /*QDir carpetaModeFolder(appArg2);
         QFile mainModeFolder(appArg2+"/main.qml");
         if(carpetaModeFolder.exists()&&mainModeFolder.exists()){
             u.log("Folder to -folder exist...");
@@ -947,8 +947,6 @@ int main(int argc, char *argv[])
             engine.addPluginPath(pq);
 #ifndef __arm__
             pq.append("/unik-tools/");
-            //engine.addImportPath("C:\\Users\\qt\\Documents\\unik\\unik-tools\\LogView");
-            //engine.addPluginPath("C:\\Users\\qt\\Documents\\unik\\unik-tools\\LogView");
 #else
 #ifdef Q_OS_ANDROID
             pq.append("/unik-android-apps/");
@@ -956,7 +954,7 @@ int main(int argc, char *argv[])
             pq.append("/unik-tools-rpi/");
 #endif
 #endif
-        }
+        }*/
         qInfo()<<"[-folder 6] PQ="<<pq;
         u.mkdir(pq);
     }
@@ -1269,7 +1267,7 @@ int main(int argc, char *argv[])
             lba.append("Fail Zip download: ");
             lba.append(urlGit);
             qInfo()<<lba;
-        }       
+        }
         /*mainQml="";
         mainQml.append(QDir::currentPath());
         mainQml.append("/main.qml");*/
@@ -1348,7 +1346,7 @@ int main(int argc, char *argv[])
 
 #endif
     if (!engine.rootObjects().isEmpty()){
-       u.splashvisible=false;
+        u.splashvisible=false;
         engine.rootContext()->setContextProperty("splashvisible", u.splashvisible);
     }
 #ifdef Q_OS_WIN
@@ -1457,7 +1455,7 @@ int main(int argc, char *argv[])
 #endif
     }
     //u.deleteFile(urlConfigJsonT.toUtf8());
- #ifdef Q_OS_ANDROID
+#ifdef Q_OS_ANDROID
     QObject *aw = engine.rootObjects().at(0);//En Android es 0 cuando no carga splash.
 #else
     if(engine.rootObjects().size()>1){
@@ -1518,7 +1516,7 @@ int main(int argc, char *argv[])
 
 
 #ifdef UNIK_COMPILE_RPI
-        qInfo()<<"Estamos compilando en RPI!";
+    qInfo()<<"Estamos compilando en RPI!";
 #endif
 
     return app.exec();
