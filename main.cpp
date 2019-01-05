@@ -251,8 +251,8 @@ int main(int argc, char *argv[])
     QByteArray moduloGit="unik-tools";
 #else
 #ifdef Q_OS_ANDROID
-    QByteArray urlGit="https://github.com/nextsigner/qmlandia";
-    QByteArray moduloGit="qmlandia";
+    QByteArray urlGit="https://github.com/nextsigner/unik-android-apps";
+    QByteArray moduloGit="unik-android-apps";
 #else
     QByteArray urlGit="https://github.com/nextsigner/unik-tools-rpi";
     QByteArray moduloGit="unik-tools-rpi";
@@ -333,6 +333,20 @@ int main(int argc, char *argv[])
     QByteArray pws;
     pws.append(uap.ws);
     qInfo()<<"Path Unik: "<<pws;
+
+    QString pq;
+    pq.append(pws);
+#ifndef __arm__
+    pq.append("/unik-tools/");
+#else
+#ifdef Q_OS_ANDROID
+    pq.append("/unik-android-apps/");
+#else
+    pq.append("/unik-tools-rpi/");
+#endif
+#endif
+     QDir::setCurrent(pq);
+
 
     //Setting the application executable name.
     QString appExec = argv[0];
@@ -617,10 +631,10 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_ANDROID
     QByteArray mf;
     mf.append(dupl);
-    mf.append("/qmlandia/main.qml");
+    mf.append("/unik-android-apps/main.qml");
     QFile m(mf);
     if(!m.exists()){
-        //bool autd=u.downloadGit("https://github.com/nextsigner/qmlandia", dupl.toUtf8());
+        //bool autd=u.downloadGit("https://github.com/nextsigner/unik-android-apps", dupl.toUtf8());
     }
 #else
     if(!modeGit){
@@ -656,7 +670,7 @@ int main(int argc, char *argv[])
 #ifndef Q_OS_ANDROID
     mainModName.append("/unik-tools");
 #else
-    mainModName.append("/qmlandia");
+    mainModName.append("/unik-android-apps");
 #endif
 
 #ifdef __arm__
@@ -689,7 +703,9 @@ int main(int argc, char *argv[])
             unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools", dupl.toUtf8());
 #else
 #ifdef Q_OS_ANDROID
-            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/qmlandia", dupl.toUtf8());
+         if(showLaunch){
+            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-android-apps", dupl.toUtf8());
+         }
 #else
             unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi", dupl.toUtf8());
 #endif
@@ -701,7 +717,7 @@ int main(int argc, char *argv[])
 #ifndef Q_OS_ANDROID
             lba.append("Unik-Tools ");
 #else
-            lba.append("QmLandia ");
+            lba.append("unik-android-apps ");
 #endif
             if(unikToolDownloaded){
                 lba.append("downloaded.");
@@ -821,17 +837,7 @@ int main(int argc, char *argv[])
     QByteArray tempFolder;
     tempFolder.append(QDateTime::currentDateTime().toString("hhmmss"));
 
-    QString pq;
-    pq.append(pws);
-#ifndef __arm__
-    pq.append("/unik-tools/");
-#else
-#ifdef Q_OS_ANDROID
-    pq.append("/qmlandia/");
-#else
-    pq.append("/unik-tools-rpi/");
-#endif
-#endif
+
 
 
 
@@ -951,7 +957,7 @@ int main(int argc, char *argv[])
             //engine.addPluginPath("C:\\Users\\qt\\Documents\\unik\\unik-tools\\LogView");
 #else
 #ifdef Q_OS_ANDROID
-            pq.append("/qmlandia/");
+            pq.append("/unik-android-apps/");
 #else
             pq.append("/unik-tools-rpi/");
 #endif
@@ -1243,6 +1249,7 @@ int main(int argc, char *argv[])
     QByteArray mainQml;
     mainQml.append(pq);
     mainQml.append("main.qml");
+    qInfo()<<"[0] main: "<<mainQml;
 
     if(modeGit){
         lba="";
@@ -1268,12 +1275,13 @@ int main(int argc, char *argv[])
             lba.append(urlGit);
             qInfo()<<lba;
         }       
-        mainQml="";
+        /*mainQml="";
         mainQml.append(QDir::currentPath());
-        mainQml.append("/main.qml");
+        mainQml.append("/main.qml");*/
+        qInfo()<<"[1] main: "<<mainQml;
         u.log("Updated: "+pq.toUtf8());
     }
-    engine.rootContext()->setContextProperty("pq", pq);
+    //engine.rootContext()->setContextProperty("pq", pq);
 
     QByteArray log4;
 
@@ -1508,7 +1516,7 @@ int main(int argc, char *argv[])
     //u.initWebSocketServer("127.0.0.1", 12345, "chatserver");
 
     //Set Unik Start Setting
-    //u.setUnikStartSettings("-git=https://github.com/nextsigner/qmlandia.git, -nl");
+    //u.setUnikStartSettings("-git=https://github.com/nextsigner/unik-android-apps.git, -nl");
 
 
 #ifdef UNIK_COMPILE_RPI

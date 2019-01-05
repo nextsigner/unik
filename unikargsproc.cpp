@@ -3,6 +3,8 @@
 UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
 {
     qInfo()<<"\n\n\nUAP: init... ";
+    qInfo()<<"UAP: Prepare WorkSpace...";
+
 #ifdef Q_OS_ANDROID
     QStringList systemEnvironment = QProcess::systemEnvironment();
     bool sdcard=false;
@@ -36,10 +38,11 @@ UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
     }else{
         qInfo()<<"uap [1] "<<dp<<" exists";
     }
+    ws="";
+    ws.append(dp);
+    ws.append("/unik");
 #else
     dp = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-#endif
-    qInfo()<<"UAP: Prepare WorkSpace...";
     if(settings.value("ws").toString().isEmpty()){
         settings.setValue("ws", dp.toUtf8()+"/unik");
         ws=dp.toUtf8()+"/unik";
@@ -62,6 +65,7 @@ UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
 #endif
         }
     }
+#endif
     qInfo()<<"UAP: WorkSpace defined as "<<ws;
     // init();
 }
