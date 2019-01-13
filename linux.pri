@@ -4,7 +4,7 @@ message(linux.pri is loaded)
     message(Linux NO ANDROID)
     !contains(QMAKE_HOST.arch, arm.*):{
         QT += webengine webview
-        DD1=$$replace(PWD, /unik,/build_unik_linux)
+        DD1=$$replace(PWD, /unik,/build_unik_linux_5_11)
         DESTDIR= $$DD1
         message(Ubicaciòn del Ejecutable: $$DESTDIR)
 

@@ -29,7 +29,7 @@
 #ifndef Q_OS_ANDROID
 #include "qmlclipboardadapter.h"
 #ifndef __arm__
-#include <QtWebEngine>
+#include <QtWebEngine/QtWebEngine>
 #endif
 #else
 #include <android/log.h>
@@ -272,8 +272,6 @@ int main(int argc, char *argv[])
     bool modeGit=false;
     bool modeGitArg=false;
     bool updateUnikTools=false;
-    bool loadConfig=false;
-    bool readConfig=true;
     bool debugLog=false;
     bool setPass=false;
     bool setPass1=false;
@@ -356,6 +354,7 @@ int main(int argc, char *argv[])
 
     //This register is deprecated.  It will be eliminated.
     qmlRegisterType<UK>("uk", 1, 0, "UK");
+
 
 
     //Load the splah QML file.
@@ -828,26 +827,13 @@ int main(int argc, char *argv[])
     QByteArray tempFolder;
     tempFolder.append(QDateTime::currentDateTime().toString("hhmmss"));
 
-
-
-
-
     QDir dir0(pq);
     if (!dir0.exists()) {
         dir0.mkpath(".");
     }
     QString appName;
-
-
-
-
-    lba="";
-    lba.append("Count no uap arguments: ");
-    lba.append(QString::number(argc));
-    qInfo()<<lba;
-
-
-    if(modeUpk&&loadConfig){
+    qInfo()<<"Count standar no uap arguments: "<<argc;
+    if(modeUpk){
         qInfo("Mode Upk 1 procces...");
         if(debugLog){
             qDebug()<<"Upk filename: "<<appArg1;
@@ -913,15 +899,7 @@ int main(int argc, char *argv[])
     }
 
     if(modeFolder){
-        lba="";
-        lba.append("Running in folder mode: ");
-        lba.append(appArg1);
-        lba.append(" ");
-        lba.append(appArg2);
-        lba.append(" ");
-        lba.append(appArg3);
-        lba.append(" ");
-        qInfo()<<lba;
+        qInfo()<<"Running in folder mode: "<<appArg1<<" "<<appArg2<<" "<<appArg3;
         pq = "";
         pq.append(appArg2);
         pq.append("/");
@@ -960,7 +938,7 @@ int main(int argc, char *argv[])
     }
 
     QString arg1Control;
-    if(modeUpk&&!loadConfig){
+    if(modeUpk){
         qInfo("Mode Upk 2 procces...");
         if(debugLog){
             lba="";
@@ -1061,8 +1039,6 @@ int main(int argc, char *argv[])
             //rewriteUpk=true;
         }
     }
-
-
     if(modeFolderToUpk){
         if(debugLog){
             lba="";
@@ -1168,9 +1144,6 @@ int main(int argc, char *argv[])
             //rewriteUpk=true;
         }
     }
-
-
-    //if((argc == 5 || argc == 6) && QByteArray(argv[1])==QByteArray("-remoteFolder")){
     if(modeRemoteFolder){
         QString urlRemoteFolder;
         urlRemoteFolder.append(QByteArray(appArg1));
@@ -1191,8 +1164,6 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("sourcePath", pq);
     engine.rootContext()->setContextProperty("unikDocs", unikFolder);
     engine.rootContext()->setContextProperty("pws", pws);
-
-
 
     QString unikFolderFolderModel;
 #ifdef Q_OS_WIN
@@ -1274,7 +1245,6 @@ int main(int argc, char *argv[])
         qInfo()<<"[1] main: "<<mainQml;
         u.log("Updated: "+pq.toUtf8());
     }
-    //engine.rootContext()->setContextProperty("pq", pq);
 
     QByteArray log4;
 
@@ -1288,15 +1258,6 @@ int main(int argc, char *argv[])
 
     log4.append("Work Space: ");
     log4.append(settings.value("ws").toString());
-    log4.append("\n");
-
-
-    log4.append("updateDay: ");
-    log4.append(updateDay ? "true" : "false");
-    log4.append("\n");
-
-    log4.append("updateUnikTools: ");
-    log4.append(updateUnikTools ? "true" : "false");
     log4.append("\n");
 
     log4.append("modeFolder: ");
@@ -1360,11 +1321,12 @@ int main(int argc, char *argv[])
     qInfo()<<"2-->.>"<<engine.pluginPathList();
     qInfo()<<"3<<"<<QLibraryInfo::Qml2ImportsPath;
 
-    if(!loadCfg){
+    if(uap.showLaunch||showLaunch){
         mainQml=":/appsListLauncher.qml";
     }
     qInfo()<<"Init unik: "<<mainQml;
-
+    // engine.load(QUrl(QStringLiteral("qrc:/appsListLauncher.qml")));
+    //engine.load(mainQml);
     engine.load(QUrl::fromLocalFile(mainQml));
     QQmlComponent component(&engine, QUrl::fromLocalFile(mainQml));
     /*QQuickWindow *window = qobject_cast<QQuickWindow*>(engine.rootObjects().at(0));
@@ -1518,6 +1480,5 @@ int main(int argc, char *argv[])
 #ifdef UNIK_COMPILE_RPI
     qInfo()<<"Estamos compilando en RPI!";
 #endif
-
     return app.exec();
 }

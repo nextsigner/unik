@@ -1,3 +1,12 @@
+# It is a QtQuick Project created by @nextsigner
+# Compile this project with Qt 5.9.1 on GNU/Linux, Windows or Macos
+# For Android you needs compile into GNU/Linux with Android SDK
+# and Android NDK r10e
+# More info
+# E-mail: nextsigner@gmail.com
+# Whatsapps: +54 11 3802 4370
+# GitHub: https://github.com/nextsigner/unik
+
 QT += qml quick sql
 !contains(QMAKE_HOST.arch, arm.*):{
     message(NO Desarrollando para RPI)
@@ -31,8 +40,10 @@ android{
     INCLUDEPATH += $$PWD/quazip
     #DEFINES += QUAZIP_BUILD
     LIBS += -lz
-    #CONFIG(staticlib): DEFINES += QUAZIP_STATIC
-    LIBS+=-L/usr/local/zlib/lib
+    #CONFIG += -openssl
+    #OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/armeabi-v7a
+    #OPENSSL_LIBS += -lcrypto -lssl
+    #OPENSSL_LIBS+=-L/usr/local/zlib/lib
     INCLUDEPATH+=/usr/local/zlib/include
     HEADERS += $$PWD/quazip/*.h
     SOURCES += $$PWD/quazip/*.cpp
@@ -109,6 +120,10 @@ DISTFILES += \
     macos.pri
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
+contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
+    ANDROID_EXTRA_LIBS =
+}
 
 
 

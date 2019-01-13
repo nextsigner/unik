@@ -494,11 +494,23 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
         QStringList m1=u.split("/");
         QString cd0=m1.at(m1.size()-1);
         carpetaDestino = cd0.replace(".git", "");
-        QString url0=u.replace(".git", "/zip/master");
-        urlZipGit=url0.replace("https://github.com/", "https://codeload.github.com/");
-        QDateTime rdt = QDateTime::currentDateTime();
-        urlZipGit.append("?r=");
-        urlZipGit.append(QString::number(rdt.currentMSecsSinceEpoch()));
+
+        bool modoCodeload=true;
+        QString url0;
+        if(modoCodeload){
+            url0=u.replace(".git", "/zip/master");
+            urlZipGit=url0.replace("https://github.com/", "https://codeload.github.com/");
+
+            QDateTime rdt = QDateTime::currentDateTime();
+            urlZipGit.append("?r=");
+            urlZipGit.append(QString::number(rdt.currentMSecsSinceEpoch()));
+        }else{
+            //url of download zip no codeload
+            //https://github.com/nextsigner/qt_qml_chat_server/archive/master.zip
+
+            url0=u.replace(".git", "/archive/master.zip");
+            urlZipGit=url0;
+        }
         qInfo("Downloading zip file: "+urlZipGit.toUtf8());
     }
 
@@ -730,7 +742,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
             }
         }
         file.close();
-        v++;       
+        v++;
     }
     zip.close();
 #else
@@ -1926,9 +1938,9 @@ Q_INVOKABLE void UK::setPinType(int pin, int type)
         return;
     }
     if(type==0){
-       rpiGpio->setPinDir(pin,mmapGpio::OUTPUT);
+        rpiGpio->setPinDir(pin,mmapGpio::OUTPUT);
     }else{
-       rpiGpio->setPinDir(pin,mmapGpio::INPUT);
+        rpiGpio->setPinDir(pin,mmapGpio::INPUT);
     }
 }
 
@@ -1938,7 +1950,7 @@ Q_INVOKABLE void UK::setPinState(int pin, int state)
         return;
     }
     if(state==0){
-       rpiGpio->writePinLow(pin);
+        rpiGpio->writePinLow(pin);
     }else{
         rpiGpio->writePinHigh(pin);
     }
