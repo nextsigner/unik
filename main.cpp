@@ -709,11 +709,8 @@ int main(int argc, char *argv[])
 #else
         lba.append("unik-android-apps ");
 #endif
-        if(unikToolDownloaded){
-            lba.append("downloaded.");
-        }else {
-            lba.append("is not downloaded!");
-        }
+        lba="Main Module Download Status: ";
+        lba.append(unikToolDownloaded?"downloaded.":"is not downloaded!");
         qInfo()<<lba;
     }else{
         qInfo()<<"Folder "<<unikFolder<<" pre existent.";
@@ -821,8 +818,6 @@ int main(int argc, char *argv[])
 #endif
     //<-Finaliza configuracion OS
 
-
-
     //Define temp folder name.
     QByteArray tempFolder;
     tempFolder.append(QDateTime::currentDateTime().toString("hhmmss"));
@@ -848,7 +843,6 @@ int main(int argc, char *argv[])
         urlUpkCorr.append(pathCorr);
         QStringList mAppName = sl2.split("/");
         QString nan = mAppName.at(mAppName.size()-1);
-        //appName=nan.replace(".upk", "");
         if(pathCorr.mid(pathCorr.size()-4, pathCorr.size()-1)==QString(".upk")){
             QByteArray err;
             if(debugLog){
@@ -879,7 +873,6 @@ int main(int argc, char *argv[])
             nAppName.append(sl.at(sl.size()-1));
             upkActivo = nAppName;
             updateUnikTools=false;
-            //engine2.rootContext()->setContextProperty("upkActivo", appName);
         }else{
             if(!upkCheck.exists()){
                 listaErrores.append("Upk file does not exist!\n");
@@ -941,17 +934,7 @@ int main(int argc, char *argv[])
     if(modeUpk){
         qInfo("Mode Upk 2 procces...");
         if(debugLog){
-            lba="";
-            lba.append("Prepare mode upk...");
-            lba.append(" arg1: ");
-            lba.append(appArg1);
-            lba.append(" arg2: ");
-            lba.append(user);
-            lba.append(" arg3: ");
-            lba.append(key);
-            /*lba.append(" arg4: ");
-            lba.append(appArg4);*/
-            qInfo()<<lba;
+            qInfo()<<"Prepare mode upk...  arg1: "<<appArg1<<" arg2: "<<user<<"  arg3: "<<key;
         }
 
         //upk file
@@ -969,74 +952,40 @@ int main(int argc, char *argv[])
         //AppName
         QString arg4;
         arg4.append(arg1.replace(".upk", ""));
-
-
 #ifdef Q_OS_WIN32
         QStringList sl =arg4.replace("\\","/").split("/");
 #else
         QStringList sl =arg4.split("/");
 #endif
-
         QByteArray nAppName;
         nAppName.append(sl.at(sl.size()-1));
         if(nAppName!=""){
             if(debugLog){
-                lba="";
-                lba.append("Run upkToFolder(\"");
-                lba.append(arg1);
-                lba.append("\", \"");
-                lba.append(arg2);
-                lba.append("\", \"");
-                lba.append(arg3);
-                lba.append("\", \"");
-                lba.append(tempFolder);
-                lba.append("\");");
-                qInfo()<<lba;
+                qInfo()<<"Run upkToFolder(\""<<arg1<<"\", \""<<arg2<<"\", \""<<arg3<<"\", \""<<tempFolder<<"\");";
             }
             if(u.upkToFolder(arg1.toUtf8(), user, key, tempFolder)){
                 if(setPass){
                     //user = arg2.toLatin1();
                     //key = arg3.toLatin1();
                 }
-                lba="";
-                lba.append(nAppName);
-                lba.append(".upk extraido: ");
-                lba.append(unikFolder);
-                lba.append("/");
-                lba.append(nAppName);
-                lba.append(".upk");
-                qInfo()<<lba;
-                //appName = nAppName;
-                //return 0;
+                qInfo()<<nAppName<<".upk extraido: "<<unikFolder<<"/"<<nAppName<<".upk";
             }else{
-                lba="";
-                lba.append("Error at extract ");
-                lba.append(nAppName);
-                lba.append(".upk");
-                qInfo()<<lba;
+                qInfo()<<"Error at extract "<<nAppName<<".upk";
             }
             upkFileName.append(unikFolder);
             upkFileName.append("/");
             upkFileName.append(nAppName);
             upkFileName.append(".upk");
             if(debugLog){
-                lba="";
-                lba.append("Upk filename: ");
-                lba.append(upkFileName);
-                qInfo()<<lba;
+                qInfo()<<"Upk filename: "<<upkFileName;
             }
             if(u.upkToFolder(upkFileName, user, key, pq.toUtf8())){
                 if(debugLog){
-                    lba="";
-                    lba.append(nAppName);
-                    lba.append(" extract successful...");
-                    qInfo()<<lba;
+                    qInfo()<<nAppName<<" extract successful...";
                 }
                 upkActivo = nAppName;
                 updateUnikTools=false;
-                //engine2.rootContext()->setContextProperty("upkActivo", appName);
             }
-            //rewriteUpk=true;
         }
     }
     if(modeFolderToUpk){
@@ -1173,36 +1122,7 @@ int main(int argc, char *argv[])
 #else
     engine.rootContext()->setContextProperty("appsDir", unikFolder);
 #endif
-    //'file:///C:/Users/qt/Documents/unik'
-#ifdef QT_DEBUG
-#ifdef Q_OS_WIN
-    /*if(argc > 3){ //SOLO FUNCIONA EN DEBUG
-        qDebug()<<"Recibiendo "<<argc<<" argumentos: "<<argv[0];
-        QByteArray arg1;
-        arg1.append(argv[1]);
-        QByteArray arg2;
-        arg2.append(argv[2]);
-        QByteArray arg3;
-        arg3.append("file://");
-        arg3.append(argv[3]);
-        if(arg1=="-force"){
-            qDebug()<<"Ejecutando -reset "<<argv[0]<<" "<<argv[1];
 
-            engine.load(QUrl::fromLocalFile(arg2));// main.qml location
-            QQmlComponent component(&engine, QUrl::fromLocalFile(arg2));
-            engine.addImportPath(arg3);
-            //engine.load(QUrl::fromLocalFile("H:/_qtos/des/unik-installer/main.qml"));
-            //engine.addImportPath("file://H://_qtos/des/unik-installer");
-        }
-    }*/
-
-#else
-    engine.load(QUrl(QStringLiteral("/media/nextsigner/ZONA-A1/_qtos/des/unik-installer/main.qml")));
-    QQmlComponent component(&engine, QUrl::fromLocalFile(arg2));
-    engine.addImportPath("file://media/nextsigner/ZONA-A1/_qtos/des/unik-installer");
-#endif
-
-#else
     QString qmlImportPath;
     if(modeRemoteFolder){
         pq = "";
@@ -1222,22 +1142,13 @@ int main(int argc, char *argv[])
         qInfo()<<lba;
         QByteArray tmpZipPath;
         tmpZipPath.append(pws);
-        //u.mkdir(tmpZipPath);
-        lba="";
-        lba.append("Downloading Zip in folder ");
-        lba.append(tmpZipPath);
-        qInfo()<<lba;
+        qInfo()<<"Downloading Zip in folder "<<tmpZipPath;
         qInfo()<<"downloadGit() 1"<<urlGit;
         bool up=u.downloadGit(urlGit, tmpZipPath);
         if(up){
-            lba="";
-            lba.append("Zip downloaded.");
-            qInfo()<<lba;
+            qInfo()<<"Zip downloaded.";
         }else{
-            lba="";
-            lba.append("Fail Zip download: ");
-            lba.append(urlGit);
-            qInfo()<<lba;
+            qInfo()<<"Fail Zip download: "<<urlGit;
         }
         /*mainQml="";
         mainQml.append(QDir::currentPath());
@@ -1397,8 +1308,7 @@ int main(int argc, char *argv[])
     QByteArray m2;
     m2.append(mainQml);
 #endif
-#endif
-    if (engine.rootObjects().length()<2&&component.errors().size()>0){
+    if(engine.rootObjects().length()<2&&component.errors().size()>0){
         u.log("Errors detected!");
         for (int i = 0; i < component.errors().size(); ++i) {
             listaErrores.append(component.errors().at(i).toString());
