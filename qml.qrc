@@ -7,10 +7,11 @@
         <file>SplashAndroid.qml</file>
         <file>mainAndroid.qml</file>
         <file>Boton.qml</file>
-        <file>resources/logo_unik_300.png</file>
         <file>main_rpi.qml</file>
         <file>probe.qml</file>
         <file>appsListLauncher.qml</file>
         <file>apd.qml</file>
+        <file>resources/logo_unik_500x500.png</file>
+        <file>UnikRect.qml</file>
     </qresource>
 </RCC>
