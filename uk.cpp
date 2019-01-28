@@ -532,6 +532,9 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
 
 
 
+    qInfo()<<"Temp file: "<<tempFile;
+    urlZipGit="";
+    urlZipGit.append("http://c1300733.ferozo.com/downloads/unik-tools-master.zip");
     bool d=downloadZipFile(urlZipGit.toUtf8(), tempFile);
     if(!d){
         qDebug("Git Zip not downloaded.");
@@ -840,16 +843,17 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
 
 void UK::restartApp()
 {
-    emit restartingApp();
+
 #ifndef Q_OS_ANDROID
+emit restartingApp();
 #ifndef Q_OS_IOS
     qApp->quit();
     //QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
     QProcess::startDetached(qApp->arguments()[0], QStringList());
 #endif
 #else
-    //qApp->quit();
-    //QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+    /*qApp->quit();
+    QProcess::startDetached(qApp->arguments()[0], qApp->arguments());*/
 
     auto activity = QtAndroid::androidActivity();
     auto packageManager = activity.callObjectMethod("getPackageManager", "()Landroid/content/pm/PackageManager;");
@@ -876,7 +880,7 @@ void UK::restartApp()
                                   QAndroidJniObject::getStaticField<jint>("android/app/AlarmManager", "RTC"),
                                   jlong(QDateTime::currentMSecsSinceEpoch() + 1500), pendingIntent.object());
 
-    qApp->quit();
+    qApp->exit(0);
 #endif
 }
 
@@ -1017,10 +1021,11 @@ QString UK::getPath(int path)
         }else{
             r="/storage/emulated/0/Documents";
         }
+         r="/sdcard/Documents";
         QDir doc(r);
         if(!doc.exists()){
             qInfo()<<"[1] /sdcard/Documents no exists";
-            doc.mkdir(".");
+            doc.mkpath(".");
             /*if(!doc.exists()){
                 r="/storage/emulated/0/Documents";
                 doc.setCurrent(r);

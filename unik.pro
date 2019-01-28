@@ -117,7 +117,8 @@ DISTFILES += \
     linux.pri \
     version.pri \
     windows.pri \
-    macos.pri
+    macos.pri \
+    android/res/xml/network_security_config.xml
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

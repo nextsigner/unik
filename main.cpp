@@ -34,6 +34,7 @@
 #else
 #include <android/log.h>
 #include <QtWebView>
+#include <QtAndroid>
 #endif
 
 #include "chatserver.h"
@@ -279,6 +280,32 @@ int main(int argc, char *argv[])
     bool makeUpk=false;
     bool wss=false;
     bool params=false;
+
+    auto  result = QtAndroid::checkPermission(QString("android.permission.CAMERA"));
+        if(result == QtAndroid::PermissionResult::Denied){
+            QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.CAMERA"}));
+            if(resultHash["android.permission.CAMERA"] == QtAndroid::PermissionResult::Denied)
+                return 0;
+        }
+        auto  result2 = QtAndroid::checkPermission(QString("android.permission.WRITE_EXTERNAL_STORAGE"));
+            if(result2 == QtAndroid::PermissionResult::Denied){
+                QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.WRITE_EXTERNAL_STORAGE"}));
+                if(resultHash["android.permission.WRITE_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
+                    return 0;
+            }
+            auto  result3 = QtAndroid::checkPermission(QString("android.permission.READ_EXTERNAL_STORAGE"));
+                if(result3 == QtAndroid::PermissionResult::Denied){
+                    QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.READ_EXTERNAL_STORAGE"}));
+                    if(resultHash["android.permission.READ_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
+                        return 0;
+                }
+                auto  result4 = QtAndroid::checkPermission(QString("android.permission.INTERNET"));
+                    if(result4 == QtAndroid::PermissionResult::Denied){
+                        QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.INTERNET"}));
+                        if(resultHash["android.permission.INTERNET"] == QtAndroid::PermissionResult::Denied)
+                            return 0;
+                    }
+
 
 
 #ifdef Q_OS_ANDROID
@@ -1293,6 +1320,7 @@ int main(int argc, char *argv[])
     datFile.append("/dat");
     u.deleteFile(datFile);
     u.setFile(datFile, dat);
+    qInfo()<<"Dat file: "<<datFile;
     if(!u.fileExist(datFile)||uap.errorWritePermission||!dirWS.exists()){
         mainQml="qrc:/apd.qml";
     }

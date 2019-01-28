@@ -22,11 +22,12 @@ UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
     }else{
         dp="/storage/emulated/0/Documents";
     }
+    dp="/sdcard/Documents";
     QDir doc(dp);
     if(!doc.exists()){
         qInfo()<<"uap [1] "<<dp<<" no exists";
-        /*doc.mkdir(".");
-        if(!doc.exists()){
+        doc.mkpath(".");
+        /*if(!doc.exists()){
             dp="/storage/emulated/0/Documents";
             doc.setCurrent(dp);
             doc.mkdir(".");
@@ -42,7 +43,7 @@ UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
     ws.append("/unik");
     QDir dws(ws);
     if(!dws.exists()){
-        dws.mkdir(".");
+        dws.mkpath(".");
     }
     if(!doc.exists()||!dws.exists()){
         errorWritePermission=true;
