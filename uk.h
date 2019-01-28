@@ -93,9 +93,9 @@
 //#include "uniksqlitecrypto.h"
 
 #ifndef Q_OS_ANDROID
-#ifdef __arm__
-#include "mmapGpio.h"
-#endif
+    #ifdef __arm__
+        #include "mmapGpio.h"
+    #endif
 #endif
 
 class UK : public QObject
@@ -204,6 +204,13 @@ public:
     Q_INVOKABLE void clearComponentCache(){
         _engine->clearComponentCache();
     }
+
+    Q_INVOKABLE void cleanExit(){
+        _engine->clearComponentCache();
+        _engine->deleteLater();
+        //this->dzip
+    }
+
 
 #ifndef Q_OS_ANDROID
 #ifdef __arm__

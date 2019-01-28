@@ -22,7 +22,7 @@ UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
     }else{
         dp="/storage/emulated/0/Documents";
     }
-    dp="/sdcard/Documents";
+    //dp="/sdcard/Documents";
     QDir doc(dp);
     if(!doc.exists()){
         qInfo()<<"uap [1] "<<dp<<" no exists";

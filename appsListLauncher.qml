@@ -23,7 +23,7 @@ ApplicationWindow {
 
     onClosing: {
         if(Qt.platform.os==='android'){
-            close.accepted = false;
+            //close.accepted = false;
         }
     }
     onCiChanged: appListLaucher.ca=appListLaucher.al[appListLaucher.ci]
@@ -244,7 +244,19 @@ ApplicationWindow {
         }
     }
     function run(){
-        appSettings.uApp=appListLaucher.ca
+        var urlGit=(''+unik.getFile(pws+'/'+appListLaucher.ca)).replace(/\n/g, '')
+        var params=urlGit
+        var m0=urlGit.split('/')
+        var s1=(''+m0[m0.length-1]).replace('.git', '')
+        var uklFileLocation=pws+'/link_'+s1+'.ukl'
+        var uklData=''+urlGit
+        uklData+=' -folder='+pws+'/'+s1
+        unik.setFile(uklFileLocation, uklData)
+        params+=', -folder='+pws+'/'+s1
+        params+=', -dir='+pws+'/'+s1
+        unik.setUnikStartSettings(params)
+        unik.restartApp()
+        /*appSettings.uApp=appListLaucher.ca
         var p=unik.getFile(appsDir+'/'+appListLaucher.ca)
         var args=(''+p).split(' ')
         var params=''
@@ -262,7 +274,7 @@ ApplicationWindow {
         }else{
             unik.restartApp("")
         }
-        appListLaucher.close()
+        appListLaucher.close()*/
     }    
 }
 

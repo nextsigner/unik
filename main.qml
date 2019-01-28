@@ -104,10 +104,10 @@ ApplicationWindow {
                         if(Qt.platform.os!=='android'){
                             unik.restartApp("-git=https://github.com/nextsigner/unik-tools.git")
                         }else{
-                            var gitDownloaded=unik.downloadGit('https://github.com/nextsigner/unik-tools', appsDir+'/unik-tools')
+                            var gitDownloaded=unik.downloadGit('https://github.com/nextsigner/unik-android-apps', appsDir+'/unik-android-apps')
                             if(gitDownloaded){
                                 var j=appsDir+'/temp_cfg.json'
-                                var c='{"arg0":"-folder='+appsDir+'/unik-tools'+'"}'
+                                var c='{"arg0":"-folder='+appsDir+'/unik-android-apps'+'"}'
                                 unik.setFile(j, c)
                                 unik.restartApp()
                             }

@@ -489,12 +489,10 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     if(m0.size()<2){
         qInfo()<<"Url no valid: "<<url;
         qInfo()<<"Use: https://github.com/<user>/<repository>.git";
-
     }else{
         QStringList m1=u.split("/");
         QString cd0=m1.at(m1.size()-1);
         carpetaDestino = cd0.replace(".git", "");
-
         bool modoCodeload=true;
         QString url0;
         if(modoCodeload){
@@ -522,7 +520,11 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     tempFile.append(getPath(2));
     tempFile.append("/");
 #ifndef __arm__
-    tempFile.append(QString::number(a.toSecsSinceEpoch()));
+    #ifndef Q_OS_ANDROID
+        tempFile.append(QString::number(a.toSecsSinceEpoch()));
+    #else
+        tempFile.append(QString::number(a.toMSecsSinceEpoch()));
+    #endif
 #else
     tempFile.append(QString::number(a.toMSecsSinceEpoch()));
 #endif
@@ -533,8 +535,8 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
 
 
     qInfo()<<"Temp file: "<<tempFile;
-    urlZipGit="";
-    urlZipGit.append("http://c1300733.ferozo.com/downloads/unik-tools-master.zip");
+    /*urlZipGit="";
+    urlZipGit.append("http://c1300733.ferozo.com/downloads/unik-tools-master.zip");*/
     bool d=downloadZipFile(urlZipGit.toUtf8(), tempFile);
     if(!d){
         qDebug("Git Zip not downloaded.");
@@ -880,7 +882,7 @@ emit restartingApp();
                                   QAndroidJniObject::getStaticField<jint>("android/app/AlarmManager", "RTC"),
                                   jlong(QDateTime::currentMSecsSinceEpoch() + 1500), pendingIntent.object());
 
-    qApp->exit(0);
+    qApp->quit();
 #endif
 }
 
@@ -1021,7 +1023,7 @@ QString UK::getPath(int path)
         }else{
             r="/storage/emulated/0/Documents";
         }
-         r="/sdcard/Documents";
+         //r="/sdcard/Documents";
         QDir doc(r);
         if(!doc.exists()){
             qInfo()<<"[1] /sdcard/Documents no exists";
