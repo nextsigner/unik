@@ -41,8 +41,13 @@ android{
     #DEFINES += QUAZIP_BUILD
     LIBS += -lz
     CONFIG += -openssl
-    OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/armeabi-v7a
-    #OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/x86
+     contains(ANDROID_TARGET_ARCH,x86) {
+        message(Android x86)
+        OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/x86
+    }else{
+        message(Android armeabi-v7a)
+        OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/armeabi-v7a
+    }
     OPENSSL_LIBS += -lcrypto -lssl
     #OPENSSL_LIBS+=-L/usr/local/zlib/lib
     INCLUDEPATH+=/usr/local/zlib/include
