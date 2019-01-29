@@ -92,6 +92,7 @@ ApplicationWindow {
             height: (appListLaucher.fs*2+appListLaucher.fs*0.25)*lv.count
             anchors.horizontalCenter: parent.horizontalCenter
             onCurrentIndexChanged: {
+                console.log('UCurrentIndex: '+currentIndex)
                 flick.contentY=(appListLaucher.fs*2+appListLaucher.fs*0.25)*currentIndex-appListLaucher.height/2
             }
         }
@@ -113,7 +114,6 @@ ApplicationWindow {
                         appListLaucher.ca=appListLaucher.al[index]
                         lv.currentIndex=index
                     }
-
                 }//lv.currentIndex=index
 
                 MouseArea{
@@ -121,11 +121,21 @@ ApplicationWindow {
                     onClicked: {
                         appListLaucher.ci=index
                         appListLaucher.ca=fileName
+                         flick.contentY=(appListLaucher.fs*2+appListLaucher.fs*0.25)*index-appListLaucher.height/2
+
+                        if(tlaunch.running){
+                            tlaunch.stop()
+                            appListLaucher.sec=0
+                            psec.width=0
+                        }else{
+                            tlaunch.start()
+                        }
                     }
                     onDoubleClicked: {
-                        var p=unik.getFile(appsDir+'/'+fileName)
+                        /*var p=unik.getFile(appsDir+'/'+fileName)
                         unik.ejecutarLineaDeComandoAparte('"'+appExec+'" -cfg '+p)
-                        appListLaucher.close()
+                        appListLaucher.close()*/
+                        run()
                     }
                 }
                 Text {
