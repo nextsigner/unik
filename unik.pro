@@ -40,9 +40,10 @@ android{
     INCLUDEPATH += $$PWD/quazip
     #DEFINES += QUAZIP_BUILD
     LIBS += -lz
-    #CONFIG += -openssl
-    #OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/armeabi-v7a
-    #OPENSSL_LIBS += -lcrypto -lssl
+    CONFIG += -openssl
+    OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/armeabi-v7a
+    #OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/x86
+    OPENSSL_LIBS += -lcrypto -lssl
     #OPENSSL_LIBS+=-L/usr/local/zlib/lib
     INCLUDEPATH+=/usr/local/zlib/include
     HEADERS += $$PWD/quazip/*.h
@@ -123,7 +124,15 @@ DISTFILES += \
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
-    ANDROID_EXTRA_LIBS =
+    ANDROID_EXTRA_LIBS = \
+        $$PWD/android/libs/armeabi-v7a/libssl.so \
+        $$PWD/android/libs/armeabi-v7a/libcrypto.so
+}
+
+contains(ANDROID_TARGET_ARCH,x86) {
+    ANDROID_EXTRA_LIBS = \
+        $$PWD/android/libs/x86/libcrypto.so \
+        $$PWD/android/libs/x86/libssl.so
 }
 
 
