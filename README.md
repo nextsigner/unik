@@ -21,6 +21,8 @@ Este proyecto Qt es compatible con GNU/Linux, Windows, Macos, Raspberry Pi and A
 
 Más info: nextsigner@gmail.com
 Whatsapps: +54 11 3802 4370
+Web:unikode.org
+
 
 Donar: (Patreon.com/unik)[https://patreon.com/unik]
 
