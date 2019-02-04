@@ -42,7 +42,7 @@ android{
     #OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/armeabi-v7a
     #OPENSSL_LIBS += -lcrypto -lssl
     #OPENSSL_LIBS+=-L/usr/local/zlib/lib
-CONFIG += -openssl
+    CONFIG += -openssl
      contains(ANDROID_TARGET_ARCH,x86) {
         message(Android x86)
         OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/x86
@@ -126,11 +126,16 @@ DISTFILES += \
     linux.pri \
     version.pri \
     windows.pri \
-    macos.pri
+    macos.pri \
+    android/res/xml/network_security_config.xml
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
+    ANDROID_EXTRA_LIBS =
+}
+
+contains(ANDROID_TARGET_ARCH,x86) {
     ANDROID_EXTRA_LIBS =
 }
 
