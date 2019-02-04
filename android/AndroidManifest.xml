@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<manifest package="org.unikode.unik" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="3.5.0" android:versionCode="31" android:installLocation="auto">
+<manifest package="org.unikdev.unik" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="3.5.2" android:versionCode="32" android:installLocation="auto">
 <application android:networkSecurityConfig="@xml/network_security_config" android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="-- %%INSERT_APP_NAME%% --" android:icon="@drawable/icon">
 <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation" android:name="org.qtproject.qt5.android.bindings.QtActivity" android:label="-- %%INSERT_APP_NAME%% --" android:launchMode="singleTop">
 <intent-filter>
@@ -89,7 +89,7 @@ signal is sent! -->
 
 </application>
 
-<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="23"/>
+<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="26"/>
 <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
 
 <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
