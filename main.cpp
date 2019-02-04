@@ -34,6 +34,7 @@
 #else
 #include <android/log.h>
 #include <QtWebView>
+#include <QtAndroid>
 #endif
 
 #include "chatserver.h"
@@ -41,7 +42,7 @@
 
 
 #ifdef Q_OS_ANDROID
-UK *u0;
+//UK *u0;
 #endif
 
 QByteArray debugData;
@@ -155,11 +156,16 @@ static void android_message_handler(QtMsgType type,
     };
 
     __android_log_print(priority, "Qt", "%s", qPrintable(message));
-    u0->log(message.toUtf8());
+   //u0->log(message.toUtf8());
 }
 #endif
 int main(int argc, char *argv[])
 {
+#ifdef Q_OS_LINUX
+    qputenv("LD_PRELOAD","/usr/lib/x86_64-linux-gnu/libnss3.so");
+     qInfo()<<"LD_PRELOAD: "<<qgetenv("LD_PRELOAD");
+#endif
+
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
     app.setApplicationDisplayName("unik qml engine");
@@ -187,6 +193,30 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_ANDROID
     UK u; //For other OS this declaration is defined previus the main function
+    auto  result = QtAndroid::checkPermission(QString("android.permission.CAMERA"));
+            if(result == QtAndroid::PermissionResult::Denied){
+                QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.CAMERA"}));
+                if(resultHash["android.permission.CAMERA"] == QtAndroid::PermissionResult::Denied)
+                    return 0;
+            }
+            auto  result2 = QtAndroid::checkPermission(QString("android.permission.WRITE_EXTERNAL_STORAGE"));
+                if(result2 == QtAndroid::PermissionResult::Denied){
+                    QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.WRITE_EXTERNAL_STORAGE"}));
+                    if(resultHash["android.permission.WRITE_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
+                        return 0;
+                }
+                auto  result3 = QtAndroid::checkPermission(QString("android.permission.READ_EXTERNAL_STORAGE"));
+                    if(result3 == QtAndroid::PermissionResult::Denied){
+                        QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.READ_EXTERNAL_STORAGE"}));
+                        if(resultHash["android.permission.READ_EXTERNAL_STORAGE"] == QtAndroid::PermissionResult::Denied)
+                            return 0;
+                    }
+                    auto  result4 = QtAndroid::checkPermission(QString("android.permission.INTERNET"));
+                        if(result4 == QtAndroid::PermissionResult::Denied){
+                            QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.INTERNET"}));
+                            if(resultHash["android.permission.INTERNET"] == QtAndroid::PermissionResult::Denied)
+                                return 0;
+                        }
 #endif
 
 
@@ -247,8 +277,13 @@ int main(int argc, char *argv[])
     QByteArray appArg6="";
 
 #ifndef __arm__
-    QByteArray urlGit="https://github.com/nextsigner/unik-tools";
-    QByteArray moduloGit="unik-tools";
+    #ifdef UNIK_COMPILE_ANDROID_X86
+        QByteArray urlGit="https://github.com/nextsigner/unik-android-apps";
+        QByteArray moduloGit="unik-android-apps";
+    #else
+        QByteArray urlGit="https://github.com/nextsigner/unik-tools";
+        QByteArray moduloGit="unik-tools";
+    #endif
 #else
 #ifdef Q_OS_ANDROID
     QByteArray urlGit="https://github.com/nextsigner/unik-android-apps";
@@ -321,7 +356,7 @@ int main(int argc, char *argv[])
 #ifndef Q_OS_ANDROID
     qInstallMessageHandler(unikStdOutPut);
 #else
-    u0=&u;
+    //u0=&u;
     qInstallMessageHandler(android_message_handler);
 #endif
 
@@ -335,7 +370,11 @@ int main(int argc, char *argv[])
     QString pq;
     pq.append(pws);
 #ifndef __arm__
-    pq.append("/unik-tools/");
+    #ifdef UNIK_COMPILE_ANDROID_X86
+        pq.append("/unik-android-apps/");
+    #else
+        pq.append("/unik-tools/");
+    #endif
 #else
 #ifdef Q_OS_ANDROID
     pq.append("/unik-android-apps/");
@@ -510,19 +549,6 @@ int main(int argc, char *argv[])
                 params=true;
             }
         }
-        if(arg.contains("-update=")){
-            QStringList marg = arg.split("-update=");
-            if(marg.size()==2){
-                QString modulo;
-                modulo.append(marg.at(1));
-                u.log("Updating "+modulo.toUtf8()+"...");
-                if(modulo.contains("unik-tools")){
-                    updateDay=true;
-                    updateUnikTools=true;
-                }
-                params=true;
-            }
-        }
         if(arg.contains("-dim=")){
             QStringList marg = arg.split("-dim=");
             if(marg.size()==2){
@@ -690,7 +716,9 @@ int main(int argc, char *argv[])
         }
         bool unikToolDownloaded=false;
 #ifndef __arm__
+    #ifndef Q_OS_ANDROID
         unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools", unikFolder.toUtf8());
+    #endif
 #else
 #ifdef Q_OS_ANDROID
         if(showLaunch||uap.showLaunch){

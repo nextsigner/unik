@@ -1,3 +1,7 @@
+# Compile this project with Qt 5.11.3 on GNU/Linux, Windows or Macos
+# For Android you needs compile into GNU/Linux with Android SDK
+# and Android NDK r16b or later
+
 message(linux.pri is loaded)
 
 !android{
@@ -36,8 +40,8 @@ message(linux.pri is loaded)
 
     #Copy resourses and translation folder manualy
 
-#linuxdeployqt /media/nextsigner/ZONA-A1/nsp/build_unik_linux/unik -qmldir=/media/nextsigner/ZONA-A1/nsp/unik -appimage -always-overwrite -bundle-non-qt-libs -no-plugins  -verbose=3
-        #mv /media/nextsigner/ZONA-A1/nsp/build_unik_linux.AppImage /home/nextsigner/Escritorio/unik_vX.XX.AppImage
+    #TO CREATE APPIMAGE FILE
+    #/home/nextsigner/Descargas/linuxdeployqt-continuous-x86_64.AppImage /media/nextsigner/ZONA-A1/nsp/build_unik_linux_5_11/unik -qmldir=/media/nextsigner/ZONA-A1/nsp/unik -appimage -always-overwrite
     }else{
         #Set Working Directory for RPI3 compilation in /home/pi/nsp
         DESTDIR= /home/pi/unik

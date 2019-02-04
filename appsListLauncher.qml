@@ -135,6 +135,9 @@ ApplicationWindow {
                         /*var p=unik.getFile(appsDir+'/'+fileName)
                         unik.ejecutarLineaDeComandoAparte('"'+appExec+'" -cfg '+p)
                         appListLaucher.close()*/
+                        appListLaucher.ci=index
+                        appListLaucher.ca=fileName
+                         flick.contentY=(appListLaucher.fs*2+appListLaucher.fs*0.25)*index-appListLaucher.height/2
                         run()
                     }
                 }
@@ -267,6 +270,7 @@ ApplicationWindow {
         unik.setUnikStartSettings(params)
         unik.restartApp()
         */
+        //return
         appSettings.uApp=appListLaucher.ca
         var p=unik.getFile(appsDir+'/'+appListLaucher.ca)
         var args=(''+p).split(' ')

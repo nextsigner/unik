@@ -1,7 +1,4 @@
 # It is a QtQuick Project created by @nextsigner
-# Compile this project with Qt 5.9.1 on GNU/Linux, Windows or Macos
-# For Android you needs compile into GNU/Linux with Android SDK
-# and Android NDK r10e
 # More info
 # E-mail: nextsigner@gmail.com
 # Whatsapps: +54 11 3802 4370
@@ -36,6 +33,7 @@ mac{
 android{
     FILE_VERSION_NAME=android/assets/android_version
     message(Programando en Android)
+
     QT += webview
     INCLUDEPATH += $$PWD/quazip
     #DEFINES += QUAZIP_BUILD
@@ -44,7 +42,18 @@ android{
     #OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/armeabi-v7a
     #OPENSSL_LIBS += -lcrypto -lssl
     #OPENSSL_LIBS+=-L/usr/local/zlib/lib
-    INCLUDEPATH+=/usr/local/zlib/include
+CONFIG += -openssl
+     contains(ANDROID_TARGET_ARCH,x86) {
+        message(Android x86)
+        OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/x86
+        COMPILEINANDROIDX86 = 1
+        DEFINES += UNIK_COMPILE_ANDROID_X86=\\\"$$COMPILEINANDROIDX86\\\"
+    }else{
+        message(Android armeabi-v7a)
+        OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/armeabi-v7a
+    }
+    OPENSSL_LIBS += -lcrypto -lssl
+INCLUDEPATH+=/usr/local/zlib/include
     HEADERS += $$PWD/quazip/*.h
     SOURCES += $$PWD/quazip/*.cpp
     SOURCES += $$PWD/quazip/*.c

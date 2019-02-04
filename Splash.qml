@@ -8,17 +8,18 @@ ApplicationWindow {
     visibility:  "Maximized"
     color: "transparent"
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
+    property int fs: appSplash.width*0.02
     property bool ver: true
     property color c1: "#1fbc05"
     property color c2: "#4fec35"
     Connections {target: unik;onUkStdChanged: logtxt.setTxtLog(''+unik.ukStd);}
     Connections {target: unik;onStdErrChanged: logtxt.setTxtLog(''+unik.getStdErr());}
-    onVerChanged: r.opacity=0.0
+    onVerChanged: xLogTxt.opacity=0.0
     onVisibleChanged: {
         if(!visible){
             appSplash.flags =  Qt.Window
             if(Qt.platform.os==='android'){
-                    //appSplash.close()
+                //appSplash.close()
             }
         }
     }
@@ -39,6 +40,38 @@ ApplicationWindow {
         height: width
         color: "transparent"
         anchors.centerIn: parent
+        opacity: xLogTxt.opacity
+        /*onOpacityChanged: {
+            if(opacity===0.0){
+                appSplash.visible=false
+            }
+        }*/
+        Behavior on opacity{
+            NumberAnimation{
+                duration:500
+            }
+        }
+        Image {
+            anchors.fill: parent
+            source: "qrc:/resources/logo_unik_500x500.png"
+        }
+        Text{
+            text: "by <b>unikode.org</b>"
+            font.pixelSize: parent.width*0.05
+            anchors.right: parent.right
+            anchors.rightMargin: appSplash.width*0.01
+            anchors.top: parent.top
+            color: appSplash.c2
+            anchors.topMargin: appSplash.width*0.005
+        }
+    }
+    Item{
+        id:xLogTxt
+        width: appSplash.fs*20
+        height: logtxt.contentHeight+appSplash.fs*0.2
+        anchors.top: r.bottom
+        anchors.topMargin: appSplash.fs
+        anchors.horizontalCenter: r.horizontalCenter
         onOpacityChanged: {
             if(opacity===0.0){
                 appSplash.visible=false
@@ -49,45 +82,57 @@ ApplicationWindow {
                 duration:500
             }
         }
-        Image {
-            anchors.fill: parent
-            source: "qrc:/resources/logo_unik_300.png"
+        Rectangle{
+            width: parent.height
+            height: parent.width
+            rotation: -90
+            anchors.centerIn: parent
+            radius: appSplash.fs*0.2
+            gradient: Gradient {
+                GradientStop {
+                    position: 0.00;
+                    color: "#ff6600";
+                }
+                GradientStop {
+                    position: 1.00;
+                    color: "#ff0000";
+                }
+            }
         }
-        Text{
-            text: "by <b>@nextsigner</b>"
-            font.pixelSize: parent.width*0.05
-            anchors.right: parent.right
-            anchors.rightMargin: appSplash.width*0.01
-            anchors.top: parent.top
-            color: appSplash.c2
-            anchors.topMargin: appSplash.width*0.005
+        Rectangle{
+            width: parent.height-appSplash.fs*0.2
+            height: parent.width-appSplash.fs*0.2
+            rotation: 90
+            anchors.centerIn: parent
+            radius: appSplash.fs*0.2
+            gradient: Gradient {
+                GradientStop {
+                    position: 0.00;
+                    color: "#ff6600";
+                }
+                GradientStop {
+                    position: 1.00;
+                    color: "#ff0000";
+                }
+            }
         }
-    }
-    Rectangle{
-        id:xLogTxt
-        width: logtxt.contentWidth+20
-        height: logtxt.contentHeight
-        anchors.top: r.bottom
-        anchors.topMargin: -4
-        anchors.horizontalCenter: r.horizontalCenter
-        color: "#333333"
-        radius: 6
-        border.color: appSplash.c1
         Rectangle{
             id:pb
             height: parent.height*0.1
             width: 0
-            color: 'red'
+            color: 'white'
             anchors.bottom: parent.bottom
         }
         Text{
             id: logtxt
             color: appSplash.c2
-            font.pixelSize: 10
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: 5
-            anchors.horizontalCenter: parent.horizontalCenter
-            verticalAlignment: Text.AlignBottom
+            font.pixelSize: app.fs
+            //anchors.verticalCenter: parent.verticalCenter
+            width: parent.width-appSplash.fs
+            height: contentHeight
+            anchors.centerIn: parent
+            wrapMode: Text.WrapAnywhere
+            anchors.verticalCenterOffset: appSplash.fs*0.5
             function setTxtLog(t){
                 var  d=(''+t).replace(/\n/g, ' ')
                 var p=true
@@ -107,13 +152,6 @@ ApplicationWindow {
                 if(p){
                     logtxt.text=t
                 }
-            }
-        }
-        Component.onCompleted: {
-            if(!unik.isRPI()){
-                xLogTxt.border.width=1
-            }else{
-                xLogTxt.border.width=0
             }
         }
     }

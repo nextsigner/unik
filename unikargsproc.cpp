@@ -131,7 +131,7 @@ void UnikArgsProc::procCfgArgs()
 #ifndef Q_OS_ANDROID
             dc.append("/unik-tools");
 #else
-            dc.append("/qmlandia");
+            dc.append("/unik-android-apps");
 #endif
             dc.append("\"");
 

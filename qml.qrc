@@ -12,5 +12,6 @@
         <file>appsListLauncher.qml</file>
         <file>apd.qml</file>
         <file>UnikRect.qml</file>
+        <file>resources/logo_unik_500x500.png</file>
     </qresource>
 </RCC>
