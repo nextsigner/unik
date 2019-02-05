@@ -126,7 +126,7 @@ ApplicationWindow {
         Text{
             id: logtxt
             color: appSplash.c2
-            font.pixelSize: app.fs
+            font.pixelSize: appSplash.fs
             //anchors.verticalCenter: parent.verticalCenter
             width: parent.width-appSplash.fs
             height: contentHeight
