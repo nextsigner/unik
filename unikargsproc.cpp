@@ -42,7 +42,7 @@ UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
     ws.append("/unik");
     QDir dws(ws);
     if(!dws.exists()){
-        dws.mkdir(".");
+        dws.mkpath(".");
     }
     if(!doc.exists()||!dws.exists()){
         errorWritePermission=true;

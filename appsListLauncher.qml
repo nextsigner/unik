@@ -289,7 +289,7 @@ ApplicationWindow {
         }else{
             unik.restartApp("")
         }
-        appListLaucher.close()
+        //appListLaucher.close()
     }    
 }
 
