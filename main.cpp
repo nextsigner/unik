@@ -1403,18 +1403,6 @@ int main(int argc, char *argv[])
     if(uap.showLaunch||showLaunch){
         mainQml="qrc:/appsListLauncher.qml";
     }
-
-    QByteArray dat="01";
-    QByteArray datFile;
-    datFile.append(pws);
-    datFile.append("/dat");
-    u.deleteFile(datFile);
-    u.setFile(datFile, dat);
-    if(!u.fileExist(datFile)||uap.errorWritePermission||!dirWS.exists()){
-        mainQml="qrc:/apd.qml";
-    }
-    u.deleteFile(datFile);
-
     qInfo()<<"Init unik: "<<mainQml;
     engine.load(probe.isEmpty() ? QUrl(mainQml) : QUrl(probe));
     QQmlComponent component(&engine, probe.isEmpty() ? QUrl(mainQml) : QUrl(probe));
