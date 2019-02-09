@@ -42,7 +42,7 @@
 
 
 #ifdef Q_OS_ANDROID
-//UK *u0;
+UK *u0;
 #endif
 
 QByteArray debugData;
@@ -156,7 +156,7 @@ static void android_message_handler(QtMsgType type,
     };
 
     __android_log_print(priority, "Qt", "%s", qPrintable(message));
-   //u0->log(message.toUtf8());
+   u0->log(message.toUtf8());
 }
 #endif
 int main(int argc, char *argv[])
@@ -356,7 +356,7 @@ int main(int argc, char *argv[])
 #ifndef Q_OS_ANDROID
     qInstallMessageHandler(unikStdOutPut);
 #else
-    //u0=&u;
+    u0=&u;
     qInstallMessageHandler(android_message_handler);
 #endif
 
@@ -603,6 +603,15 @@ int main(int argc, char *argv[])
 
         });
     }
+#else
+    QWebChannel channel;
+    u._channel=&channel;
+    WebSocketClientWrapper *clientWrapper;
+    u._clientWrapper=clientWrapper;
+    ChatServer* chatserver = new ChatServer(&app);
+    u._chatserver=chatserver;
+    engine.rootContext()->setContextProperty("cs", u._chatserver);
+    //engine.rootContext()->setContextProperty("cw", u._clientWrapper);
 #endif
     /*QObject::connect(&u, &UK::restartingApp, [=](){
         delete chatserver;
@@ -1381,15 +1390,21 @@ int main(int argc, char *argv[])
 
 
 #else
+    qmlImportPath.append(pq);
     QString ncqmls;
     ncqmls.append(pq.mid(0,pq.size()-1).replace("/", "\\"));
     qmlImportPath.append(ncqmls);
     engine.addImportPath(pq);
+    engine.addImportPath(QDir::currentPath());
+    engine.addPluginPath("/sdcard/Documents/unik/unik-ws-android-client-1");
+    engine.addPluginPath("assets:/lib/x86");
+
     QString unikPluginsPath;
     unikPluginsPath.append(u.getPath(1));
     unikPluginsPath.append("/unikplugins");
     engine.addImportPath(unikPluginsPath);
-
+    qInfo()<<"Imports Paths List: "<<engine.importPathList();
+    qInfo()<<"Plugins Paths List: "<<engine.pluginPathList();
 #ifdef __arm__
     engine.addImportPath("/home/pi/unik/qml");
 #endif

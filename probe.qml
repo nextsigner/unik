@@ -1,7 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.0
-import LogView 1.0
-import uk 1.0
+//import LogView 1.0
 ApplicationWindow {
     id: app
     objectName: 'qmlandia'
@@ -29,21 +28,26 @@ ApplicationWindow {
             font.pixelSize: 20
             anchors.centerIn: parent
         }*/
-        LogView{
-            id: logView
-            anchors.fill: parent
-            fontColor: "red"
-            fontSize: 30
+//        LogView{
+//            id: logView
+//            anchors.fill: parent
+//            fontColor: "red"
+//            fontSize: 30
 
-        }
+//        }
     }
     Timer{
         running: true
         repeat: true
-        interval: 1000
+        interval: 5000
         onTriggered: {
-            var d = new Date(Date.now())
-            console.log('Probe LogView--->'+d.getTime())
-            }
+            //var d = new Date(Date.now())
+            //console.log('Probe LogView--->'+d.getTime())
+            unik.setUploadState('-git=https://github.com/nextsigner/unik-ws-android-client-1.git')
+            unik.restartApp()
+        }
+    }
+    Component.onCompleted:  {
+
     }
 }

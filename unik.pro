@@ -4,7 +4,7 @@
 # Whatsapps: +54 11 3802 4370
 # GitHub: https://github.com/nextsigner/unik
 
-QT += qml quick sql
+QT += qml quick sql websockets
 !contains(QMAKE_HOST.arch, arm.*):{
     message(NO Desarrollando para RPI)
     QT += multimedia
@@ -35,6 +35,8 @@ android{
     message(Programando en Android)
 
     QT += webview
+    QT += androidextras
+
     INCLUDEPATH += $$PWD/quazip
     #DEFINES += QUAZIP_BUILD
     LIBS += -lz
@@ -53,21 +55,10 @@ android{
         OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/armeabi-v7a
     }
     OPENSSL_LIBS += -lcrypto -lssl
-INCLUDEPATH+=/usr/local/zlib/include
+    INCLUDEPATH+=/usr/local/zlib/include
     HEADERS += $$PWD/quazip/*.h
     SOURCES += $$PWD/quazip/*.cpp
     SOURCES += $$PWD/quazip/*.c
-
-    #ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android-build
-
-    #LIBS+=-L/home/nextsigner/android-ndk-r10e/platforms/android-3/arch-arm/usr/lib
-    #INCLUDEPATH+=/home/nextsigner/android-ndk-r10e/platforms/android-3/arch-arm/usr/include
-
-    QT += androidextras
-
-    COMMON_DATA.path = /assets/                                                                                qml
-    COMMON_DATA.files = $$files($$PWD/android/qml/*)
-    INSTALLS += COMMON_DATA
 }
 
 message(DestDir: $$DESTDIR)
@@ -131,13 +122,7 @@ DISTFILES += \
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
-contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
-    ANDROID_EXTRA_LIBS =
-}
 
-contains(ANDROID_TARGET_ARCH,x86) {
-    ANDROID_EXTRA_LIBS =
-}
 
 
 

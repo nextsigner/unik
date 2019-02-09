@@ -24,6 +24,8 @@ import QtCanvas3D 1.1
 import QtPositioning 5.9
 import QtLocation 5.9
 
+//import Qt.WebSockets 1.0
+
 ApplicationWindow {
     id: app
     objectName: 'unik-main-errors'

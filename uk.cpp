@@ -1926,14 +1926,17 @@ void UK::crearPDF(QString captura, QString url, int orientacion)
 }
 
 
-#ifdef UNIK_COMPILE_RPI
+
 Q_INVOKABLE void UK::initRpiGpio()
 {
+    #ifdef UNIK_COMPILE_RPI
     rpiGpio = new mmapGpio();
+    #endif
 }
 
 Q_INVOKABLE void UK::setPinType(int pin, int type)
 {
+    #ifdef UNIK_COMPILE_RPI
     if(type!=0&&type!=1){
         return;
     }
@@ -1942,10 +1945,12 @@ Q_INVOKABLE void UK::setPinType(int pin, int type)
     }else{
         rpiGpio->setPinDir(pin,mmapGpio::INPUT);
     }
+    #endif
 }
 
 Q_INVOKABLE void UK::setPinState(int pin, int state)
 {
+    #ifdef UNIK_COMPILE_RPI
     if(state!=0&&state!=1){
         return;
     }
@@ -1954,31 +1959,44 @@ Q_INVOKABLE void UK::setPinState(int pin, int state)
     }else{
         rpiGpio->writePinHigh(pin);
     }
+    #endif
 }
 
 Q_INVOKABLE unsigned int UK::readPin(unsigned int pin)
 {
+    #ifdef UNIK_COMPILE_RPI
     return rpiGpio->readPin(pin);
+    #else
+    return 0;
+    #endif
 }
 
 Q_INVOKABLE void UK::writePinHigh(unsigned int pinnum)
 {
+    #ifdef UNIK_COMPILE_RPI
     rpiGpio->writePinHigh(pinnum);
+    #endif
 }
 
 Q_INVOKABLE void UK::writePinLow(unsigned int pinnum)
 {
+    #ifdef UNIK_COMPILE_RPI
     rpiGpio->writePinLow(pinnum);
+    #endif
 }
 Q_INVOKABLE bool UK::pinIsHigh(int pin){
+    #ifdef UNIK_COMPILE_RPI
     unsigned int pinVal;
     pinVal = rpiGpio->readPin(pin);
     if(pinVal == mmapGpio::HIGH){
         return false;
     }
     return true;
-}
+#else
+    return false;
 #endif
+}
+
 
 QString UK::encPrivateData(QByteArray d, QString user, QString key)
 {
