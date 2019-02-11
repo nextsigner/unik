@@ -42,7 +42,9 @@
 
 
 #ifdef Q_OS_ANDROID
-UK *u0;
+    #ifndef __arm__
+        UK *u0;
+    #endif
 #endif
 
 QByteArray debugData;
@@ -156,7 +158,9 @@ static void android_message_handler(QtMsgType type,
     };
 
     __android_log_print(priority, "Qt", "%s", qPrintable(message));
-   u0->log(message.toUtf8());
+   #ifndef __arm__
+        u0->log(message.toUtf8());
+    #endif
 }
 #endif
 int main(int argc, char *argv[])
@@ -356,8 +360,10 @@ int main(int argc, char *argv[])
 #ifndef Q_OS_ANDROID
     qInstallMessageHandler(unikStdOutPut);
 #else
-    u0=&u;
-    qInstallMessageHandler(android_message_handler);
+    #ifndef __arm__
+        u0=&u;
+        qInstallMessageHandler(android_message_handler);
+    #endif
 #endif
 
 
