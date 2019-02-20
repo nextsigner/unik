@@ -15,6 +15,10 @@ UK::UK(QObject *parent) : QObject(parent)
 UK::~UK()
 {
     db.close();
+    delete app;
+    delete _clientWrapper;
+    delete _channel;
+    delete _chatserver;
 }
 
 void UK::setHost(QString nh)
@@ -877,6 +881,7 @@ void UK::restartApp()
                                   jlong(QDateTime::currentMSecsSinceEpoch() + 1500), pendingIntent.object());
 
     qApp->quit();
+    //qApp->exit(0);
 #endif
 }
 

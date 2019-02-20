@@ -44,6 +44,8 @@
 #ifdef Q_OS_ANDROID
     #ifndef __arm__
         UK *u0;
+    #else
+        UK *u0;
     #endif
 #endif
 
@@ -160,6 +162,8 @@ static void android_message_handler(QtMsgType type,
     __android_log_print(priority, "Qt", "%s", qPrintable(message));
    #ifndef __arm__
         u0->log(message.toUtf8());
+    #else
+         u0->log(message.toUtf8());
     #endif
 }
 #endif
@@ -196,7 +200,9 @@ int main(int argc, char *argv[])
     qInfo()<<"UAP showLaunch: "<<uap.showLaunch;
 
 #ifdef Q_OS_ANDROID
-    UK u; //For other OS this declaration is defined previus the main function
+    //#ifndef __arm__
+        UK u; //For other OS this declaration is defined previus the main function
+    //#endif
     auto  result = QtAndroid::checkPermission(QString("android.permission.CAMERA"));
             if(result == QtAndroid::PermissionResult::Denied){
                 QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.CAMERA"}));
@@ -360,10 +366,10 @@ int main(int argc, char *argv[])
 #ifndef Q_OS_ANDROID
     qInstallMessageHandler(unikStdOutPut);
 #else
-    #ifndef __arm__
+    //#ifndef __arm__
         u0=&u;
-        qInstallMessageHandler(android_message_handler);
-    #endif
+    //#endif
+     qInstallMessageHandler(android_message_handler);
 #endif
 
 
@@ -617,7 +623,7 @@ int main(int argc, char *argv[])
     ChatServer* chatserver = new ChatServer(&app);
     u._chatserver=chatserver;
     engine.rootContext()->setContextProperty("cs", u._chatserver);
-    //engine.rootContext()->setContextProperty("cw", u._clientWrapper);
+    engine.rootContext()->setContextProperty("cw", u._clientWrapper);
 #endif
     /*QObject::connect(&u, &UK::restartingApp, [=](){
         delete chatserver;

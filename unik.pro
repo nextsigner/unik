@@ -81,6 +81,7 @@ SOURCES += main.cpp \
     chatserver.cpp \
     websocketclientwrapper.cpp \
     websockettransport.cpp \
+    unikmessagehandler.cpp
 
 
 RESOURCES += qml.qrc
@@ -104,6 +105,7 @@ HEADERS += \
     chatserver.h \
     websocketclientwrapper.h \
     websockettransport.h \
+    unikmessagehandler.h
 
 
 DISTFILES += \
