@@ -15,10 +15,6 @@ UK::UK(QObject *parent) : QObject(parent)
 UK::~UK()
 {
     db.close();
-    delete app;
-    delete _clientWrapper;
-    delete _channel;
-    delete _chatserver;
 }
 
 void UK::setHost(QString nh)
@@ -844,7 +840,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
 
 void UK::restartApp()
 {
-    emit restartingApp();
+
 #ifndef Q_OS_ANDROID
 #ifndef Q_OS_IOS
     qApp->quit();
@@ -880,9 +876,9 @@ void UK::restartApp()
                                   QAndroidJniObject::getStaticField<jint>("android/app/AlarmManager", "RTC"),
                                   jlong(QDateTime::currentMSecsSinceEpoch() + 1500), pendingIntent.object());
 
-    qApp->quit();
-    //qApp->exit(0);
+    //qApp->quit();
 #endif
+    emit restartingApp();
 }
 
 void UK::restartApp(QString args)

@@ -283,10 +283,10 @@ ApplicationWindow {
             }
         }
         unik.setUnikStartSettings(params)
+        console.log('New USS params: '+params)
         if(Qt.platform.os==='android'){
             unik.restartApp()
         }else{
-            console.log('New USS params: '+params)
             unik.restartApp("")
         }
         //appListLaucher.close()

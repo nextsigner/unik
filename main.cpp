@@ -39,15 +39,17 @@
 
 #include "chatserver.h"
 #include "unikargsproc.h"
+#include "uniklogobject.h"
 
 
 #ifdef Q_OS_ANDROID
     #ifndef __arm__
         UK *u0;
-    #else
-        UK *u0;
     #endif
 #endif
+
+        UnikLogObject ulo;
+
 
 QByteArray debugData;
 QString debugPrevio;
@@ -163,7 +165,11 @@ static void android_message_handler(QtMsgType type,
    #ifndef __arm__
         u0->log(message.toUtf8());
     #else
-         u0->log(message.toUtf8());
+    //ulo.setObjectName("afasda");
+    ulo.setLog(message.toUtf8());
+    //UK *ux =   qApp->findChild<UK*>("uk3");
+    //ux->log(message.toUtf8());
+    //qApp->instance()->children()
     #endif
 }
 #endif
@@ -200,9 +206,8 @@ int main(int argc, char *argv[])
     qInfo()<<"UAP showLaunch: "<<uap.showLaunch;
 
 #ifdef Q_OS_ANDROID
-    //#ifndef __arm__
-        UK u; //For other OS this declaration is defined previus the main function
-    //#endif
+    UK u; //For other OS this declaration is defined previus the main function
+    u.setObjectName("uk3");
     auto  result = QtAndroid::checkPermission(QString("android.permission.CAMERA"));
             if(result == QtAndroid::PermissionResult::Denied){
                 QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.CAMERA"}));
@@ -366,10 +371,12 @@ int main(int argc, char *argv[])
 #ifndef Q_OS_ANDROID
     qInstallMessageHandler(unikStdOutPut);
 #else
-    //#ifndef __arm__
+    #ifndef __arm__
         u0=&u;
-    //#endif
-     qInstallMessageHandler(android_message_handler);
+        qInstallMessageHandler(android_message_handler);
+    #else
+        qInstallMessageHandler(android_message_handler);
+    #endif
 #endif
 
 
@@ -623,14 +630,18 @@ int main(int argc, char *argv[])
     ChatServer* chatserver = new ChatServer(&app);
     u._chatserver=chatserver;
     engine.rootContext()->setContextProperty("cs", u._chatserver);
-    engine.rootContext()->setContextProperty("cw", u._clientWrapper);
+    //engine.rootContext()->setContextProperty("cw", u._clientWrapper);
 #endif
-    /*QObject::connect(&u, &UK::restartingApp, [=](){
-        delete chatserver;
+    QObject::connect(&u, &UK::restartingApp, [=](){
+        qApp->quit();
+        //delete chatserver;
         //delete channel;
-        delete clientWrapper;
-        qInfo()<<"Unik restarting...";
-    });*/
+        //delete clientWrapper;
+        //qInfo()<<"Unik restarting...";
+    });
+    QObject::connect(&ulo, SIGNAL(logReceived(QByteArray)),
+                                &u, SLOT(log(QByteArray)));
+
 
 
 

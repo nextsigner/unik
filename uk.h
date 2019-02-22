@@ -26,7 +26,6 @@
 
 //Librerias Android
 #ifdef Q_OS_ANDROID
-#include <android/log.h>
 #include <QtAndroidExtras/QtAndroid>
 #include <QtAndroidExtras/QAndroidJniObject>
 #endif
@@ -111,7 +110,7 @@ class UK : public QObject
     Q_PROPERTY(QString initStdString READ getInitStdString WRITE setInitStdString)
 public:
     explicit UK(QObject *parent = nullptr);
-    ~UK();   
+    ~UK();
     QGuiApplication *app;
 #ifndef Q_OS_ANDROID
     QWebSocketServer *_server;
@@ -384,5 +383,20 @@ private:
 #endif
 };
 
+/*void UK::unikStdOut(QtMsgType type,
+                    const QMessageLogContext &context,
+                    const QString &message)
+{
+        android_LogPriority priority = ANDROID_LOG_DEBUG;
+        switch (type) {
+        case QtDebugMsg: priority = ANDROID_LOG_DEBUG; break;
+        case QtWarningMsg: priority = ANDROID_LOG_WARN; break;
+        case QtCriticalMsg: priority = ANDROID_LOG_ERROR; break;
+        case QtFatalMsg: priority = ANDROID_LOG_FATAL; break;
+        };
 
+        __android_log_print(priority, "Qt", "%s", qPrintable(message));
+        //log(message.toUtf8());
+    //}
+}*/
 #endif
