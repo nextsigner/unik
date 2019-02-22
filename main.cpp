@@ -165,11 +165,7 @@ static void android_message_handler(QtMsgType type,
    #ifndef __arm__
         u0->log(message.toUtf8());
     #else
-    //ulo.setObjectName("afasda");
     ulo.setLog(message.toUtf8());
-    //UK *ux =   qApp->findChild<UK*>("uk3");
-    //ux->log(message.toUtf8());
-    //qApp->instance()->children()
     #endif
 }
 #endif
@@ -184,8 +180,8 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
     app.setApplicationDisplayName("unik qml engine");
     app.setApplicationName("unik");
-    app.setOrganizationDomain("http://unikode.org/");
-    app.setOrganizationName("nextsigner");
+    app.setOrganizationDomain("http://www.unikode.org/");
+    app.setOrganizationName("unikode.org");
 
     QDir cAppPath=QDir::current();
 
@@ -630,14 +626,10 @@ int main(int argc, char *argv[])
     ChatServer* chatserver = new ChatServer(&app);
     u._chatserver=chatserver;
     engine.rootContext()->setContextProperty("cs", u._chatserver);
-    //engine.rootContext()->setContextProperty("cw", u._clientWrapper);
+    engine.rootContext()->setContextProperty("cw", u._clientWrapper);
 #endif
     QObject::connect(&u, &UK::restartingApp, [=](){
         qApp->quit();
-        //delete chatserver;
-        //delete channel;
-        //delete clientWrapper;
-        //qInfo()<<"Unik restarting...";
     });
     QObject::connect(&ulo, SIGNAL(logReceived(QByteArray)),
                                 &u, SLOT(log(QByteArray)));
