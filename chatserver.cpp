@@ -109,7 +109,7 @@ bool ChatServer::logout(const QString& userName)
 
 bool ChatServer::sendMessage(const QString& user, const QString& msg)
 {
-    qDebug()<<"Mensaje recibido: "<<user<<" "<<msg;
+    //qDebug()<<"Mensaje recibido: "<<user<<" "<<msg;
     if (m_userList.contains(user)) {
         emit newMessage(QTime::currentTime().toString("HH:mm:ss"), user, msg);
         return true;

@@ -1893,6 +1893,18 @@ bool UK::createLink(QString execString, QString desktopLocationFileName, QString
     run("chmod a+x "+url);
     return true;
 }
+
+QByteArray UK::itemToImageData(QObject *item)
+{
+    QQuickItemGrabResult *itemGR = nullptr;
+    itemGR = qobject_cast<QQuickItemGrabResult*>(item);
+    QImage qi(itemGR->image());
+    QByteArray ba;
+    QBuffer bu(&ba);
+    bu.open(QIODevice::WriteOnly);
+    qi.save(&bu, "PNG");
+    return ba.toBase64().data();
+}
 #endif
 
 

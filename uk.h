@@ -16,6 +16,7 @@
 #include <QDir>
 #include <QDirIterator>
 #include <QFile>
+#include <QBuffer>
 #include <QDebug>
 #include <QMimeDatabase>
 #include <QPdfWriter>
@@ -328,6 +329,15 @@ public slots:
     Q_INVOKABLE bool createLink(QString execString, QString desktopLocationFileName, QString name, QString comment);
     Q_INVOKABLE bool createLink(QString execString, QString desktopLocationFileName, QString name, QString comment, QString iconPath);
 #endif
+
+    //Funciones de Imagen
+
+    //From Qml call
+    /*item.grabToImage(function(result) {
+        unik.setFile('/tmp/imageData.txt',unik.itemToImageData(result));
+    });*/
+    Q_INVOKABLE QByteArray itemToImageData(QObject *item);
+
     //Funciones Varias
     QString toHtmlEscaped(QString htmlCode);
     void crearPDF(QString captura, QString url, int orientacion);
