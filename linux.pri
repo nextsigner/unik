@@ -26,7 +26,7 @@ message(linux.pri is loaded)
         DESTDIR= $$DD1
         message(Ubicaciòn del Ejecutable: $$DESTDIR)
 
-        FILE_VERSION_NAME=$$replace(PWD, /unik,/build_unik_linux_64/linux_version)
+        FILE_VERSION_NAME=$$replace(PWD, /unik,/build_unik_linux/linux_version)
         FILE_VERSION_NAME2=\"$$FILE_VERSION_NAME\"
         write_file(/tmp/linux_version, APPVERSION)
         message(File version location: $$FILE_VERSION_NAME2)
@@ -40,6 +40,18 @@ message(linux.pri is loaded)
         HEADERS += $$PWD/quazip/*.h
         SOURCES += $$PWD/quazip/*.cpp
         SOURCES += $$PWD/quazip/*.c
+
+        #Make Desktop Unik File
+        #message($$PWD/makeDesktopFile.sh unik_v4.4.4 $$DESTDIR/default.desktop)
+
+            #Previus Linux Build Count
+            PLBC=$$system(cat linux_build_count$$escape_expand(\n\t))
+            #Previus Linux Build Count
+            LBC=$$system(echo $(($$PLBC + 1))$$escape_expand(\n\t))
+            message(Linux Build Count: $$LBC)
+            $$system(echo $(($$PLBC + 1)) > linux_build_count$$escape_expand(\n\t))
+
+           QMAKE_POST_LINK += $$quote(sh $$PWD/makeDesktopFile.sh unik_v$$VERSION_MAJ"."$$system(date +%W).$$LBC $$DESTDIR/default.desktop$$escape_expand(\n\t))
 
         #COPIAR ARCHIVOS DENTRO DE APPIMAGE
         EXTRA_BINFILES += \
