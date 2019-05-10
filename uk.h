@@ -56,6 +56,9 @@
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlRecord>
 
+//Librelias Multimedia
+#include <QMediaPlayer>
+
 //Librerias Json
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -166,6 +169,9 @@ public:
         u.append(s.toHtmlEscaped());
         u.append("\n");
         ukStd=u;
+        if(debugLog){
+            qDebug()<<s;
+        }
         emit ukStdChanged();
     }
     Q_INVOKABLE QString getStdErr(){
@@ -237,6 +243,8 @@ public:
     Q_INVOKABLE void writePinLow(unsigned int pinnum);
     Q_INVOKABLE bool pinIsHigh(int pin);
 
+    //For Audio Stream
+    qint64 uFileSize=0;
 
  signals:
     //Señales para QML
@@ -322,6 +330,8 @@ public slots:
     QString getUpkTempPath();
     QString getUpksLocalPath();
     bool fileExist(QByteArray fileName);
+    QByteArray base64ToByteArray(const QByteArray data);
+    QByteArray byteArrayToBase64(const QByteArray data);
 #ifdef Q_OS_WIN
     bool createLink(QString execString,  QString arguments, QString lnkLocationFileName, QString description, QString workingDirectory);
 #endif
@@ -337,6 +347,11 @@ public slots:
         unik.setFile('/tmp/imageData.txt',unik.itemToImageData(result));
     });*/
     Q_INVOKABLE QByteArray itemToImageData(QObject *item);
+
+    //Funciones para Audio
+    Q_INVOKABLE QByteArray  sendAudioStreamWSS(const QString audioFilePath, int bytes);
+    Q_INVOKABLE void appendAudioStreamFileWSS(const QString audioFilePath, const QByteArray data);
+
 
     //Funciones Varias
     QString toHtmlEscaped(QString htmlCode);
@@ -385,6 +400,12 @@ private:
 
     QNetworkReply *respuentaSendDatos;
     QImage *frame;
+
+    //Variables Multimedia
+    QMediaPlayer *mPlayer;
+    QBuffer *mBuffer;
+    QByteArray databuf;
+
 
 #ifndef Q_OS_ANDROID
 #ifdef __arm__

@@ -10,6 +10,28 @@ UK::UK(QObject *parent) : QObject(parent)
     rpiGpio = new mmapGpio();
 #endif
 #endif
+
+
+
+    mPlayer = new QMediaPlayer(this, QMediaPlayer::StreamPlayback);
+    mBuffer = new QBuffer(this);
+    mBuffer->open(QIODevice::ReadWrite);
+    mPlayer->setMedia(QMediaContent(), mBuffer);
+
+
+
+    /*player = new QMediaPlayer;
+    //player->set
+    QFile a("/home/nextsigner/Música/clip_0002.mov");
+    if(a.open(QIODevice::ReadOnly)){
+        QByteArray data;
+        data.append(a.readAll());
+        a.close();
+        qint64 size=data.size();
+        QByteArray databuf2 = QByteArray(reinterpret_cast<char*>(&data), size);
+        //QBuffer mediaStream(&databuf);
+        //player->setMedia(QMediaContent(), &mediaStream);
+    }*/
 }
 
 UK::~UK()
@@ -1815,6 +1837,16 @@ bool UK::fileExist(QByteArray fileName)
     return a.exists();
 }
 
+QByteArray UK::base64ToByteArray(const QByteArray data)
+{
+    return QByteArray::fromBase64(data);
+}
+
+QByteArray UK::byteArrayToBase64(const QByteArray data)
+{
+    return data.toBase64();
+}
+
 
 #ifdef Q_OS_WIN
 bool UK::createLink(QString execString, QString arguments, QString lnkLocationFileName, QString description, QString workingDirectory)
@@ -1904,6 +1936,65 @@ QByteArray UK::itemToImageData(QObject *item)
     bu.open(QIODevice::WriteOnly);
     qi.save(&bu, "PNG");
     return ba.toBase64().data();
+}
+
+Q_INVOKABLE QByteArray  UK::sendAudioStreamWSS(const QString audioFilePath,  int bytes)
+{
+    QFile file(audioFilePath);
+    if(file.open(QIODevice::ReadOnly))
+    {
+        qint64 fileSize = file.size();
+        qint64 dataSize=fileSize-uFileSize;
+        qint64 num = dataSize;
+
+
+        //file.seek(fileSize - (fileSize-num));
+        //uFileSize=fileSize;
+        QByteArray data;
+        data.reserve(50000);
+       //data.append(file.read(num));
+        data.append(file.readAll().toBase64());
+       if(audioFilePath==QString("/tmp/stream-0.ogg")){
+           qDebug() <<"XFile Size:"<< file.size();
+           qDebug() <<"XFile 64 Size:"<< data.size();
+       }
+        //qDebug() << "File Read: "<<data;
+       file.close();
+       /*QFile fileSalida("/home/nextsigner/salida.ogg");
+       if(fileSalida.open(QIODevice::WriteOnly))
+       {
+           fileSalida.write(data);
+           fileSalida.close();
+       }*/
+       return data;
+    }
+    return "";
+}
+
+void UK::appendAudioStreamFileWSS(const QString audioFilePath, const QByteArray data)
+{
+    QFile file(audioFilePath);
+    //file.open(QIODevice::WriteOnly | QIODevice::Append);
+    file.open(QIODevice::WriteOnly);
+    //file.seek(file.size()-1);
+    file.write(QByteArray::fromBase64(data));
+    if(audioFilePath==QString("/tmp/streamOutPut--0.ogg")){
+        qDebug() <<"XXFile Size:"<< file.size();
+        qDebug() <<"XXFile 64 Size:"<< data.size();
+    }
+    file.close();
+
+    /*
+    //mBuffer->seek(0);
+    mBuffer->write(QByteArray::fromBase64(data));
+    //mBuffer->seek(0);
+    //mBuffer<<data;
+    //mPlayer->setMedia(QMediaContent(), mBuffer);
+    mPlayer->play();
+
+    //player = new QMediaPlayer;
+    //player->setMedia(QMediaContent(), &buffer);
+    */
 }
 #endif
 

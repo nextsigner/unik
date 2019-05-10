@@ -75,6 +75,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += main.cpp \
+    audiorecorder.cpp \
     uk.cpp \
     row.cpp \
     unikargsproc.cpp \
@@ -98,6 +99,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    audiorecorder.h \
     uk.h \
     qmlclipboardadapter.h \
     row.h \

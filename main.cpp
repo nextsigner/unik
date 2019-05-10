@@ -37,6 +37,7 @@
 #include <QtAndroid>
 #endif
 
+#include "audiorecorder.h"
 #include "chatserver.h"
 #include "unikargsproc.h"
 #include "uniklogobject.h"
@@ -338,12 +339,15 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     u.setEngine(&engine);//Set engine for a variable access into the unik main instance.
 
+    AudioRecorder ar;
+
     //Setting any unik vars for a QML interaction.
     engine.rootContext()->setContextProperty("engine", &engine);
     engine.rootContext()->setContextProperty("unik", &u);
     engine.rootContext()->setContextProperty("console", &u);
     engine.rootContext()->setContextProperty("unikLog", u.ukStd);
     engine.rootContext()->setContextProperty("unikError", listaErrores);
+    engine.rootContext()->setContextProperty("audioRecorder", &ar);
 
     //Setting any vars...
     engine.rootContext()->setContextProperty("wait", u.wait);
