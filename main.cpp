@@ -347,6 +347,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("console", &u);
     engine.rootContext()->setContextProperty("unikLog", u.ukStd);
     engine.rootContext()->setContextProperty("unikError", listaErrores);
+    engine.rootContext()->setContextProperty("uap", uap.args);
     engine.rootContext()->setContextProperty("audioRecorder", &ar);
 
     //Setting any vars...
@@ -955,41 +956,9 @@ int main(int argc, char *argv[])
     }
 
     if(modeFolder){
-        qInfo()<<"Running in folder mode: "<<appArg1<<" "<<appArg2<<" "<<appArg3;
         pq = "";
         pq.append(appArg2);
         pq.append("/");
-        qInfo()<<"[-folder 22] appArg2="<<appArg2;
-        qInfo()<<"[-folder 3] PQ="<<pq;
-        qInfo()<<"[-folder 4] PWS="<<pws;
-        /*QDir carpetaModeFolder(appArg2);
-        QFile mainModeFolder(appArg2+"/main.qml");
-        if(carpetaModeFolder.exists()&&mainModeFolder.exists()){
-            u.log("Folder to -folder exist...");
-            pq.append("/");
-        }else{
-            if(!carpetaModeFolder.exists()){
-                u.log("Folder to -folder not exist...");
-            }
-            if(!mainModeFolder.exists()){
-                u.log("main.qml to -folder not exist...");
-            }
-            pq="";
-            pq.append(pws);
-            qInfo()<<"[-folder 5] PQ="<<pq;
-            engine.addImportPath(pq);
-            engine.addPluginPath(pq);
-#ifndef __arm__
-            pq.append("/unik-tools/");
-#else
-#ifdef Q_OS_ANDROID
-            pq.append("/unik-android-apps/");
-#else
-            pq.append("/unik-tools-rpi/");
-#endif
-#endif
-        }*/
-        qInfo()<<"[-folder 6] PQ="<<pq;
         u.mkdir(pq);
     }
 

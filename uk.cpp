@@ -983,7 +983,7 @@ void UK::log(QByteArray d)
     QString d2;
     d2.append(d);
     if(!_engine->rootContext()->property("setInitString").toBool()){
-        initStdString.append(d2.toHtmlEscaped());
+        initStdString.append(d2);
         initStdString.append("\n");
     }
     setUkStd(d2);
