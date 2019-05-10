@@ -53,6 +53,9 @@ message(linux.pri is loaded)
 
            QMAKE_POST_LINK += $$quote(sh $$PWD/makeDesktopFile.sh unik_v$$VERSION_MAJ"."$$system(date +%W).$$LBC $$DESTDIR/default.desktop$$escape_expand(\n\t))
 
+        #Copy unik icon image to destdir
+        $$system(cp $$PWD/logo_unik.png $$DESTDIR/default.png$$escape_expand(\n\t))
+
         #COPIAR ARCHIVOS DENTRO DE APPIMAGE
         EXTRA_BINFILES += \
         /tmp/linux_version
