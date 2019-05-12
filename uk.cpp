@@ -66,7 +66,6 @@ void UK::engineExited(int n)
     qInfo()<<ld;
     db.close();
 }
-
 void UK::engineQuited(QObject *)
 {
     db.close();

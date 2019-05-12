@@ -1,3 +1,9 @@
 #!/bin/bash
-DATA="[Desktop Entry]\nType=Application\nName=$1\nExec=AppRun %F\nIcon=default\nComment=Unik Qml Engine by @nextsigner\nTerminal=true"
-echo -e $DATA > $2
+rm  $2
+echo "[Desktop Entry]" >> $2
+echo "Type=Application" >> $2
+echo "Name="$1  >> $2
+echo "Exec=AppRun %F" >> $2
+echo  "Icon=default" >> $2
+echo "Comment=Unik Qml Engine by @nextsigner" >> $2
+echo "Terminal=true" >> $2

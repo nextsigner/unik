@@ -1,7 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.0
-ApplicationWindow {
+Window {
     id: appSplash
     objectName: 'awsplash'
     visible: true
@@ -158,5 +158,11 @@ ApplicationWindow {
     MouseArea{
         anchors.fill: parent
         onClicked: r.opacity = 0.0
+    }
+    Timer{
+        running: true
+        repeat: true
+        interval: 2000
+        onTriggered: console.log('Splash....')
     }
 }
