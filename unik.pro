@@ -5,6 +5,10 @@
 # GitHub: https://github.com/nextsigner/unik
 
 QT += qml quick sql websockets
+
+#Widget for Qt.labs.platform 1.0
+QT += widgets
+
 !contains(QMAKE_HOST.arch, arm.*):{
     message(NO Desarrollando para RPI)
     QT += multimedia

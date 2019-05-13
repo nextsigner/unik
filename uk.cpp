@@ -1383,7 +1383,7 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
 {
     log("downloading zip file from: "+url);
     uZipUrl=QString(url);
-    uZipSize=-1;
+    uZipSize=0;
     QEventLoop eventLoop0;
     QNetworkAccessManager mgr0;
     QObject::connect(&mgr0, SIGNAL(finished(QNetworkReply*)), &eventLoop0, SLOT(quit()));
@@ -1395,6 +1395,9 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
                 [=]( ) {
         uZipSize=reply0->header(QNetworkRequest::ContentLengthHeader).toInt();
         reply0->deleteLater();
+        if(uZipSize<=0){
+            return downloadZipFile(url, ubicacion);
+        }
     }
     );
 

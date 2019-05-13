@@ -1,7 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.0
-Window {
+ApplicationWindow {
     id: appSplash
     objectName: 'awsplash'
     visible: true
@@ -11,7 +11,8 @@ Window {
     property int fs: appSplash.width*0.02
     property bool ver: true
     property color c1: "#1fbc05"
-    property color c2: "#4fec35"
+    property color c2: "white"
+    property int uProgressBarPorc: 0
     Connections {target: unik;onUkStdChanged: logtxt.setTxtLog(''+unik.ukStd);}
     Connections {target: unik;onStdErrChanged: logtxt.setTxtLog(''+unik.getStdErr());}
     onVerChanged: xLogTxt.opacity=0.0
@@ -126,13 +127,13 @@ Window {
         Text{
             id: logtxt
             color: appSplash.c2
-            font.pixelSize: appSplash.fs
+            font.pixelSize: appSplash.fs*0.5
             //anchors.verticalCenter: parent.verticalCenter
             width: parent.width-appSplash.fs
             height: contentHeight
             anchors.centerIn: parent
             wrapMode: Text.WrapAnywhere
-            anchors.verticalCenterOffset: appSplash.fs*0.5
+            //anchors.verticalCenterOffset: appSplash.fs*0.5
             function setTxtLog(t){
                 var  d=(''+t).replace(/\n/g, ' ')
                 var p=true
@@ -145,9 +146,11 @@ Window {
                         var m2=(''+m1[1]).replace('%','')
                         //unik.setFile('/home/nextsigner/nnn', ''+m2)
                         var m3=parseInt(m2.replace(/ /g,''))
-                        pb.width=pb.parent.width/100*m3
+                        if(m3>appSplash.uProgressBarPorc){
+                            pb.width=pb.parent.width/100*m3
+                            appSplash.uProgressBarPorc=m3
+                        }
                     }
-
                 }
                 if(p){
                     logtxt.text=t
@@ -158,11 +161,5 @@ Window {
     MouseArea{
         anchors.fill: parent
         onClicked: r.opacity = 0.0
-    }
-    Timer{
-        running: true
-        repeat: true
-        interval: 2000
-        onTriggered: console.log('Splash....')
-    }
+    }    
 }
