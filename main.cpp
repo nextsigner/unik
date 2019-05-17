@@ -45,8 +45,12 @@
 
 #ifdef Q_OS_ANDROID
     #ifndef __arm__
-        UK *u0;
+        UK *u0;        
     #endif
+        QWebSocketServer *server;
+       ChatServer* chatserver;
+       QWebChannel channel;
+       WebSocketClientWrapper *clientWrapper;
 #endif
 
         UnikLogObject ulo;
@@ -624,14 +628,73 @@ int main(int argc, char *argv[])
         });
     }
 #else
-    QWebChannel channel;
-    u._channel=&channel;
-    WebSocketClientWrapper *clientWrapper;
-    u._clientWrapper=clientWrapper;
-    ChatServer* chatserver = new ChatServer(&app);
-    u._chatserver=chatserver;
-    engine.rootContext()->setContextProperty("cs", u._chatserver);
-    engine.rootContext()->setContextProperty("cw", u._clientWrapper);
+
+    //u._channel=&channel;
+
+    //u._clientWrapper=clientWrapper;
+    chatserver = new ChatServer(&app);
+    //u._chatserver=chatserver;
+    //engine.rootContext()->setContextProperty("cs", u._chatserver);
+    //engine.rootContext()->setContextProperty("cw", u._clientWrapper);
+    server=new QWebSocketServer(QStringLiteral("Unik QWebChannel Standalone Server"),
+                                                  QWebSocketServer::NonSecureMode);
+
+    //engine.rootContext()->setContextProperty("wss", server);
+    engine.rootContext()->setContextProperty("cs", chatserver);
+
+
+    QObject::connect(&u, &UK::initWSS, [=](QQmlApplicationEngine *_engine, QByteArray ip, int port, QByteArray serverName){
+        qInfo()<<"Unik Server Request: "<<ip<<":"<<port<<" Server Name: "<<serverName;
+        const QHostAddress &localhost = QHostAddress(QHostAddress::LocalHost);
+        QHostAddress addr("192.168.1.64");
+        qint64 p=5500;
+        if (!server->listen(addr, p)) {
+            qInfo("Failed to open web socket server.");
+            //return false;
+        }else{
+            qInfo()<<"WSS listen in "<<addr.toString()<<":"<<p;
+        }
+        //        for (const QHostAddress &address: QNetworkInterface::allAddresses()) {
+//            if (address.protocol() == QAbstractSocket::IPv4Protocol && address != localhost)
+//                qDebug() <<"Local ip: "<< address.toString();
+//            //QHostAddress addr(192.168.1.61);
+//            qint64 p=5500;
+//            if (!server->listen(address, p)) {
+//                qInfo("Failed to open web socket server.");
+//                //return false;
+//            }else{
+//                qInfo()<<"WSS listen in "<<address.toString()<<":"<<p;
+//            }
+//            if(address.toString().contains("192.168")){
+//                break;
+//            }
+//        }
+
+        clientWrapper=new WebSocketClientWrapper(server);
+        QObject::connect(clientWrapper, &WebSocketClientWrapper::clientConnected,
+                         &channel, &QWebChannel::connectTo);
+        //
+        channel.registerObject(serverName.constData(), chatserver);
+        _engine->rootContext()->setContextProperty("cw", clientWrapper);
+    });
+
+
+
+    /*if(wss)
+
+    QObject::connect(&u, &UK::initWSS, [=](const QByteArray ip, const int port, const QByteArray serverName){
+            qInfo()<<"Unik Server Request: "<<ip<<":"<<port<<" Server Name: "<<serverName;
+
+            //QWebSocketServer *server=(QWebSocketServer*)u._server;
+            //u.setServer(&server);
+            //u._server=server;
+           // u.ip=&ip;
+            //bool wsss=u.startWSS(ip, port, serverName);//WebSocketsServerStarted
+            //u._channel->registerObject(serverName.constData(), chatserver);
+            //qInfo()<<"Unik WebSockets Server Started: "<<wsss;
+
+        });
+    }*/
 #endif
     QObject::connect(&u, &UK::restartingApp, [=](){
         qApp->quit();

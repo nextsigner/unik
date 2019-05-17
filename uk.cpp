@@ -1612,6 +1612,22 @@ bool UK::startWSS(const QByteArray ip, const int port, const QByteArray serverNa
     _engine->rootContext()->setContextProperty("cw", _clientWrapper);
     return true;
 }
+#else
+bool UK::startWSS(QByteArray ip, int port, QByteArray serverName)
+{
+    /*QHostAddress addr(ip.constData());
+    if (!server->listen(addr, 12345)) {
+        qFatal("Failed to open web socket server.");
+        return false;
+    }
+    _clientWrapper=new WebSocketClientWrapper(server);
+    QObject::connect(_clientWrapper, &WebSocketClientWrapper::clientConnected,
+                     _channel, &QWebChannel::connectTo);
+    _engine->rootContext()->setContextProperty("cw", _clientWrapper);
+    _channel->registerObject(serverName.constData(), _chatserver);*/
+    emit initWSS(_engine, ip, port, serverName);
+    return true;
+}
 #endif
 bool UK::sqliteInit(QString pathName)
 {

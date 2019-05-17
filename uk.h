@@ -116,16 +116,20 @@ public:
     explicit UK(QObject *parent = nullptr);
     ~UK();
     QGuiApplication *app;
-#ifndef Q_OS_ANDROID
+//#ifndef Q_OS_ANDROID
     QWebSocketServer *_server;
+    void setServer(const QWebSocketServer *server){
+        //_server=(QWebSocketServer*)server;
+        //_server=(QWebSocketServer)server;
+    }
     WebSocketClientWrapper *_clientWrapper;
     QWebChannel *_channel;
     ChatServer* _chatserver;
-#else
+/*#else
     WebSocketClientWrapper *_clientWrapper;
     QWebChannel *_channel;
     ChatServer* _chatserver;
-#endif
+#endif*/
     QStringList uErrors;
 
     //Propiedades para QML
@@ -255,9 +259,9 @@ public:
     void stdErrChanged();
     void runCLChanged();
     void debugLogChanged();
-#ifndef Q_OS_ANDROID
-    void initWSS(const QByteArray, const int, const QByteArray);
-#endif
+//#ifndef Q_OS_ANDROID
+    void initWSS(QQmlApplicationEngine *_engine, const QByteArray, const int, const QByteArray);
+//#endif
     void restartingApp();
 
 public slots:
@@ -312,6 +316,8 @@ public slots:
 #ifndef Q_OS_ANDROID
     void initWebSocketServer(const QByteArray ip, const int port, const QByteArray serverName);
     bool startWSS(const QByteArray ip, const int port, const QByteArray serverName);
+#else
+    bool startWSS(QByteArray ip,  int port, QByteArray serverName);
 #endif
     //Funciones Sqlite
     bool sqliteInit(QString pathName);
@@ -405,6 +411,7 @@ private:
     QMediaPlayer *mPlayer;
     QBuffer *mBuffer;
     QByteArray databuf;
+
 
 
 #ifndef Q_OS_ANDROID
