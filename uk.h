@@ -69,6 +69,7 @@
 #include <QStandardPaths>
 #include <QThread>
 #include "row.h"
+#include "unikimageprovider.h"
 
 //Librerias Chat Server
 #include "qwebchannel.h"
@@ -116,20 +117,11 @@ public:
     explicit UK(QObject *parent = nullptr);
     ~UK();
     QGuiApplication *app;
-//#ifndef Q_OS_ANDROID
-    QWebSocketServer *_server;
-    void setServer(const QWebSocketServer *server){
-        //_server=(QWebSocketServer*)server;
-        //_server=(QWebSocketServer)server;
-    }
+    QWebSocketServer *_server;    
     WebSocketClientWrapper *_clientWrapper;
     QWebChannel *_channel;
     ChatServer* _chatserver;
-/*#else
-    WebSocketClientWrapper *_clientWrapper;
-    QWebChannel *_channel;
-    ChatServer* _chatserver;
-#endif*/
+
     QStringList uErrors;
 
     //Propiedades para QML
@@ -259,9 +251,11 @@ public:
     void stdErrChanged();
     void runCLChanged();
     void debugLogChanged();
-//#ifndef Q_OS_ANDROID
+//#ifdef Q_OS_ANDROID
     void initWSS(QQmlApplicationEngine *_engine, const QByteArray, const int, const QByteArray);
-//#endif
+/*#else
+    void initWSS(const QByteArray, const int, const QByteArray);
+#endif*/
     void restartingApp();
 
 public slots:
@@ -313,12 +307,8 @@ public slots:
     void uploadProgress(qint64 bytesSend, qint64 bytesTotal);
     void downloadProgress(qint64 bytesSend, qint64 bytesTotal);
     void sendFinished();
-#ifndef Q_OS_ANDROID
-    void initWebSocketServer(const QByteArray ip, const int port, const QByteArray serverName);
-    bool startWSS(const QByteArray ip, const int port, const QByteArray serverName);
-#else
     bool startWSS(QByteArray ip,  int port, QByteArray serverName);
-#endif
+
     //Funciones Sqlite
     bool sqliteInit(QString pathName);
     bool sqlQuery(QString query);
@@ -338,6 +328,8 @@ public slots:
     bool fileExist(QByteArray fileName);
     QByteArray base64ToByteArray(const QByteArray data);
     QByteArray byteArrayToBase64(const QByteArray data);
+    QByteArray uCompressed(const QByteArray data);
+
 #ifdef Q_OS_WIN
     bool createLink(QString execString,  QString arguments, QString lnkLocationFileName, QString description, QString workingDirectory);
 #endif
@@ -348,11 +340,15 @@ public slots:
 
     //Funciones de Imagen
 
+    QImage getScreen(int screen);
+    Q_INVOKABLE QByteArray imageCameraCapturaToByteArray(QString url);
     //From Qml call
     /*item.grabToImage(function(result) {
         unik.setFile('/tmp/imageData.txt',unik.itemToImageData(result));
     });*/
     Q_INVOKABLE QByteArray itemToImageData(QObject *item);
+    Q_INVOKABLE QByteArray screenImageData(int screen);
+
 
     //Funciones para Audio
     Q_INVOKABLE QByteArray  sendAudioStreamWSS(const QString audioFilePath, int bytes);
@@ -406,6 +402,9 @@ private:
 
     QNetworkReply *respuentaSendDatos;
     QImage *frame;
+
+    //Variables de Imagen
+    UnikImageProvider *uip;
 
     //Variables Multimedia
     QMediaPlayer *mPlayer;

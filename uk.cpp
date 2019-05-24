@@ -13,6 +13,7 @@ UK::UK(QObject *parent) : QObject(parent)
 
 
 
+
     mPlayer = new QMediaPlayer(this, QMediaPlayer::StreamPlayback);
     mBuffer = new QBuffer(this);
     mBuffer->open(QIODevice::ReadWrite);
@@ -1591,7 +1592,7 @@ void UK::sendFinished()
     setUploadState(respuentaSendDatos->readAll());
 }
 
-#ifndef Q_OS_ANDROID
+/*#ifndef Q_OS_ANDROID
 void UK::initWebSocketServer(const QByteArray ip, const int port, const QByteArray serverName)
 {
     emit initWSS(ip, port, serverName);
@@ -1612,23 +1613,13 @@ bool UK::startWSS(const QByteArray ip, const int port, const QByteArray serverNa
     _engine->rootContext()->setContextProperty("cw", _clientWrapper);
     return true;
 }
-#else
+#else*/
 bool UK::startWSS(QByteArray ip, int port, QByteArray serverName)
 {
-    /*QHostAddress addr(ip.constData());
-    if (!server->listen(addr, 12345)) {
-        qFatal("Failed to open web socket server.");
-        return false;
-    }
-    _clientWrapper=new WebSocketClientWrapper(server);
-    QObject::connect(_clientWrapper, &WebSocketClientWrapper::clientConnected,
-                     _channel, &QWebChannel::connectTo);
-    _engine->rootContext()->setContextProperty("cw", _clientWrapper);
-    _channel->registerObject(serverName.constData(), _chatserver);*/
     emit initWSS(_engine, ip, port, serverName);
     return true;
 }
-#endif
+
 bool UK::sqliteInit(QString pathName)
 {
     bool ret=false;
@@ -1865,6 +1856,11 @@ QByteArray UK::byteArrayToBase64(const QByteArray data)
     return data.toBase64();
 }
 
+QByteArray UK::uCompressed(const QByteArray data)
+{
+    return qUncompress(data);
+}
+
 
 #ifdef Q_OS_WIN
 bool UK::createLink(QString execString, QString arguments, QString lnkLocationFileName, QString description, QString workingDirectory)
@@ -1944,6 +1940,22 @@ bool UK::createLink(QString execString, QString desktopLocationFileName, QString
     return true;
 }
 
+QImage UK::getScreen(int screen)
+{
+    QScreen *s = QGuiApplication::primaryScreen();
+    return s->grabWindow(screen).toImage();
+}
+
+QByteArray UK::imageCameraCapturaToByteArray(QString url)
+{
+    QImage qi(url);
+    QByteArray ba;
+    QBuffer bu(&ba);
+    bu.open(QIODevice::WriteOnly);
+    qi.save(&bu, "JPEG");
+    return ba.toBase64().data();
+}
+
 QByteArray UK::itemToImageData(QObject *item)
 {
     QQuickItemGrabResult *itemGR = nullptr;
@@ -1952,7 +1964,19 @@ QByteArray UK::itemToImageData(QObject *item)
     QByteArray ba;
     QBuffer bu(&ba);
     bu.open(QIODevice::WriteOnly);
-    qi.save(&bu, "PNG");
+    qi.save(&bu, "JPEG");
+    return ba.toBase64().data();
+    //qDebug()<<qCompress(ba);
+    //return qCompress(ba);
+}
+
+QByteArray UK::screenImageData(int screen)
+{
+    QScreen *s = QGuiApplication::primaryScreen();
+    QByteArray ba;
+    QBuffer bu(&ba);
+    bu.open(QIODevice::WriteOnly);
+    s->grabWindow(screen).toImage().save(&bu, "JPEG");
     return ba.toBase64().data();
 }
 

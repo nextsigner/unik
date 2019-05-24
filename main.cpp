@@ -41,16 +41,22 @@
 #include "chatserver.h"
 #include "unikargsproc.h"
 #include "uniklogobject.h"
+#include "unikimageprovider.h"
 
 
 #ifdef Q_OS_ANDROID
     #ifndef __arm__
         UK *u0;        
+        UK u;
     #endif
         QWebSocketServer *server;
        ChatServer* chatserver;
        QWebChannel channel;
        WebSocketClientWrapper *clientWrapper;
+#else
+     QWebSocketServer *server;
+     WebSocketClientWrapper *clientWrapper;
+     QWebChannel channel;
 #endif
 
         UnikLogObject ulo;
@@ -158,6 +164,11 @@ static void android_message_handler(QtMsgType type,
                                     const QMessageLogContext &context,
                                     const QString &message)
 {
+#ifndef __arm__
+     u.log(message.toUtf8());
+ #else
+ ulo.setLog(message.toUtf8());
+ #endif
     android_LogPriority priority = ANDROID_LOG_DEBUG;
     switch (type) {
     case QtDebugMsg: priority = ANDROID_LOG_DEBUG; break;
@@ -166,12 +177,7 @@ static void android_message_handler(QtMsgType type,
     case QtFatalMsg: priority = ANDROID_LOG_FATAL; break;
     };
 
-    __android_log_print(priority, "Qt", "%s", qPrintable(message));
-   #ifndef __arm__
-        u0->log(message.toUtf8());
-    #else
-    ulo.setLog(message.toUtf8());
-    #endif
+    __android_log_print(priority, "Qt", "%s", qPrintable(message));   
 }
 #endif
 int main(int argc, char *argv[])
@@ -207,7 +213,7 @@ int main(int argc, char *argv[])
     qInfo()<<"UAP showLaunch: "<<uap.showLaunch;
 
 #ifdef Q_OS_ANDROID
-    UK u; //For other OS this declaration is defined previus the main function
+    //UK u; //For other OS this declaration is defined previus the main function
     u.setObjectName("uk3");
     auto  result = QtAndroid::checkPermission(QString("android.permission.CAMERA"));
             if(result == QtAndroid::PermissionResult::Denied){
@@ -346,6 +352,7 @@ int main(int argc, char *argv[])
     AudioRecorder ar;
 
     //Setting any unik vars for a QML interaction.
+    engine.addImageProvider(QLatin1String("unik"), new UnikImageProvider);
     engine.rootContext()->setContextProperty("engine", &engine);
     engine.rootContext()->setContextProperty("unik", &u);
     engine.rootContext()->setContextProperty("console", &u);
@@ -607,7 +614,50 @@ int main(int argc, char *argv[])
     }
 
 #ifndef Q_OS_ANDROID
-    QWebChannel channel;
+    //->WSS
+     ChatServer* chatserver = new ChatServer(&app);
+    engine.rootContext()->setContextProperty("cs", chatserver);
+    engine.rootContext()->setContextProperty("cw", clientWrapper);
+    QObject::connect(&u, &UK::initWSS, [=](QQmlApplicationEngine *_engine, QByteArray ip, int port, QByteArray serverName){
+        qInfo()<<"Unik Server Request: "<<ip<<":"<<port<<" Server Name: "<<serverName;
+        server=new QWebSocketServer(QStringLiteral("Unik QWebChannel Standalone Server"),
+                                                          QWebSocketServer::NonSecureMode);
+        QHostAddress addr(ip.constData());
+
+        /*for (const QHostAddress &address: QNetworkInterface::allAddresses()) {
+            if (address.protocol() == QAbstractSocket::IPv4Protocol && address != localhost)
+                qDebug() <<"Local ip: "<< address.toString();
+            //QHostAddress addr(192.168.1.61);
+            qint64 p=5500;
+            if (!server->listen(address, p)) {
+                qInfo("Failed to open web socket server.");
+                //return false;
+            }else{
+                qInfo()<<"WSS listen in "<<address.toString()<<":"<<p;
+            }
+            if(address.toString().contains("192.168")){
+                break;
+            }
+        }*/
+
+
+
+        if (!server->listen(addr, port)) {
+            qInfo("Failed to open web socket server.");
+            //return false;
+        }else{
+            qInfo()<<"WSS listen in "<<addr.toString()<<":"<<port;
+        }
+        clientWrapper=new WebSocketClientWrapper(server);
+        QObject::connect(clientWrapper, &WebSocketClientWrapper::clientConnected,
+                         &channel, &QWebChannel::connectTo);
+        //
+        channel.registerObject(serverName.constData(), chatserver);
+        _engine->rootContext()->setContextProperty("cw", clientWrapper);
+    });
+    //<-WSS
+
+    /*QWebChannel channel;
     u._channel=&channel;
     WebSocketClientWrapper *clientWrapper;
     u._clientWrapper=clientWrapper;
@@ -626,7 +676,7 @@ int main(int argc, char *argv[])
             qInfo()<<"Unik WebSockets Server Started: "<<wsss;
 
         });
-    }
+    }*/
 #else
 
     //u._channel=&channel;
@@ -636,17 +686,19 @@ int main(int argc, char *argv[])
     //u._chatserver=chatserver;
     //engine.rootContext()->setContextProperty("cs", u._chatserver);
     //engine.rootContext()->setContextProperty("cw", u._clientWrapper);
-    server=new QWebSocketServer(QStringLiteral("Unik QWebChannel Standalone Server"),
-                                                  QWebSocketServer::NonSecureMode);
+//    server=new QWebSocketServer(QStringLiteral("Unik QWebChannel Standalone Server"),
+//                                                  QWebSocketServer::NonSecureMode);
 
     //engine.rootContext()->setContextProperty("wss", server);
     engine.rootContext()->setContextProperty("cs", chatserver);
+    engine.rootContext()->setContextProperty("cw", clientWrapper);
 
 
     QObject::connect(&u, &UK::initWSS, [=](QQmlApplicationEngine *_engine, QByteArray ip, int port, QByteArray serverName){
         qInfo()<<"Unik Server Request: "<<ip<<":"<<port<<" Server Name: "<<serverName;
-        const QHostAddress &localhost = QHostAddress(QHostAddress::LocalHost);
-        QHostAddress addr("192.168.1.64");
+        server=new QWebSocketServer(QStringLiteral("Unik QWebChannel Standalone Server"),
+                                                      QWebSocketServer::NonSecureMode);
+        QHostAddress addr(ip.constData());
         qint64 p=5500;
         if (!server->listen(addr, p)) {
             qInfo("Failed to open web socket server.");

@@ -84,6 +84,7 @@ SOURCES += main.cpp \
     row.cpp \
     unikargsproc.cpp \
     chatserver.cpp \
+    unikimageprovider.cpp \
     websocketclientwrapper.cpp \
     websockettransport.cpp \
     uniklogobject.cpp
@@ -109,6 +110,7 @@ HEADERS += \
     row.h \
     unikargsproc.h \
     chatserver.h \
+    unikimageprovider.h \
     websocketclientwrapper.h \
     websockettransport.h \
     uniklogobject.h
