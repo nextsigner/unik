@@ -1,20 +1,24 @@
-# Compile this project with Qt 5.12.3 on GNU/Linux, Windows or Macos
-# For Android you needs compile into GNU/Linux with Android SDK
-# and Android NDK r16b or later
+# Compile this project with Qt 5.13.0 on GNU/Linux, Windows or Macos
+# For Android you needs compile into GNU/Linux with Android SDK 26.1.1 or later
+# and Android NDK r19c or later
 
 #Linux Deploy
 #Deploy Command Line Example
 
-#1 Copy default.png image for app icon.
+#1) Copy default.png image for app icon.
 
-#2 Edit default.desktop
+#2) Edit default.desktop
 
 #3)  ./linuxdeployqt-continuous-x86_64.AppImage /media/nextsigner/ZONA-A1/nsp/build_unik_linux/unik -qmldir=/media/nextsigner/ZONA-A1/nsp/unik -qmake=/home/nextsigner/Qt5.12.3/5.12.3/gcc_64/bin/qmake -verbose=3
 
-#4) ./linuxdeployqt-continuous-x86_64.AppImage /media/nextsigner/ZONA-A1/nsp/build_unik_linux/unik -qmldir=/media/nextsigner/ZONA-A1/nsp/unik -qmake=/home/nextsigner/Qt5.12.3/5.12.3/gcc_64/bin/qmake -verbose=3 -bundle-non-qt-libs -no-plugins -appimage
+#4 optional) Copy full plugins and qml folder for full qtquick support.
+#Copy <QT-INSTALL>/gcc_64/qml and <QT-INSTALL>/gcc_64/plugins folders manualy to the executable folder location.
 
-#Optional: For a full QtQuick/plugins compatibility
-#Copy <QT-INSTALL>/gcc_64/qml folder manualy to the executable folder location.
+#5) ./linuxdeployqt-continuous-x86_64.AppImage /media/nextsigner/ZONA-A1/nsp/build_unik_linux/unik -qmldir=/media/nextsigner/ZONA-A1/nsp/unik -qmake=/home/nextsigner/Qt5.12.3/5.12.3/gcc_64/bin/qmake -verbose=3 -bundle-non-qt-libs -no-plugins -appimage
+
+#6 optional) Copy nss3 files into
+#cp -r /usr/lib/x86_64-linux-gnu/nss <executable path>/
+
 
 message(linux.pri is loaded)
 

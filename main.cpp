@@ -355,7 +355,7 @@ int main(int argc, char *argv[])
     engine.addImageProvider(QLatin1String("unik"), new UnikImageProvider);
     engine.rootContext()->setContextProperty("engine", &engine);
     engine.rootContext()->setContextProperty("unik", &u);
-    engine.rootContext()->setContextProperty("console", &u);
+
     engine.rootContext()->setContextProperty("unikLog", u.ukStd);
     engine.rootContext()->setContextProperty("unikError", listaErrores);
     engine.rootContext()->setContextProperty("uap", uap.args);
@@ -370,6 +370,8 @@ int main(int argc, char *argv[])
 #ifndef Q_OS_ANDROID
     QmlClipboardAdapter clipboard;
     engine.rootContext()->setContextProperty("clipboard", &clipboard);
+#else
+    engine.rootContext()->setContextProperty("console", &u);
 #endif
 
 

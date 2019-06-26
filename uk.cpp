@@ -907,7 +907,12 @@ void UK::restartApp(QString args)
 {
     qApp->quit();
     QStringList al = args.split(",");
+    qDebug()<<"Restarting executable "<<qApp->applicationFilePath();
+#ifdef Q_OS_LINUX
+    QProcess::startDetached(qApp->applicationFilePath(), al);
+#else
     QProcess::startDetached(qApp->arguments()[0], al);
+#endif
 }
 
 bool UK::run(QString commandLine)
@@ -1731,7 +1736,10 @@ bool UK::mysqlInit(QString hostName, QString dataBaseName, QString userName, QSt
         firstDB.setDatabaseName(dataBaseName);
         firstDB.setUserName(userName);
         firstDB.setPassword(password);
-        ret = firstDB.open();
+        bool o=firstDB.open();
+        qDebug()<<"Open: "<<o;
+        ret = o;
+
     }else{
         secondDB = QSqlDatabase::addDatabase("QMYSQL");
         secondDB.setHostName(hostName);
