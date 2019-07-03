@@ -323,6 +323,7 @@ public slots:
     bool setFile(QByteArray n, QByteArray d);
     QString getFile(QByteArray n);
     bool mkdir(const QString path);
+    QList<QString> getFolderFileList(const QByteArray folder);
     QString getUpkTempPath();
     QString getUpksLocalPath();
     bool fileExist(QByteArray fileName);
@@ -336,7 +337,7 @@ public slots:
 #ifdef Q_OS_LINUX
     Q_INVOKABLE bool createLink(QString execString, QString desktopLocationFileName, QString name, QString comment);
     Q_INVOKABLE bool createLink(QString execString, QString desktopLocationFileName, QString name, QString comment, QString iconPath);
-#endif
+
 
     //Funciones de Imagen
 
@@ -353,7 +354,7 @@ public slots:
     //Funciones para Audio
     Q_INVOKABLE QByteArray  sendAudioStreamWSS(const QString audioFilePath, int bytes);
     Q_INVOKABLE void appendAudioStreamFileWSS(const QString audioFilePath, const QByteArray data);
-
+#endif
 
     //Funciones Varias
     QString toHtmlEscaped(QString htmlCode);

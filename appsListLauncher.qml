@@ -5,6 +5,7 @@ import Qt.labs.settings 1.0
 ApplicationWindow {
     id: appListLaucher
     objectName: 'awll'
+    visible: true
     visibility:  "Maximized"
     color: "transparent"
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
@@ -34,7 +35,7 @@ ApplicationWindow {
         property string uApp
     }
     FolderListModel{
-        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'/'+appsDir
+        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'file:///'+appsDir+'/'//'/'+appsDir
         id:fl
         showDirs:  false
         showDotAndDotDot: false
@@ -44,7 +45,10 @@ ApplicationWindow {
         nameFilters: "*.ukl"
         property int f: 0
         onCountChanged: {
-            console.log('File: '+fl.get(f,"fileName"))
+            for(var i=0;i<count;i++){
+                console.log('Folder: '+fl.folder+' File: '+fl.get(i,"fileName"))
+            }
+
             f++
         }
     }
@@ -86,7 +90,7 @@ ApplicationWindow {
            ListView{
             id:lv
             spacing: appListLaucher.fs*0.25
-            model:fl
+            //model:fl
             delegate: delegate
             width: appListLaucher.width-appListLaucher.fs*2
             height: (appListLaucher.fs*2+appListLaucher.fs*0.25)*lv.count
@@ -95,20 +99,26 @@ ApplicationWindow {
                 console.log('UCurrentIndex: '+currentIndex)
                 flick.contentY=(appListLaucher.fs*2+appListLaucher.fs*0.25)*currentIndex-appListLaucher.height/2
             }
+            Rectangle{
+                anchors.fill: parent
+                color: 'red'
+            }
         }
     }
+
         Component{
             id:delegate
             Rectangle{
                 id:xItem
                 width: txt.contentWidth+appListLaucher.fs*2
                 height: appListLaucher.fs*2
-                color: xItem.border.width!==0?appListLaucher.c4:appListLaucher.c2
+                //color: xItem.border.width!==0?appListLaucher.c4:appListLaucher.c2
+                color: 'yellow'
                 radius: appListLaucher.fs*0.25
                 border.width: fileName===appListLaucher.ca?2:0
                 border.color: fileName===appListLaucher.ca?appListLaucher.c2:appListLaucher.c4
                 anchors.horizontalCenter: parent.horizontalCenter
-                visible:(''+fileName).indexOf('link')===0&&(''+fileName).indexOf('.ukl')>0
+                //visible:(''+fileName).indexOf('link')===0&&(''+fileName).indexOf('.ukl')>0
                 onColorChanged: {
                     if(xItem.border.width!==0){
                         appListLaucher.ca=appListLaucher.al[index]
@@ -243,7 +253,7 @@ ApplicationWindow {
     }
     Timer{
         id: tlaunch
-        running: true
+        //running: true
         repeat: true
         interval: 1000
         property bool enabled: true
@@ -255,6 +265,11 @@ ApplicationWindow {
             psec.width=psec.parent.width/5*(appListLaucher.sec-1)
 
         }
+    }
+    Component.onCompleted: {
+        var arr = unik.getFolderFileList('C:\\Users\\qt\\Documents\\unik')
+        lv.model=arr
+        //console.log('Archivos: '+unik.getFolderFileList('C:\\Users\\qt\\Documents\\unik'))
     }
     function run(){
         /*var urlGit=(''+unik.getFile(pws+'/'+appListLaucher.ca)).replace(/\n/g, '')

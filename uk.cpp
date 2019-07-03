@@ -1816,6 +1816,16 @@ bool UK::mkdir(const QString path)
     return dir0.exists();
 }
 
+QList<QString> UK::getFolderFileList(const QByteArray folder)
+{
+    QList<QString> ret;
+    QDir d(folder);
+    for (int i=0;i<d.entryList().length();i++) {
+        ret.append(d.entryList().at(i));
+    }
+    return  ret;
+}
+
 QString UK::getUpkTempPath()
 {
     QString pq;

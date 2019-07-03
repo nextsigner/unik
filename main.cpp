@@ -1463,14 +1463,24 @@ int main(int argc, char *argv[])
     qInfo()<<"2-->.>"<<engine.pluginPathList();
     qInfo()<<"3<<"<<QLibraryInfo::Qml2ImportsPath;
 
-    if(uap.showLaunch||showLaunch){
-        mainQml=":/appsListLauncher.qml";
-    }
+    /*if(uap.showLaunch||showLaunch){
+        mainQml="qrc:/appsListLauncher.qml";
+        engine.load(QUrl::fromLocalFile(mainQml));
+        QQmlComponent component(&engine, QUrl(QStringLiteral("qrc:/appsListLauncher.qml")));
+    }else{
+        engine.load(QUrl::fromLocalFile(mainQml));
+        QQmlComponent component(&engine, QUrl::fromLocalFile(mainQml));
+    }*/
+    QByteArray prevMainQml=mainQml;
+    mainQml=uap.showLaunch||showLaunch?":/appsListLauncher.qml":prevMainQml;
+    engine.load(uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
+    QQmlComponent component(&engine, QUrl(QStringLiteral("qrc:/appsListLauncher.qml")));
     qInfo()<<"Init unik: "<<mainQml;
     // engine.load(QUrl(QStringLiteral("qrc:/appsListLauncher.qml")));
     //engine.load(mainQml);
-    engine.load(QUrl::fromLocalFile(mainQml));
-    QQmlComponent component(&engine, QUrl::fromLocalFile(mainQml));
+    //engine.load(QUrl::fromLocalFile(mainQml));
+    //QQmlComponent component(&engine, QUrl(QStringLiteral("qrc:/main.qml")));
+    //QQmlComponent component(&engine, QUrl::fromLocalFile(mainQml));
     /*QQuickWindow *window = qobject_cast<QQuickWindow*>(engine.rootObjects().at(0));
     if (!window) {
         qFatal("Error: Your root item has to be a window.");
@@ -1520,12 +1530,19 @@ int main(int argc, char *argv[])
     //probe.append("qrc:/probe.qml");
     qInfo()<<"showLaunch: "<<showLaunch;
     qInfo()<<"uap.showLaunch: "<<uap.showLaunch;
-    if(uap.showLaunch||showLaunch){
+    QByteArray prevMainQml=mainQml;
+    mainQml=uap.showLaunch||showLaunch?":/appsListLauncher.qml":prevMainQml;
+    engine.load(uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
+    QQmlComponent component(&engine, QUrl(QStringLiteral("qrc:/appsListLauncher.qml")));
+    qInfo()<<"Init unik: "<<mainQml;
+    /*if(uap.showLaunch||showLaunch){
         mainQml="qrc:/appsListLauncher.qml";
     }
     qInfo()<<"Init unik: "<<mainQml;
     engine.load(probe.isEmpty() ? QUrl(mainQml) : QUrl(probe));
     QQmlComponent component(&engine, probe.isEmpty() ? QUrl(mainQml) : QUrl(probe));
+    */
+
 
     engine.addImportPath(qmlImportPath);
     QByteArray m1;
@@ -1552,10 +1569,6 @@ int main(int argc, char *argv[])
 #endif
 #endif
     }
-    //u.deleteFile(urlConfigJsonT.toUtf8());
-#ifdef Q_OS_ANDROID
-    QObject *aw = engine.rootObjects().at(0);//En Android es 0 cuando no carga splash.
-#else
     if(engine.rootObjects().size()>1){
         QObject *aw = engine.rootObjects().at(1);
         QObject::connect(aw, SIGNAL(closing(QQuickCloseEvent *)), &u, SLOT(ukClose(QQuickCloseEvent *)));
@@ -1574,6 +1587,28 @@ int main(int argc, char *argv[])
             }
         }
     }
+    //u.deleteFile(urlConfigJsonT.toUtf8());
+#ifdef Q_OS_ANDROID
+    QObject *aw = engine.rootObjects().at(0);//En Android es 0 cuando no carga splash.
+#else
+    /*if(engine.rootObjects().size()>1){
+        QObject *aw = engine.rootObjects().at(1);
+        QObject::connect(aw, SIGNAL(closing(QQuickCloseEvent *)), &u, SLOT(ukClose(QQuickCloseEvent *)));
+        if(dim!=""){
+            QStringList m=dim.split("x");
+            if(m.size()==2){
+                aw->setProperty("width", QString(m.at(0)).toInt());
+                aw->setProperty("height", QString(m.at(1)).toInt());
+            }
+        }
+        if(pos!=""){
+            QStringList m=pos.split("x");
+            if(m.size()==2){
+                aw->setProperty("x", QString(m.at(0)).toInt());
+                aw->setProperty("y", QString(m.at(1)).toInt());
+            }
+        }
+    }*/
 #endif
 
     //qInfo()<<"Executing from: "<<QDir::currentPath();
