@@ -238,6 +238,8 @@ int main(int argc, char *argv[])
                             QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.INTERNET"}));
                             if(resultHash["android.permission.INTERNET"] == QtAndroid::PermissionResult::Denied)
                                 return 0;
+                        }else {
+                            qInfo()<<"Este dispositivo tiene permiso para INTERNET.";
                         }
 #endif
 

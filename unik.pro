@@ -51,14 +51,19 @@ android{
     CONFIG += -openssl
      contains(ANDROID_TARGET_ARCH,x86) {
         message(Android x86)
-        OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/x86
+        #OPENSSL_LIBS +=-LOpenSSL-for-Android-Prebuilt-master/openssl-1.1.1a-clang/x86/lib
         COMPILEINANDROIDX86 = 1
         DEFINES += UNIK_COMPILE_ANDROID_X86=\\\"$$COMPILEINANDROIDX86\\\"
     }else{
-        message(Android armeabi-v7a)
-        OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/armeabi-v7a
+        contains(ANDROID_TARGET_ARCH,arm64-v8a) {
+            message(Android arm64-v8a)
+            OPENSSL_LIBS +=-L/home/ns/nsp/unik/android/lib/arm64-v8a/lib
+        }else{
+            message(Android armeabi-v7a)
+            OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/lib/armeabi-v7a
+        }
+        OPENSSL_LIBS += -lcrypto -lssl
     }
-    OPENSSL_LIBS += -lcrypto -lssl
     INCLUDEPATH+=/usr/local/zlib/include
     HEADERS += $$PWD/quazip/*.h
     SOURCES += $$PWD/quazip/*.cpp
