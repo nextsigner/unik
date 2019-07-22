@@ -1,18 +1,21 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>qtquickcontrols2.conf</file>
-        <file>fontawesome-webfont.ttf</file>
-        <file>Splash.qml</file>
-        <file>SplashAndroid.qml</file>
-        <file>mainAndroid.qml</file>
-        <file>Boton.qml</file>
-        <file>main_rpi.qml</file>
-        <file>probe.qml</file>
-        <file>appsListLauncher.qml</file>
-        <file>apd.qml</file>
+        <file>UnikWebSocketServerView.qml</file>
         <file>UnikRect.qml</file>
-        <file>resources/logo_unik_500x500.png</file>
+        <file>Unik.qml</file>
+        <file>SplashAndroid.qml</file>
+        <file>probe.qml</file>
+        <file>main_rpi.qml</file>
+        <file>mainAndroid.qml</file>
+        <file>LineResizeH.qml</file>
         <file>imports.qml</file>
+        <file>Boton.qml</file>
+        <file>apd.qml</file>
+        <file>appsListLauncher.qml</file>
+        <file>Splash.qml</file>
+        <file>fontawesome-webfont.ttf</file>
+        <file>resources/logo_unik_512x512.png</file>
+        <file>resources/logo_unik_500x500.png</file>
     </qresource>
 </RCC>

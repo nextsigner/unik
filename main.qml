@@ -1,29 +1,24 @@
-//Compilado con Qt 5.12.3
-import QtQuick 2.7
-import QtQuick.Controls 1.2
-import QtQuick.Layouts 1.3
-import QtQuick.Window 2.0
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+import Qt.labs.settings 1.0
+import QtQuick.Layouts 1.12
+import QtQuick.Window 2.12
 import QtQuick.Dialogs 1.2
 import Qt.labs.platform 1.0
-import QtQuick.LocalStorage 2.0
-import QtQuick.Particles 2.0
-import QtQuick.Window 2.0
-import QtQuick.XmlListModel 2.0
+import QtQuick.LocalStorage 2.12
+import QtQuick.Particles 2.12
+
+import QtQuick.XmlListModel 2.12
 import QtQuick.Controls.Styles 1.4
-import QtMultimedia 5.9
-//import QtQuick.Templates 2.2
+import QtMultimedia 5.12
+import QtQuick.Templates 2.12
 import QtWebView 1.1
 import Qt.labs.calendar 1.0
-import Qt.labs.folderlistmodel 2.2
-import Qt.labs.settings 1.0
-
+import Qt.labs.folderlistmodel 2.12
 import QtGraphicalEffects 1.0
-import QtCanvas3D 1.1
-
-import QtPositioning 5.9
-import QtLocation 5.9
-
-import QtWebSockets 1.0
+import QtPositioning 5.12
+import QtLocation 5.12
+import QtWebSockets 1.1
 
 ApplicationWindow {
     id: app
@@ -35,7 +30,7 @@ ApplicationWindow {
     title: qsTr("uniK-status")
     color: app.c2
     FontLoader {name: "FontAwesome";source: "qrc:/fontawesome-webfont.ttf";}
-    property int fs: Qt.platform.os !=='android'?app.width*0.02:app.width*0.03
+    property int fs: Qt.platform.os !=='android'?app.width*0.02:app.width*0.05
     property color c1: "#1fbc05"
     property color c2: "#222222"
     property color c3: "black"
@@ -52,7 +47,16 @@ ApplicationWindow {
     property var colors: [["red", "black", "#cccccc", "#222222"], ["black", "white", "#cccccc", "#222222"], ["white", "black", "#222222", "#cccccc"], ["#1fbc05", "#222222", "black", "white"]]
     Item{
         id:xApp
-        anchors.fill: parent
+        width: parent.width
+        height: parent.height
+        Timer{
+            running: Qt.platform.os!=='android'
+            repeat: true
+            interval: 500
+            onTriggered: {
+                xApp.height=xApp.parent.height-Qt.inputMethod.height
+            }
+        }
         Item{
             id: xTools
             width: app.fs*1.5
@@ -172,30 +176,57 @@ ApplicationWindow {
                 height: parent.height-app.fs*4
                 color: 'transparent'
                 visible: app.area===0
-                TextArea {
-                    id: taLog
-                    text: qsTr("Unik Main Qml")
-                    width: parent.width
-                    height: parent.height
-                    onTextChanged: {
-                        taLog.flickableItem.contentY=taLog.flickableItem.contentHeight
-                    }
-                    backgroundVisible: false
-                    textColor: app.c1
-                    style: TextAreaStyle{
-                        selectedTextColor: app.c2
-                        selectionColor: app.c1
-                    }
-                    font.pixelSize: app.fs
-                    wrapMode: Text.WordWrap
-                    Connections{
-                        target: unik;
-                        onUkStdChanged:{
-                            taLog.text+=unik.ukStd
-                            taLog.flickableItem.contentY=taLog.flickableItem.contentHeight
+                clip: true
+                Flickable{
+                    id:fkAndroid
+                    width: xTaLog.width
+                    height: xTaLog.height
+                    contentWidth: xTaLog.width
+                    contentHeight: taLogAndroid.contentHeight
+                    visible: Qt.platform.os==='android'
+                    Text {
+                        id: taLogAndroid
+                        text: taLog.text
+                        width: xTaLog.width
+                        color: 'yellow'
+                        onTextChanged: {
+                            fkAndroid.contentY=taLogAndroid.contentHeight
                         }
+                        font.pixelSize: app.fs
+                        wrapMode: Text.WordWrap
                     }
                 }
+                ScrollView {
+                    id: view
+                    width: parent.width
+                    height: parent.height
+                    visible: Qt.platform.os!=='android'
+                    TextArea {
+                        id: taLog
+                        text: qsTr("Unik Main Qml")
+                        width: xTaLog.width
+                        height: xTaLog.height
+                        onTextChanged: {
+                            //taLog.flickableItem.contentY=taLog.flickableItem.contentHeight
+                        }
+                        /*backgroundVisible: false
+                        textColor: app.c1
+                        style: TextAreaStyle{
+                            selectedTextColor: app.c2
+                            selectionColor: app.c1
+                        }*/
+                        font.pixelSize: app.fs
+                        wrapMode: Text.WordWrap
+                    }
+                }
+                Connections{
+                    target: unik;
+                    onUkStdChanged:{
+                        taLog.text+=unik.ukStd
+                        taLog.flickableItem.contentY=taLog.flickableItem.contentHeight
+                    }
+                }
+
             }
             Rectangle{
                 id: xEditor
@@ -216,12 +247,12 @@ ApplicationWindow {
                     height: parent.height/3
                     anchors.horizontalCenter: parent.horizontalCenter
                     font.pixelSize: app.width*0.02
-                    backgroundVisible: false
+                    /*backgroundVisible: false
                     textColor: app.c1
                     style: TextAreaStyle{
                         selectedTextColor: app.c2
                         selectionColor: app.c1
-                    }
+                    }*/
                 }
                 Rectangle{
                     width: labelbtn2.contentWidth*1.2
@@ -299,7 +330,7 @@ ApplicationWindow {
     }
     Component.onCompleted: {
 
-        var nc=appSettingsUnik.numColors
+        /*var nc=appSettingsUnik.numColors
         app.c1=colors[nc][0]
         app.c2=colors[nc][1]
         app.c3=colors[nc][2]
@@ -338,6 +369,6 @@ ApplicationWindow {
         }
         txt+="\n\n\n\n\n\n\n\n\n\n"
         taLog.text+=stdinit
-        taLog.text+=txt
+        taLog.text+=txt*/
     }
 }

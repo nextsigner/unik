@@ -2,7 +2,7 @@
 #define AUDIORECORDER_H
 
 #include <QObject>
-#include <QMediaRecorder>
+#include <QtMultimedia/QMediaRecorder>
 #include <QUrl>
 
 QT_BEGIN_NAMESPACE

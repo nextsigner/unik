@@ -1,3 +1,4 @@
+windows{
 message(windows.pri is loaded)
 
 FILE_VERSION_NAME=windows_version
@@ -14,12 +15,6 @@ FILE_VERSION_NAME2=\"$$FILE_VERSION_NAME\"
 write_file(windows_version, APPVERSION)
 message(File version location: $$FILE_VERSION_NAME2)
 
-#Building Quazip from Windows 8.1
-INCLUDEPATH += $$PWD/quazip
-DEFINES+=QUAZIP_STATIC
-HEADERS += $$PWD/quazip/*.h
-SOURCES += $$PWD/quazip/*.cpp
-SOURCES += $$PWD/quazip/*.c
 
 EXTRA_BINFILES += $$PWD/windows_version
 EXTRA_BINFILES_WIN = $${EXTRA_BINFILES}
@@ -28,4 +23,5 @@ DESTDIR_WIN = $$replace(PWD, /unik,/unik/build_win_32/windows_version)
 DESTDIR_WIN ~= s,/,\\,g
 for(FILE,EXTRA_BINFILES_WIN){
         QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${FILE} $${DESTDIR_WIN}$$escape_expand(\n\t))
+}
 }

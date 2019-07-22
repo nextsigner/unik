@@ -1390,6 +1390,7 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
     log("downloading zip file from: "+url);
     uZipUrl=QString(url);
     uZipSize=0;
+ #ifndef Q_OS_ANDROID
     QEventLoop eventLoop0;
     QNetworkAccessManager mgr0;
     QObject::connect(&mgr0, SIGNAL(finished(QNetworkReply*)), &eventLoop0, SLOT(quit()));
@@ -1406,6 +1407,7 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
         }
     }
     );
+#endif
 
 
     QEventLoop eventLoop;
@@ -2090,7 +2092,7 @@ void UK::crearPDF(QString captura, QString url, int orientacion)
 }
 
 
-
+#ifdef UNIK_COMPILE_RPI
 Q_INVOKABLE void UK::initRpiGpio()
 {
     #ifdef UNIK_COMPILE_RPI
@@ -2160,7 +2162,7 @@ Q_INVOKABLE bool UK::pinIsHigh(int pin){
     return false;
 #endif
 }
-
+#endif
 
 QString UK::encPrivateData(QByteArray d, QString user, QString key)
 {

@@ -1,3 +1,4 @@
+macos{
 message(linux.pri is loaded)
 
 QT += webengine
@@ -39,3 +40,4 @@ for(FILE,EXTRA_BINFILES){
 
 #Deploy command line example
 #/Users/qt/Qt5.9.1/5.9.1/clang_64/bin/macdeployqt /Users/qt/nsp/unik-recursos/build_osx_clang64/unik.app -qmldir=/Users/qt/nsp/unik -no-strip -dmg
+}

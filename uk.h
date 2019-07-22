@@ -229,6 +229,7 @@ public:
     bool splashvisible=true;
     bool setInitString=false;
 
+#ifdef UNIK_COMPILE_RPI
     //GPIO functions for RPI
     //This function returns void values for other os.
     Q_INVOKABLE void initRpiGpio();
@@ -238,7 +239,7 @@ public:
     Q_INVOKABLE void writePinHigh(unsigned int pinnum);
     Q_INVOKABLE void writePinLow(unsigned int pinnum);
     Q_INVOKABLE bool pinIsHigh(int pin);
-
+#endif
     //For Audio Stream
     qint64 uFileSize=0;
 
