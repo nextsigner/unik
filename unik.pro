@@ -13,13 +13,24 @@ CONFIG += c++11
 QT += webchannel websockets
 CONFIG -= qmlcache
 include(version.pri)
+include(archconf.pri)
 linux:android{
     include(openssl.pri)
     QT += multimedia webview androidextras
     message(QT_MESSAGELOGCONTEXT defined for Android)
-    DEFINES += UNIK_COMPILE_ANDROID_X86_64
+
     DEFINES += QT_MESSAGELOGCONTEXT
+
+    #Building Quazip Android
+    INCLUDEPATH += $$PWD/quazip
+    DEFINES+=QUAZIP_STATIC
+    HEADERS += $$PWD/quazip/*.h
+    SOURCES += $$PWD/quazip/*.cpp
+    SOURCES += $$PWD/quazip/*.c
     #include(android.pri)
+}
+linux:!android:!windows:!macos{
+    QT += multimedia webview webengine
 }
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -46,9 +57,6 @@ SOURCES += \
         websocketclientwrapper.cpp \
         websockettransport.cpp
 
-#Building Quazip
-INCLUDEPATH += $$PWD/quazip
-DEFINES+=QUAZIP_STATIC
 HEADERS += $$PWD/quazip/*.h \
     audiorecorder.h \
     chatserver.h \
@@ -62,8 +70,6 @@ HEADERS += $$PWD/quazip/*.h \
     unikmessagehandler.h \
     websocketclientwrapper.h \
     websockettransport.h
-SOURCES += $$PWD/quazip/*.cpp
-SOURCES += $$PWD/quazip/*.c
 
 RESOURCES += qml.qrc
 
@@ -85,7 +91,8 @@ DISTFILES += \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew \
     android/gradlew.bat \
-    android/res/values/libs.xml
+    android/res/values/libs.xml \
+    archconf.pri
 
 contains(ANDROID_TARGET_ARCH,x86_64) {
     ANDROID_PACKAGE_SOURCE_DIR = \

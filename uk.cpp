@@ -1390,7 +1390,7 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
     log("downloading zip file from: "+url);
     uZipUrl=QString(url);
     uZipSize=0;
- #ifndef Q_OS_ANDROID
+ #ifndef UNIK_COMPILE_ANDROID_ARMV8
     QEventLoop eventLoop0;
     QNetworkAccessManager mgr0;
     QObject::connect(&mgr0, SIGNAL(finished(QNetworkReply*)), &eventLoop0, SLOT(quit()));

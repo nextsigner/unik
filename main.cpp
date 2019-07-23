@@ -55,9 +55,18 @@
 #ifdef Q_OS_ANDROID
     #ifndef __arm__
         UK *u0;
-        UK u;
+        //UK u;
     #endif
-        QWebSocketServer *server;
+       /*
+        Esta variable UK u; fue creado para compilar en armeabi-v7a
+        pero para arm64 no hizo falta.
+        */
+#ifdef UNIK_COMPILE_ANDROID_ARMV7
+        UK u;
+#endif
+
+
+       QWebSocketServer *server;
        ChatServer* chatserver;
        QWebChannel channel;
        WebSocketClientWrapper *clientWrapper;
@@ -849,7 +858,7 @@ int main(int argc, char *argv[])
 #else
 #ifdef Q_OS_ANDROID
         if(showLaunch||uap.showLaunch){
-            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-android-apps", pws.toUtf8());
+            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-android-apps", pws);
         }
 #else
         unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi", pws.toUtf8());
@@ -1308,35 +1317,6 @@ int main(int argc, char *argv[])
 
 
     //------------------------------------------->5
-#ifdef QT_DEBUG
-#ifdef Q_OS_WIN
-    /*if(argc > 3){ //SOLO FUNCIONA EN DEBUG
-            qDebug()<<"Recibiendo "<<argc<<" argumentos: "<<argv[0];
-            QByteArray arg1;
-            arg1.append(argv[1]);
-            QByteArray arg2;
-            arg2.append(argv[2]);
-            QByteArray arg3;
-            arg3.append("file://");
-            arg3.append(argv[3]);
-            if(arg1=="-force"){
-                qDebug()<<"Ejecutando -reset "<<argv[0]<<" "<<argv[1];
-
-                engine.load(QUrl::fromLocalFile(arg2));// main.qml location
-                QQmlComponent component(&engine, QUrl::fromLocalFile(arg2));
-                engine.addImportPath(arg3);
-                //engine.load(QUrl::fromLocalFile("H:/_qtos/des/unik-installer/main.qml"));
-                //engine.addImportPath("file://H://_qtos/des/unik-installer");
-            }
-        }*/
-
-#else
-    engine.load(QUrl(QStringLiteral("/media/nextsigner/ZONA-A1/_qtos/des/unik-installer/main.qml")));
-    QQmlComponent component(&engine, QUrl::fromLocalFile(arg2));
-    engine.addImportPath("file://media/nextsigner/ZONA-A1/_qtos/des/unik-installer");
-#endif
-
-#else
     QString qmlImportPath;
     if(modeRemoteFolder){
         ffmqml = "";
@@ -1541,7 +1521,7 @@ int main(int argc, char *argv[])
     QByteArray m2;
     m2.append(mainQml);
 #endif
-#endif
+
     //-------------------------------------------<5
 
 
