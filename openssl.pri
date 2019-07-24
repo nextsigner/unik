@@ -18,9 +18,6 @@ contains(ANDROID_TARGET_ARCH,x86) {
 
 contains(ANDROID_TARGET_ARCH,x86_64) {
     ANDROID_EXTRA_LIBS += \
-        #$$PWD/x86_64/libcrypto.so \
-        #$$PWD/x86_64/libssl.so
         $$PWD/android_openssl-5.12.4_5.13.0/x86_64/libcrypto.so \
         $$PWD/android_openssl-5.12.4_5.13.0/x86_64/libssl.so
-        #/home/ns/nsp/unik/
 }

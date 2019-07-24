@@ -30,6 +30,7 @@ linux:android{
     #include(android.pri)
 }
 linux:!android:!windows:!macos{
+    message(Building from Linux)
     QT += multimedia webview webengine
 }
 # The following define makes your compiler emit warnings if you use
@@ -93,8 +94,5 @@ DISTFILES += \
     android/gradlew.bat \
     android/res/values/libs.xml \
     archconf.pri
-
-contains(ANDROID_TARGET_ARCH,x86_64) {
     ANDROID_PACKAGE_SOURCE_DIR = \
         $$PWD/android
-}
