@@ -24,7 +24,7 @@
 message(linux.pri is loaded)
 
 QT += webview
-QT += webengine
+QT += multimedia webview webengine
 DD1=$$replace(PWD, /unik,/build_unik_linux)
 DESTDIR= $$DD1
 message(Ubicaciòn del Ejecutable: $$DESTDIR)

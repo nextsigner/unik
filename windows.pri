@@ -1,8 +1,9 @@
-windows{
 message(windows.pri is loaded)
 
 FILE_VERSION_NAME=windows_version
-QT += webengine
+QT += webview
+QT += multimedia webview webengine
+
 DESTDIR = ../unik/build_win_32
 RC_FILE = unik.rc
 LIBS += -L$$PWD/libvlc-qt/lib/ -lVLCQtCore -lVLCQtWidgets -lVLCQtQml
@@ -24,4 +25,12 @@ DESTDIR_WIN ~= s,/,\\,g
 for(FILE,EXTRA_BINFILES_WIN){
         QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${FILE} $${DESTDIR_WIN}$$escape_expand(\n\t))
 }
-}
+
+
+#Building Quazip from Windows 8.1
+INCLUDEPATH += $$PWD/quazip
+DEFINES+=QUAZIP_STATIC
+HEADERS += $$PWD/quazip/*.h
+SOURCES += $$PWD/quazip/*.cpp
+SOURCES += $$PWD/quazip/*.c
+

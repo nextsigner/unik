@@ -97,10 +97,8 @@
 
 //#include "uniksqlitecrypto.h"
 
-#ifndef Q_OS_ANDROID
-#ifdef __arm__
+#ifdef UNIK_COMPILE_LINUX_RPI
 #include "mmapGpio.h"
-#endif
 #endif
 
 class UK : public QObject

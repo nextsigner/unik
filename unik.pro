@@ -29,10 +29,7 @@ linux:android{
     SOURCES += $$PWD/quazip/*.c
     #include(android.pri)
 }
-linux:!android:!windows:!macos{
-    message(Building from Linux)
-    QT += multimedia webview webengine
-}
+
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Refer to the documentation for the
@@ -48,7 +45,6 @@ SOURCES += \
         audiorecorder.cpp \
         chatserver.cpp \
         main.cpp \
-        mmapGpio.cpp \
         row.cpp \
         uk.cpp \
         unikargsproc.cpp \
@@ -61,7 +57,6 @@ SOURCES += \
 HEADERS += $$PWD/quazip/*.h \
     audiorecorder.h \
     chatserver.h \
-    mmapGpio.h \
     qmlclipboardadapter.h \
     row.h \
     uk.h \

@@ -31,4 +31,8 @@ contains(QMAKE_HOST.os,Linux) {
     }
 }
 
-
+contains(QMAKE_HOST.os,Windows) {
+    DEFINES += UNIK_COMPILE_WINDOWS
+    message(Compiling Unik from Windows)
+    include(windows.pri)
+}
