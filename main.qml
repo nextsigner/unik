@@ -44,7 +44,7 @@ ApplicationWindow {
         property int numColors
         onLvfsChanged: logView.log('')
     }
-    property var colors: [["red", "black", "#cccccc", "#222222"], ["black", "white", "#cccccc", "#222222"], ["white", "black", "#222222", "#cccccc"], ["#1fbc05", "#222222", "black", "white"]]
+    property var colors: [["red", "black", "#cccccc", "#222222"], ["black", "white", "#cccccc", "#222222"], ["white", "black", "#222222", "#cccccc"], ["#1fbc05", "#222222", "black", "white"]]    
     Item{
         id:xApp
         width: parent.width
@@ -135,6 +135,25 @@ ApplicationWindow {
                         color: app.c2
                     }
                 }
+                Boton{//Set Colors
+                    w:parent.width
+                    h: w
+                    t: "\uf1fc"
+                    d:'Color'
+                    b:app.c1
+                    c: app.c2
+                    onClicking: {
+                        if(appSettingsUnik.numColors<app.colors.length-1){
+                           appSettingsUnik.numColors++
+                        }else{
+                            if(appSettingsUnik.numColors===app.colors.length-1){
+                                appSettingsUnik.numColors=0
+                            }
+                        }
+                        setColors()
+                    }
+                }
+
                 Boton{//Quit
                     w:parent.width
                     h: w
@@ -149,9 +168,10 @@ ApplicationWindow {
             }
         }
         Column{
-            width: parent.width-xTools.width
+            width: parent.width-xTools.width-app.fs*2
             height: parent.height
             anchors.left: xTools.right
+            anchors.leftMargin: app.fs
             Row{
                 id: row1
                 height: app.fs*4
@@ -209,6 +229,8 @@ ApplicationWindow {
                         onTextChanged: {
                             //taLog.flickableItem.contentY=taLog.flickableItem.contentHeight
                         }
+                        color: app.c1
+                        textFormat: Text.RichText
                         /*backgroundVisible: false
                         textColor: app.c1
                         style: TextAreaStyle{
@@ -222,11 +244,13 @@ ApplicationWindow {
                 Connections{
                     target: unik;
                     onUkStdChanged:{
+                        //taLog.text+=(unik.ukStd).replace(/\/\n/g, '<br />')
                         taLog.text+=unik.ukStd
-                        taLog.flickableItem.contentY=taLog.flickableItem.contentHeight
+                        if(Qt.platform.os==='android'){
+                            fkAndroid.contentY=taLogAndroid.contentHeight
+                        }
                     }
                 }
-
             }
             Rectangle{
                 id: xEditor
@@ -241,18 +265,13 @@ ApplicationWindow {
                         }
                     }
                 }
-                TextArea {
+                TextEdit {
                     id: txtEdit
                     width: parent.width*0.98
                     height: parent.height/3
                     anchors.horizontalCenter: parent.horizontalCenter
                     font.pixelSize: app.width*0.02
-                    /*backgroundVisible: false
-                    textColor: app.c1
-                    style: TextAreaStyle{
-                        selectedTextColor: app.c2
-                        selectionColor: app.c1
-                    }*/
+                    color: app.c1
                 }
                 Rectangle{
                     width: labelbtn2.contentWidth*1.2
@@ -329,46 +348,37 @@ ApplicationWindow {
         onActivated: Qt.quit()
     }
     Component.onCompleted: {
-
-        /*var nc=appSettingsUnik.numColors
-        app.c1=colors[nc][0]
-        app.c2=colors[nc][1]
-        app.c3=colors[nc][2]
-        app.c3=colors[nc][3]
-
+        setColors()
         if(Qt.platform.os==='windows'){
             var a1 = Screen.desktopAvailableHeight
             var altoBarra = a1-unik.frameHeight(app)
             app.height = a1-altoBarra
         }
         var s=unik.initStdString
-        var stdinit='Start Unik Init Message:\n'+s+'\nEnd Unik Init Message.\n'
-        var txt ='\n'
-        txt += "OS: "+Qt.platform.os+'\n'
-        txt += 'Doc location: '+appsDir+'\n'
-        txt += 'WorkSpace location: '+pws+'\n'
-        txt += '\nUAP Arguments:'+uap+'\n'
-        txt+="\n"+appStatus+'\n'
-        txt += 'user: '+ukuser+'\n'
-        if(ukuser==='unik-free'){
-            txt += 'key: '+ukkey+'\n'
-        }else{
-            txt += 'key: '
-            var k= (''+ukkey).split('')
-            for(var i=0;i<k.length;i++){
-                txt += '*'
-            }
-            txt += '\n'
-        }
-        txt += "\nUnik Init Errors:\n"
-        txt += 'sourcePath: '+sourcePath+'\n'
+        var stdinit='Start Unik Init Message:<br/>'+s+'<br/>End Unik Init Message.<br/>'
+        var txt ='<br/>'
+        txt += "OS: "+Qt.platform.os+'<br/>'
+        txt += 'Doc location: '+appsDir+'<br/>'
+        txt += 'WorkSpace location: '+pws+'<br/>'
+        txt += '<br/>UAP Arguments:'+uap+'<br/>'
+        txt+="<br/>"+appStatus+'<br/>'
+
+        txt += "<br/>Unik Init Errors:<br/>"
+        txt += 'sourcePath: '+sourcePath+'<br/>'
         if(unik.fileExist(appsDir+'/cfg.json')){
-            txt += '\ncfg.json:\n'+unik.getFile(appsDir+'/cfg.json')+'\n'
+            txt += '\ncfg.json:<br/>'+unik.getFile(appsDir+'/cfg.json')+'<br/>'
         }else{
-            txt += '\ncfg.json:\nNo cfg.json file seted.\n'
+            txt += '\ncfg.json:<br/>No cfg.json file seted.<br/>'
         }
-        txt+="\n\n\n\n\n\n\n\n\n\n"
-        taLog.text+=stdinit
-        taLog.text+=txt*/
+        txt+="<br/><br/><br/>"
+        taLog.text+=stdinit.replace(/\n/g, '<br />')
+        taLog.text+=txt.replace(/\n/g, '<br />')
+    }
+    function setColors(){
+        var nc=appSettingsUnik.numColors
+        app.c1=colors[nc][0]
+        app.c2=colors[nc][1]
+        app.c3=colors[nc][2]
+        app.c3=colors[nc][3]
     }
 }
