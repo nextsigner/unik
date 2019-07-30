@@ -1774,7 +1774,7 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
     QObject::connect(&mgr0, SIGNAL(finished(QNetworkReply*)), &eventLoop0, SLOT(quit()));
     QNetworkRequest req0(QUrl(url.constData()));
     QNetworkReply *reply0 = mgr0.get(req0);
-
+    uZipSizeReg=0;
     connect(
                 reply0, &QNetworkReply::metaDataChanged,
                 [=]( ) {
@@ -1783,7 +1783,11 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
         if(uZipSize<=0){
             return downloadZipFile(url, ubicacion);
         }else {
-            reply0->close();
+            if(uZipSize>uZipSizeReg){
+                uZipSizeReg=uZipSize;
+            }else {
+                reply0->close();
+            }
         }
     }
     );

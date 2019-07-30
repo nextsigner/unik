@@ -389,6 +389,7 @@ private:
 
    QString uZipUrl;
    int uZipSize;
+   int uZipSizeReg;
    bool doResume;
    bool httpRequestAborted;
    bool retried;
