@@ -273,6 +273,7 @@ public slots:
     void definirCarpetaTrabajo(QString et);
     bool folderToUpk(QString folder, QString upkName, QString user, QString key, QString folderDestination);
     bool carpetaAUpk(QString carpeta, QString nombreUpk, QString usuario, QString clave, QString carpetaDestino);
+    bool runAppFromZip(QByteArray url, QByteArray localFolder);
     bool downloadRemoteFolder(QString urlFolder, QString list, QString dirDestination);
     //bool extraerUpk(QString appName, QString origen, QString dirDestino, QString user, QString key);
     bool mkUpk(QByteArray folder, QByteArray upkName, QByteArray user, QByteArray key, QByteArray folderDestination);

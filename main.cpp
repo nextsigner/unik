@@ -270,6 +270,8 @@ int main(int argc, char *argv[])
 #else
     QByteArray urlGit="https://github.com/nextsigner/unik-tools";
     QByteArray moduloGit="unik-tools";
+    QByteArray moduloZip="unik-tools";
+    QByteArray urlZip="";
 #endif
 #endif
 #else
@@ -299,6 +301,7 @@ int main(int argc, char *argv[])
     bool modeRemoteFolder=false;
     bool modeUpk=false;
     bool modeGit=false;
+    bool modeZip=false;
     bool modeGitArg=false;
     bool updateUnikTools=false;
     bool debugLog=false;
@@ -571,6 +574,29 @@ int main(int argc, char *argv[])
         }
         //<-folder
 
+        if(arg.contains("-zip=")){
+            QStringList marg = arg.split("-zip=");
+            if(marg.size()==2){
+                QString pUrlZip1;
+                pUrlZip1.append(marg.at(1));
+                lba="";
+                lba.append("-zip=");
+                lba.append(marg.at(1));
+                qInfo()<<lba;
+                urlZip = "";
+                if(pUrlZip1.contains(".zip")&&pUrlZip1.mid(pUrlZip1.size()-4, pUrlZip1.size())==".zip"){
+                    urlZip.append(pUrlZip1);
+                    QFileInfo infoZip(urlZip);
+                    qInfo()<<"unziping fileName: "<<infoZip.fileName();
+                    moduloZip=infoZip.fileName().replace(".zip","").toUtf8();
+                    modeZip=true;
+                    showLaunch=false;
+                    uap.showLaunch=false;
+                    modeZip=true;
+                    params=true;
+                }
+            }
+        }
         if(arg.contains("-git=")){
             QStringList marg = arg.split("-git=");
             if(marg.size()==2){
@@ -1328,6 +1354,42 @@ int main(int argc, char *argv[])
     mainQml.append(ffmqml);
     mainQml.append("main.qml");
     qInfo()<<"[0] main: "<<mainQml;
+
+    if(modeZip){
+        lba="";
+        lba.append("Updating from zip file: ");
+        lba.append(urlZip);
+        qInfo()<<lba;
+        QByteArray unzipFolder;
+        unzipFolder.append(pws);
+        //unzipFolder.append("/");
+        //unzipFolder.append(moduloZip);
+        qInfo()<<"unziping to folder "<<unzipFolder;
+        lba="";
+        lba.append("Unziping in folder ");
+        lba.append(unzipFolder);
+        qInfo()<<lba;
+        qInfo()<<"unzip file 1 "<<urlZip;
+        bool up=u.runAppFromZip(urlZip, unzipFolder);
+        if(up){
+            qInfo()<<"Zip unzipped.";
+            QString nCurrentDir=unzipFolder;
+            nCurrentDir.append("/");
+            nCurrentDir.append(moduloZip);
+            QDir::setCurrent(nCurrentDir);
+            mainQml.clear();
+            mainQml.append(nCurrentDir);
+            mainQml.append("/main.qml");
+            qInfo()<<"Set current dir to zip folder: "<<nCurrentDir;
+        }else{
+            lba="";
+            lba.append("Fail Unzip file: ");
+            lba.append(urlZip);
+            qInfo()<<lba;
+        }
+        qInfo()<<"[1] main: "<<mainQml;
+        u.log("Updated: "+ffmqml.toUtf8());
+    }
 
     if(modeGit){
         lba="";
