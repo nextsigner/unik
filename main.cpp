@@ -1567,7 +1567,7 @@ int main(int argc, char *argv[])
     engine.load(uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
     QQmlComponent component(&engine, uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
     qInfo()<<"Init unik: "<<mainQml;
-    u.setFile("/sdcard/Documents/unik/url.txt", mainQml);
+    //u.setFile("/sdcard/Documents/unik/url.txt", mainQml);
     /*if(uap.showLaunch||showLaunch){
                 mainQml="qrc:/appsListLauncher.qml";
             }

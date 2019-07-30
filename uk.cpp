@@ -1769,7 +1769,7 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
     uZipUrl=QString(url);
     uZipSize=0;
  #ifndef UNIK_COMPILE_ANDROID_ARMV8
-    /*QEventLoop eventLoop0;
+    QEventLoop eventLoop0;
     QNetworkAccessManager mgr0;
     QObject::connect(&mgr0, SIGNAL(finished(QNetworkReply*)), &eventLoop0, SLOT(quit()));
     QNetworkRequest req0(QUrl(url.constData()));
@@ -1782,9 +1782,11 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
         reply0->deleteLater();
         if(uZipSize<=0){
             return downloadZipFile(url, ubicacion);
+        }else {
+            reply0->close();
         }
     }
-    );*/
+    );
 #endif
 
 
@@ -2153,6 +2155,12 @@ void UK::cd(QString folder)
     _engine->addImportPath(QDir::currentPath());
     _engine->addPluginPath(QDir::currentPath());
     qInfo()<<"Set current dir: "<<QDir::currentPath();
+}
+
+QString UK::currentFolderName()
+{
+    QDir f(QDir::currentPath());
+    return f.dirName();
 }
 void UK::deleteFile(QByteArray f)
 {

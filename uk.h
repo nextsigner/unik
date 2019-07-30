@@ -319,6 +319,7 @@ public slots:
 
     //Funciones de Sistema de Archivos
     void cd(QString folder);
+    QString currentFolderName();
     void deleteFile(QByteArray f);
     bool setFile(QByteArray n, QByteArray d);
     QString getFile(QByteArray n);
