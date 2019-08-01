@@ -17,5 +17,12 @@
         <file>fontawesome-webfont.ttf</file>
         <file>resources/logo_unik_512x512.png</file>
         <file>resources/logo_unik_500x500.png</file>
+        <file>AppColorsThemes.qml</file>
+        <file>UnikSettings.qml</file>
+        <file>Borde.qml</file>
+        <file>BotonUX.qml</file>
+        <file>URadioButton.qml</file>
+        <file>UText.qml</file>
+        <file>UnikFocus.qml</file>
     </qresource>
 </RCC>

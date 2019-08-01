@@ -24,7 +24,7 @@ ApplicationWindow {
     id: app
     objectName: 'unik-main-errors'
     visible: true
-    flags: Qt.Window | Qt.FramelessWindowHint
+    flags: Qt.FramelessWindowHint//Qt.Window | Qt.FramelessWindowHint
     width: Screen.desktopAvailableWidth
     height: Screen.desktopAvailableHeight
     title: qsTr("uniK-status")
@@ -36,15 +36,9 @@ ApplicationWindow {
     property color c3: "black"
     property color c4: "white"
     property int area: 0
-    Settings{
-        id: appSettingsUnik
-        category: 'conf-unik-main-errors'
-        property string languaje
-        property int lvfs
-        property int numColors
-        onLvfsChanged: logView.log('')
+    UnikSettings{
+        id: unikSettings
     }
-    property var colors: [["red", "black", "#cccccc", "#222222"], ["black", "white", "#cccccc", "#222222"], ["white", "black", "#222222", "#cccccc"], ["#1fbc05", "#222222", "black", "white"]]    
     Item{
         id:xApp
         width: parent.width
@@ -125,7 +119,8 @@ ApplicationWindow {
                     b:app.c1
                     c: app.c2
                     onClicking: {
-                        unik.restartApp()
+                        if(Qt.platform.os==='android')unik.restartApp()
+                        if(Qt.platform.os!=='android')unik.restartApp("")
                     }
                     Text {
                         text: "\uf011"
@@ -142,15 +137,17 @@ ApplicationWindow {
                     d:'Color'
                     b:app.c1
                     c: app.c2
+                    opacity: appColorsThemes.visible?1.0:0.65
                     onClicking: {
-                        if(appSettingsUnik.numColors<app.colors.length-1){
-                           appSettingsUnik.numColors++
-                        }else{
-                            if(appSettingsUnik.numColors===app.colors.length-1){
-                                appSettingsUnik.numColors=0
-                            }
-                        }
-                        setColors()
+                        appColorsThemes.visible=!appColorsThemes.visible
+                    }
+                    AppColorsThemes{
+                        id:appColorsThemes;
+                        z:parent.z-1;
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: parent.right
+                        anchors.leftMargin: app.fs
+                        visible: false
                     }
                 }
 
@@ -348,6 +345,8 @@ ApplicationWindow {
         onActivated: Qt.quit()
     }
     Component.onCompleted: {
+
+
         setColors()
         if(Qt.platform.os==='windows'){
             var a1 = Screen.desktopAvailableHeight
@@ -375,10 +374,10 @@ ApplicationWindow {
         taLog.text+=txt.replace(/\n/g, '<br />')
     }
     function setColors(){
-        var nc=appSettingsUnik.numColors
-        app.c1=colors[nc][0]
-        app.c2=colors[nc][1]
-        app.c3=colors[nc][2]
-        app.c3=colors[nc][3]
+        var nc=unikSettings.currentNumColor
+        app.c1=unikSettings.colors[nc][0]
+        app.c2=unikSettings.colors[nc][1]
+        app.c3=unikSettings.colors[nc][2]
+        app.c4=unikSettings.colors[nc][3]
     }
 }

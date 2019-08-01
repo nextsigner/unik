@@ -29,6 +29,9 @@ ApplicationWindow {
             close.accepted = false;
         }
     }
+    UnikSettings{
+        id: unikSettings
+    }
     Timer{
         running: !ver
         repeat: false

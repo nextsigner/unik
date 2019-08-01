@@ -17,7 +17,9 @@ ApplicationWindow{
     onClosing: {
         close.accepted = false
     }
-
+    UnikSettings{
+        id: unikSettings
+    }
     Timer{
         running: true
         repeat: true
