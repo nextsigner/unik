@@ -3,6 +3,7 @@
 # E-mail: nextsigner@gmail.com
 # Whatsapps: +54 11 3802 4370
 # GitHub: https://github.com/nextsigner/unik
+
 message(BUILT TO ARCH: $$QMAKE_HOST.arch)
 QT +=   qml quick sql
 

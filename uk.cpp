@@ -2810,30 +2810,14 @@ QString UK::desCompData(QString d)
 }
 
 void UK::downloadZipProgress(qint64 bytesSend, qint64 bytesTotal)
-{
-
-    /*qint32 bs=qint32(bytesSend);
-    qint32 bt=qint32(bytesTotal);
-    if(bt<0){
-        bt=uZipSize;
-    }
-#ifdef Q_OS_LINUX
-#ifdef Q_OS_ANDROID
-     double porc = (((double)bs)/bt)*100;
-#else
-    int porc= (int)((bytesSend * 100) / bt);
-#endif
-
-#endif
-#ifdef Q_OS_WIN
-    double porc = (((double)bytesSend)/bt)*100;
-#endif
-#ifdef Q_OS_OSX
-    double porc = (((double)bytesSend)/bt)*100;
-#endif*/
+{    
     double porc;
     if(bytesTotal==-1){
-        porc = 1.0;
+        if(uZipSize<=bytesTotal){
+            porc = (((double)bytesSend)/uZipSize)*100;
+        }else {
+            porc = (((double)bytesSend)/bytesTotal)*100;
+        }
     }else if(bytesTotal==-1&&uZipSize!=-1){
         porc = (((double)bytesSend)/uZipSize)*100;
     }else{
