@@ -2,17 +2,32 @@ import QtQuick 2.0
 
 Rectangle {
     id: r
-    width: parent.width+w
-    height: parent.height+w
+    width: parent.width//+w
+    height: parent.height//+w
     anchors.centerIn: parent
-    property var objFocus: r.parent
-    property int w: app.fs*0.4
-    property color c: unikSettings.currentNumColor===2?'yellow':'red'
+    property var objFocus: parent
+    property int w: unikSettings.borderWidth
+    property color c: unikSettings.colors[unikSettings.currentNumColor][2]
     color: 'transparent'
-    border.width: w
+    border.width: unikSettings.borderWidth
     border.color: c
-    radius: !r.parent.radius?app.fs*0.2:r.parent.radius
+    radius: unikSettings.radius+unikSettings.borderWidth*2
     onVisibleChanged: {
         if(visible)app.objFocus=r.objFocus
+    }
+    Timer{
+        running: parent.visible
+        repeat: true
+        interval: 500
+        property int v: 0
+        onTriggered: {
+            if(v===0){
+                parent.c=unikSettings.colors[unikSettings.currentNumColor][2]
+                v++
+            }else{
+                parent.c=unikSettings.colors[unikSettings.currentNumColor][0]
+                v=0
+            }
+        }
     }
 }

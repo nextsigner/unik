@@ -11,7 +11,8 @@ ApplicationWindow {
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     color: "transparent"
     //flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
-    property int fs: width<height?(Qt.platform.os !=='android'?app.width*0.02*unikSettings.zoom:app.width*0.06*unikSettings.zoom):(Qt.platform.os !=='android'?app.width*0.02*unikSettings.zoom:app.width*0.03*unikSettings.zoom)
+    //property int fs: width<height?(Qt.platform.os !=='android'?app.height*0.02*unikSettings.zoom:app.height*0.06*unikSettings.zoom):(Qt.platform.os !=='android'?app.height*0.06*unikSettings.zoom:app.width*0.03*unikSettings.zoom)
+    property int fs: Qt.platform.os !=='android'?app.height*0.035*unikSettings.zoom:app.height*0.06*unikSettings.zoom
     property color c1: "#1fbc05"
     property color c2: "black"
     property color c3: "white"
@@ -243,16 +244,17 @@ ApplicationWindow {
             anchors.horizontalCenter: parent.horizontalCenter
             visible: false
             clip: true
-            property int cantFocus: 6
+            property int wmax: appColorsThemes.width+app.fs*12
+            property int cantFocus: 10
             property int currentFocus: 1
             onWidthChanged: {
-                if(width===rowBtnSettings.width+app.fs){
+                if(width===wmax){
                     colConfig.opacity=1.0
                 }
             }
             onVisibleChanged:{
                 if(visible){
-                    width=rowBtnSettings.width+app.fs
+                    width=xConfig.wmax//rowBtnSettings.width+app.fs
                     //focus=true
                 }
                 if(!visible){
@@ -275,7 +277,7 @@ ApplicationWindow {
                 id: colConfig
                 anchors.centerIn: parent
                 spacing: app.fs
-                opacity: parent.width===rowBtnSettings.width+app.fs?1.0:0.0
+                opacity: parent.width===xConfig.wmax?1.0:0.0
                 onOpacityChanged:{
                     if(opacity===0.0)xConfig.width=0
                 }
@@ -289,7 +291,7 @@ ApplicationWindow {
                     id: rowBtnSettings
                     anchors.horizontalCenter: parent.horizontalCenter
                     spacing: app.fs*0.5
-                    onWidthChanged: xConfig.width=rowBtnSettings.width+app.fs
+                    onWidthChanged: xConfig.width=xConfig.wmax
                     BotonUX{
                         id: btnUX1
                         UnikFocus{visible: xConfig.currentFocus===1}
@@ -305,9 +307,36 @@ ApplicationWindow {
                         }
                     }
                     BotonUX{
+                        UnikFocus{visible: xConfig.currentFocus===2}
+                        text: unikSettings.lang==='es'?'Radio de Borde':'Border Radius'
+                        onClicked: {
+                            if(unikSettings.radius>app.fs*0.5){
+                                unikSettings.radius-=app.fs*0.05
+                            }else{
+                                unikSettings.radius=app.fs*2
+                            }
+                        }
+                    }
+                    BotonUX{
+                        UnikFocus{visible: xConfig.currentFocus===3}
+                        text: unikSettings.lang==='es'?'Ancho de Borde':'Width Radius'
+                        onClicked: {
+                            if(unikSettings.borderWidth>app.fs*0.05){
+                                unikSettings.borderWidth-=app.fs*0.05
+                            }else{
+                                unikSettings.borderWidth=app.fs*0.5
+                            }
+                        }
+                    }
+                                    }
+                Row{
+                    id: rowBtnSettings2
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    spacing: app.fs*0.5
+                    BotonUX{
                         text: unikSettings.lang==='es'?'Languaje':'Lenguaje'
                         onClicked: unikSettings.lang=unikSettings.lang==='es'?'en':'es'
-                        UnikFocus{visible: xConfig.currentFocus===2}
+                        UnikFocus{visible: xConfig.currentFocus===4}
                     }
                     BotonUX{
                         text: unikSettings.lang==='es'?'Sonido '+yesno:'Sound '+yesno
@@ -315,15 +344,10 @@ ApplicationWindow {
                         property string no: unikSettings.lang==='es'?'NO':'NOT'
                         property string yesno: unikSettings.sound?yes:no
                         onClicked:unikSettings.sound=!unikSettings.sound
-                        UnikFocus{visible: xConfig.currentFocus===3}
+                        UnikFocus{visible: xConfig.currentFocus===5}
                     }
-                }
-                Row{
-                    id: rowBtnSettings2
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    spacing: app.fs*0.5
                     BotonUX{
-                        UnikFocus{visible: xConfig.currentFocus===4}
+                        UnikFocus{visible: xConfig.currentFocus===6}
                         property string yes: unikSettings.lang==='es'?'SI':'YES'
                         property string no: unikSettings.lang==='es'?'NO':'NOT'
                         property string yesno: unikSettings.showBg?no:yes
@@ -341,10 +365,10 @@ ApplicationWindow {
                     objectName: 'bbbb'
                     UnikFocus{
                         id: ufACT;
-                        visible: xConfig.currentFocus===5
+                        visible: xConfig.currentFocus===7
                         objectName: 'aaa'
                         property int currentFocus: -1
-                        property int cantFocus: 4
+                        property int cantFocus: appColorsThemes.cantColors-1
                     }
                 }
                 Row{
@@ -352,9 +376,21 @@ ApplicationWindow {
                     anchors.horizontalCenter: parent.horizontalCenter
                     spacing: app.fs*0.5
                     BotonUX{
+                        UnikFocus{visible: xConfig.currentFocus===8}
+                        text: unikSettings.lang==='es'?'Ayuda':'Help'
+                        onClicked: {
+                            unikSettings.showBg=!unikSettings.showBg
+                        }
+                    }
+                    BotonUX{
                         text: unikSettings.lang==='es'?'Cerrar ':'Close'
                         onClicked:xConfig.visible=false
-                        UnikFocus{visible: xConfig.currentFocus===6}
+                        UnikFocus{visible: xConfig.currentFocus===9}
+                    }
+                    BotonUX{
+                        text: unikSettings.lang==='es'?'Cerrar Unik':'Close Unik'
+                        onClicked:Qt.quit()
+                        UnikFocus{visible: xConfig.currentFocus===10}
                     }
                 }
             }
@@ -384,27 +420,19 @@ ApplicationWindow {
     Shortcut{
         sequence: 'Left'
         onActivated: {
-            tlaunch.stop()
-            xConfig.visible=true
-            if(xConfig.width===0){
-                xConfig.visible=true
-                xConfig.width=rowBtnSettings.width+app.fs
-                return
-            }
             if(xConfig.width!==0)colConfig.opacity=0.0
         }
-
     }
     Shortcut{
         sequence: 'Right'
         onActivated: {
-            unikSettings.sound=!unikSettings.sound
-            if(unikSettings.sound){
-                tlaunch.restart()
-                var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
-                mp.source='file:///'+pws+'/'+uModuleName+'/select.m4a'
-            }else{
-                mp.stop()
+            tlaunch.stop()
+            xConfig.visible=true
+            if(xConfig.width===0){
+                xConfig.visible=true
+                //xConfig.width=rowBtnSettings.width+app.fs
+                xConfig.width=xConfig.wmax
+                return
             }
         }
     }
@@ -462,17 +490,11 @@ ApplicationWindow {
                     if(ufACT.currentFocus>0){
                         ufACT.currentFocus--
                     }else{
-                        ufACT.currentFocus=ufACT.cantFocus+1
+                        ufACT.currentFocus=ufACT.cantFocus
                     }
                 }
             }
         }
-    }
-    Text {
-        id: ttt
-        text: 'ci: '+app.ci
-        font.pixelSize: 50
-        color: 'yellow'
     }
     Rectangle{
         id:tap

@@ -1,11 +1,13 @@
 import QtQuick 2.0
-Item {
+Rectangle {
     id: r
-    width: a.contentWidth+r.fontSize
-    height: r.fontSize*2
-    clip: true
+    width: a.contentWidth+r.fontSize*2
+    height: a.contentHeight+r.fontSize*2
     opacity: enabled?1.0:0.5
     objectName: 'sin_nombre'
+    color: 'transparent'
+    radius: xR1.radius
+    clip: true
     property int fontSize: app.fs
     property bool canceled: false
     property alias text: a.text
@@ -19,26 +21,27 @@ Item {
     Rectangle{
         id: xR1
         color: 'transparent'
-        border.width: app.fs*0.1
+        border.width: unikSettings.borderWidth
         border.color: r.fontColor
-        radius: app.fs*0.2
-        width: a.contentWidth+r.fontSize
-        height: r.fontSize*2
+        radius: unikSettings.radius
+        width: parent.width-unikSettings.borderWidth*2//r.fontSize*0.5
+        height: parent.height-unikSettings.borderWidth*2//-r.fontSize*0.5
+        anchors.centerIn: r
         Rectangle{
             id: b3
             opacity: b1.opacity!==0.5?1.0:0.0
-            width: parent.width-parent.border.width
-            height: parent.height-parent.border.width
-            radius: parent.radius
+            width: parent.width-unikSettings.borderWidth
+            height: parent.height-unikSettings.borderWidth
+            radius: unikSettings.radius
             anchors.centerIn: parent
             color: app.c2
             Behavior on opacity{NumberAnimation{duration:r.speed}}
         }
         Rectangle{
             id: b1
-            width: parent.height
-            height: parent.width
-            radius: parent.radius
+            width: xR1.height-unikSettings.borderWidth//parent.height-xR1.border.width
+            height: xR1.width-unikSettings.borderWidth//parent.width-xR1.border.width
+            radius: unikSettings.radius
             rotation: -90
             anchors.centerIn: parent
             opacity: 0.5
@@ -62,9 +65,9 @@ Item {
                     b1.opacity=0.5
                 }
             }
-            width: parent.height
-            height: parent.width
-            radius: parent.radius
+            width: xR1.width-unikSettings.borderWidth//parent.height+r.fontSize
+            height: xR1.height-unikSettings.borderWidth//parent.width+r.fontSize
+            radius: unikSettings.radius
             rotation: -270
             anchors.centerIn: parent
             gradient: Gradient {

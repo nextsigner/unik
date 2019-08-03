@@ -2,13 +2,15 @@ import QtQuick 2.0
 
 Rectangle{
     id:r
-    width: app.fs*unikSettings.colors.length*2
-    height: colColors.height+app.fs*2
-    color:'#aaa'
+    width: rowTit.width>(cantColors/2)*app.fs*3+app.fs?rowTit.width+app.fs:(cantColors/2)*app.fs*3+app.fs
+    height: gridPackColor.height+app.fs*3
+    color:unikSettings.colors[unikSettings.currentNumColor][3]
     border.width: 2
     border.color: unikSettings.colors[unikSettings.currentNumColor][0]
     property alias showBtnClose: btnCloseACT.visible
     property int currentFocus: -1
+    property int cantColors//: gridPackColor.children.length-1
+    //property type name: value
     Boton{//Close
         id: btnCloseACT
         w:app.fs
@@ -26,99 +28,115 @@ Rectangle{
         }
     }
     Column{
-        id: colColors
+        anchors.centerIn: r
         spacing: app.fs*0.5
-        anchors.centerIn: parent
-        Text {
-            text: unikSettings.lang==='es'?'<b>Colores de Unik: '+unikSettings.currentNumColor+'</b>':'<b>Unik Colors: '+unikSettings.currentNumColor+'</b>'
-            font.pixelSize: app.fs
+        Row{
+            id: rowTit
             anchors.horizontalCenter: parent.horizontalCenter
-            color: 'black'
+            spacing: app.fs
+            Text {
+                text: unikSettings.lang==='es'?'<b>Color de Unik: '+parseInt(unikSettings.currentNumColor+1)+'</b>':'<b>Unik Color: '+parseInt(unikSettings.currentNumColor+1)+'</b>'
+                font.pixelSize: app.fs
+                color: unikSettings.colors[unikSettings.currentNumColor][1]
+            }
+            Text {
+                text: unikSettings.lang==='es'?'<b>Cantidad de Colores: '+r.cantColors+'</b>':'<b>Count Colors: '+r.cantColors+'</b>'
+                font.pixelSize: app.fs
+                color: unikSettings.colors[unikSettings.currentNumColor][1]
+            }
         }
-        Repeater{
-            id:rep1
-            model: unikSettings.colors
-            Rectangle{
-                width: app.fs*unikSettings.colors.length+app.fs*0.5*unikSettings.colors.length-1
-                height: app.fs*1.3
-                border.width: 1
-                border.color: '#000'
-                color: 'transparent'
-                UnikFocus{visible: r.currentFocus===index}
-                Text {
-                    text: "\uf00c"
-                    font.family: "FontAwesome"
-                    font.pixelSize: app.fs*0.5
-                    anchors.right: parent.left
-                    anchors.rightMargin: app.fs*0.2
-                    anchors.verticalCenter: parent.verticalCenter
-                    color: 'black'
-                    visible: unikSettings.currentNumColor===index
-                }
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                        unikSettings.currentNumColor=index
-                        setColors()
+        Grid{
+            id: gridPackColor
+            spacing: app.fs*0.25
+            anchors.horizontalCenter: parent.horizontalCenter
+            rows: 2
+            Repeater{
+                id:rep1
+                model: unikSettings.colors
+                Rectangle{
+                    width: app.fs*2.5//app.fs*unikSettings.colors.length+app.fs*0.5*unikSettings.colors.length-1
+                    height: width
+                    border.width: 1
+                    border.color: '#000'
+                    color: 'transparent'
+                    UnikFocus{visible: r.currentFocus===index}
+                    Text {
+                        text: "\uf00c"
+                        font.family: "FontAwesome"
+                        font.pixelSize: app.fs*0.5
+                        anchors.right: parent.left
+                        anchors.rightMargin: app.fs*0.2
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: 'black'
+                        visible: unikSettings.currentNumColor===index
                     }
-                }
-                Row{
-                    id: rowColors
-                    spacing: app.fs*0.5
-                    anchors.centerIn: parent
-                    Rectangle{
-                        width: app.fs
-                        height: width
-                        border.width: 2
-                        border.color: 'black'
-                        color: 'transparent'
-                        Rectangle{
-                            width: parent.width-8
-                            height: parent.width-8
-                            color: unikSettings.colors[index][0]
-                            anchors.centerIn: parent
+                    MouseArea{
+                        anchors.fill: parent
+                        onClicked: {
+                            unikSettings.currentNumColor=index
+                            setColors()
                         }
                     }
-                    Rectangle{
-                        width: app.fs
-                        height: width
-                        border.width: 2
-                        border.color: 'black'
-                        color: 'transparent'
+                    Grid{
+                        id: gridColors
+                        spacing: app.fs*0.1
+                        anchors.centerIn: parent
+                        columns: 2
                         Rectangle{
-                            width: parent.width-8
-                            height: parent.width-8
-                            color: unikSettings.colors[index][1]
-                            anchors.centerIn: parent
+                            width: app.fs
+                            height: width
+                            border.width: 2
+                            border.color: 'black'
+                            color: 'transparent'
+                            Rectangle{
+                                width: parent.width-8
+                                height: parent.width-8
+                                color: unikSettings.colors[index][0]
+                                anchors.centerIn: parent
+                            }
                         }
-                    }
-                    Rectangle{
-                        width: app.fs
-                        height: width
-                        border.width: 2
-                        border.color: 'black'
-                        color: 'transparent'
                         Rectangle{
-                            width: parent.width-8
-                            height: parent.width-8
-                            color: unikSettings.colors[index][2]
-                            anchors.centerIn: parent
+                            width: app.fs
+                            height: width
+                            border.width: 2
+                            border.color: 'black'
+                            color: 'transparent'
+                            Rectangle{
+                                width: parent.width-8
+                                height: parent.width-8
+                                color: unikSettings.colors[index][1]
+                                anchors.centerIn: parent
+                            }
                         }
-                    }
-                    Rectangle{
-                        width: app.fs
-                        height: width
-                        border.width: 2
-                        border.color: 'black'
-                        color: 'transparent'
                         Rectangle{
-                            width: parent.width-8
-                            height: parent.width-8
-                            color: unikSettings.colors[index][3]
-                            anchors.centerIn: parent
+                            width: app.fs
+                            height: width
+                            border.width: 2
+                            border.color: 'black'
+                            color: 'transparent'
+                            Rectangle{
+                                width: parent.width-8
+                                height: parent.width-8
+                                color: unikSettings.colors[index][2]
+                                anchors.centerIn: parent
+                            }
                         }
-                    }
+                        Rectangle{
+                            width: app.fs
+                            height: width
+                            border.width: 2
+                            border.color: 'black'
+                            color: 'transparent'
+                            Rectangle{
+                                width: parent.width-8
+                                height: parent.width-8
+                                color: unikSettings.colors[index][3]
+                                anchors.centerIn: parent
+                            }
+                        }
 
+                    }
+                    Component.onCompleted: r.cantColors++
                 }
             }
         }
