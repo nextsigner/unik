@@ -7,7 +7,8 @@ Rectangle {
     objectName: 'sin_nombre'
     color: 'transparent'
     radius: xR1.radius
-    clip: true
+    border.color: xR1.border.color
+    //clip: true
     property int fontSize: app.fs
     property bool canceled: false
     property alias text: a.text

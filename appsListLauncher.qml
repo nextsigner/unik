@@ -379,7 +379,7 @@ ApplicationWindow {
                         UnikFocus{visible: xConfig.currentFocus===8}
                         text: unikSettings.lang==='es'?'Ayuda':'Help'
                         onClicked: {
-                            unikSettings.showBg=!unikSettings.showBg
+                            help.visible=true
                         }
                     }
                     BotonUX{
@@ -395,6 +395,50 @@ ApplicationWindow {
                 }
             }
         }
+        Rectangle{
+            id: help
+            visible: false
+            width: parent.width
+            height: parent.height
+            color: app.c1
+            border.width: unikSettings.borderWidth
+            border.color: app.c2
+            anchors.centerIn: parent
+            Text {
+                id: txtHelp
+                text: unikSettings.lang==='es'?h1:h2
+                font.pixelSize: app.fs
+                anchors.centerIn: parent
+                color: app.c2
+                width: parent.width-app.fs*2
+                textFormat: Text.RichText
+                horizontalAlignment: Text.AlignHCenter
+                property string h1
+                property string h2
+                Component.onCompleted: {
+                    h1='<h1>Ayuda de Unik Launcher</h1><p><b>Teclas de Navegaciòn</b></p><ul><li>Izquierda: Salir o Retroceder</li><li>Derecha: Entrar o Ejecutar</li><li>Arriba: Navega entrando a areas</li><li>Abajo: Navega saltando areas</li><li>Escape: Escape, cierre o apagado</li><li>Intro: Entrar o Ejecutar</li></ul><p>Màs informaciòn sobre Unik:</p><p>Unik fue creado gracias a Qt Open Source bajo las licencias LGPL. Màs informaciòn en <a href="http://www.qt.io">qt.io</a><</p></p><p>Sitio Web: www.unikode.org</p><p>Correo Electrònico: nextsigner@gmail.com</p><p>Whatsapps: +541138024370</p><p><b>GitHub: </b>https://github.com/nextsigner/unik</p><p><b>Donaciones: </b>patreon.com/unik</p>'
+
+                    h2='<h1>Unik Launcher Help</h1><p><b>Keyboard Navigation</b></p><ul><li>Left: Quit or Back</li><li>Right: Get in or Run</li><li>Up: Navigate getting to area</li><li>Down: Navigate jumping to area</li><li>Escape: Escape, close or quit</li><li>Enter: Get in or Run</li></ul><p>About Unik:</p><p>Unik was made with Qt Open Source under LGPL licence. More information in <a href="http://www.qt.io">qt.io</a><</p><p>Web Site: www.unikode.org</p><p>E-Mail: nextsigner@gmail.com</p><p>Whatsapps: +541138024370</p><p><b>GitHub: </b>https://github.com/nextsigner/unik</p><p><b>Donate: </b>patreon.com/unik</p>'
+                }
+            }
+            Boton{//Close
+                id: btnCloseACT
+                w:app.fs*2
+                h: w
+                t: "\uf00d"
+                d:'Close'
+                b:app.c1
+                c: app.c2
+                anchors.right: parent.right
+                anchors.rightMargin: app.fs
+                anchors.top: parent.top
+                anchors.topMargin: app.fs
+                onClicking: {
+                    help.visible=false
+                }
+            }
+        }
+
     }
     Shortcut{
         sequence: 'Return'
@@ -415,12 +459,25 @@ ApplicationWindow {
     }
     Shortcut{
         sequence: 'Esc'
-        onActivated: Qt.quit()
+        onActivated: {
+            if(help.visible){
+                help.visible=false
+                return
+            }
+            Qt.quit()
+        }
     }
     Shortcut{
         sequence: 'Left'
         onActivated: {
-            if(xConfig.width!==0)colConfig.opacity=0.0
+            if(help.visible){
+                help.visible=false
+                return
+            }
+            if(xConfig.width!==0){
+                colConfig.opacity=0.0
+                return
+            }
         }
     }
     Shortcut{
@@ -433,6 +490,27 @@ ApplicationWindow {
                 //xConfig.width=rowBtnSettings.width+app.fs
                 xConfig.width=xConfig.wmax
                 return
+            }
+            if(!xConfig.visible||xConfig.width===0){
+                if(app.ci<app.al.length-1){
+                    app.ci++
+                }else{
+                    app.ci=0
+                }
+                tlaunch.stop()
+
+                mp.stop()
+                if(unikSettings.sound){
+                    var uModuleName=app.al[app.ci].replace('link_', '').replace('.ukl', '')
+                    mp.source='file:///'+pws+'/'+uModuleName+'/select.m4a'
+                }
+            }else{
+                console.log('CurrentFocus: '+xConfig.currentFocus)
+                if(xConfig.currentFocus<xConfig.cantFocus){
+                    xConfig.currentFocus++
+                }else{
+                    xConfig.currentFocus=1
+                }
             }
         }
     }

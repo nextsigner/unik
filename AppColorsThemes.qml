@@ -5,12 +5,12 @@ Rectangle{
     width: rowTit.width>(cantColors/2)*app.fs*3+app.fs?rowTit.width+app.fs:(cantColors/2)*app.fs*3+app.fs
     height: gridPackColor.height+app.fs*3
     color:unikSettings.colors[unikSettings.currentNumColor][3]
-    border.width: 2
-    border.color: unikSettings.colors[unikSettings.currentNumColor][0]
+    border.width: unikSettings.borderWidth
+    border.color: unikSettings.colors[unikSettings.currentNumColor][1]
+    radius: unikSettings.radius
     property alias showBtnClose: btnCloseACT.visible
     property int currentFocus: -1
     property int cantColors//: gridPackColor.children.length-1
-    //property type name: value
     Boton{//Close
         id: btnCloseACT
         w:app.fs
