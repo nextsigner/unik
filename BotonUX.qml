@@ -172,7 +172,6 @@ Item {
     function run(){
         r.clicked()
     }
-
     function runQml(q){
         var obj = Qt.createQmlObject(q, objToRunQml, 'botonUx-'+r.objectName)
     }

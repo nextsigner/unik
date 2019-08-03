@@ -53,16 +53,14 @@ ApplicationWindow {
             app.c4=unikSettings.colors[nc][3]
             app.visible=true
         }
-
     }
     MediaPlayer{
         id:mp;
         autoLoad: true;
         autoPlay: true;
-        //source: 'file:///'+pws+'/unik-tools/unik.m4a'
     }
     FolderListModel{
-        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'/'+appsDir
+        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'/'+ws
         id:fl
         showDirs:  false
         showDotAndDotDot: false
@@ -198,7 +196,18 @@ ApplicationWindow {
                     color:xItem.border.width!==0?app.c2:app.c1
                     anchors.centerIn: parent
                 }
+                Timer{
+                    running: true
+                    repeat: true
+                    interval: 250
+                    onTriggered: {
+                        if(xItem.border.width!==0){
+                            app.ci=index
+                        }
+                    }
+                }
                 Component.onCompleted: {
+
                     app.al.push(fileName)
                     if((''+fileName).indexOf('link')===0&&(''+fileName).indexOf('.json')>0&&!app.prima){
                         app.ca=app.al[index]
@@ -234,7 +243,7 @@ ApplicationWindow {
             anchors.horizontalCenter: parent.horizontalCenter
             visible: false
             clip: true
-            property int cantFocus: 4
+            property int cantFocus: 6
             property int currentFocus: 1
             onWidthChanged: {
                 if(width===rowBtnSettings.width+app.fs){
@@ -284,13 +293,15 @@ ApplicationWindow {
                     BotonUX{
                         id: btnUX1
                         UnikFocus{visible: xConfig.currentFocus===1}
-                        text: unikSettings.lang==='es'?'Tamaño Letra':'Font Size'
+                        text: unikSettings.lang==='es'?'Tamaño Letra '+parseFloat(unikSettings.zoom).toFixed(1):'Font Size '+parseFloat(unikSettings.zoom).toFixed(1)
                         onClicked: {
-                            if(unikSettings.zoom>0.5){
-                                unikSettings.zoom-=0.1
+                            var uzoom=parseFloat(unikSettings.zoom).toFixed(1)
+                            if(uzoom>0.5){
+                                uzoom-=0.1
                             }else{
-                                unikSettings.zoom=1.2
+                                uzoom=1.2
                             }
+                            unikSettings.zoom=uzoom
                         }
                     }
                     BotonUX{
@@ -318,7 +329,7 @@ ApplicationWindow {
                         property string yesno: unikSettings.showBg?no:yes
                         text: unikSettings.lang==='es'?'Fondo Transparente '+yesno:'Transparent Background '+yesno
                         onClicked: {
-                                unikSettings.showBg=!unikSettings.showBg
+                            unikSettings.showBg=!unikSettings.showBg
                         }
                     }
                 }
@@ -326,6 +337,15 @@ ApplicationWindow {
                     id: appColorsThemes
                     anchors.horizontalCenter: parent.horizontalCenter
                     showBtnClose: false
+                    currentFocus: ufACT.currentFocus
+                    objectName: 'bbbb'
+                    UnikFocus{
+                        id: ufACT;
+                        visible: xConfig.currentFocus===5
+                        objectName: 'aaa'
+                        property int currentFocus: -1
+                        property int cantFocus: 4
+                    }
                 }
                 Row{
                     id: rowBtnSettingsFoot
@@ -334,6 +354,7 @@ ApplicationWindow {
                     BotonUX{
                         text: unikSettings.lang==='es'?'Cerrar ':'Close'
                         onClicked:xConfig.visible=false
+                        UnikFocus{visible: xConfig.currentFocus===6}
                     }
                 }
             }
@@ -346,7 +367,13 @@ ApplicationWindow {
             if(!xConfig.visible||xConfig.width===0){
                 run()
             }else{
-                app.objFocus.run()
+                if(!ufACT.visible){
+                    app.objFocus.run()
+                }else{
+                    console.log('objFocus objectName:'*appColorsThemes.objectName)
+                    appColorsThemes.run()
+                }
+
             }
         }
     }
@@ -357,7 +384,6 @@ ApplicationWindow {
     Shortcut{
         sequence: 'Left'
         onActivated: {
-
             tlaunch.stop()
             xConfig.visible=true
             if(xConfig.width===0){
@@ -366,7 +392,6 @@ ApplicationWindow {
                 return
             }
             if(xConfig.width!==0)colConfig.opacity=0.0
-
         }
 
     }
@@ -427,13 +452,27 @@ ApplicationWindow {
                 }
             }else{
                 console.log('CurrentFocus: '+xConfig.currentFocus)
-                if(xConfig.currentFocus>1){
-                    xConfig.currentFocus--
+                if(!ufACT.visible){
+                    if(xConfig.currentFocus>1){
+                        xConfig.currentFocus--
+                    }else{
+                        xConfig.currentFocus=xConfig.cantFocus
+                    }
                 }else{
-                    xConfig.currentFocus=xConfig.cantFocus
+                    if(ufACT.currentFocus>0){
+                        ufACT.currentFocus--
+                    }else{
+                        ufACT.currentFocus=ufACT.cantFocus+1
+                    }
                 }
             }
         }
+    }
+    Text {
+        id: ttt
+        text: 'ci: '+app.ci
+        font.pixelSize: 50
+        color: 'yellow'
     }
     Rectangle{
         id:tap

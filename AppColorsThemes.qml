@@ -8,6 +8,7 @@ Rectangle{
     border.width: 2
     border.color: unikSettings.colors[unikSettings.currentNumColor][0]
     property alias showBtnClose: btnCloseACT.visible
+    property int currentFocus: -1
     Boton{//Close
         id: btnCloseACT
         w:app.fs
@@ -28,6 +29,12 @@ Rectangle{
         id: colColors
         spacing: app.fs*0.5
         anchors.centerIn: parent
+        Text {
+            text: unikSettings.lang==='es'?'<b>Colores de Unik: '+unikSettings.currentNumColor+'</b>':'<b>Unik Colors: '+unikSettings.currentNumColor+'</b>'
+            font.pixelSize: app.fs
+            anchors.horizontalCenter: parent.horizontalCenter
+            color: 'black'
+        }
         Repeater{
             id:rep1
             model: unikSettings.colors
@@ -37,6 +44,7 @@ Rectangle{
                 border.width: 1
                 border.color: '#000'
                 color: 'transparent'
+                UnikFocus{visible: r.currentFocus===index}
                 Text {
                     text: "\uf00c"
                     font.family: "FontAwesome"
@@ -114,5 +122,9 @@ Rectangle{
                 }
             }
         }
+    }
+    function run(){
+        unikSettings.currentNumColor=r.currentFocus
+        setColors()
     }
 }

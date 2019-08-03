@@ -7,7 +7,7 @@ Rectangle {
     anchors.centerIn: parent
     property var objFocus: r.parent
     property int w: app.fs*0.4
-    property color c: 'red'
+    property color c: unikSettings.currentNumColor===2?'yellow':'red'
     color: 'transparent'
     border.width: w
     border.color: c

@@ -12,12 +12,12 @@ Settings{
     property int numberRun
     property real zoom
     Component.onCompleted: {
-        appSettingsUnik.colors= [["black", "white", "#666", "#aaa"], ["white", "black", "#aaa", "#666"], ["red", "black", "#ff6666", "white"], ["#ff3333", "black", "#ff9999", "white"], ["#1fbc05", "black", "green", "white"], ["black", "#1fbc05", "white", "green"]]
+        appSettingsUnik.colors= [["black", "white", "#666", "#aaa"], ["white", "black", "#aaa", "#666"], ["red", "black", "#ff6666", "white"], ["#ff8833", "black", "#ff9999", "white"], ["#1fbc05", "black", "green", "white"], ["black", "#1fbc05", "white", "green"]]
         if(numberRun===0){
             lang='es'
             zoom=0.5
         }
+        numberRun++
     }
-
 }
 

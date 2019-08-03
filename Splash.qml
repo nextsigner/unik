@@ -8,7 +8,7 @@ ApplicationWindow {
     visibility:  "Maximized"
     color: "transparent"
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
-    property int fs: appSplash.width*0.02
+    property int fs: appSplash.width*0.02*unikSettings.zoom
     property bool ver: true
     property color c1: "#1fbc05"
     property color c2: "white"
