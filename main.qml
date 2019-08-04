@@ -36,8 +36,10 @@ ApplicationWindow {
     property color c3: "black"
     property color c4: "white"
     property int area: 0
+    property string pws: pws
     UnikSettings{
         id: unikSettings
+        //property string pws: pws
     }
     Item{
         id:xApp

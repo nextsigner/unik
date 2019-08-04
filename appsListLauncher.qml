@@ -244,7 +244,7 @@ ApplicationWindow {
             anchors.horizontalCenter: parent.horizontalCenter
             visible: false
             clip: true
-            property int wmax: appColorsThemes.width+app.fs*12
+            property int wmax: appColorsThemes.width+app.fs*20
             property int cantFocus: 10
             property int currentFocus: 1
             onWidthChanged: {
@@ -333,6 +333,7 @@ ApplicationWindow {
                     id: rowBtnSettings2
                     anchors.horizontalCenter: parent.horizontalCenter
                     spacing: app.fs*0.5
+                    onWidthChanged: xConfig.width=xConfig.wmax
                     BotonUX{
                         text: unikSettings.lang==='es'?'Languaje':'Lenguaje'
                         onClicked: unikSettings.lang=unikSettings.lang==='es'?'en':'es'

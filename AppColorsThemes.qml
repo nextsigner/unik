@@ -11,6 +11,12 @@ Rectangle{
     property alias showBtnClose: btnCloseACT.visible
     property int currentFocus: -1
     property int cantColors//: gridPackColor.children.length-1
+    Timer{
+        running: true
+        repeat: true
+        interval: 500
+        onTriggered: rep1.model=unikSettings.colors.length//unikSettings.colors
+    }
     Boton{//Close
         id: btnCloseACT
         w:app.fs

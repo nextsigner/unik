@@ -4,15 +4,15 @@ Rectangle {
     id: r
     //z:r.parent.z-1
     width: parent.width//+unikSettings.borderWidth/2//+w
-    height: parent.height//+unikSettings.borderWidth/2//+w
+    height: parent.height
     anchors.centerIn: parent
     property var objFocus: parent
     property int w: unikSettings.borderWidth
     property color c: unikSettings.colors[unikSettings.currentNumColor][2]
     color: 'transparent'
-    border.width: unikSettings.borderWidth*2
+    border.width: unikSettings.borderWidth
     border.color: c
-    radius: unikSettings.radius+unikSettings.borderWidth*2
+    radius: unikSettings.radius
     onVisibleChanged: {
         if(visible)app.objFocus=r.objFocus
     }
@@ -27,7 +27,6 @@ Rectangle {
                 v++
             }else{
                 parent.c=r.parent.border.color
-                //parent.c=unikSettings.colors[unikSettings.currentNumColor][0]
                 v=0
             }
         }

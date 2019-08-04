@@ -8,7 +8,7 @@ Rectangle {
     color: 'transparent'
     radius: xR1.radius
     border.color: xR1.border.color
-    //clip: true
+    border.width: 0
     property int fontSize: app.fs
     property bool canceled: false
     property alias text: a.text
@@ -25,14 +25,14 @@ Rectangle {
         border.width: unikSettings.borderWidth
         border.color: r.fontColor
         radius: unikSettings.radius
-        width: parent.width-unikSettings.borderWidth*2//r.fontSize*0.5
-        height: parent.height-unikSettings.borderWidth*2//-r.fontSize*0.5
+        width: parent.width
+        height: parent.height
         anchors.centerIn: r
         Rectangle{
             id: b3
             opacity: b1.opacity!==0.5?1.0:0.0
-            width: parent.width-unikSettings.borderWidth
-            height: parent.height-unikSettings.borderWidth
+            width: parent.width
+            height: parent.height
             radius: unikSettings.radius
             anchors.centerIn: parent
             color: app.c2
@@ -40,8 +40,8 @@ Rectangle {
         }
         Rectangle{
             id: b1
-            width: xR1.height-unikSettings.borderWidth//parent.height-xR1.border.width
-            height: xR1.width-unikSettings.borderWidth//parent.width-xR1.border.width
+            width: xR1.height
+            height: xR1.width
             radius: unikSettings.radius
             rotation: -90
             anchors.centerIn: parent
@@ -61,15 +61,16 @@ Rectangle {
         Rectangle{
             id: b2
             opacity: 0.5-b1.opacity
+            width: xR1.width
+            height: xR1.height
+            radius: unikSettings.radius
+            rotation: -270
+
             onOpacityChanged: {
                 if(opacity>=0.5&&!maBX.p){
                     b1.opacity=0.5
                 }
             }
-            width: xR1.width-unikSettings.borderWidth//parent.height+r.fontSize
-            height: xR1.height-unikSettings.borderWidth//parent.width+r.fontSize
-            radius: unikSettings.radius
-            rotation: -270
             anchors.centerIn: parent
             gradient: Gradient {
                 GradientStop {
@@ -111,13 +112,11 @@ Rectangle {
     }
     MouseArea{
         id: maBX
-        //hoverEnabled: true
         anchors.fill: r
         property bool p: false
         onPChanged: {
             if(p){
                 if(r.qmlCode===''&&!r.canceled){
-                    //click()
                     tBxCancel.stop()
                     return
                 };
