@@ -377,9 +377,11 @@ ApplicationWindow {
     }
     function setColors(){
         var nc=unikSettings.currentNumColor
-        app.c1=unikSettings.colors[nc][0]
-        app.c2=unikSettings.colors[nc][1]
-        app.c3=unikSettings.colors[nc][2]
-        app.c4=unikSettings.colors[nc][3]
+        var cc1=unikSettings.defaultColors.split('|')
+        var cc2=cc1[nc].split('-')
+        app.c1=cc2[0]
+        app.c2=cc2[1]
+        app.c3=cc2[2]
+        app.c4=cc2[3]
     }
 }

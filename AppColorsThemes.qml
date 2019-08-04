@@ -4,9 +4,9 @@ Rectangle{
     id:r
     width: rowTit.width>(cantColors/2)*app.fs*3+app.fs?rowTit.width+app.fs:(cantColors/2)*app.fs*3+app.fs
     height: gridPackColor.height+app.fs*3
-    color:unikSettings.colors[unikSettings.currentNumColor][3]
+    color:app.c4
     border.width: unikSettings.borderWidth
-    border.color: unikSettings.colors[unikSettings.currentNumColor][1]
+    border.color: app.c2
     radius: unikSettings.radius
     property alias showBtnClose: btnCloseACT.visible
     property int currentFocus: -1
@@ -15,7 +15,10 @@ Rectangle{
         running: true
         repeat: true
         interval: 500
-        onTriggered: rep1.model=unikSettings.colors.length//unikSettings.colors
+        onTriggered: {
+            var ac=unikSettings.defaultColors.split('|')
+            rep1.model=ac
+        }
     }
     Boton{//Close
         id: btnCloseACT
@@ -43,12 +46,12 @@ Rectangle{
             Text {
                 text: unikSettings.lang==='es'?'<b>Color de Unik: '+parseInt(unikSettings.currentNumColor+1)+'</b>':'<b>Unik Color: '+parseInt(unikSettings.currentNumColor+1)+'</b>'
                 font.pixelSize: app.fs
-                color: unikSettings.colors[unikSettings.currentNumColor][1]
+                color: app.c2
             }
             Text {
                 text: unikSettings.lang==='es'?'<b>Cantidad de Colores: '+r.cantColors+'</b>':'<b>Count Colors: '+r.cantColors+'</b>'
                 font.pixelSize: app.fs
-                color: unikSettings.colors[unikSettings.currentNumColor][1]
+                color: app.c2
             }
         }
         Grid{
@@ -58,14 +61,14 @@ Rectangle{
             rows: 2
             Repeater{
                 id:rep1
-                model: unikSettings.colors
+                //model: unikSettings.colors
                 Rectangle{
                     width: app.fs*2.5//app.fs*unikSettings.colors.length+app.fs*0.5*unikSettings.colors.length-1
                     height: width
                     border.width: 1
                     border.color: '#000'
                     color: 'transparent'
-                    UnikFocus{visible: r.currentFocus===index}
+                    UnikFocus{radius:0;visible: r.currentFocus===index}
                     Text {
                         text: "\uf00c"
                         font.family: "FontAwesome"
@@ -88,16 +91,17 @@ Rectangle{
                         spacing: app.fs*0.1
                         anchors.centerIn: parent
                         columns: 2
+                        property var arr: modelData.split('-')
                         Rectangle{
                             width: app.fs
                             height: width
                             border.width: 2
-                            border.color: 'black'
+                            border.color: app.c2
                             color: 'transparent'
                             Rectangle{
                                 width: parent.width-8
                                 height: parent.width-8
-                                color: unikSettings.colors[index][0]
+                                color: gridColors.arr[0]
                                 anchors.centerIn: parent
                             }
                         }
@@ -105,12 +109,12 @@ Rectangle{
                             width: app.fs
                             height: width
                             border.width: 2
-                            border.color: 'black'
+                            border.color: app.c2
                             color: 'transparent'
                             Rectangle{
                                 width: parent.width-8
                                 height: parent.width-8
-                                color: unikSettings.colors[index][1]
+                                color: gridColors.arr[1]
                                 anchors.centerIn: parent
                             }
                         }
@@ -118,12 +122,12 @@ Rectangle{
                             width: app.fs
                             height: width
                             border.width: 2
-                            border.color: 'black'
+                            border.color: app.c2
                             color: 'transparent'
                             Rectangle{
                                 width: parent.width-8
                                 height: parent.width-8
-                                color: unikSettings.colors[index][2]
+                                color: gridColors.arr[2]
                                 anchors.centerIn: parent
                             }
                         }
@@ -131,12 +135,12 @@ Rectangle{
                             width: app.fs
                             height: width
                             border.width: 2
-                            border.color: 'black'
+                            border.color: app.c2
                             color: 'transparent'
                             Rectangle{
                                 width: parent.width-8
                                 height: parent.width-8
-                                color: unikSettings.colors[index][3]
+                                color: gridColors.arr[3]
                                 anchors.centerIn: parent
                             }
                         }

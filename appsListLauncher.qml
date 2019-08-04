@@ -48,10 +48,12 @@ ApplicationWindow {
         Component.onCompleted: {
             console.log('UnikColorTheme: '+unikSettings.currentNumColor)
             var nc=unikSettings.currentNumColor
-            app.c1=unikSettings.colors[nc][0]
-            app.c2=unikSettings.colors[nc][1]
-            app.c3=unikSettings.colors[nc][2]
-            app.c4=unikSettings.colors[nc][3]
+            var cc1=unikSettings.defaultColors.split('|')
+            var cc2=cc1[nc].split('-')
+            app.c1=cc2[0]
+            app.c2=cc2[1]
+            app.c3=cc2[2]
+            app.c4=cc2[3]
             app.visible=true
         }
     }
@@ -237,7 +239,7 @@ ApplicationWindow {
             width: 0
             height: colConfig.height+app.fs
             color: app.c1
-            border.width: 2
+            border.width: unikSettings.borderWidth
             border.color: app.c2
             radius: app.fs*0.25
             anchors.verticalCenter: parent.verticalCenter
@@ -636,10 +638,12 @@ ApplicationWindow {
     }
     function setColors(){
         var nc=unikSettings.currentNumColor
-        app.c1=unikSettings.colors[nc][0]
-        app.c2=unikSettings.colors[nc][1]
-        app.c3=unikSettings.colors[nc][2]
-        app.c4=unikSettings.colors[nc][3]
+        var cc1=unikSettings.defaultColors.split('|')
+        var cc2=cc1[nc].split('-')
+        app.c1=cc2[0]
+        app.c2=cc2[1]
+        app.c3=cc2[2]
+        app.c4=cc2[3]
     }
     function run(){
         appSettings.uApp=app.ca

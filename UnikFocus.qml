@@ -8,7 +8,7 @@ Rectangle {
     anchors.centerIn: parent
     property var objFocus: parent
     property int w: unikSettings.borderWidth
-    property color c: unikSettings.colors[unikSettings.currentNumColor][2]
+    property color c: app.c3
     color: 'transparent'
     border.width: unikSettings.borderWidth
     border.color: c
@@ -23,7 +23,7 @@ Rectangle {
         property int v: 0
         onTriggered: {
             if(v===0){
-                parent.c=unikSettings.colors[unikSettings.currentNumColor][2]
+                parent.c=app.c3
                 v++
             }else{
                 parent.c=r.parent.border.color
