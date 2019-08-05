@@ -24,5 +24,6 @@
         <file>URadioButton.qml</file>
         <file>UText.qml</file>
         <file>UnikFocus.qml</file>
+        <file>UBg.qml</file>
     </qresource>
 </RCC>

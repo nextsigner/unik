@@ -237,8 +237,15 @@ ApplicationWindow {
                         anchors.right: parent.left
                         anchors.rightMargin: app.fs
                         onClicked: {
-                            app.run()
+                            tlaunch.stop()
+                            var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
+                            if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch.m4a')){
+                                app.runSound(pws+'/'+uModuleName+'/launch.m4a')
+                            }else{
+                                app.run()
+                            }
                         }
+                        UBg{opacity: 1.0}
                     }
                 }
             }
@@ -428,6 +435,7 @@ ApplicationWindow {
                     tlaunch.stop()
                     xConfig.width=xConfig.wmax
                 }
+                UBg{opacity: 1.0}
             }
         }
         Rectangle{
@@ -480,7 +488,13 @@ ApplicationWindow {
         onActivated: {
             console.log('Enter...')
             if(!xConfig.visible||xConfig.width===0){
-                run()
+                tlaunch.stop()
+                var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
+                if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch.m4a')){
+                    app.runSound(pws+'/'+uModuleName+'/launch.m4a')
+                }else{
+                    app.run()
+                }
             }else{
                 /*if(ufACT.visible&&xConfig.currentFocus===6){
                     return
@@ -503,7 +517,7 @@ ApplicationWindow {
                 help.visible=false
                 return
             }
-            if(xConfig.width!==0){
+            if(xConfig.width!==0&&xConfig.visible){
                 colConfig.opacity=0.0
                 return
             }
@@ -537,6 +551,7 @@ ApplicationWindow {
         onActivated: {
             tlaunch.stop()
             xConfig.visible=true
+            xP.opacity=0.0
             if(xConfig.width===0){
                 xConfig.visible=true
                 //xConfig.width=rowBtnSettings.width+app.fs
@@ -671,10 +686,10 @@ ApplicationWindow {
                 engine.load(appsDir+'/unik-tools/main.qml')
             }else{
                 xP.visible=true
-                if(unikSettings.sound){
+                /*if(unikSettings.sound){
                     var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
                     mp.source='file:///'+pws+'/'+uModuleName+'/launch.m4a'
-                }
+                }*/
             }
             flick.opacity=1.0
         }
@@ -689,16 +704,18 @@ ApplicationWindow {
         onTriggered: {
             app.sec++
             if(app.sec===7){
-                //run()
                 stop()
-                app.runSound('aaa')
+                var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
+                if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch.m4a')){
+                    app.runSound(pws+'/'+uModuleName+'/launch.m4a')
+                }else{
+                    app.run()
+                }
             }
             if(app.sec>7){
                app.sec=0
             }
-
             psec.width=psec.parent.width/5*(app.sec-1)
-
         }
     }
     function setColors(){
@@ -718,7 +735,7 @@ MediaPlayer{
         id:mpc;
         autoLoad: true;
         autoPlay: true;
-        source: "file://'+pws+'/unik-tools/launch.m4a"
+        source: "file://'+ids+'"
         onStopped:{
             console.log("Se detuvo audio mpc"+mpc.source)
             app.run()
