@@ -146,8 +146,8 @@ ApplicationWindow {
                 width: txt.contentWidth+app.fs*2
                 height: app.fs*2
                 color: xItem.border.width!==0?app.c1:app.c2
-                radius: app.fs*0.25
-                border.width: fileName===app.ca?2:0
+                radius: unikSettings.radius
+                border.width: fileName===app.ca?unikSettings.borderWidth:0
                 border.color: fileName===app.ca?app.c2:app.c1
                 anchors.horizontalCenter: parent.horizontalCenter
                 visible:(''+fileName).indexOf('link')===0&&(''+fileName).indexOf('.ukl')>0
@@ -163,8 +163,8 @@ ApplicationWindow {
                     id: borde
                     anchors.fill: parent
                     radius: parent.radius
-                    border.width: 2
-                    border.color: xItem.border.width!==0?app.c2:app.c1
+                    border.width: unikSettings.borderWidth
+                    border.color: xItem.border.width!==0?app.c2:app.c4
                     color: 'transparent'
                 }
                 MouseArea{
@@ -226,11 +226,20 @@ ApplicationWindow {
                     text: '\uf061'
                     font.family: "FontAwesome"
                     font.pixelSize: app.fs
-                    color:app.c1
+                    color:app.c2
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.right: parent.left
                     anchors.rightMargin: app.fs*0.5
                     visible: xItem.border.width!==0
+                    BotonUX{
+                        text: unikSettings.lang==='es'?'Iniciar':'Start'
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.right: parent.left
+                        anchors.rightMargin: app.fs
+                        onClicked: {
+                            app.run()
+                        }
+                    }
                 }
             }
         }
@@ -330,7 +339,7 @@ ApplicationWindow {
                             }
                         }
                     }
-                                    }
+                }
                 Row{
                     id: rowBtnSettings2
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -372,6 +381,7 @@ ApplicationWindow {
                         objectName: 'aaa'
                         property int currentFocus: -1
                         property int cantFocus: appColorsThemes.cantColors-1
+                        onVisibleChanged: visible?currentFocus=0:currentFocus=-1
                     }
                 }
                 Row{
@@ -395,6 +405,28 @@ ApplicationWindow {
                         onClicked:Qt.quit()
                         UnikFocus{visible: xConfig.currentFocus===10}
                     }
+                }
+            }
+        }
+        Text {
+            text: '\uf061'
+            font.family: "FontAwesome"
+            font.pixelSize: app.fs*2
+            color:app.c2
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: app.fs*0.5
+            opacity: (!xConfig.visible&&!help.visible)||(xConfig.width===0&&!help.visible)?1.0:0.0
+            Behavior on opacity{NumberAnimation{duration: 500}}
+            BotonUX{
+                text: unikSettings.lang==='es'?'Configurar':'Config'
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.left
+                anchors.rightMargin: app.fs
+                onClicked: {
+                    xConfig.visible=true
+                    tlaunch.stop()
+                    xConfig.width=xConfig.wmax
                 }
             }
         }
@@ -450,6 +482,10 @@ ApplicationWindow {
             if(!xConfig.visible||xConfig.width===0){
                 run()
             }else{
+                /*if(ufACT.visible&&xConfig.currentFocus===6){
+                    return
+                }*/
+
                 if(!ufACT.visible){
                     app.objFocus.run()
                 }else{
@@ -467,12 +503,25 @@ ApplicationWindow {
                 help.visible=false
                 return
             }
+            if(xConfig.width!==0){
+                colConfig.opacity=0.0
+                return
+            }
             Qt.quit()
         }
     }
     Shortcut{
         sequence: 'Left'
         onActivated: {
+            if(xConfig.width!==0&&ufACT.visible&&appColorsThemes.currentFocus===0){
+                xConfig.currentFocus--
+                return
+            }else{
+                if(xConfig.width!==0&&ufACT.visible&&appColorsThemes.currentFocus!==0){
+                    appColorsThemes.currentFocus--
+                    return
+                }
+            }
             if(help.visible){
                 help.visible=false
                 return
@@ -509,6 +558,16 @@ ApplicationWindow {
                 }
             }else{
                 console.log('CurrentFocus: '+xConfig.currentFocus)
+                if(ufACT.visible){
+                    if(appColorsThemes.currentFocus!==appColorsThemes.cantColors-1){
+                        appColorsThemes.currentFocus++
+                    }else{
+                        appColorsThemes.currentFocus=0
+                    }
+
+                    appColorsThemes.run()
+                    return
+                }
                 if(xConfig.currentFocus<xConfig.cantFocus){
                     xConfig.currentFocus++
                 }else{
@@ -630,8 +689,14 @@ ApplicationWindow {
         onTriggered: {
             app.sec++
             if(app.sec===7){
-                run()
+                //run()
+                stop()
+                app.runSound('aaa')
             }
+            if(app.sec>7){
+               app.sec=0
+            }
+
             psec.width=psec.parent.width/5*(app.sec-1)
 
         }
@@ -644,6 +709,24 @@ ApplicationWindow {
         app.c2=cc2[1]
         app.c3=cc2[2]
         app.c4=cc2[3]
+    }
+    function runSound(ids){
+        var q='import QtQuick 2.0
+import QtMultimedia 5.0
+Item {
+MediaPlayer{
+        id:mpc;
+        autoLoad: true;
+        autoPlay: true;
+        source: "file://'+pws+'/unik-tools/launch.m4a"
+        onStopped:{
+            console.log("Se detuvo audio mpc"+mpc.source)
+            app.run()
+        }
+    }
+}
+'
+        var obj = Qt.createQmlObject(q, app, 'mpc')
     }
     function run(){
         appSettings.uApp=app.ca

@@ -10,7 +10,7 @@ Rectangle{
     radius: unikSettings.radius
     property alias showBtnClose: btnCloseACT.visible
     property int currentFocus: -1
-    property int cantColors//: gridPackColor.children.length-1
+    property int cantColors//: gridPackColor.children.length-1    
     Timer{
         running: true
         repeat: true
@@ -60,28 +60,28 @@ Rectangle{
             anchors.horizontalCenter: parent.horizontalCenter
             rows: 2
             Repeater{
-                id:rep1
-                //model: unikSettings.colors
+                id:rep1               
                 Rectangle{
-                    width: app.fs*2.5//app.fs*unikSettings.colors.length+app.fs*0.5*unikSettings.colors.length-1
+                    width: app.fs*2.5
                     height: width
                     border.width: 1
                     border.color: '#000'
                     color: 'transparent'
-                    UnikFocus{radius:0;visible: r.currentFocus===index}
-                    Text {
-                        text: "\uf00c"
-                        font.family: "FontAwesome"
-                        font.pixelSize: app.fs*0.5
-                        anchors.right: parent.left
-                        anchors.rightMargin: app.fs*0.2
-                        anchors.verticalCenter: parent.verticalCenter
-                        color: 'black'
-                        visible: unikSettings.currentNumColor===index
+                    Borde{
+                        w: app.fs*0.5
+                        visible: unikSettings.currentNumColor===index&&!uf.visible
+                        Timer{
+                            running: r.visible&&parent.visible
+                            repeat: true
+                            interval: 250
+                            onTriggered: parent.opacity===0.0?parent.opacity=1.0:parent.opacity=0.0
+                        }
                     }
+                    UnikFocus{id: uf; radius:0;visible: r.currentFocus===index}
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
+                            r.currentFocus=index
                             unikSettings.currentNumColor=index
                             setColors()
                         }

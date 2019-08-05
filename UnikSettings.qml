@@ -21,11 +21,11 @@ Settings{
             appSettingsUnik.radius=Screen.width*0.02
             appSettingsUnik.borderWidth=Screen.width*0.005
         }
-        defaultColors='black-white-#666-#aaa|white-black-#aaa-#666|black-red-#ff6666-white|black-red-#ff6666-white|red-black-#ff6666-white|#ff2200-black-#ff8833-white|black-#ff8833-white-#ddcccc|#1fbc05-black-green-white|black-#1fbc05-white-green|green-white-red-blue'
+        defaultColors='black-white-#666-#aaa|white-black-#aaa-#666|black-red-#ff6666-white|black-#ff6666-red-white|red-black-#ff6666-white|#ff2200-#ff8833-black-white|black-#ff8833-#ff3388-#ddcccc|#1fbc05-black-green-white|black-#1fbc05-white-green|green-white-red-blue'
 
         var cPWS=pws
         if(Qt.platform.os!=='android'){
-            var unikCfgFile=''+cPWS+'/unik-tools/unik-cfg.json'
+            var unikCfgFile=''+cPWS+'/unik-tools/unik/unik-cfg.json'
             var unikCfgFileData=unik.getFile(unikCfgFile)
             console.log('unikCfgFile: '+unikCfgFile)
             console.log('unikCfgFileData: '+unikCfgFileData)
