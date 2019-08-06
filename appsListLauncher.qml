@@ -63,7 +63,7 @@ ApplicationWindow {
         autoPlay: true;
     }
     FolderListModel{
-        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'/'+ws
+        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'file:///'+appsDir//'/'+pws
         id:fl
         showDirs:  false
         showDotAndDotDot: false
