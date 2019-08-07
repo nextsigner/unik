@@ -1,5 +1,6 @@
 ﻿import QtQuick 2.7
 import QtQuick.Controls 2.0
+import QtQuick.Window 2.2
 import Qt.labs.folderlistmodel 2.2
 import Qt.labs.settings 1.0
 import QtMultimedia 5.0
@@ -63,7 +64,7 @@ ApplicationWindow {
         autoPlay: true;
     }
     FolderListModel{
-        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'file:///'+appsDir//'/'+pws
+        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'/'+ws
         id:fl
         showDirs:  false
         showDotAndDotDot: false
@@ -127,7 +128,7 @@ ApplicationWindow {
             Behavior on contentY{NumberAnimation{duration: 500}}
             ListView{
                 id:lv
-                spacing: app.fs*0.25
+                spacing: app.fs*unikSettings.padding
                 model:fl
                 delegate: delegate
                 width: app.width-app.fs*2
@@ -142,70 +143,107 @@ ApplicationWindow {
         Component{
             id:delegate
             Rectangle{
-                id:xItem
+                id:xItemP
                 width: txt.contentWidth+app.fs*2
                 height: app.fs*2
-                color: xItem.border.width!==0?app.c1:app.c2
-                radius: unikSettings.radius
-                border.width: fileName===app.ca?unikSettings.borderWidth:0
-                border.color: fileName===app.ca?app.c2:app.c1
+                color: 'transparent'
                 anchors.horizontalCenter: parent.horizontalCenter
-                visible:(''+fileName).indexOf('link')===0&&(''+fileName).indexOf('.ukl')>0
-                onColorChanged: {
-                    if(xItem.border.width!==0){
-                        app.ca=app.al[index]
-                        lv.currentIndex=index
-                        psec.width=0
-                    }
-                }//lv.currentIndex=index
-
-                Rectangle{
-                    id: borde
-                    anchors.fill: parent
-                    radius: parent.radius
-                    border.width: unikSettings.borderWidth
-                    border.color: xItem.border.width!==0?app.c2:app.c4
-                    color: 'transparent'
-                }
-                MouseArea{
-                    anchors.fill: parent
-                    onClicked: {
-                        app.ci=index
-                        app.ca=fileName
-                        flick.contentY=(app.fs*2+app.fs*0.25)*index-app.height/2
-
-                        if(tlaunch.running){
+                Row{
+                    id: rowLaunchItem
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+                    height: parent.height
+                    spacing: app.fs*0.5*unikSettings.padding
+                    BotonUX{
+                        id: btnStart
+                        text: unikSettings.lang==='es'?'Iniciar':'Start'
+                        anchors.verticalCenter: parent.verticalCenter
+                        visible: xItem.border.width!==0
+                        onClicked: {
                             tlaunch.stop()
-                            app.sec=0
-                            psec.width=0
-                        }else{
-                            tlaunch.start()
+                            var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
+                            if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')){
+                                app.runSound(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')
+                            }else{
+                                app.run()
+                            }
                         }
+                        UBg{opacity: 1.0}
                     }
-                    onDoubleClicked: {
-                        /*var p=unik.getFile(appsDir+'/'+fileName)
+                    Text {
+                        text: '\uf061'
+                        font.family: "FontAwesome"
+                        font.pixelSize: app.fs
+                        color:app.c2
+                        anchors.verticalCenter: parent.verticalCenter
+                        visible: xItem.border.width!==0
+                    }
+                    Rectangle{
+                        id:xItem
+                        width: txt.contentWidth+app.fs*2
+                        height: app.fs*2
+                        color: xItem.border.width!==0?app.c1:app.c2
+                        radius: unikSettings.radius
+                        border.width: fileName===app.ca?unikSettings.borderWidth:0
+                        border.color: fileName===app.ca?app.c2:app.c1
+                        anchors.verticalCenter: parent.verticalCenter
+                        visible:(''+fileName).indexOf('link')===0&&(''+fileName).indexOf('.ukl')>0
+                        onColorChanged: {
+                            if(xItem.border.width!==0){
+                                app.ca=app.al[index]
+                                lv.currentIndex=index
+                                psec.width=0
+                            }
+                        }
+                        Rectangle{
+                            id: borde
+                            anchors.fill: parent
+                            radius: parent.radius
+                            border.width: unikSettings.borderWidth
+                            border.color: xItem.border.width!==0?app.c2:app.c4
+                            color: 'transparent'
+                        }
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                app.ci=index
+                                app.ca=fileName
+                                flick.contentY=(app.fs*2+app.fs*0.25)*index-app.height/2
+
+                                if(tlaunch.running){
+                                    tlaunch.stop()
+                                    app.sec=0
+                                    psec.width=0
+                                }else{
+                                    tlaunch.start()
+                                }
+                            }
+                            onDoubleClicked: {
+                                /*var p=unik.getFile(appsDir+'/'+fileName)
                         unik.ejecutarLineaDeComandoAparte('"'+appExec+'" -cfg '+p)
                         app.close()*/
-                        app.ci=index
-                        app.ca=fileName
-                        flick.contentY=(app.fs*2+app.fs*0.25)*index-app.height/2
-                        run()
-                    }
-                }
-                Text {
-                    id: txt
-                    text: (''+fileName).substring(5, (''+fileName).length-4)
-                    font.pixelSize: app.fs
-                    color:xItem.border.width!==0?app.c2:app.c1
-                    anchors.centerIn: parent
-                }
-                Timer{
-                    running: true
-                    repeat: true
-                    interval: 250
-                    onTriggered: {
-                        if(xItem.border.width!==0){
-                            app.ci=index
+                                app.ci=index
+                                app.ca=fileName
+                                flick.contentY=(app.fs*2+app.fs*0.25)*index-app.height/2
+                                run()
+                            }
+                        }
+                        Text {
+                            id: txt
+                            text: (''+fileName).substring(5, (''+fileName).length-4)
+                            font.pixelSize: app.fs
+                            color:xItem.border.width!==0?app.c2:app.c1
+                            anchors.centerIn: parent
+                        }
+                        Timer{
+                            running: true
+                            repeat: true
+                            interval: 250
+                            onTriggered: {
+                                if(xItem.border.width!==0){
+                                    app.ci=index
+                                }
+                            }
                         }
                     }
                 }
@@ -222,82 +260,52 @@ ApplicationWindow {
                         tinit.restart()
                     }
                 }
-                Text {
-                    text: '\uf061'
-                    font.family: "FontAwesome"
-                    font.pixelSize: app.fs
-                    color:app.c2
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.right: parent.left
-                    anchors.rightMargin: app.fs*0.5
-                    visible: xItem.border.width!==0
-                    BotonUX{
-                        text: unikSettings.lang==='es'?'Iniciar':'Start'
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.right: parent.left
-                        anchors.rightMargin: app.fs
-                        onClicked: {
-                            tlaunch.stop()
-                            var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
-                            if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch.m4a')){
-                                app.runSound(pws+'/'+uModuleName+'/launch.m4a')
-                            }else{
-                                app.run()
-                            }
-                        }
-                        UBg{opacity: 1.0}
-                    }
-                }
             }
         }
         Rectangle{
             id: xConfig
-            width: 0
+            width: !visible?0:wmax
             height: colConfig.height+app.fs
             color: app.c1
             border.width: unikSettings.borderWidth
             border.color: app.c2
             radius: app.fs*0.25
             anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: xConfig.height<Screen.desktopAvailableHeight?0:xConfig.currentFocus<8?(xConfig.height-Screen.desktopAvailableHeight)/2:0-(xConfig.height-Screen.desktopAvailableHeight)/2
             anchors.horizontalCenter: parent.horizontalCenter
-            visible: false
+            visible: opacity!==0.0
+            opacity: 0.0
             clip: true
-            property int wmax: appColorsThemes.width+app.fs*20
+            property int wmax:btnUX5.width+btnUX6.width+btnUX7.width+btnUX8.width<btnUX1.width+btnUX2.width+btnUX3.width+btnUX4.width? btnUX1.width+btnUX2.width+btnUX3.width+btnUX4.width+(btnUX7.width+app.fs*2):btnUX5.width+btnUX6.width+btnUX7.width+btnUX8.width+(btnUX7.width+app.fs*2)
             property int cantFocus: 10
             property int currentFocus: 1
-            onWidthChanged: {
-                if(width===wmax){
+            onOpacityChanged:{
+                if(opacity===0.0){
+                    colConfig.opacity=0.0
+                }
+                if(opacity===1.0){
                     colConfig.opacity=1.0
-                }
-            }
-            onVisibleChanged:{
-                if(visible){
-                    width=xConfig.wmax//rowBtnSettings.width+app.fs
-                    //focus=true
-                }
-                if(!visible){
-                    width=0
-                    //colConfig.opacity=1.0
                 }
             }
             Behavior on width{
                 NumberAnimation{
                     duration: 500;
                     easing.type: Easing.InExpo
-                    onStopped: {
-                        if(!xConfig.visible||xConfig.width===0){
-                            xConfig.visible=true
-                        }
-                    }
+                }
+            }
+            Behavior on opacity{
+                NumberAnimation{
+                    duration: 500;
+                    easing.type: Easing.InExpo
                 }
             }
             Column{
                 id: colConfig
                 anchors.centerIn: parent
-                spacing: app.fs
-                opacity: parent.width===xConfig.wmax?1.0:0.0
+                spacing: app.fs*unikSettings.padding
+                opacity: parent.opacity===1.0?1.0:0.0
                 onOpacityChanged:{
-                    if(opacity===0.0)xConfig.width=0
+                    if(opacity===0.0)xConfig.opacity=0.0
                 }
                 Behavior on opacity{
                     NumberAnimation{
@@ -308,7 +316,7 @@ ApplicationWindow {
                 Row{
                     id: rowBtnSettings
                     anchors.horizontalCenter: parent.horizontalCenter
-                    spacing: app.fs*0.5
+                    spacing: app.fs*0.5*unikSettings.padding
                     onWidthChanged: xConfig.width=xConfig.wmax
                     BotonUX{
                         id: btnUX1
@@ -325,6 +333,7 @@ ApplicationWindow {
                         }
                     }
                     BotonUX{
+                        id: btnUX2
                         UnikFocus{visible: xConfig.currentFocus===2}
                         text: unikSettings.lang==='es'?'Radio de Borde':'Border Radius'
                         onClicked: {
@@ -336,6 +345,7 @@ ApplicationWindow {
                         }
                     }
                     BotonUX{
+                        id: btnUX3
                         UnikFocus{visible: xConfig.currentFocus===3}
                         text: unikSettings.lang==='es'?'Ancho de Borde':'Width Radius'
                         onClicked: {
@@ -346,16 +356,28 @@ ApplicationWindow {
                             }
                         }
                     }
+                    BotonUX{
+                        id: btnUX4
+                        UnikFocus{visible: xConfig.currentFocus===4}
+                        text: unikSettings.lang==='es'?'Espacio':'Space'
+                        onClicked: {
+                            if(unikSettings.padding>0.1){
+                                unikSettings.padding-=0.1
+                            }else{
+                                unikSettings.padding=1.0
+                            }
+                        }
+                    }
                 }
                 Row{
                     id: rowBtnSettings2
                     anchors.horizontalCenter: parent.horizontalCenter
-                    spacing: app.fs*0.5
+                    spacing: app.fs*0.5*unikSettings.padding
                     onWidthChanged: xConfig.width=xConfig.wmax
                     BotonUX{
                         text: unikSettings.lang==='es'?'Languaje':'Lenguaje'
                         onClicked: unikSettings.lang=unikSettings.lang==='es'?'en':'es'
-                        UnikFocus{visible: xConfig.currentFocus===4}
+                        UnikFocus{visible: xConfig.currentFocus===5}
                     }
                     BotonUX{
                         text: unikSettings.lang==='es'?'Sonido '+yesno:'Sound '+yesno
@@ -363,16 +385,24 @@ ApplicationWindow {
                         property string no: unikSettings.lang==='es'?'NO':'NOT'
                         property string yesno: unikSettings.sound?yes:no
                         onClicked:unikSettings.sound=!unikSettings.sound
-                        UnikFocus{visible: xConfig.currentFocus===5}
+                        UnikFocus{visible: xConfig.currentFocus===6}
                     }
                     BotonUX{
-                        UnikFocus{visible: xConfig.currentFocus===6}
+                        UnikFocus{visible: xConfig.currentFocus===7}
                         property string yes: unikSettings.lang==='es'?'SI':'YES'
                         property string no: unikSettings.lang==='es'?'NO':'NOT'
                         property string yesno: unikSettings.showBg?no:yes
                         text: unikSettings.lang==='es'?'Fondo Transparente '+yesno:'Transparent Background '+yesno
                         onClicked: {
                             unikSettings.showBg=!unikSettings.showBg
+                        }
+                    }
+                    BotonUX{
+                        id: btnUX8
+                        UnikFocus{id:ufBntFF;visible: xConfig.currentFocus===8}
+                        text: unikSettings.lang==='es'?'Tipo de Letra':'Font Family'
+                        onClicked: {
+                            xFF.visible=true
                         }
                     }
                 }
@@ -384,7 +414,7 @@ ApplicationWindow {
                     objectName: 'bbbb'
                     UnikFocus{
                         id: ufACT;
-                        visible: xConfig.currentFocus===7
+                        visible: xConfig.currentFocus===9
                         objectName: 'aaa'
                         property int currentFocus: -1
                         property int cantFocus: appColorsThemes.cantColors-1
@@ -396,22 +426,99 @@ ApplicationWindow {
                     anchors.horizontalCenter: parent.horizontalCenter
                     spacing: app.fs*0.5
                     BotonUX{
-                        UnikFocus{visible: xConfig.currentFocus===8}
+                        id: btnUX5
+                        UnikFocus{visible: xConfig.currentFocus===10}
                         text: unikSettings.lang==='es'?'Ayuda':'Help'
                         onClicked: {
                             help.visible=true
                         }
                     }
                     BotonUX{
+                        id: btnUX6
                         text: unikSettings.lang==='es'?'Cerrar ':'Close'
                         onClicked:xConfig.visible=false
-                        UnikFocus{visible: xConfig.currentFocus===9}
+                        UnikFocus{visible: xConfig.currentFocus===11}
                     }
                     BotonUX{
+                        id: btnUX7
                         text: unikSettings.lang==='es'?'Cerrar Unik':'Close Unik'
                         onClicked:Qt.quit()
-                        UnikFocus{visible: xConfig.currentFocus===10}
+                        UnikFocus{visible: xConfig.currentFocus===12}
                     }
+                }
+            }
+            Rectangle{
+                id: xFF
+                anchors.fill: parent
+                border.width: parent.border.width
+                border.color: parent.border.color
+                color: parent.color
+                visible: false
+                onVisibleChanged: {
+                    if(!visible){
+                        xConfig.currentFocus--
+                        tCloseFF.start()
+                        ufCloseListFF.visible=false
+                    }
+                }
+                Timer{
+                    id: tCloseFF
+                    interval: 500
+                    onTriggered: xConfig.currentFocus++
+                }
+                Column{
+                    anchors.centerIn: parent
+                    spacing: app.fs*unikSettings.padding
+                    width: parent.width
+                    Row{
+                        id: rowFF1
+                        spacing: app.fs*unikSettings.padding
+                        height: btnUXCloseListFF.height
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        UText{
+                            text: unikSettings.lang==='es'?'Tipo de Fuente Actual: '+unikSettings.fontFamily:'Current Font Family: '+unikSettings.fontFamily
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                        BotonUX{
+                            id: btnUXCloseListFF
+                            //z: lvFF.z+1
+                            //anchors.right: parent.right
+                            UBg{}
+                            UnikFocus{id: ufCloseListFF; visible:false}
+                            text: unikSettings.lang==='es'?'Cerrar':'Close'
+                            onClicked: {
+                                xFF.visible=false
+                            }
+                        }
+                    }
+                    ListView{
+                        id: lvFF
+                        width: app.fs*8
+                        height: xFF.height-btnUXCloseListFF.height-spacing-app.fs*unikSettings.padding
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        model: Qt.fontFamilies()
+                        delegate: delFF
+                        spacing: app.fs*unikSettings.padding
+                        Component{
+                            id: delFF
+                            BotonUX{
+                                text: ''
+                                onClicked: unikSettings.fontFamily='"'+modelData+'"'
+                                width:example.contentWidth+app.fs*unikSettings.padding
+                                height: example.contentHeight+app.fs*unikSettings.padding
+                                UnikFocus{visible: lvFF.currentIndex===index}
+                                Text {
+                                    id: example
+                                    text: modelData
+                                    font.family: modelData
+                                    font.pixelSize: app.fs
+                                    color: app.c2
+                                    anchors.centerIn: parent
+                                }
+                            }
+                        }
+                    }
+
                 }
             }
         }
@@ -421,19 +528,20 @@ ApplicationWindow {
             font.pixelSize: app.fs*2
             color:app.c2
             anchors.verticalCenter: parent.verticalCenter
-            anchors.right: parent.right
-            anchors.rightMargin: app.fs*0.5
-            opacity: (!xConfig.visible&&!help.visible)||(xConfig.width===0&&!help.visible)?1.0:0.0
+            anchors.left: parent.left
+            anchors.leftMargin: app.fs*0.5
+            opacity: xConfig.opacity===0.0&&!help.visible?1.0:0.0
+            rotation: -180
             Behavior on opacity{NumberAnimation{duration: 500}}
             BotonUX{
                 text: unikSettings.lang==='es'?'Configurar':'Config'
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.right: parent.left
                 anchors.rightMargin: app.fs
+                rotation: -180
                 onClicked: {
-                    xConfig.visible=true
                     tlaunch.stop()
-                    xConfig.width=xConfig.wmax
+                    xConfig.opacity=1.0
                 }
                 UBg{opacity: 1.0}
             }
@@ -487,11 +595,11 @@ ApplicationWindow {
         sequence: 'Return'
         onActivated: {
             console.log('Enter...')
-            if(!xConfig.visible||xConfig.width===0){
+            if(!xConfig.opacity===0.0){
                 tlaunch.stop()
                 var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
-                if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch.m4a')){
-                    app.runSound(pws+'/'+uModuleName+'/launch.m4a')
+                if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')){
+                    app.runSound(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')
                 }else{
                     app.run()
                 }
@@ -513,11 +621,15 @@ ApplicationWindow {
     Shortcut{
         sequence: 'Esc'
         onActivated: {
+            if(xFF.visible){
+                xFF.visible=false
+                return
+            }
             if(help.visible){
                 help.visible=false
                 return
             }
-            if(xConfig.width!==0&&xConfig.visible){
+            if(xConfig.opacity===1.0&&colConfig.opacity===1.0){
                 colConfig.opacity=0.0
                 return
             }
@@ -527,6 +639,15 @@ ApplicationWindow {
     Shortcut{
         sequence: 'Left'
         onActivated: {
+            if(xFF.visible){
+                lvFF.currentIndex--
+                return
+            }
+            if(xConfig.opacity===0.0){
+                tlaunch.stop()
+                xConfig.opacity=1.0
+                return
+            }
             if(xConfig.width!==0&&ufACT.visible&&appColorsThemes.currentFocus===0){
                 xConfig.currentFocus--
                 return
@@ -540,7 +661,7 @@ ApplicationWindow {
                 help.visible=false
                 return
             }
-            if(xConfig.width!==0){
+            if(xConfig.opacity===1.0){
                 colConfig.opacity=0.0
                 return
             }
@@ -549,40 +670,26 @@ ApplicationWindow {
     Shortcut{
         sequence: 'Right'
         onActivated: {
+            if(xFF.visible&&!ufCloseListFF.visible){
+                ufCloseListFF.visible=true
+                return
+            }
+            if(xFF.visible&&ufCloseListFF.visible){
+                ufCloseListFF.visible=false
+                return
+            }
             tlaunch.stop()
             xConfig.visible=true
             xP.opacity=0.0
-            if(xConfig.width===0){
-                xConfig.visible=true
-                //xConfig.width=rowBtnSettings.width+app.fs
-                xConfig.width=xConfig.wmax
-                return
-            }
-            if(!xConfig.visible||xConfig.width===0){
-                if(app.ci<app.al.length-1){
-                    app.ci++
-                }else{
-                    app.ci=0
-                }
+            if(!xConfig.visible){
                 tlaunch.stop()
-
-                mp.stop()
-                if(unikSettings.sound){
-                    var uModuleName=app.al[app.ci].replace('link_', '').replace('.ukl', '')
-                    mp.source='file:///'+pws+'/'+uModuleName+'/select.m4a'
+                var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
+                if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')){
+                    app.runSound(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')
+                }else{
+                    app.run()
                 }
             }else{
-                console.log('CurrentFocus: '+xConfig.currentFocus)
-                if(ufACT.visible){
-                    if(appColorsThemes.currentFocus!==appColorsThemes.cantColors-1){
-                        appColorsThemes.currentFocus++
-                    }else{
-                        appColorsThemes.currentFocus=0
-                    }
-
-                    appColorsThemes.run()
-                    return
-                }
                 if(xConfig.currentFocus<xConfig.cantFocus){
                     xConfig.currentFocus++
                 }else{
@@ -594,7 +701,7 @@ ApplicationWindow {
     Shortcut{
         sequence: 'Down'
         onActivated: {
-            if(!xConfig.visible||xConfig.width===0){
+            if(xConfig.opacity===0.0){
                 if(app.ci<app.al.length-1){
                     app.ci++
                 }else{
@@ -605,22 +712,27 @@ ApplicationWindow {
                 mp.stop()
                 if(unikSettings.sound){
                     var uModuleName=app.al[app.ci].replace('link_', '').replace('.ukl', '')
-                    mp.source='file:///'+pws+'/'+uModuleName+'/select.m4a'
+                    mp.source='file:///'+pws+'/'+uModuleName+'/select-'+unikSettings.lang+'.m4a'
                 }
             }else{
                 console.log('CurrentFocus: '+xConfig.currentFocus)
-                if(xConfig.currentFocus<xConfig.cantFocus){
-                    xConfig.currentFocus++
-                }else{
-                    xConfig.currentFocus=1
+                if(xFF.visible){
+                    lvFF.currentIndex++
+                    return
                 }
+                    if(xConfig.currentFocus<xConfig.cantFocus){
+                        xConfig.currentFocus++
+                    }else{
+                        xConfig.currentFocus=1
+                    }
+
             }
         }
     }
     Shortcut{
         sequence: 'Up'
         onActivated: {
-            if(!xConfig.visible||xConfig.width===0){
+            if(xConfig.opacity===0.0){
                 if(app.ci>0){
                     app.ci--
                 }else{
@@ -631,9 +743,13 @@ ApplicationWindow {
                 mp.stop()
                 if(unikSettings.sound){
                     var uModuleName=app.al[app.ci].replace('link_', '').replace('.ukl', '')
-                    mp.source='file:///'+pws+'/'+uModuleName+'/select.m4a'
+                    mp.source='file:///'+pws+'/'+uModuleName+'/select-'+unikSettings.lang+'.m4a'
                 }
             }else{
+                if(xFF.visible){
+                    lvFF.currentIndex--
+                    return
+                }
                 console.log('CurrentFocus: '+xConfig.currentFocus)
                 if(!ufACT.visible){
                     if(xConfig.currentFocus>1){
@@ -706,14 +822,14 @@ ApplicationWindow {
             if(app.sec===7){
                 stop()
                 var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
-                if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch.m4a')){
-                    app.runSound(pws+'/'+uModuleName+'/launch.m4a')
+                if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')){
+                    app.runSound(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')
                 }else{
                     app.run()
                 }
             }
             if(app.sec>7){
-               app.sec=0
+                app.sec=0
             }
             psec.width=psec.parent.width/5*(app.sec-1)
         }

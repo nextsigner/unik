@@ -64,19 +64,9 @@ Rectangle{
                 Rectangle{
                     width: app.fs*2.5
                     height: width
-                    border.width: 1
+                    border.width: unikSettings.currentNumColor===index&&!uf.visible?4:1
                     border.color: '#000'
                     color: 'transparent'
-                    Borde{
-                        w: app.fs*0.5
-                        visible: unikSettings.currentNumColor===index&&!uf.visible
-                        Timer{
-                            running: r.visible&&parent.visible
-                            repeat: true
-                            interval: 250
-                            onTriggered: parent.opacity===0.0?parent.opacity=1.0:parent.opacity=0.0
-                        }
-                    }
                     UnikFocus{id: uf; radius:0;visible: r.currentFocus===index}
                     MouseArea{
                         anchors.fill: parent
