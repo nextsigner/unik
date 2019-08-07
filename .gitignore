@@ -1,5 +1,9 @@
 android_openssl-5.12.4_5.13.0/* 
 
+build_linux/*
+!build_linux/default.png
+!build_linux/default.desktop
+
 build_win_32/Qt*.dll
 build_win_32/Qt*/
 build_win_32/7zip/*
