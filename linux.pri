@@ -52,14 +52,15 @@ PLBC=$$system(cat linux_build_count$$escape_expand(\n\t))
 #Previus Linux Build Count
 LBC=$$system(echo $(($$PLBC + 1))$$escape_expand(\n\t))
 message(Linux Build Count: $$LBC)
-#QMAKE_POST_LINK += $$quote(echo $(($$PLBC + 1)) > linux_build_count$$escape_expand(\n\t))
+#QMAKE_POST_LINK += $$quote(echo $(($$PLBC + 1)) > linux_build_count$$escape_exp1and(\n\t))
 
 QMAKE_POST_LINK += $$quote(cp $$PWD/resources/default.desktop $$DESTDIR/default.desktop$$escape_expand(\n\t))
 #QMAKE_POST_LINK += $$quote(rm $$DESTDIR/default.desktop$$escape_expand(\n\t))
 #QMAKE_POST_LINK += $$quote(sh $$PWD/makeDesktopFile.sh unik_v$$VERSION_MAJ"."$$system(date +%W).$$LBC $$DESTDIR/default.desktop$$escape_expand(\n\t))
 
-#Copy unik icon image to destdir
-#QMAKE_POST_LINK += $$quote(cp $$PWD/logo_unik.png $$DESTDIR/default.png$$escape_expand(\n\t))
+#Copy unik files
+QMAKE_POST_LINK += $$quote(cp $$PWD/default.desktop $$DESTDIR/$$escape_expand(\n\t))
+QMAKE_POST_LINK += $$quote(cp $$PWD/logo_unik.png $$DESTDIR/default.png$$escape_expand(\n\t))
 
 #COPIAR ARCHIVOS DENTRO DE APPIMAGE
 EXTRA_BINFILES += \
