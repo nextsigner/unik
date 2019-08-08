@@ -64,8 +64,8 @@ ApplicationWindow {
         autoPlay: true;
     }
     FolderListModel{
-        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'/'+ws
-        id:fl
+        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'file:///'+pws
+        id: fl
         showDirs:  false
         showDotAndDotDot: false
         showHidden: false
@@ -687,7 +687,7 @@ ApplicationWindow {
     Shortcut{
         sequence: 'Return'
         onActivated: {
-            if(!xConfig.opacity===0.0){
+            if(xConfig.opacity===0.0){
                 tlaunch.stop()
                 var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
                 if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')){
