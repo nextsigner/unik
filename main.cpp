@@ -64,6 +64,12 @@
 #ifdef UNIK_COMPILE_ANDROID_ARMV7
         UK u;
 #endif
+#ifdef UNIK_COMPILE_ANDROID_X86
+        UK u;
+#endif
+#ifdef UNIK_COMPILE_ANDROID_X86_64
+        UK u;
+#endif
 
 
        QWebSocketServer *server;
@@ -263,10 +269,14 @@ int main(int argc, char *argv[])
 #ifdef UNIK_COMPILE_ANDROID_X86
     QByteArray urlGit="https://github.com/nextsigner/unik-android-apps";
     QByteArray moduloGit="unik-android-apps";
+    QByteArray moduloZip="unik-tools";
+    QByteArray urlZip="";
 #else
 #ifdef UNIK_COMPILE_ANDROID_X86_64
     QByteArray urlGit="https://github.com/nextsigner/unik-android-apps";
     QByteArray moduloGit="unik-android-apps";
+    QByteArray moduloZip="unid-android-apps";
+    QByteArray urlZip="";
 #else
     QByteArray urlGit="https://github.com/nextsigner/unik-tools";
     QByteArray moduloGit="unik-tools";
@@ -278,6 +288,8 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_ANDROID
     QByteArray urlGit="https://github.com/nextsigner/unik-android-apps";
     QByteArray moduloGit="unik-android-apps";
+    QByteArray moduloZip="unid-android-apps";
+    QByteArray urlZip="";
 #else
     QByteArray urlGit="https://github.com/nextsigner/unik-tools-rpi";
     QByteArray moduloGit="unik-tools-rpi";
@@ -1546,7 +1558,14 @@ int main(int argc, char *argv[])
     engine.addImportPath(ffmqml);
     engine.addImportPath(QDir::currentPath());
     engine.addPluginPath("/sdcard/Documents/unik/unik-ws-android-client-1");
+#ifdef UNIK_COMPILE_ANDROID_X86
     engine.addPluginPath("assets:/lib/x86");
+#endif
+#ifdef UNIK_COMPILE_ANDROID_X86_64
+    engine.addPluginPath("assets:/lib/x86");
+    engine.addPluginPath("assets:/lib/x86_64");
+    engine.addPluginPath("assets:/lib/x86-64");
+#endif
 
     QString unikPluginsPath;
     unikPluginsPath.append(u.getPath(1));
@@ -1704,6 +1723,14 @@ int main(int argc, char *argv[])
 
     //-->Connections
     QObject::connect(&u, &UK::restartingApp, [=](){
+#ifdef UNIK_COMPILE_ANDROID_X86_64
+        delete &u;
+        delete u0;
+        delete &server;
+        delete &chatserver;
+        delete &channel;
+        delete &clientWrapper;
+#endif
         qApp->quit();
     });
     QObject::connect(&ulo, SIGNAL(logReceived(QByteArray)),

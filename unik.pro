@@ -23,6 +23,10 @@ linux:android{
     DEFINES += QT_MESSAGELOGCONTEXT
 
     #Building Quazip Android
+    LIBS += -lz
+    LIBS+=-L/usr/local/zlib/lib
+    INCLUDEPATH+=/usr/local/zlib/include
+
     INCLUDEPATH += $$PWD/quazip
     DEFINES+=QUAZIP_STATIC
     HEADERS += $$PWD/quazip/*.h

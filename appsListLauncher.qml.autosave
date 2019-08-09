@@ -968,7 +968,8 @@ MediaPlayer{
         unik.setUnikStartSettings(params)
         console.log('New USS params: '+params)
         if(Qt.platform.os==='android'){
-            unik.restartApp()
+            //unik.restartApp()
+            
         }else{
             unik.restartApp("")
         }

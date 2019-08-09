@@ -15,7 +15,7 @@ ApplicationWindow{
     Connections {target: unik;onUkStdChanged: log.setTxtLog(''+unik.ukStd); }
 
     onClosing: {
-        close.accepted = false
+        //close.accepted = false
     }
     UnikSettings{
         id: unikSettings

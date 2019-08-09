@@ -1,4 +1,5 @@
 ﻿#include "uk.h"
+#include <QMetaObject>
 
 UK::UK(QObject *parent) : QObject(parent)
 {
@@ -1247,11 +1248,12 @@ void UK::restartApp()
     //QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
     QProcess::startDetached(qApp->arguments()[0], QStringList());
 #endif
+    emit restartingApp();
 #else
     //qApp->quit();
     //QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
 
-    auto activity = QtAndroid::androidActivity();
+    /*auto activity = QtAndroid::androidActivity();
     auto packageManager = activity.callObjectMethod("getPackageManager", "()Landroid/content/pm/PackageManager;");
 
     auto activityIntent = packageManager.callObjectMethod("getLaunchIntentForPackage",
@@ -1274,11 +1276,39 @@ void UK::restartApp()
     alarmManager.callMethod<void>("set",
                                   "(IJLandroid/app/PendingIntent;)V",
                                   QAndroidJniObject::getStaticField<jint>("android/app/AlarmManager", "RTC"),
-                                  jlong(QDateTime::currentMSecsSinceEpoch() + 1500), pendingIntent.object());
+                                  jlong(QDateTime::currentMSecsSinceEpoch() + 1500), pendingIntent.object());*/
 
-    //qApp->quit();
-#endif
+    auto activity = QtAndroid::androidActivity();
+    auto packageManager = activity.callObjectMethod("getPackageManager",
+                                                    "()Landroid/content/pm/PackageManager;");
+
+    auto activityIntent = packageManager.callObjectMethod("getLaunchIntentForPackage",
+                                                          "(Ljava/lang/String;)Landroid/content/Intent;",
+                                                          activity.callObjectMethod("getPackageName",
+                                                          "()Ljava/lang/String;").object());
+
+    auto pendingIntent = QAndroidJniObject::callStaticObjectMethod("android/app/PendingIntent", "getActivity",
+                                                                   "(Landroid/content/Context;ILandroid/content/Intent;I)Landroid/app/PendingIntent;",
+                                                                   activity.object(), jint(0), activityIntent.object(),
+                                                                   QAndroidJniObject::getStaticField<jint>("android/content/Intent",
+                                                                                                           "FLAG_ACTIVITY_CLEAR_TOP"));
+
+    auto alarmManager = activity.callObjectMethod("getSystemService",
+                                                  "(Ljava/lang/String;)Ljava/lang/Object;",
+                                                  QAndroidJniObject::getStaticObjectField("android/content/Context",
+                                                                                          "ALARM_SERVICE",
+                                                                                          "Ljava/lang/String;").object());
+
+    alarmManager.callMethod<void>("set",
+                                  "(IJLandroid/app/PendingIntent;)V",
+                                  QAndroidJniObject::getStaticField<jint>("android/app/AlarmManager", "RTC"),
+                                  jlong(QDateTime::currentMSecsSinceEpoch() + 100), pendingIntent.object());
+
+
     emit restartingApp();
+    //QProcess::startDetached(qApp->arguments()[0], QStringList());
+#endif
+
 }
 
 void UK::restartApp(QString args)
@@ -1769,6 +1799,8 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
     uZipUrl=QString(url);
     uZipSize=0;
  #ifndef UNIK_COMPILE_ANDROID_ARMV8
+#ifndef UNIK_COMPILE_ANDROID_ARMV7
+#ifndef UNIK_COMPILE_ANDROID_X86_64
     QEventLoop eventLoop0;
     QNetworkAccessManager mgr0;
     QObject::connect(&mgr0, SIGNAL(finished(QNetworkReply*)), &eventLoop0, SLOT(quit()));
@@ -1791,6 +1823,8 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
         }
     }
     );
+#endif
+#endif
 #endif
 
 

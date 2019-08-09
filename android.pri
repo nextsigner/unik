@@ -20,11 +20,11 @@ android{
     contains(ANDROID_TARGET_ARCH,x86) {
         message(Android x86)
         COMPILEINANDROIDX86 = 1
-        DEFINES += UNIK_COMPILE_ANDROID_X86=\\\"$$COMPILEINANDROIDX86\\\"
+        #DEFINES += UNIK_COMPILE_ANDROID_X86=\\\"$$COMPILEINANDROIDX86\\\"
     }
     contains(ANDROID_TARGET_ARCH,x86_64) {
         message(Compilando para Android x86_64)
         COMPILEINANDROIDX86_64 = 1
-        DEFINES += UNIK_COMPILE_ANDROID_X86_64=\\\"$$COMPILEINANDROIDX86_64\\\"
+        #DEFINES += UNIK_COMPILE_ANDROID_X86_64=\\\"$$COMPILEINANDROIDX86_64\\\"
     }
 }
