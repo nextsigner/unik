@@ -20,6 +20,7 @@ Este es el repositorio oficial del proyecto unik qml engine creado por @nextsign
 Este proyecto Qt es compatible con GNU/Linux, Windows, Macos, Raspberry Pi and Android. Tu puedes clonar y configurar este proyecto segùn tus necesidades.
 
 Más info: nextsigner@gmail.com
+Twitter: @nextsigner
 Whatsapps: +54 11 3802 4370
 
 Donar: (Patreon.com/unik)[https://patreon.com/unik]
