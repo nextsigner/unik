@@ -11,10 +11,12 @@ ApplicationWindow{
     property color c1: "#1fbc05"
     property color c2: "#4fec35"
 
-    Connections {target: unik;onUkStdChanged:log.setTxtLog(''+unik.ukStd);}
-    Connections {target: unik;onUkStdChanged: log.setTxtLog(''+unik.ukStd); }
+    Connections {id: con1; target: unik;onUkStdChanged:log.setTxtLog(''+unik.ukStd);}
+    Connections {id: con2; target: unik;onUkStdChanged: log.setTxtLog(''+unik.ukStd); }
 
     onClosing: {
+        con1.target=undefined
+        con2.target=undefined
         //close.accepted = false
     }
     UnikSettings{
@@ -38,12 +40,12 @@ ApplicationWindow{
         height: parent.height
         color: "transparent"
         anchors.centerIn: parent
-        /*onOpacityChanged: {
+        onOpacityChanged: {
             if(opacity===0.0){
                 //appSplash.visible=false
                 appSplash.close()
             }
-        }*/
+        }
         Behavior on opacity{
             NumberAnimation{
                 duration:500

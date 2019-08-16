@@ -1,7 +1,6 @@
 # unik
 
 ## English Description
-
 It is the official repository of unik qml engine project by @nextsigner.
 
 
@@ -25,4 +24,3 @@ Whatsapps: +54 11 3802 4370
 Donar: (Patreon.com/unik)[https://patreon.com/unik]
 
 Descargar Instaladores para GNU/Linux, Windows o Macos: (unikode.org)[http://unikode.org/p/download.html]
-

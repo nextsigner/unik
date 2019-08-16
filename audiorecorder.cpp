@@ -1,9 +1,9 @@
 #include "audiorecorder.h"
 
-#include <QtMultimedia/QAudioProbe>
-#include <QtMultimedia/QAudioRecorder>
+#include <QAudioProbe>
+#include <QAudioRecorder>
 #include <QDir>
-#include <QtMultimedia/QMediaRecorder>
+#include <QMediaRecorder>
 #include <QStandardPaths>
 #include <QDebug>
 
@@ -30,7 +30,7 @@ AudioRecorder::AudioRecorder(QObject *parent) : QObject(parent)
     for (auto &device: m_audioRecorder->audioInputs()) {
         //ui->audioDeviceBox->addItem(device, QVariant(device));
         cant++;
-        //qDebug()<<"Unik AudioRecorder Devices "<<cant<<": "<<device;
+        qDebug()<<"Unik AudioRecorder Devices "<<cant<<": "<<device;
     }
 
     //audio codecs
@@ -39,7 +39,7 @@ AudioRecorder::AudioRecorder(QObject *parent) : QObject(parent)
     for (auto &codecName: m_audioRecorder->supportedAudioCodecs()) {
         //ui->audioCodecBox->addItem(codecName, QVariant(codecName));
         cant++;
-        //qDebug()<<"Unik AudioRecorder Codec Name "<<cant<<": "<<codecName;
+        qDebug()<<"Unik AudioRecorder Codec Name "<<cant<<": "<<codecName;
     }
 
     //containers
@@ -48,7 +48,7 @@ AudioRecorder::AudioRecorder(QObject *parent) : QObject(parent)
     for (auto &containerName: m_audioRecorder->supportedContainers()) {
         //ui->containerBox->addItem(containerName, QVariant(containerName));
         cant++;
-        //qDebug()<<"Unik AudioRecorder Container Name "<<cant<<": "<<containerName;
+        qDebug()<<"Unik AudioRecorder Container Name "<<cant<<": "<<containerName;
     }
 
     //sample rate
@@ -57,7 +57,7 @@ AudioRecorder::AudioRecorder(QObject *parent) : QObject(parent)
     for (int sampleRate: m_audioRecorder->supportedAudioSampleRates()) {
         //ui->sampleRateBox->addItem(QString::number(sampleRate), QVariant(
             //    sampleRate));
-         //qDebug()<<"Unik AudioRecorder Sample Rate "<<cant<<": "<<sampleRate;
+         qDebug()<<"Unik AudioRecorder Sample Rate "<<cant<<": "<<sampleRate;
     }
 
     //channels

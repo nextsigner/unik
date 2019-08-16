@@ -133,392 +133,6 @@ bool UK::carpetaAUpk(QString carpeta, QString nombreUpk, QString usuario, QStrin
     return folderToUpk(carpeta, nombreUpk, usuario, clave, carpetaDestino);
 }
 
-bool UK::runAppFromZip(QByteArray url, QByteArray localFolder)
-{
-    QString u;
-    u.append(url);
-    QString module;
-    QDateTime a = QDateTime::currentDateTime();
-    QByteArray tempFile;
-    QString carpetaDestino;
-    qInfo()<<"Cheking remote extension protocol: "<<u.mid(0,4);
-    if(u.mid(0,4)==QString("http")){
-        QStringList mUrl0=u.split("/");
-        if(mUrl0.size()<2){
-            qInfo()<<"downloadGit() fail! This url git is no valid!";
-            return false;
-        }
-        QString u2 = mUrl0.at(mUrl0.size()-1);
-        module=u2.replace(".git", "");
-        if(u.mid(u.size()-4, 4)!=".git"){
-            u.append(".git");
-        }
-        QString urlZipGit;
-        QStringList m0 = u.split(".git");
-        if(m0.size()<2){
-            qInfo()<<"Url no valid: "<<url;
-            qInfo()<<"Use: https://github.com/<user>/<repository>.git";
-
-        }else{
-            QStringList m1=u.split("/");
-            QString cd0=m1.at(m1.size()-1);
-            carpetaDestino = cd0.replace(".git", "");
-
-            bool modoCodeload=true;
-            QString url0;
-            if(modoCodeload){
-                url0=u.replace(".git", "/zip/master");
-                urlZipGit=url0.replace("https://github.com/", "https://codeload.github.com/");
-
-                QDateTime rdt = QDateTime::currentDateTime();
-                urlZipGit.append("?r=");
-                urlZipGit.append(QString::number(rdt.currentMSecsSinceEpoch()));
-            }else{
-                //url of download zip no codeload
-                //https://github.com/nextsigner/qt_qml_chat_server/archive/master.zip
-
-                url0=u.replace(".git", "/archive/master.zip");
-                urlZipGit=url0;
-            }
-            qInfo()<<"Downloading zip file: "<<urlZipGit;
-        }
-
-
-        qInfo()<<"Downloading from GitHub: "<<url;
-        qInfo()<<"Download Folder Location: "<<carpetaDestino;
-
-        tempFile.append(getPath(2));
-        tempFile.append("/");
-#ifndef __arm__
-        tempFile.append(QString::number(a.toSecsSinceEpoch()));
-#else
-        tempFile.append(QString::number(a.toMSecsSinceEpoch()));
-#endif
-        tempFile.append(".zip");
-        qInfo()<<"temp zip location "<<tempFile;
-        qInfo()<<"Url Zip Git: "<<urlZipGit;
-
-        bool d=downloadZipFile(urlZipGit.toUtf8(), tempFile);
-        if(!d){
-            qDebug("Git Zip not downloaded.");
-            return false;
-        }
-        qInfo("Git Zip downloaded.");
-    }else {
-        //Rev local file
-        qInfo()<<"unzip local file with ext: "<<u.mid(u.size()-4, u.size()-1);
-        if(u.mid(u.size()-4, u.size()-1)!=".zip"){
-            qInfo()<<"unzip local file fail! This file is no valid!";
-            return false;
-        }
-        QStringList mUrl0=u.split("/");
-        QString u2 = mUrl0.at(mUrl0.size()-1);
-        module=u2.replace(".zip", "");
-        carpetaDestino = module;
-        tempFile=u.toUtf8();
-        qInfo()<<"zip file location "<<tempFile;
-    }
-
-
-
-
-#ifdef Q_OS_WIN32
-    QByteArray carpDestinoFinal;
-    carpDestinoFinal.append(localFolder);
-    QDir fdf1(carpDestinoFinal);
-    if(!fdf1.exists()){
-        fdf1.mkpath(".");
-    }
-    qInfo()<<"Downloading Git Zip into: "<<carpDestinoFinal;
-    qInfo()<<"Downloading Git Zip Module: "<<module;
-    QString nfdf2;
-    nfdf2.append(carpDestinoFinal);
-    nfdf2.append("/");
-    nfdf2.append(module);
-    qInfo()<<"Downloading Git Zip Module Location: "<<nfdf2;
-    QDir fdf2(nfdf2);
-    if(!fdf2.exists()){
-        fdf2.mkpath(".");
-    }
-
-    QuaZip zip(tempFile.constData());
-    zip.open(QuaZip::mdUnzip);
-
-    QuaZipFile file(&zip);
-
-    QString carpeta="aaa";
-    int v=0;
-    for(bool f=zip.goToFirstFile(); f; f=zip.goToNextFile()) {
-        if(v>=zip.getFileNameList().size()){
-            break;
-        }
-        file.open(QIODevice::ReadOnly);
-        //qInfo()<<"Zip filename: "<<zip.getFileNameList();
-        if(v==0){
-            carpeta=QString(zip.getFileNameList().at(0));
-            //qInfo()<<"Carpeta de destino Zip: "<<carpeta;
-        }else{
-            QString nfn;
-            nfn.append(carpDestinoFinal);
-            nfn.append("/");
-            nfn.append(zip.getFileNameList().at(v));
-            QString nfn2 = nfn.replace("-master/", "/");
-            QString nfn3 = nfn2.replace(" ", "%20");
-
-            if(nfn3.at(nfn3.size()-1)!="/"){
-                qInfo()<<"Destino de archivo: "<<nfn3;
-                QFile nfile(nfn3);
-                if(!nfile.open(QIODevice::WriteOnly)){
-                    qInfo()<<"Error al abrir archivo "<<nfn3;
-                }else{
-                    nfile.write(file.readAll());
-                    nfile.close();
-                }
-            }else{
-                qInfo()<<"Destino de carpeta: "<<nfn3;
-                QDir dnfn(nfn3);
-                dnfn.mkpath(".");
-            }
-        }
-        file.close();
-        v++;
-    }
-    zip.close();
-#endif
-#ifdef Q_OS_OSX
-    QByteArray carpDestinoFinal;
-    carpDestinoFinal.append(localFolder);
-    QDir fdf1(carpDestinoFinal);
-    if(!fdf1.exists()){
-        fdf1.mkpath(".");
-    }
-    qInfo()<<"Downloading Git Zip into: "<<carpDestinoFinal;
-    qInfo()<<"Downloading Git Zip Module: "<<module;
-    QString nfdf2;
-    nfdf2.append(carpDestinoFinal);
-    nfdf2.append("/");
-    nfdf2.append(module);
-    qInfo()<<"Downloading Git Zip Module Location: "<<nfdf2;
-    QDir fdf2(nfdf2);
-    if(!fdf2.exists()){
-        fdf2.mkpath(".");
-    }
-
-    QuaZip zip(tempFile.constData());
-    zip.open(QuaZip::mdUnzip);
-
-    QuaZipFile file(&zip);
-
-    QString carpeta="aaa";
-    int v=0;
-    for(bool f=zip.goToFirstFile(); f; f=zip.goToNextFile()) {
-        if(v>=zip.getFileNameList().size()){
-            break;
-        }
-        file.open(QIODevice::ReadOnly);
-        //qInfo()<<"Zip filename: "<<zip.getFileNameList();
-        if(v==0){
-            carpeta=QString(zip.getFileNameList().at(0));
-            qInfo()<<"Carpeta de destino Zip: "<<carpeta;
-        }else{
-            QString nfn;
-            nfn.append(carpDestinoFinal);
-            nfn.append("/");
-            nfn.append(zip.getFileNameList().at(v));
-            QString nfn2 = nfn.replace("-master/", "/");
-            QString nfn3 = nfn2.replace(" ", "%20");
-
-            if(nfn3.at(nfn3.size()-1)!="/"){
-                qInfo()<<"Destino de archivo: "<<nfn3;
-                QFile nfile(nfn3);
-                if(!nfile.open(QIODevice::WriteOnly)){
-                    qInfo()<<"Error al abrir archivo "<<nfn3;
-                }else{
-                    nfile.write(file.readAll());
-                    nfile.close();
-                }
-            }else{
-                qInfo()<<"Destino de carpeta: "<<nfn3;
-                QDir dnfn(nfn3);
-                dnfn.mkpath(".");
-            }
-        }
-        file.close();
-        v++;
-    }
-    zip.close();
-#endif
-#ifdef Q_OS_LINUX
-    QByteArray carpDestinoFinal;
-    carpDestinoFinal.append(localFolder);
-    qInfo()<<"Local Folder: "<<carpDestinoFinal;
-    QString nFolder=carpDestinoFinal;
-    //nFolder.append("/");
-    qInfo()<<"Check if master zip "<<module.mid(module.size()-7, module.size()-1);
-    /*if(module.mid(module.size()-7, module.size()-1)=="-master"){
-        nFolder.append(module.replace("-master", ""));
-    }else{
-        nFolder.append(module);
-    }*/
-    //nFolder.append(module);
-    QDir fdf(nFolder);
-    if(!fdf.exists()){
-        fdf.mkpath(".");
-    }
-    QFile zipFile(tempFile);
-    if(zipFile.exists()){
-        qInfo()<<"Zip File "<<tempFile<<" exist.";
-    }else{
-        qInfo()<<"Zip File "<<tempFile<<" not exist.";
-        return false;
-    }
-
-#ifndef Q_OS_ANDROID
-
-#else
-    QByteArray cl;
-    cl.append("unzip ");
-    //cl.append("\");
-    cl.append(tempFile);
-#endif
-
-#ifdef Q_OS_ANDROID
-    QuaZip zip(tempFile.constData());
-    zip.open(QuaZip::mdUnzip);
-
-    QuaZipFile file(&zip);
-
-    QString carpeta="aaa";
-    int v=0;
-    for(bool f=zip.goToFirstFile(); f; f=zip.goToNextFile()) {
-        if(v>=zip.getFileNameList().size()){
-            break;
-        }
-        file.open(QIODevice::ReadOnly);
-        //qInfo()<<"Zip filename: "<<zip.getFileNameList();
-        if(v==0){
-            carpeta=QString(zip.getFileNameList().at(0));
-            //qInfo()<<"Carpeta de destino Zip: "<<carpeta;
-        }else{
-            QString nfn;
-            nfn.append(carpDestinoFinal);
-            nfn.append("/");
-            nfn.append(zip.getFileNameList().at(v));
-            QString nfn2 = nfn.replace("-master/", "/");
-            QString nfn3 = nfn2.replace(" ", "%20");
-
-            if(nfn3.at(nfn3.size()-1)!="/"){
-                qInfo()<<"Destino de archivo: "<<nfn3;
-                QFile nfile(nfn3);
-                if(!nfile.open(QIODevice::WriteOnly)){
-                    qInfo()<<"Error al abrir archivo "<<nfn3;
-                }else{
-                    nfile.write(file.readAll());
-                    nfile.close();
-                }
-            }else{
-                qInfo()<<"Destino de carpeta: "<<nfn3;
-                QDir dnfn(nfn3);
-                dnfn.mkpath(".");
-            }
-        }
-        file.close();
-        v++;
-    }
-    zip.close();
-#else
-    QuaZip zip(tempFile.constData());
-    zip.open(QuaZip::mdUnzip);
-
-    QuaZipFile file(&zip);
-
-    QString carpeta="aaa";
-    int v=0;
-    for(bool f=zip.goToFirstFile(); f; f=zip.goToNextFile()) {
-        if(v>=zip.getFileNameList().size()){
-            break;
-        }
-        file.open(QIODevice::ReadOnly);
-        if(v==0){
-            carpeta=QString(zip.getFileNameList().at(0));
-            qInfo()<<"Carpeta de destino Zip: "<<carpeta;
-        }else{
-            QString nfn;
-            nfn.append(carpDestinoFinal);
-            nfn.append("/");
-            nfn.append(zip.getFileNameList().at(v));
-            //QString nfn2 = nfn.replace("-master/", "/");
-            QString nfn3 = nfn.replace(" ", "%20");
-            QByteArray banfn3;
-            banfn3.append(nfn3.at(nfn3.size()-1));
-            if(banfn3!="/"){
-                qInfo()<<"Destino de archivo: "<<nfn3;
-                QFile nfile(nfn3);
-                if(!nfile.open(QIODevice::WriteOnly)){
-                    qInfo()<<"Error al abrir archivo "<<nfn3;
-                }else{
-                    nfile.write(file.readAll());
-                    nfile.close();
-                }
-            }else{
-                qInfo()<<"Destino de carpeta: "<<nfn3;
-                QDir dnfn(nfn3);
-                dnfn.mkpath(".");
-            }
-        }
-        file.close();
-        v++;
-    }
-    zip.close();
-#endif
-#ifdef Q_OS_OSX
-    QByteArray carpDestinoFinal;
-    carpDestinoFinal.append(localFolder);
-    //carpDestinoFinal.append("/");
-    //carpDestinoFinal.append(carpetaDestino);
-
-    QByteArray cl;
-    cl.append("unzip -o ");
-    cl.append(tempFile);
-    //cl.append(" ");
-    //cl.append(" nivelfluido-master/* ");
-    cl.append(" -d ");
-    cl.append(getPath(2));
-    cl.append("/");
-    cl.append(carpetaDestino);
-    log("Run "+cl);
-    run(cl);
-    while (proc->waitForFinished(250)&&proc->isOpen()) {
-        log(".");
-    }
-    //sleep(5);
-    cl = "cp -R ";
-    cl.append(getPath(2));
-    cl.append("/");
-    cl.append(carpetaDestino);
-    cl.append("/");
-    cl.append(carpetaDestino);
-    cl.append("-master/ ");
-    //cl.append(carpetaDestino);
-    //cl.append("-master");
-    cl.append(" ");
-    cl.append(carpDestinoFinal);
-    cl.append("/");
-    cl.append(carpetaDestino);
-    //cl.append(carpDestinoFinal);
-    //cl.append("/");
-    //cl.append(carpetaDestino);
-    //cl.append(" -f");
-    //cl.append("-master");
-    log(cl);
-    run(cl);
-#endif
-#endif
-
-
-    return true;
-}
-
 bool UK::downloadRemoteFolder(QString urlFolder, QString list, QString dirDestination)
 {
     QStringList m0 = list.split("|");
@@ -919,12 +533,12 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
             url0=u.replace(".git", "/archive/master.zip");
             urlZipGit=url0;
         }
-        qInfo()<<"Downloading zip file: "<<urlZipGit;
+        qInfo("Downloading zip file: "+urlZipGit.toUtf8());
     }
 
 
-    qInfo()<<"Downloading from GitHub: "<<url;
-    qInfo()<<"Download Folder Location: "<<carpetaDestino;
+    qInfo("Downloading from GitHub: "+url);
+    qInfo("Download Folder Location: "+carpetaDestino.toUtf8());
     QDateTime a = QDateTime::currentDateTime();
     QByteArray tempFile;
     tempFile.append(getPath(2));
@@ -1075,20 +689,28 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
 #endif
 #ifdef Q_OS_LINUX
     QByteArray carpDestinoFinal;
+#ifndef Q_OS_ANDROID
+    //carpDestinoFinal.append("\"");
+#endif
     carpDestinoFinal.append(localFolder);
+    //carpDestinoFinal.append("/");
+    //carpDestinoFinal.append(module);
+#ifndef Q_OS_ANDROID
+    //carpDestinoFinal.append("\"");
+#endif
     qInfo()<<"Local Folder: "<<carpDestinoFinal;
     QString nFolder=carpDestinoFinal;
-    //nFolder.append("/");
-    //nFolder.append(module);
+    nFolder.append("/");
+    nFolder.append(module);
     QDir fdf(nFolder);
     if(!fdf.exists()){
         fdf.mkpath(".");
     }
     QFile zipFile(tempFile);
     if(zipFile.exists()){
-        qInfo()<<"Zip File "+tempFile+" exist.";
+        qInfo("Zip File "+tempFile+" exist.");
     }else{
-        qInfo()<<"Zip File "<<tempFile<<" not exist.";
+        qInfo("Zip File "+tempFile+" not exist.");
         return false;
     }
 
@@ -1276,21 +898,16 @@ void UK::restartApp()
                                   QAndroidJniObject::getStaticField<jint>("android/app/AlarmManager", "RTC"),
                                   jlong(QDateTime::currentMSecsSinceEpoch() + 1500), pendingIntent.object());
 
-    //qApp->quit();
+    qApp->quit();
 #endif
-    emit restartingApp();
+    //emit restartingApp();
 }
 
 void UK::restartApp(QString args)
 {
     qApp->quit();
     QStringList al = args.split(",");
-    qDebug()<<"Restarting executable "<<qApp->applicationFilePath();
-#ifdef Q_OS_LINUX
-    QProcess::startDetached(qApp->applicationFilePath(), al);
-#else
     QProcess::startDetached(qApp->arguments()[0], al);
-#endif
 }
 
 bool UK::run(QString commandLine)
@@ -1400,7 +1017,7 @@ QString UK::getPath(int path)
 #endif
     if(path==2){//Temp location
         r = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
-        qInfo()<<"getPath(2): "<<r;
+        qInfo("getPath(2): "+r.toUtf8());
     }
     if(path==3){//Doc location
 #ifndef Q_OS_ANDROID
@@ -1768,13 +1385,12 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
     log("downloading zip file from: "+url);
     uZipUrl=QString(url);
     uZipSize=0;
- #ifndef Q_OS_ANDROID
     QEventLoop eventLoop0;
     QNetworkAccessManager mgr0;
     QObject::connect(&mgr0, SIGNAL(finished(QNetworkReply*)), &eventLoop0, SLOT(quit()));
     QNetworkRequest req0(QUrl(url.constData()));
     QNetworkReply *reply0 = mgr0.get(req0);
-    uZipSizeReg=0;
+
     connect(
                 reply0, &QNetworkReply::metaDataChanged,
                 [=]( ) {
@@ -1782,16 +1398,9 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
         reply0->deleteLater();
         if(uZipSize<=0){
             return downloadZipFile(url, ubicacion);
-        }else {
-            if(uZipSize>uZipSizeReg){
-                uZipSizeReg=uZipSize;
-            }else {
-                reply0->close();
-            }
         }
     }
     );
-#endif
 
 
     QEventLoop eventLoop;
@@ -2082,7 +1691,7 @@ QList<QObject *> UK::getSqlData(QString query)
             QString cc;
             cc.append("Column count: ");
             cc.append(QString::number(cantcols));
-            qInfo()<<cc;
+            qInfo(cc.toUtf8());
         }
         int v=0;
         while (consultar.next()) {
@@ -2122,10 +1731,7 @@ bool UK::mysqlInit(QString hostName, QString dataBaseName, QString userName, QSt
         firstDB.setDatabaseName(dataBaseName);
         firstDB.setUserName(userName);
         firstDB.setPassword(password);
-        bool o=firstDB.open();
-        qDebug()<<"Open: "<<o;
-        ret = o;
-
+        ret = firstDB.open();
     }else{
         secondDB = QSqlDatabase::addDatabase("QMYSQL");
         secondDB.setHostName(hostName);
@@ -2159,12 +1765,6 @@ void UK::cd(QString folder)
     _engine->addImportPath(QDir::currentPath());
     _engine->addPluginPath(QDir::currentPath());
     qInfo()<<"Set current dir: "<<QDir::currentPath();
-}
-
-QString UK::currentFolderName()
-{
-    QDir f(QDir::currentPath());
-    return f.dirName();
 }
 void UK::deleteFile(QByteArray f)
 {
@@ -2206,16 +1806,6 @@ bool UK::mkdir(const QString path)
         dir0.mkpath(".");
     }
     return dir0.exists();
-}
-
-QList<QString> UK::getFolderFileList(const QByteArray folder)
-{
-    QList<QString> ret;
-    QDir d(folder);
-    for (int i=0;i<d.entryList().length();i++) {
-        ret.append(d.entryList().at(i));
-    }
-    return  ret;
 }
 
 QString UK::getUpkTempPath()
@@ -2482,7 +2072,7 @@ void UK::crearPDF(QString captura, QString url, int orientacion)
 }
 
 
-#ifdef UNIK_COMPILE_RPI
+
 Q_INVOKABLE void UK::initRpiGpio()
 {
     #ifdef UNIK_COMPILE_RPI
@@ -2552,7 +2142,7 @@ Q_INVOKABLE bool UK::pinIsHigh(int pin){
     return false;
 #endif
 }
-#endif
+
 
 QString UK::encPrivateData(QByteArray d, QString user, QString key)
 {
@@ -2810,14 +2400,30 @@ QString UK::desCompData(QString d)
 }
 
 void UK::downloadZipProgress(qint64 bytesSend, qint64 bytesTotal)
-{    
+{
+
+    /*qint32 bs=qint32(bytesSend);
+    qint32 bt=qint32(bytesTotal);
+    if(bt<0){
+        bt=uZipSize;
+    }
+#ifdef Q_OS_LINUX
+#ifdef Q_OS_ANDROID
+     double porc = (((double)bs)/bt)*100;
+#else
+    int porc= (int)((bytesSend * 100) / bt);
+#endif
+
+#endif
+#ifdef Q_OS_WIN
+    double porc = (((double)bytesSend)/bt)*100;
+#endif
+#ifdef Q_OS_OSX
+    double porc = (((double)bytesSend)/bt)*100;
+#endif*/
     double porc;
     if(bytesTotal==-1){
-        if(uZipSize<=bytesTotal){
-            porc = (((double)bytesSend)/uZipSize)*100;
-        }else {
-            porc = (((double)bytesSend)/bytesTotal)*100;
-        }
+        porc = 1.0;
     }else if(bytesTotal==-1&&uZipSize!=-1){
         porc = (((double)bytesSend)/uZipSize)*100;
     }else{

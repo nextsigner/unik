@@ -24,9 +24,11 @@ Settings{
             appSettingsUnik.borderWidth=Screen.width*0.005
             padding=0.5
             fontFamily='Arial'
+            return
         }
         defaultColors='black-white-#666-#aaa|white-black-#aaa-#666|black-red-#ff6666-white|black-#ff6666-red-white|red-black-#ff6666-white|#ff2200-#ff8833-black-white|black-#ff8833-#ff3388-#ddcccc|#1fbc05-black-green-white|black-#1fbc05-white-green|green-white-red-blue'
 
+        numberRun++
         var cPWS=pws
         if(Qt.platform.os!=='android'){
             var unikCfgFile=''+cPWS+'/unik-tools/unik/unik-cfg.json'
@@ -61,7 +63,7 @@ Settings{
             }
 
         }
-        numberRun++
+
     }
 }
 

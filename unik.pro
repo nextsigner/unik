@@ -4,73 +4,102 @@
 # Whatsapps: +54 11 3802 4370
 # GitHub: https://github.com/nextsigner/unik
 
-message(BUILT TO ARCH: $$QMAKE_HOST.arch)
-QT +=   qml quick sql
+QT += qml quick sql websockets
 
 #Widget for Qt.labs.platform 1.0
 QT += widgets
 
+!contains(QMAKE_HOST.arch, arm.*):{
+    message(NO Desarrollando para RPI)
+    QT += multimedia
+}else{
+    message(Desarrollando para RPI)
+}
+QT +=  websockets webchannel
 CONFIG += c++11
-QT += webchannel websockets
 CONFIG -= qmlcache
+
+LOCATION = $$PWD
+DEFINES += UNIK_PROJECT_LOCATION=\\\"$$LOCATION\\\"
+
 include(version.pri)
-include(archconf.pri)
-linux:android{
+linux:!android{
+    include(linux.pri)
+}
+windows{
+    include(windows.pri)
+}
+
+mac{
+    include(macos.pri)
+}
+
+android{
     include(openssl.pri)
-    QT += multimedia webview androidextras
-    message(QT_MESSAGELOGCONTEXT defined for Android)
+    FILE_VERSION_NAME=android/assets/android_version
+    message(Programando en Android)
 
-    DEFINES += QT_MESSAGELOGCONTEXT
-
-    #Building Quazip Android
-    LIBS += -lz
-    LIBS+=-L/usr/local/zlib/lib
-    INCLUDEPATH+=/usr/local/zlib/include
+    QT += webview
+    QT += androidextras
 
     INCLUDEPATH += $$PWD/quazip
-    DEFINES+=QUAZIP_STATIC
+    #DEFINES += QUAZIP_BUILD
+    LIBS += -lz
+contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
+    DEFINES += UNIK_COMPILE_ANDROID_ARMV7
+}
+
+contains(ANDROID_TARGET_ARCH,arm64-v8a) {
+    DEFINES += UNIK_COMPILE_ANDROID_ARM64
+}
+
+contains(ANDROID_TARGET_ARCH,x86) {
+    DEFINES += UNIK_COMPILE_ANDROID_X86
+}
+
+contains(ANDROID_TARGET_ARCH,x86_64) {
+    DEFINES += UNIK_COMPILE_ANDROID_X86_64
+}
+     contains(ANDROID_TARGET_ARCH,x86) {
+        message(Android x86)
+        #OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/x86
+        #COMPILEINANDROIDX86 = 1
+        #DEFINES += UNIK_COMPILE_ANDROID_X86=\\\"$$COMPILEINANDROIDX86\\\"
+    }else{
+        message(Android armeabi-v7a)
+        #OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/armeabi-v7a
+    }
+    #OPENSSL_LIBS += -lcrypto -lssl
+    INCLUDEPATH+=/usr/local/zlib/include
     HEADERS += $$PWD/quazip/*.h
     SOURCES += $$PWD/quazip/*.cpp
     SOURCES += $$PWD/quazip/*.c
-    #include(android.pri)
 }
 
+message(DestDir: $$DESTDIR)
+
 # The following define makes your compiler emit warnings if you use
-# any Qt feature that has been marked deprecated (the exact warnings
-# depend on your compiler). Refer to the documentation for the
-# deprecated API to know how to port your code away from it.
+# any feature of Qt which as been marked deprecated (the exact warnings
+# depend on your compiler). Please consult the documentation of the
+# deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
-# You can also make your code fail to compile if it uses deprecated APIs.
+# You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SOURCES += \
-        audiorecorder.cpp \
-        chatserver.cpp \
-        main.cpp \
-        row.cpp \
-        uk.cpp \
-        unikargsproc.cpp \
-        unikimageprovider.cpp \
-        uniklogobject.cpp \
-        unikmessagehandler.cpp \
-        websocketclientwrapper.cpp \
-        websockettransport.cpp
+SOURCES += main.cpp \
+    audiorecorder.cpp \
+    uk.cpp \
+    row.cpp \
+    unikargsproc.cpp \
+    chatserver.cpp \
+    unikimageprovider.cpp \
+    websocketclientwrapper.cpp \
+    websockettransport.cpp \
+    uniklogobject.cpp
 
-HEADERS += $$PWD/quazip/*.h \
-    audiorecorder.h \
-    chatserver.h \
-    qmlclipboardadapter.h \
-    row.h \
-    uk.h \
-    unikargsproc.h \
-    unikimageprovider.h \
-    uniklogobject.h \
-    unikmessagehandler.h \
-    websocketclientwrapper.h \
-    websockettransport.h
 
 RESOURCES += qml.qrc
 
@@ -85,14 +114,37 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+HEADERS += \
+    audiorecorder.h \
+    uk.h \
+    qmlclipboardadapter.h \
+    row.h \
+    unikargsproc.h \
+    chatserver.h \
+    unikimageprovider.h \
+    websocketclientwrapper.h \
+    websockettransport.h \
+    uniklogobject.h
+
+
 DISTFILES += \
     android/AndroidManifest.xml \
-    android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.jar \
-    android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew \
-    android/gradlew.bat \
     android/res/values/libs.xml \
-    archconf.pri
-    ANDROID_PACKAGE_SOURCE_DIR = \
-        $$PWD/android
+    android/build.gradle \
+    android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew.bat \
+    linux.pri \
+    version.pri \
+    windows.pri \
+    macos.pri \
+    android/res/xml/network_security_config.xml
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
+
+
+
+
+

@@ -57,10 +57,10 @@
         UK *u0;
         //UK u;
     #endif
-       /*
-        Esta variable UK u; fue creado para compilar en armeabi-v7a
-        pero para arm64 no hizo falta.
-        */
+
+#ifdef UNIK_COMPILE_ANDROID_ARM64
+        UK u;
+#endif
 #ifdef UNIK_COMPILE_ANDROID_ARMV7
         UK u;
 #endif
@@ -1367,7 +1367,7 @@ int main(int argc, char *argv[])
     mainQml.append("main.qml");
     qInfo()<<"[0] main: "<<mainQml;
 
-    if(modeZip){
+    /*if(modeZip){
         lba="";
         lba.append("Updating from zip file: ");
         lba.append(urlZip);
@@ -1402,6 +1402,8 @@ int main(int argc, char *argv[])
         qInfo()<<"[1] main: "<<mainQml;
         u.log("Updated: "+ffmqml.toUtf8());
     }
+
+    */
 
     if(modeGit){
         lba="";

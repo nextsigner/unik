@@ -13,7 +13,7 @@ ApplicationWindow {
     color: "transparent"
     //flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     //property int fs: width<height?(Qt.platform.os !=='android'?app.height*0.02*unikSettings.zoom:app.height*0.06*unikSettings.zoom):(Qt.platform.os !=='android'?app.height*0.06*unikSettings.zoom:app.width*0.03*unikSettings.zoom)
-    property int fs: Qt.platform.os !=='android'?app.height*0.035*unikSettings.zoom:app.height*0.06*unikSettings.zoom
+    property int fs: Qt.platform.os !=='android'?app.height*0.035*unikSettings.zoom:width<height?app.width*0.025*unikSettings.zoom:app.height*0.035*unikSettings.zoom
     property color c1: "#1fbc05"
     property color c2: "black"
     property color c3: "white"
@@ -619,12 +619,13 @@ ApplicationWindow {
             font.family: "FontAwesome"
             font.pixelSize: app.fs*2
             color:app.c2
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: app.fs*2
             anchors.left: parent.left
             anchors.leftMargin: app.fs*0.5
             opacity: xConfig.opacity===0.0&&!help.visible?1.0:0.0
             rotation: -180
-            z:flick.z-1
+            z:flick.z+1
             Behavior on opacity{NumberAnimation{duration: 500}}
             BotonUX{
                 text: unikSettings.lang==='es'?'Configurar':'Config'
@@ -966,7 +967,7 @@ MediaPlayer{
             }
         }
         unik.setUnikStartSettings(params)
-        console.log('New USS params: '+params)
+        //console.log('New USS params: '+params)
         if(Qt.platform.os==='android'){
             unik.restartApp()
         }else{
