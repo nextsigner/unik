@@ -62,7 +62,7 @@ signal is sent! -->
 
 
 <!-- For adding service(s) please check: https://wiki.qt.io/AndroidServices -->
-<service android:process="org.unikode.unik" android:name="org.qtproject.qt5.android.bindings.QtService">
+<service android:process="org.unikode.unik" android:name="org.unikode.unik.android.bindings.QtService">
 
 <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
 <meta-data android:name="android.app.qt_sources_resource_id" android:resource="@array/qt_sources"/>
@@ -102,5 +102,5 @@ Remove the comment if you do not require these default features. -->
 
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

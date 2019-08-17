@@ -187,11 +187,14 @@ static void android_message_handler(QtMsgType type,
                                     const QMessageLogContext &context,
                                     const QString &message)
 {
+    /*
 #ifndef __arm__
      u.log(message.toUtf8());
  #else
  ulo.setLog(message.toUtf8());
- #endif
+ #endif*/
+    qDebug()<<message.toUtf8();
+    u.log(message.toUtf8());
     android_LogPriority priority = ANDROID_LOG_DEBUG;
     switch (type) {
     case QtDebugMsg: priority = ANDROID_LOG_DEBUG; break;
@@ -453,16 +456,18 @@ int main(int argc, char *argv[])
 
 
     //-->Install a Message Handler for GNU/Linux, Windows and Macos
-#ifndef Q_OS_ANDROID
+#ifndef Q_OS_ANDROID //->[100]
     qInstallMessageHandler(unikStdOutPut);
 #else
-#ifndef __arm__
+/*#ifndef __arm__
     u0=&u;
     qInstallMessageHandler(android_message_handler);
 #else
     qInstallMessageHandler(android_message_handler);
-#endif
-#endif
+#endif*/
+    qInstallMessageHandler(android_message_handler);
+
+#endif //<-[100]
     //<--Install a Message Handler for GNU/Linux, Windows and Macos
 
 

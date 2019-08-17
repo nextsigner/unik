@@ -15,8 +15,8 @@ ApplicationWindow{
     Connections {id: con2; target: unik;onUkStdChanged: log.setTxtLog(''+unik.ukStd); }
 
     onClosing: {
-        con1.target=undefined
-        con2.target=undefined
+        //con1.target=undefined
+        //con2.target=undefined
         //close.accepted = false
     }
     UnikSettings{

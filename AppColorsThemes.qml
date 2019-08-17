@@ -35,6 +35,7 @@ Rectangle{
         onClicking: {
             r.visible=false
         }
+        UBg{}
     }
     Column{
         anchors.centerIn: r

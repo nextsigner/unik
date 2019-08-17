@@ -5,19 +5,19 @@ import QtQuick.Window 2.0
 Settings{
     id: appSettingsUnik
     category: 'conf-unik'
-    property string lang
+    property string lang: 'es'
     property int currentNumColor
-    property var defaultColors
-    property bool sound
-    property bool showBg
-    property int numberRun
-    property real zoom
-    property real padding
-    property int radius
-    property int borderWidth
-    property string fontFamily
+    property var defaultColors: 'black-white-#666-#aaa|white-black-#aaa-#666|black-red-#ff6666-white|black-#ff6666-red-white|red-black-#ff6666-white|#ff2200-#ff8833-black-white|black-#ff8833-#ff3388-#ddcccc|#1fbc05-black-green-white|black-#1fbc05-white-green|green-white-red-blue'
+    property bool sound:true
+    property bool showBg:false
+    property int numberRun:0
+    property real zoom:1.5
+    property real padding:0.5
+    property int radius:10
+    property int borderWidth: 10
+    property string fontFamily: 'Arial'
     Component.onCompleted: {
-        if(numberRun===0){
+        if(numberRun===0&&Qt.platform.os!=='android'){
             lang='es'
             zoom=0.5
             appSettingsUnik.radius=Screen.width*0.02
@@ -26,7 +26,9 @@ Settings{
             fontFamily='Arial'
             return
         }
+        if(Qt.platform.os!=='android'){
         defaultColors='black-white-#666-#aaa|white-black-#aaa-#666|black-red-#ff6666-white|black-#ff6666-red-white|red-black-#ff6666-white|#ff2200-#ff8833-black-white|black-#ff8833-#ff3388-#ddcccc|#1fbc05-black-green-white|black-#1fbc05-white-green|green-white-red-blue'
+        }
 
         numberRun++
         var cPWS=pws

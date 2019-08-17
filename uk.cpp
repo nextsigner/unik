@@ -1276,9 +1276,9 @@ void UK::restartApp()
                                   QAndroidJniObject::getStaticField<jint>("android/app/AlarmManager", "RTC"),
                                   jlong(QDateTime::currentMSecsSinceEpoch() + 1500), pendingIntent.object());
 
-    //qApp->quit();
+    qApp->quit();
 #endif
-    emit restartingApp();
+    //emit restartingApp();
 }
 
 void UK::restartApp(QString args)
