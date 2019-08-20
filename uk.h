@@ -111,6 +111,7 @@ class UK : public QObject
     Q_PROPERTY(QString ukStd READ getUkStd() WRITE setUkStd NOTIFY ukStdChanged)
     Q_PROPERTY(QString stdErr READ getStdErr WRITE setStdErr NOTIFY stdErrChanged)
     Q_PROPERTY(QString initStdString READ getInitStdString WRITE setInitStdString)
+    Q_PROPERTY(QString uWarning READ getUWarning WRITE setUWarning NOTIFY uWarningChanged)
 public:
     explicit UK(QObject *parent = nullptr);
     ~UK();
@@ -121,6 +122,7 @@ public:
     ChatServer* _chatserver;
 
     QStringList uErrors;
+    QString uWarning;
 
     //Propiedades para QML
     int porc;
@@ -129,6 +131,14 @@ public:
     QString stdErr;
     bool runCL;
 
+    Q_INVOKABLE QString getUWarning(){
+        return uWarning;
+    }
+    Q_INVOKABLE void setUWarning(QString uw){
+        uWarning.clear();
+        uWarning.append(uw);
+        emit uWarningChanged();
+    }
     Q_INVOKABLE int getPorc(){
         return porc;
     }
@@ -244,6 +254,7 @@ public:
  signals:
     //Señales para QML
     void log();
+    void uWarningChanged();
     void porcChanged();
     void uploadStateChanged();
     void ukStdChanged();

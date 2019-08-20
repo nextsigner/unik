@@ -21,5 +21,6 @@
         <file>BotonUX.qml</file>
         <file>Borde.qml</file>
         <file>AppColorsThemes.qml</file>
+        <file>mainError.qml</file>
     </qresource>
 </RCC>

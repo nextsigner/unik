@@ -1729,6 +1729,11 @@ int main(int argc, char *argv[])
 
 
     //-->Connections
+    //QObject::connect(&engine, SIGNAL(warnings(QList<QQmlError>)), &u, SLOT(errorQML(QList<QQmlError>)));
+    QObject::connect(&engine, &QQmlEngine::warnings, [&engine](QList<QQmlError> le){
+        u.setUWarning(le.last().toString());
+    });
+
     QObject::connect(&u, &UK::restartingApp, [=](){
 #ifdef UNIK_COMPILE_ANDROID_X86_64
         delete &u;
@@ -1742,6 +1747,7 @@ int main(int argc, char *argv[])
     });
     QObject::connect(&ulo, SIGNAL(logReceived(QByteArray)),
                      &u, SLOT(log(QByteArray)));
+
     /*QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
 
