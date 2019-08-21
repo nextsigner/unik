@@ -35,48 +35,13 @@ mac{
 }
 
 android{
-    include(openssl.pri)
-    FILE_VERSION_NAME=android/assets/android_version
-    message(Programando en Android)
-
-    QT += webview
-    QT += androidextras
-
-    INCLUDEPATH += $$PWD/quazip
-    #DEFINES += QUAZIP_BUILD
-    LIBS += -lz
-contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
-    DEFINES += UNIK_COMPILE_ANDROID_ARMV7
+    include(android.pri)
 }
 
-contains(ANDROID_TARGET_ARCH,arm64-v8a) {
-    DEFINES += UNIK_COMPILE_ANDROID_ARM64
+!android{
+    message(DestDir: $$DESTDIR)
 }
 
-contains(ANDROID_TARGET_ARCH,x86) {
-    DEFINES += UNIK_COMPILE_ANDROID_X86
-}
-
-contains(ANDROID_TARGET_ARCH,x86_64) {
-    DEFINES += UNIK_COMPILE_ANDROID_X86_64
-}
-     contains(ANDROID_TARGET_ARCH,x86) {
-        message(Android x86)
-        #OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/x86
-        #COMPILEINANDROIDX86 = 1
-        #DEFINES += UNIK_COMPILE_ANDROID_X86=\\\"$$COMPILEINANDROIDX86\\\"
-    }else{
-        message(Android armeabi-v7a)
-        #OPENSSL_LIBS +=-L/media/nextsigner/ZONA-A1/nsp/unik/android/libs/armeabi-v7a
-    }
-    #OPENSSL_LIBS += -lcrypto -lssl
-    INCLUDEPATH+=/usr/local/zlib/include
-    HEADERS += $$PWD/quazip/*.h
-    SOURCES += $$PWD/quazip/*.cpp
-    SOURCES += $$PWD/quazip/*.c
-}
-
-message(DestDir: $$DESTDIR)
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -128,6 +93,7 @@ HEADERS += \
 
 
 DISTFILES += \
+    android.pri \
     android/AndroidManifest.xml \
     android/gradle/wrapper/gradle-wrapper.jar \
     android/gradlew \
