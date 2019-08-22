@@ -1,5 +1,6 @@
 VERSION_YEAR=2016
 win32 {
+    #FORMAT SYSTEM DATE WITH Spanish/Argentina
     VERSION_MAJ1=$$system("echo  %date%")
     VERSION_MAJ2 =$$split(VERSION_MAJ1, "/")#07 08 2018
     VERSION_MAJ3 =$$member(VERSION_MAJ2, 2)
@@ -11,17 +12,30 @@ win32 {
     MDIA1=$$member(VERSION_MAJ2, 0)
     MDIA2=$$split(MDIA1, "")
     MDIA3=$$member(MDIA2, 0)
-    greaterThan(MDIA3, 9){
-        MDIA4=$$MDIA3
+    greaterThan(MDIA1, 9){
+        message(DIA mayor que 9: $$MDIA1)
+        MDIA4=$$MDIA1
     }else{
+        message(DIA menor igual que 9)
         MDIA4=$$member(MDIA2, 1)
+    }
+    MES=$$member(VERSION_MAJ2, 1)
+    ARRAYMES=$$split(MES, "")
+    greaterThan(MES, 9){
+        message(MES mayor que 9: $$MES)
+
+    }else{
+        message(MES menor igual que 9: $$MES)
+        MES=$$member(ARRAYMES, 1)
     }
     VERSION_MEN1=$$system("echo  %time%")
     VERSION_MEN2 =$$split(VERSION_MEN1, ":")#07 08 2018
     VERSION_MEN3 =$$member(VERSION_MEN2, 1)
-    VERSION_MEN4=$$system("resources\\week.bat $$MDIA4 $$member(VERSION_MAJ2, 1) $$member(VERSION_MAJ2, 2)")
+    VERSION_MEN4=$$system("resources\\week.bat $$MDIA4 $$MES $$member(VERSION_MAJ2, 2)")
     NUMWEEK=$$system("set /a  $$VERSION_MEN4 + 1")
-
+    message(DIA: $$MDIA4)
+    message(MES: $$MDIA4)
+    message(NUMWEEK: $$NUMWEEK)
     #message(Date: $$MDIA1)
     #message(Month: $$member(VERSION_MAJ2, 1))
     #message(Week: $$NUMWEEK)

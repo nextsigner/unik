@@ -2,14 +2,15 @@ message(windows.pri is loaded)
 
 FILE_VERSION_NAME=windows_version
 QT += webengine
-DESTDIR = ../build_win_unik_32
+DD1=$$replace(PWD, /unik,/unik/build_win_32)
+DESTDIR= $$DD1
 RC_FILE = unik.rc
-LIBS += -L$$PWD/../libvlc-qt/lib/ -lVLCQtCore -lVLCQtWidgets -lVLCQtQml
- INCLUDEPATH += $$PWD/../libvlc-qt/include
- DEPENDPATH += $$PWD/../libvlc-qt/include
+LIBS += -L$$PWD/libvlc-qt/lib/ -lVLCQtCore -lVLCQtWidgets -lVLCQtQml
+INCLUDEPATH += $$PWD/libvlc-qt/include
+DEPENDPATH += $$PWD/libvlc-qt/include
 
-FILE_VERSION_NAME=$$replace(PWD, /unik,/build_win_unik_32/windows_version)
-FILE_VERSION_NAME3=$$replace(PWD, /unik,/build_win_unik_32/windows_version)
+FILE_VERSION_NAME=$$replace(PWD, /unik,/unik/build_win_32/windows_version)
+FILE_VERSION_NAME3=$$replace(PWD, /unik,/unik/build_win_32/windows_version)
 FILE_VERSION_NAME2=\"$$FILE_VERSION_NAME\"
 write_file(windows_version, APPVERSION)
 message(File version location: $$FILE_VERSION_NAME2)
