@@ -86,6 +86,12 @@ int UK::getScreenHeight()
     return screenGeometry.height();
 }
 
+QString UK::getUnikProperty(const QByteArray propertyName)
+{
+    qDebug()<<":::::::::"<<_engine->rootContext()->contextProperty("pws").toString();
+    return  _engine->rootContext()->contextProperty(propertyName).toString();
+}
+
 void UK::setUnikStartSettings(const QString params)
 {
     QSettings settings;
@@ -2159,6 +2165,12 @@ void UK::cd(QString folder)
     _engine->addImportPath(QDir::currentPath());
     _engine->addPluginPath(QDir::currentPath());
     qInfo()<<"Set current dir: "<<QDir::currentPath();
+}
+
+QString UK::currentFolderPath()
+{
+    QDir f(QDir::currentPath());
+    return f.currentPath();
 }
 
 QString UK::currentFolderName()

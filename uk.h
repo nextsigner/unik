@@ -121,6 +121,9 @@ public:
     QWebChannel *_channel;
     ChatServer* _chatserver;
 
+    //Variables Globales
+    QString pws;
+
     QStringList uErrors;
     QString uWarning;
 
@@ -278,6 +281,7 @@ public slots:
     int getScreenHeight();
 
     //Funciones del Sistema Unik
+    QString getUnikProperty(const QByteArray propertyName);
     void setUnikStartSettings(const QString params);
     QList<QString> getUnikStartSetting();
     void setWorkSpace(QString ws);
@@ -330,6 +334,7 @@ public slots:
 
     //Funciones de Sistema de Archivos
     void cd(QString folder);
+    QString currentFolderPath();
     QString currentFolderName();
     void deleteFile(QByteArray f);
     bool setFile(QByteArray n, QByteArray d);

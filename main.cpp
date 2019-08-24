@@ -409,6 +409,9 @@ int main(int argc, char *argv[])
 #endif
     //<--Init Components
 
+    //-->Setting Unik Vars
+    u.pws=pws;
+    //<--Setting Unik Vars
 
 
     //-->Setting Engine Vars
@@ -498,6 +501,8 @@ int main(int argc, char *argv[])
 
 
 
+
+    engine.rootContext()->setContextProperty("pws", pws);
 
     //-->Load the splah QML file.
 #ifdef Q_OS_ANDROID

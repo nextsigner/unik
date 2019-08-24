@@ -54,7 +54,9 @@ ApplicationWindow {
     }
     UnikSettings{
         id: unikSettings
+        url:'./launcher.json'
         Component.onCompleted: {
+            console.log('Seted... ')
             console.log('UnikColorTheme currentNumColor: '+unikSettings.currentNumColor)
             console.log('UnikColorTheme defaultColors: '+unikSettings.defaultColors)
             var nc=unikSettings.currentNumColor
