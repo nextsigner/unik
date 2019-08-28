@@ -4,7 +4,7 @@ import QtQuick.Window 2.0
 
 Item{
     id: r
-    property string url: appSettingsUnik.category
+    property string url: 'conf-unik'
     property alias lang: appSettingsUnik.lang
     property alias currentNumColor: appSettingsUnik.currentNumColor
     property alias defaultColors: appSettingsUnik.defaultColors
@@ -18,7 +18,7 @@ Item{
     property alias fontFamily: appSettingsUnik.fontFamily
     Settings{
         id: appSettingsUnik
-        category: 'conf-unik'
+        category: r.url
         property string lang
         property int currentNumColor
         property var defaultColors//: 'black-white-#666-#aaa|white-black-#aaa-#666|black-red-#ff6666-white|black-#ff6666-red-white|red-black-#ff6666-white|#ff2200-#ff8833-black-white|black-#ff8833-#ff3388-#ddcccc|#1fbc05-black-green-white|black-#1fbc05-white-green|green-white-red-blue'

@@ -1,19 +1,21 @@
-﻿import QtQuick 2.7
+﻿import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Window 2.2
 import Qt.labs.folderlistmodel 2.2
 import Qt.labs.settings 1.0
-import QtMultimedia 5.0
+import QtMultimedia 5.12
 ApplicationWindow {
     id: app
     objectName: 'awll'
-    visibility:  "Maximized"
-    visible: false
+    //visibility:  "Maximized"
+    //visible: false
+    width: Screen.width
+    height: Screen.height
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     color: "transparent"
     //flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     //property int fs: width<height?(Qt.platform.os !=='android'?app.height*0.02*unikSettings.zoom:app.height*0.06*unikSettings.zoom):(Qt.platform.os !=='android'?app.height*0.06*unikSettings.zoom:app.width*0.03*unikSettings.zoom)
-    property int fs: Qt.platform.os !=='android'?app.height*0.035*unikSettings.zoom:width<height?app.width*0.025*unikSettings.zoom:app.height*0.035*unikSettings.zoom
+    property int fs: Qt.platform.os !=='android'?app.height*0.035*unikSettings.zoom:app.height*0.06*unikSettings.zoom
     property color c1: "#1fbc05"
     property color c2: "black"
     property color c3: "white"
@@ -26,10 +28,6 @@ ApplicationWindow {
     property string ca: ''
 
     property var objFocus
-    property bool downloading: false
-
-    Connections {id: con1; target: unik;onUkStdChanged:log.setTxtLog(''+unik.ukStd);}
-    Connections {id: con2; target: unik;onUkStdChanged: log.setTxtLog(''+unik.ukStd); }
 
     onClosing: {
         if(Qt.platform.os==='android'){
@@ -43,10 +41,6 @@ ApplicationWindow {
         category: 'conf-appsListLauncher'
         property string uApp
         property int runNumber
-        onUAppChanged: {
-            app.downloading=false
-            xPb.opacity=0.0
-        }
         Component.onCompleted: {
             //if(runNumber===0)sound=true
             runNumber++
@@ -54,11 +48,8 @@ ApplicationWindow {
     }
     UnikSettings{
         id: unikSettings
-        url:'./launcher.json'
         Component.onCompleted: {
-            console.log('Seted... ')
-            console.log('UnikColorTheme currentNumColor: '+unikSettings.currentNumColor)
-            console.log('UnikColorTheme defaultColors: '+unikSettings.defaultColors)
+            console.log('UnikColorTheme: '+unikSettings.currentNumColor)
             var nc=unikSettings.currentNumColor
             var cc1=unikSettings.defaultColors.split('|')
             var cc2=cc1[nc].split('-')
@@ -75,7 +66,7 @@ ApplicationWindow {
         autoPlay: true;
     }
     FolderListModel{
-        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'file:///'+pws
+        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'file:///'+appsDir//'C:/Users/qt/Documents/unik'//+(''+pws).replace('/unik-tools', '')
         id: fl
         showDirs:  false
         showDotAndDotDot: false
@@ -273,6 +264,14 @@ ApplicationWindow {
                 }
             }
         }
+
+        Text {
+            text: fl.folder
+            font.pixelSize: app.fs*2
+            color:app.c2
+        }
+
+
         Rectangle{
             id: xConfig
             width: !visible?0:wmax
@@ -630,13 +629,12 @@ ApplicationWindow {
             font.family: "FontAwesome"
             font.pixelSize: app.fs*2
             color:app.c2
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: app.fs*2
+            anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: app.fs*0.5
             opacity: xConfig.opacity===0.0&&!help.visible?1.0:0.0
             rotation: -180
-            z:flick.z+1
+            z:flick.z-1
             Behavior on opacity{NumberAnimation{duration: 500}}
             BotonUX{
                 text: unikSettings.lang==='es'?'Configurar':'Config'
@@ -660,27 +658,22 @@ ApplicationWindow {
             border.width: unikSettings.borderWidth
             border.color: app.c2
             anchors.centerIn: parent
-            clip: true
-            Flickable{
-                anchors.fill: parent
-                contentWidth: parent.width
-                contentHeight: txtHelp.height+app.fs*2
-                Text {
-                    id: txtHelp
-                    text: unikSettings.lang==='es'?h1:h2
-                    font.pixelSize: app.fs
-                    font.family: unikSettings.fontFamily
-                    color: app.c2
-                    width: parent.width-app.fs*2
-                    textFormat: Text.RichText
-                    horizontalAlignment: Text.AlignHCenter
-                    property string h1
-                    property string h2
-                    Component.onCompleted: {
-                        h1='<h1>Ayuda de Unik Launcher</h1><p><b>Teclas de Navegaciòn</b></p><ul><li>Izquierda: Salir o Retroceder</li><li>Derecha: Entrar o Ejecutar</li><li>Arriba: Navega entrando a areas</li><li>Abajo: Navega saltando areas</li><li>Escape: Escape, cierre o apagado</li><li>Intro: Entrar o Ejecutar</li></ul><p>Màs informaciòn sobre Unik:</p><p>Unik fue creado gracias a Qt Open Source bajo las licencias LGPL. Màs informaciòn en <a href="http://www.qt.io">qt.io</a><</p></p><p>Sitio Web: www.unikode.org</p><p>Correo Electrònico: nextsigner@gmail.com</p><p>Whatsapp: +541138024370</p><p><b>GitHub: </b>https://github.com/nextsigner/unik</p><p><b>Donaciones: </b>patreon.com/unik</p>'
+            Text {
+                id: txtHelp
+                text: unikSettings.lang==='es'?h1:h2
+                font.pixelSize: app.fs
+                font.family: unikSettings.fontFamily
+                anchors.centerIn: parent
+                color: app.c2
+                width: parent.width-app.fs*2
+                textFormat: Text.RichText
+                horizontalAlignment: Text.AlignHCenter
+                property string h1
+                property string h2
+                Component.onCompleted: {
+                    h1='<h1>Ayuda de Unik Launcher</h1><p><b>Teclas de Navegaciòn</b></p><ul><li>Izquierda: Salir o Retroceder</li><li>Derecha: Entrar o Ejecutar</li><li>Arriba: Navega entrando a areas</li><li>Abajo: Navega saltando areas</li><li>Escape: Escape, cierre o apagado</li><li>Intro: Entrar o Ejecutar</li></ul><p>Màs informaciòn sobre Unik:</p><p>Unik fue creado gracias a Qt Open Source bajo las licencias LGPL. Màs informaciòn en <a href="http://www.qt.io">qt.io</a><</p></p><p>Sitio Web: www.unikode.org</p><p>Correo Electrònico: nextsigner@gmail.com</p><p>Whatsapp: +541138024370</p><p><b>GitHub: </b>https://github.com/nextsigner/unik</p><p><b>Donaciones: </b>patreon.com/unik</p>'
 
-                        h2='<h1>Unik Launcher Help</h1><p><b>Keyboard Navigation</b></p><ul><li>Left: Quit or Back</li><li>Right: Get in or Run</li><li>Up: Navigate getting to area</li><li>Down: Navigate jumping to area</li><li>Escape: Escape, close or quit</li><li>Enter: Get in or Run</li></ul><p>About Unik:</p><p>Unik was made with Qt Open Source under LGPL licence. More information in <a href="http://www.qt.io">qt.io</a><</p><p>Web Site: www.unikode.org</p><p>E-Mail: nextsigner@gmail.com</p><p>Whatsapp: +541138024370</p><p><b>GitHub: </b>https://github.com/nextsigner/unik</p><p><b>Donate: </b>patreon.com/unik</p>'
-                    }
+                    h2='<h1>Unik Launcher Help</h1><p><b>Keyboard Navigation</b></p><ul><li>Left: Quit or Back</li><li>Right: Get in or Run</li><li>Up: Navigate getting to area</li><li>Down: Navigate jumping to area</li><li>Escape: Escape, close or quit</li><li>Enter: Get in or Run</li></ul><p>About Unik:</p><p>Unik was made with Qt Open Source under LGPL licence. More information in <a href="http://www.qt.io">qt.io</a><</p><p>Web Site: www.unikode.org</p><p>E-Mail: nextsigner@gmail.com</p><p>Whatsapp: +541138024370</p><p><b>GitHub: </b>https://github.com/nextsigner/unik</p><p><b>Donate: </b>patreon.com/unik</p>'
                 }
             }
             Boton{//Close
@@ -688,7 +681,7 @@ ApplicationWindow {
                 w:app.fs*2
                 h: w
                 t: "\uf00d"
-                d:unikSettings.lang==='es'?'Cerrar':'Close'
+                d:'Close'
                 b:app.c1
                 c: app.c2
                 anchors.right: parent.right
@@ -697,91 +690,6 @@ ApplicationWindow {
                 anchors.topMargin: app.fs
                 onClicking: {
                     help.visible=false
-                }
-            }
-        }
-
-        Rectangle{
-            id: xPb
-            opacity: 0.0
-            width: Screen.desktopAvailableWidth<Screen.desktopAvailableHeight ? Screen.desktopAvailableWidth*0.95 : Screen.desktopAvailableHeight*0.95
-            height: titDownloadLog.contentHeight+log.contentHeight+pblaunch.height+app.fs
-            anchors.centerIn: parent
-            color: app.c1
-            //radius: unikSettings.radius
-            border.width: unikSettings.borderWidth
-            border.color: app.c2
-            clip:true
-            Behavior on opacity{
-                NumberAnimation{duration: 1000}
-            }
-            Column{
-                id: colDownloadLog
-                anchors.centerIn: parent
-                spacing: app.fs*0.5
-                Text{
-                    id: titDownloadLog
-                    color: app.c2
-                    width: app.width<app.height ? app.width*0.9 : app.height*0.9
-                    height: contentHeight
-                    wrapMode: Text.WordWrap
-                    font.pixelSize: app.fs
-                    horizontalAlignment: Text.AlignHCenter
-                    text: unikSettings.lang==='es'?'<b>Descargando '+app.ca+'</b>':'<b>Downloading '+app.ca+'</b>'
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-                Text{
-                    id: log
-                    color: app.c2
-                    width: app.width<app.height ? app.width*0.9 : app.height*0.9
-                    height: contentHeight
-                    wrapMode: Text.WordWrap
-                    font.pixelSize: app.fs*0.5
-                    horizontalAlignment: Text.AlignHCenter
-                    function setTxtLog(t){
-                        var  d=(''+t).replace(/\n/g, ' ')
-                        var p=true
-                        if(d.indexOf('Socket')>=0){
-                            p=false
-                        }else if(d.indexOf('download git')>=0){
-                            var m0=''+d.replace('download git ','')
-                            var m1=m0.split(' ')
-                            if(m1.length>1){
-                                var m2=(''+m1[1]).replace('%','')
-                                //unik.setFile('/home/nextsigner/nnn', ''+m2)
-                                var m3=parseInt(m2.replace(/ /g,''))
-                                pblaunch.width=pblaunch.parent.width/100*m3
-                            }
-
-                        }
-                        if(p){
-                            log.text=t
-                        }
-                    }
-                }
-
-                Rectangle{
-                    id:pblaunch
-                    height: app.fs*0.5
-                    width: 0
-                    color: 'red'
-                }
-            }
-
-            Boton{//Close
-                id: btnCloseDownload
-                w:app.fs
-                h: w
-                t: "\uf00d"
-                d:unikSettings.lang==='es'?'Cerrar':'Close'
-                b:app.c1
-                c: app.c2
-                anchors.right: parent.right
-                anchors.rightMargin: app.fs*0.5
-                anchors.top: parent.top
-                anchors.topMargin: app.fs*0.5
-                onClicking: {
-                    xPb.visible=false
                 }
             }
         }
@@ -1028,11 +936,6 @@ ApplicationWindow {
             psec.width=psec.parent.width/5*(app.sec-1)
         }
     }
-    Component.onCompleted:{
-        if(Qt.platform.os==='android'){
-            unik.debugLog=true
-        }
-    }
     function setColors(){
         var nc=unikSettings.currentNumColor
         var cc1=unikSettings.defaultColors.split('|')
@@ -1072,64 +975,12 @@ MediaPlayer{
                 params+=','+args[i]
             }
         }
-        console.log('Launching '+appSettings.uApp+'...')
-
-
+        unik.setUnikStartSettings(params)
+        console.log('New USS params: '+params)
         if(Qt.platform.os==='android'){
-            var m0
-            var m1
-            var m2
-            var mn
-
-            if(params.indexOf('-git=')>=0&&params.indexOf('-git=')!==params.length-1&&params.length>5){
-                app.downloading=true
-                m0=params.split('-git=')
-                m1=m0[1].split(',')
-                m2=m1[0].split('/')
-                mn=m2[m2.length-1].replace(/.git/g, '')
-
-                unik.cd(pws)
-                unik.mkdir(pws+'/'+mn)
-                xPb.opacity=1.0
-                var d = unik.downloadGit(m1[0], pws)
-                if(app.downloading){
-                    unik.cd(pws+'/'+mn)
-                    engine.load(pws+'/'+mn+'/main.qml')
-                    app.close()
-                    return
-                }
-            }
-            if(params.indexOf('-zip=')>=0&&params.indexOf('-zip=')!==params.length-1&&params.length>5){
-                m0=params.split('-zip=')
-                m1=m0[1].split(',')
-                m2=m1[0].split('/')
-                mn=m2[m2.length-1].replace(/.zip/g, '')
-
-                unik.cd(pws)
-                unik.mkdir(pws+'/'+mn)
-                var d = unik.runAppFromZip(m1[0], pws)
-                unik.cd(pws+'/'+mn)
-                engine.load(pws+'/'+mn+'/main.qml')
-                app.close()
-                return
-
-            }
-
-            if(params.indexOf('-folder=')>=0&&params.indexOf('-folder=')!==params.length-1&&params.length>5){
-                m0=params.split('-folder=')
-                m1=m0[1].split(',')
-                m2=m1[0].split('/')
-                mn=m2[m2.length-1]
-
-                unik.cd(pws)
-                unik.mkdir(pws+'/'+mn)
-                engine.load(pws+'/'+mn+'/main.qml')
-                app.close()
-                return
-            }
+            //unik.restartApp()
+            
         }else{
-            unik.setUnikStartSettings(params)
-            console.log('New USS params: '+params)
             unik.restartApp("")
         }
         //app.close()

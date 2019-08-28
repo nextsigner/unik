@@ -12,7 +12,7 @@ DEPENDPATH += $$PWD/libvlc-qt/include
 FILE_VERSION_NAME=$$replace(PWD, /unik,/unik/build_win_32/windows_version)
 FILE_VERSION_NAME3=$$replace(PWD, /unik,/unik/build_win_32/windows_version)
 FILE_VERSION_NAME2=\"$$FILE_VERSION_NAME\"
-write_file(windows_version, APPVERSION)
+write_file($$PWD/build_win_32/windows_version, APPVERSION)
 message(File version location: $$FILE_VERSION_NAME2)
 
 #Building Quazip from Windows 8.1
