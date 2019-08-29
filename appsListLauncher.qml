@@ -66,7 +66,7 @@ ApplicationWindow {
         autoPlay: true;
     }
     FolderListModel{
-        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'file:///'+appsDir//'C:/Users/qt/Documents/unik'//+(''+pws).replace('/unik-tools', '')
+        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'file:///'+appsDir
         id: fl
         showDirs:  false
         showDotAndDotDot: false
@@ -269,6 +269,7 @@ ApplicationWindow {
             text: fl.folder
             font.pixelSize: app.fs*2
             color:app.c2
+            visible: false
         }
 
 
