@@ -1,3 +1,7 @@
+#This project Unik for Windows was compiled with Qt 5.12.3 Open Source
+# and Visual Studio Comunity 2017 32Bit
+#by @nextsigner - 28/08/2019
+
 message(windows.pri is loaded)
 
 FILE_VERSION_NAME=windows_version
