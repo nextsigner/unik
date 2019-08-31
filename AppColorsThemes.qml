@@ -7,7 +7,8 @@ Rectangle{
     color:app.c4
     border.width: unikSettings.borderWidth
     border.color: app.c2
-    radius: unikSettings.radius
+    radius: unikSettings.radius/2
+    antialiasing: true
     property alias showBtnClose: btnCloseACT.visible
     property int currentFocus: -1
     property int cantColors//: gridPackColor.children.length-1    
@@ -68,6 +69,7 @@ Rectangle{
                     border.width: unikSettings.currentNumColor===index&&!uf.visible?4:1
                     border.color: '#000'
                     color: 'transparent'
+                    antialiasing: true
                     UnikFocus{id: uf; radius:0;visible: r.currentFocus===index}
                     MouseArea{
                         anchors.fill: parent

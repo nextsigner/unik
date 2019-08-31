@@ -7,8 +7,8 @@ import QtMultimedia 5.12
 ApplicationWindow {
     id: app
     objectName: 'awll'
-    //visibility:  "Maximized"
-    //visible: false
+    visible: true
+    visibility:  "Maximized"
     width: Screen.width
     height: Screen.height
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
@@ -92,9 +92,6 @@ ApplicationWindow {
         color: 'transparent'
         anchors.centerIn: parent
         focus: true
-        /*Keys.onReturnPressed: {
-            if(xConfig.opacity===0.0)run()
-        }*/
         Rectangle{
             id:xP
             visible: false
@@ -119,7 +116,6 @@ ApplicationWindow {
                 }
             }
         }
-
         Flickable{
             id:flick
             width: app.width
@@ -137,142 +133,143 @@ ApplicationWindow {
                 height: (app.fs*2+app.fs*0.25)*lv.count
                 anchors.horizontalCenter: parent.horizontalCenter
                 onCurrentIndexChanged: {
-                    console.log('UCurrentIndex: '+currentIndex)
+                    //console.log('UCurrentIndex: '+currentIndex)
                     flick.contentY=(app.fs*2+app.fs*0.25)*currentIndex-app.height/2
                 }
-            }
-        }
-        Component{
-            id:delegate
-            Rectangle{
-                id:xItemP
-                width: txt.contentWidth+app.fs*2
-                height: app.fs*2
-                color: 'transparent'
-                anchors.horizontalCenter: parent.horizontalCenter
-                Row{
-                    id: rowLaunchItem
-                    anchors.verticalCenter: parent.verticalCenter
-                    anchors.right: parent.right
-                    height: parent.height
-                    spacing: app.fs*0.5*unikSettings.padding
-                    BotonUX{
-                        id: btnStart
-                        text: unikSettings.lang==='es'?'Iniciar':'Start'
-                        anchors.verticalCenter: parent.verticalCenter
-                        visible: xItem.border.width!==0
-                        onClicked: {
-                            tlaunch.stop()
-                            var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
-                            if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')){
-                                app.runSound(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')
-                            }else{
-                                app.run()
-                            }
-                        }
-                        UBg{opacity: 1.0}
-                    }
-                    Text {
-                        text: '\uf061'
-                        font.family: "FontAwesome"
-                        font.pixelSize: app.fs
-                        color:app.c2
-                        anchors.verticalCenter: parent.verticalCenter
-                        visible: xItem.border.width!==0
-                    }
+                Component{
+                    id:delegate
                     Rectangle{
-                        id:xItem
+                        id:xItemP
                         width: txt.contentWidth+app.fs*2
                         height: app.fs*2
-                        color: xItem.border.width!==0?app.c1:app.c2
-                        radius: unikSettings.radius
-                        border.width: fileName===app.ca?unikSettings.borderWidth:0
-                        border.color: fileName===app.ca?app.c2:app.c1
-                        anchors.verticalCenter: parent.verticalCenter
-                        visible:(''+fileName).indexOf('link')===0&&(''+fileName).indexOf('.ukl')>0
-                        onColorChanged: {
-                            if(xItem.border.width!==0){
-                                app.ca=app.al[index]
-                                lv.currentIndex=index
-                                psec.width=0
-                            }
-                        }
-                        Rectangle{
-                            id: borde
-                            anchors.fill: parent
-                            radius: parent.radius
-                            border.width: unikSettings.borderWidth
-                            border.color: xItem.border.width!==0?app.c2:app.c4
-                            color: 'transparent'
-                        }
-                        MouseArea{
-                            anchors.fill: parent
-                            onClicked: {
-                                app.ci=index
-                                app.ca=fileName
-                                flick.contentY=(app.fs*2+app.fs*0.25)*index-app.height/2
-
-                                if(tlaunch.running){
+                        color: 'transparent'
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        antialiasing: true
+                        Row{
+                            id: rowLaunchItem
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: parent.right
+                            height: parent.height
+                            spacing: app.fs*0.5*unikSettings.padding
+                            BotonUX{
+                                id: btnStart
+                                text: unikSettings.lang==='es'?'Iniciar':'Start'
+                                anchors.verticalCenter: parent.verticalCenter
+                                visible: xItem.border.width!==0
+                                onClicked: {
                                     tlaunch.stop()
-                                    app.sec=0
-                                    psec.width=0
-                                }else{
-                                    tlaunch.start()
+                                    var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
+                                    if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')){
+                                        app.runSound(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')
+                                    }else{
+                                        app.run()
+                                    }
                                 }
+                                UBg{opacity: 1.0}
                             }
-                            onDoubleClicked: {
-                                /*var p=unik.getFile(appsDir+'/'+fileName)
-                        unik.ejecutarLineaDeComandoAparte('"'+appExec+'" -cfg '+p)
-                        app.close()*/
-                                app.ci=index
-                                app.ca=fileName
-                                flick.contentY=(app.fs*2+app.fs*0.25)*index-app.height/2
-                                run()
+                            Text {
+                                text: '\uf061'
+                                font.family: "FontAwesome"
+                                font.pixelSize: app.fs
+                                color:app.c2
+                                anchors.verticalCenter: parent.verticalCenter
+                                visible: xItem.border.width!==0
                             }
-                        }
-                        Text {
-                            id: txt
-                            text: (''+fileName).substring(5, (''+fileName).length-4)
-                            font.pixelSize: app.fs
-                            color:xItem.border.width!==0?app.c2:app.c1
-                            anchors.centerIn: parent
-                        }
-                        Timer{
-                            running: true
-                            repeat: true
-                            interval: 250
-                            onTriggered: {
-                                if(xItem.border.width!==0){
-                                    app.ci=index
+                            Rectangle{
+                                id:xItem
+                                width: txt.contentWidth+app.fs*2
+                                height: app.fs*2
+                                color: xItem.border.width!==0?app.c1:app.c2
+                                radius: unikSettings.radius
+                                border.width: fileName===app.ca?unikSettings.borderWidth:0
+                                border.color: fileName===app.ca?app.c2:app.c1
+                                anchors.verticalCenter: parent.verticalCenter
+                                visible:(''+fileName).indexOf('link')===0&&(''+fileName).indexOf('.ukl')>0
+                                antialiasing: true
+                                onColorChanged: {
+                                    if(xItem.border.width!==0){
+                                        app.ca=app.al[index]
+                                        lv.currentIndex=index
+                                        psec.width=0
+                                    }
                                 }
-                            }
-                        }
-                    }
-                }
-                Component.onCompleted: {
+                                Rectangle{
+                                    id: borde
+                                    anchors.fill: parent
+                                    radius: parent.radius
+                                    border.width: unikSettings.borderWidth
+                                    border.color: xItem.border.width!==0?app.c2:app.c4
+                                    color: 'transparent'
+                                    antialiasing: true
+                                }
+                                MouseArea{
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        app.ci=index
+                                        app.ca=fileName
+                                        flick.contentY=(app.fs*2+app.fs*0.25)*index-app.height/2
 
-                    app.al.push(fileName)
-                    if((''+fileName).indexOf('link')===0&&(''+fileName).indexOf('.json')>0&&!app.prima){
-                        app.ca=app.al[index]
-                        app.prima=true
-                        tap.color='black'
-                        xP.visible=true
-                    }
-                    if( tlaunch.enabled){
-                        tinit.restart()
+                                        if(tlaunch.running){
+                                            tlaunch.stop()
+                                            app.sec=0
+                                            psec.width=0
+                                        }else{
+                                            tlaunch.start()
+                                        }
+                                    }
+                                    onDoubleClicked: {
+                                        /*var p=unik.getFile(appsDir+'/'+fileName)
+                                unik.ejecutarLineaDeComandoAparte('"'+appExec+'" -cfg '+p)
+                                app.close()*/
+                                        app.ci=index
+                                        app.ca=fileName
+                                        flick.contentY=(app.fs*2+app.fs*0.25)*index-app.height/2
+                                        run()
+                                    }
+                                }
+                                UText {
+                                    id: txt
+                                    text: (''+fileName).substring(5, (''+fileName).length-4)
+                                    font.pixelSize: app.fs
+                                    color:xItem.border.width!==0?app.c2:app.c1
+                                    anchors.centerIn: parent
+                                }
+                                Timer{
+                                    running: true
+                                    repeat: true
+                                    interval: 250
+                                    onTriggered: {
+                                        if(xItem.border.width!==0){
+                                            app.ci=index
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        Component.onCompleted: {
+
+                            app.al.push(fileName)
+                            if((''+fileName).indexOf('link')===0&&(''+fileName).indexOf('.json')>0&&!app.prima){
+                                app.ca=app.al[index]
+                                app.prima=true
+                                tap.color='black'
+                                xP.visible=true
+                            }
+                            if( tlaunch.enabled){
+                                tinit.restart()
+                            }
+                        }
                     }
                 }
+
             }
         }
-
         Text {
             text: fl.folder
             font.pixelSize: app.fs*2
             color:app.c2
             visible: false
         }
-
-
         Rectangle{
             id: xConfig
             width: !visible?0:wmax
@@ -287,6 +284,7 @@ ApplicationWindow {
             visible: opacity!==0.0
             opacity: 0.0
             clip: true
+            antialiasing: true
             property int wmax:btnUX5.width+btnUX6.width+btnUX7.width+btnUX8.width<btnUX1.width+btnUX2.width+btnUX3.width+btnUX4.width? btnUX1.width+btnUX2.width+btnUX3.width+btnUX4.width+(btnUX7.width+app.fs*2):btnUX5.width+btnUX6.width+btnUX7.width+btnUX8.width+(btnUX7.width+app.fs*2)
             property int cantFocus: 12
             property int currentFocus: 1
@@ -361,7 +359,7 @@ ApplicationWindow {
                         text: unikSettings.lang==='es'?'Ancho de Borde':'Width Radius'
                         onClicked: {
                             if(unikSettings.borderWidth>app.fs*0.05){
-                                unikSettings.borderWidth-=app.fs*0.05
+                                unikSettings.borderWidth-=app.fs*0.025
                             }else{
                                 unikSettings.borderWidth=app.fs*0.5
                             }
@@ -372,8 +370,8 @@ ApplicationWindow {
                         UnikFocus{visible: xConfig.currentFocus===4}
                         text: unikSettings.lang==='es'?'Espacio':'Space'
                         onClicked: {
-                            if(unikSettings.padding>0.1){
-                                unikSettings.padding-=0.1
+                            if(unikSettings.padding>0.2){
+                                unikSettings.padding-=0.05
                             }else{
                                 unikSettings.padding=1.0
                             }
@@ -427,6 +425,7 @@ ApplicationWindow {
                         id: ufACT;
                         visible: xConfig.currentFocus===9
                         objectName: 'aaa'
+                        radius: parent.radius
                         property int currentFocus: -1
                         property int cantFocus: appColorsThemes.cantColors-1
                         onVisibleChanged: visible?currentFocus=0:currentFocus=-1
@@ -592,21 +591,12 @@ ApplicationWindow {
                                 id: delFF
                                 BotonUX{
                                     id: itemFF
-                                    text: ''
+                                    text: modelData
+                                    fontFamily: modelData
                                     onClicked: unikSettings.fontFamily='"'+modelData+'"'
-                                    width:example.contentWidth+app.fs*unikSettings.padding
-                                    height: example.contentHeight+app.fs*unikSettings.padding
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     onYChanged: xFF.arrY[index]=itemFF.y
                                     UnikFocus{visible: lvFF.currentIndex===index}
-                                    Text {
-                                        id: example
-                                        text: modelData
-                                        font.family: modelData
-                                        font.pixelSize: app.fs
-                                        color: app.c2
-                                        anchors.centerIn: parent
-                                    }
                                     Component.onCompleted: {
                                         if(width>lvFF.width){
                                             lvFF.width=width+app.fs
@@ -630,7 +620,8 @@ ApplicationWindow {
             font.family: "FontAwesome"
             font.pixelSize: app.fs*2
             color:app.c2
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: app.fs*0.5
             anchors.left: parent.left
             anchors.leftMargin: app.fs*0.5
             opacity: xConfig.opacity===0.0&&!help.visible?1.0:0.0
@@ -659,6 +650,7 @@ ApplicationWindow {
             border.width: unikSettings.borderWidth
             border.color: app.c2
             anchors.centerIn: parent
+            antialiasing: true
             Text {
                 id: txtHelp
                 text: unikSettings.lang==='es'?h1:h2
@@ -694,7 +686,6 @@ ApplicationWindow {
                 }
             }
         }
-
     }
     Shortcut{
         sequence: 'Return'

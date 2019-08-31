@@ -86,11 +86,11 @@ Item{
         numberRun++
     }
     function getCfgFile(){
-        console.log('getCfgFile()...')
+        //console.log('getCfgFile()...')
         var unikCfgFile=r.url
-        console.log('unikCfgFile: '+unikCfgFile)
+        //console.log('unikCfgFile: '+unikCfgFile)
         var unikCfgFileData=unik.getFile(unikCfgFile)
-        console.log('unikCfgFileData: '+unikCfgFileData)
+        //console.log('unikCfgFileData: '+unikCfgFileData)
         var json
         if(unikCfgFileData!=='error') {
             try {
@@ -113,7 +113,7 @@ Item{
             appSettingsUnik.loaded=true
         }else{
             var jsonCode='{
-"cfg":{"zoom":0.5,"padding":0.5,"radius":38,"borderWidth":2,"fontFamily":"Arial", "sound" : false, "showBg": true, "lang" : "es", "currentNumColor": 0, "defaultColors":"black-white-#666-#aaa|white-black-#aaa-#666|black-red-#ff6666-white|black-#ff6666-red-white|red-black-#ff6666-white|#ff2200-#ff8833-black-white|black-#ff8833-#ff3388-#ddcccc|#1fbc05-black-green-white|black-#1fbc05-white-green|green-white-red-blue" }
+"cfg":{"zoom":0.5,"padding":0.5,"radius":38,"borderWidth":2,"fontFamily":"Arial", "sound" : false, "showBg": true, "lang" : "es", "currentNumColor": 0, "defaultColors":"black-white-#666-#aaa|white-black-#aaa-#666|black-red-#ff6666-white|black-#ff6666-red-white|red-black-#ff6666-white|#ff2200-white-black-#ff8833|black-#ff8833-#ff3388-#ddcccc|#1fbc05-black-green-white|black-#1fbc05-white-green|green-white-red-blue" }
 }
 '
             unik.setFile(unikCfgFile, jsonCode)

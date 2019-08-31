@@ -9,12 +9,14 @@ Rectangle {
     radius: xR1.radius
     border.color: xR1.border.color
     border.width: 0
+    antialiasing: true
     property int fontSize: app.fs
     property bool canceled: false
     property alias text: a.text
     property string t2
     property color backgroudColor: app.c1
     property color fontColor: app.c2
+    property string fontFamily: unikSettings.fontFamily
     property var objToRunQml
     property string qmlCode:''
     property int speed: 100
@@ -28,6 +30,7 @@ Rectangle {
         width: parent.width
         height: parent.height
         anchors.centerIn: r
+        antialiasing: true
         Rectangle{
             id: b3
             opacity: b1.opacity!==0.5?1.0:0.0
@@ -36,6 +39,7 @@ Rectangle {
             radius: unikSettings.radius
             anchors.centerIn: parent
             color: app.c2
+            antialiasing: true
             Behavior on opacity{NumberAnimation{duration:r.speed}}
         }
         Rectangle{
@@ -46,6 +50,7 @@ Rectangle {
             rotation: -90
             anchors.centerIn: parent
             opacity: 0.5
+            antialiasing: true
             gradient: Gradient {
                 GradientStop {
                     position: 0.00;
@@ -65,7 +70,7 @@ Rectangle {
             height: xR1.height
             radius: unikSettings.radius
             rotation: -270
-
+            antialiasing: true
             onOpacityChanged: {
                 if(opacity>=0.5&&!maBX.p){
                     b1.opacity=0.5
@@ -87,6 +92,7 @@ Rectangle {
     UText {
         id: a
         font.pixelSize: r.fontSize
+        fontFamily: r.fontFamily
         color: r.fontColor
         anchors.centerIn: parent
         visible: r.enabled
@@ -95,6 +101,7 @@ Rectangle {
         id: a2
         text:a.text
         font.pixelSize: r.fontSize
+        fontFamily: r.fontFamily
         color: r.backgroudColor
         x: !maBX.p?a.x:a.x+2
         y:a.y
@@ -105,8 +112,9 @@ Rectangle {
     UText {
         id: txtCancel
         text: '<b>?</b>'
-        font.pixelSize: r.fontSize*2
-        color: 'red'
+        font.pixelSize: r.fontSize*1.5
+        fontFamily: r.fontFamily
+        color: app.c2
         anchors.centerIn: parent
         visible: !r.enabled
     }

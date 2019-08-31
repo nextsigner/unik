@@ -14,6 +14,7 @@ Rectangle {
     border.width: unikSettings.borderWidth
     border.color: c
     radius: unikSettings.radius
+    antialiasing: true
     onVisibleChanged: {
         if(visible){
             app.objFocus=r.objFocus

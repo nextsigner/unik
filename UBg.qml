@@ -7,4 +7,5 @@ Rectangle {
     color: app.c1
     opacity: 0.5
     z:r,parent.z-1
+    antialiasing: true
 }
