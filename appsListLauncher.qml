@@ -811,6 +811,7 @@ ApplicationWindow {
                                     if(visible){
                                         tiLinkFileContent.focus=false
                                         tiLinkFile.focus=true
+                                        labelStatus.text=tiLinkFile.text===''?unikSettings.lang==='es'?'Escriba el nuevo nombre del enlace a crear.':'Write the new name for the new link to make.':unikSettings.lang==='es'?'Creando el enlace link_'+tiLinkFile.text+'.ukl':'Making the link link_'+tiLinkFile.text+'.ukl'
                                     }
                                 }
                             }
@@ -831,6 +832,7 @@ ApplicationWindow {
                                     if(unik.fileExist(linkFileName)){
                                         tiLinkFileContent.text=linkFileData
                                     }
+                                    labelStatus.text=tiLinkFile.text===''?unikSettings.lang==='es'?'Escriba el nuevo nombre del enlace a crear.':'Write the new name for the new link to make.':unikSettings.lang==='es'?'Creando el enlace link_'+tiLinkFile.text+'.ukl':'Making the link link_'+tiLinkFile.text+'.ukl'
                                 }
                             }
                         }
@@ -843,6 +845,7 @@ ApplicationWindow {
                                     if(visible){
                                         tiLinkFileContent.focus=false
                                         tiLinkFile.focus=false
+                                        labelStatus.text=unikSettings.lang==='es'?'Cancelar y Cerrar el Editor de Enlace.':'Cancel and Close the Link Editor.'
                                     }
                                 }
                             }
@@ -861,6 +864,7 @@ ApplicationWindow {
                                     if(visible){
                                         tiLinkFileContent.focus=false
                                         tiLinkFile.focus=false
+                                        labelStatus.text=unikSettings.lang==='es'?'Hacer click o presionar retorno para crear este enlace.':'Click or press return for make this link.'
                                     }
                                 }
                             }
@@ -917,6 +921,23 @@ ApplicationWindow {
                                     xLinkEditor.visible=false
                                     xConfig.opacity=0.0
                                     tlaunch.start()
+                                }else if(tiLinkFileContent.text.indexOf('-folder=')>=0){
+                                    var m0=tiLinkFileContent.text.split('\n')
+                                    var m1=m0[0].split('-folder=')
+                                    var m2=m1[1].split(' ')
+                                    if(!unik.fileExist(m2[0])){
+                                        labelStatus.text=unikSettings.lang==='es'?'La carpeta no existe':'Folder not found'
+                                    }else{
+                                       if(!unik.fileExist(m2[0]+'/main.qml')){
+                                           labelStatus.text=unikSettings.lang==='es'?'El archivo principal no existe':'Main file not exist'
+                                           //return
+                                       }else{
+                                           unik.setFile(linkFileName, tiLinkFileContent.text)
+                                           xLinkEditor.visible=false
+                                           xConfig.opacity=0.0
+                                           tlaunch.start()
+                                       }
+                                    }
                                 }else{
                                     unik.setFile(linkFileName, tiLinkFileContent.text)
                                     xLinkEditor.visible=false
@@ -959,11 +980,12 @@ ApplicationWindow {
                             id: btnUXDelLink
                             UnikFocus{
                                 id: ufDelLink;
-                                visible:xLinkEditor.currentFocus===2
+                                visible:xLinkEditor.currentFocus===4
                                 onVisibleChanged: {
                                     if(visible){
                                         tiLinkFileContent.focus=false
                                         tiLinkFile.focus=false
+                                        labelStatus.text=unikSettings.lang==='es'?'Eliminar este enlace.':'Delete this link.'
                                     }
                                 }
                             }
@@ -1241,7 +1263,7 @@ ApplicationWindow {
         sequence: 'Right'
         onActivated: {
             if(xLinkEditor.visible){
-                if(xLinkEditor.currentFocus<3){
+                if(xLinkEditor.currentFocus<4){
                     xLinkEditor.currentFocus++
                 }else{
                     xLinkEditor.currentFocus=1
@@ -1280,7 +1302,7 @@ ApplicationWindow {
         sequence: 'Down'
         onActivated: {
             if(xLinkEditor.visible){
-                if(xLinkEditor.currentFocus<3){
+                if(xLinkEditor.currentFocus<4){
                     xLinkEditor.currentFocus++
                 }else{
                     xLinkEditor.currentFocus=0
@@ -1323,7 +1345,7 @@ ApplicationWindow {
                 if(xLinkEditor.currentFocus>0){
                     xLinkEditor.currentFocus--
                 }else{
-                    xLinkEditor.currentFocus=3
+                    xLinkEditor.currentFocus=4
                 }
                 console.log('UCurrentFocus xLinkEditor: '+xLinkEditor.currentFocus)
                 return
@@ -1475,7 +1497,6 @@ MediaPlayer{
             }
         }
         console.log('Launching '+appSettings.uApp+'...')
-
 
         if(Qt.platform.os==='android'){
             var m0
