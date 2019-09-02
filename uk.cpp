@@ -1776,6 +1776,7 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
     uZipSize=0;
  #ifndef Q_OS_ANDROID
     #ifndef Q_OS_WIN
+    #ifndef Q_OS_LINUX
     QEventLoop eventLoop0;
     QNetworkAccessManager mgr0;
     QObject::connect(&mgr0, SIGNAL(finished(QNetworkReply*)), &eventLoop0, SLOT(quit()));
@@ -1798,6 +1799,7 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
         }
     }
     );
+#endif
 #endif
 #endif
 
