@@ -1787,7 +1787,7 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
         uZipSize=reply0->header(QNetworkRequest::ContentLengthHeader).toInt();
         reply0->deleteLater();
         if(uZipSize<=0){
-            return downloadZipFile(url, ubicacion);
+           // return downloadZipFile(url, ubicacion);
         }else {
             if(uZipSize>uZipSizeReg){
                 uZipSizeReg=uZipSize;

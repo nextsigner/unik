@@ -37,7 +37,7 @@ ApplicationWindow {
             //close.accepted = false;
         }
     }
-    onCiChanged: app.ca=app.al[app.ci]
+    onCiChanged: if(app.al[app.ci])app.ca=app.al[app.ci]
     FontLoader {name: "FontAwesome";source: "qrc:/fontawesome-webfont.ttf";}
     Settings{
         id: appSettings
@@ -140,7 +140,7 @@ ApplicationWindow {
             Behavior on contentY{NumberAnimation{duration: 500}}
             ListView{
                 id:lv
-                spacing: app.fs*unikSettings.padding
+                spacing: (app.fs*unikSettings.padding)+2
                 model:fl
                 delegate: delegate
                 width: app.width-app.fs*2
@@ -204,9 +204,11 @@ ApplicationWindow {
                         antialiasing: true
                         onColorChanged: {
                             if(xItem.border.width!==0){
-                                app.ca=app.al[index]
-                                lv.currentIndex=index
-                                psec.width=0
+                                if(app.al[index]){
+                                    app.ca=app.al[index]
+                                    lv.currentIndex=index
+                                    psec.width=0
+                                }
                             }
                         }
                         Rectangle{
@@ -597,6 +599,7 @@ ApplicationWindow {
                     width: parent.width
                     Row{
                         id: rowFF1
+                        z:rowFF2.z+1
                         spacing: app.fs*unikSettings.padding
                         height: btnUXCloseListFF.height
                         anchors.horizontalCenter: parent.horizontalCenter
@@ -606,9 +609,7 @@ ApplicationWindow {
                         }
                         BotonUX{
                             id: btnUXCloseListFF
-                            //z: lvFF.z+1
-                            //anchors.right: parent.right
-                            UBg{}
+                            UBg{opacity: 1.0}
                             UnikFocus{id: ufCloseListFF; visible:false}
                             text: unikSettings.lang==='es'?'Cerrar':'Close'
                             onClicked: {
@@ -617,6 +618,7 @@ ApplicationWindow {
                         }
                     }
                     Row{
+                        id:rowFF2
                         anchors.horizontalCenter: parent.horizontalCenter
                         spacing: app.fs*2
                         Rectangle{
@@ -698,7 +700,7 @@ ApplicationWindow {
                             property int uCurrentIndex: currentIndex
                             property int heightButton:app.fs*2
                             onCurrentItemChanged: {
-                               //y=currentIndex>uCurrentIndex?0-lvFF.height/2:lvFF.height/2
+                                //y=currentIndex>uCurrentIndex?0-lvFF.height/2:lvFF.height/2
                                 //uCurrentIndex=currentIndex
                                 //                                var item = lvFF.i(currentIndex)
                                 //                                console.log('XXXXXXXXXXXXXXXXXXXx'+item)
@@ -750,6 +752,27 @@ ApplicationWindow {
                 border.color: app.c2
                 radius: app.fs*0.25
                 visible: false
+                property int currentFocus: -1
+                property int uCurrentFocus: -1
+                onVisibleChanged: {
+                    if(visible){
+                        currentFocus=0
+                        //labelStatus.text=unikSettings.lang==='es'?'':''
+                    }else{
+                        currentFocus=-1
+                        app.objFocus=btnUX9
+                        labelStatus.text=''
+                    }
+                }
+                onCurrentFocusChanged: {
+                    if(!btnUXSetLink.visible&&currentFocus===2&&uCurrentFocus<currentFocus){
+                        currentFocus++
+                    }
+                    if(!btnUXSetLink.visible&&currentFocus===2&&uCurrentFocus>currentFocus){
+                        currentFocus--
+                    }
+                    uCurrentFocus=currentFocus
+                }
                 MouseArea{
                     anchors.fill: parent
                 }
@@ -757,6 +780,10 @@ ApplicationWindow {
                     anchors.centerIn: parent
                     spacing: app.fs*0.5
                     property int radius: unikSettings.radius/2
+                    UText{
+                        text: unikSettings.lang==='es'?'<b>Editor de Enlace</b>':'<b>Link Editor</b>'
+                        anchors.horizontalCenter: parent.horizontalCenter
+                    }
                     Row{
                         anchors.horizontalCenter: parent.horizontalCenter
                         spacing: app.fs*0.5
@@ -768,14 +795,28 @@ ApplicationWindow {
                         Rectangle{
                             border.width: unikSettings.borderWidth
                             border.color: app.c2
+                            radius: unikSettings.radius
                             width: xLinkEditor.width*0.5
                             height: app.fs*2
                             color: app.c1
                             clip: true
                             anchors.verticalCenter: parent.verticalCenter
                             antialiasing: true
+                            function run(){
+                                xLinkEditor.currentFocus=btnUXSetLink?2:1
+                            }
+                            UnikFocus{
+                                visible:xLinkEditor.currentFocus===0
+                                onVisibleChanged: {
+                                    if(visible){
+                                        tiLinkFileContent.focus=false
+                                        tiLinkFile.focus=true
+                                    }
+                                }
+                            }
                             TextInput{
                                 id: tiLinkFile
+                                focus: false
                                 //text: app.ca.replace('link_','').replace('.ukl', '')
                                 width: parent.width-app.fs
                                 height: app.fs
@@ -783,6 +824,7 @@ ApplicationWindow {
                                 font.pixelSize: app.fs
                                 anchors.centerIn: parent
                                 maximumLength: 25
+                                onFocusChanged: if(focus)xLinkEditor.currentFocus=0
                                 onTextChanged: {
                                     var linkFileName=pws+'/link_'+tiLinkFile.text+'.ukl'
                                     var linkFileData=unik.getFile(linkFileName)
@@ -794,7 +836,16 @@ ApplicationWindow {
                         }
                         BotonUX{
                             id: btnUXSetLinkCancel
-                            UnikFocus{id: ufSetLinkCancel; visible:false}
+                            UnikFocus{
+                                id: ufSetLinkCancel;
+                                visible:xLinkEditor.currentFocus===1
+                                onVisibleChanged: {
+                                    if(visible){
+                                        tiLinkFileContent.focus=false
+                                        tiLinkFile.focus=false
+                                    }
+                                }
+                            }
                             text: unikSettings.lang==='es'?'Cancelar':'Cancel'
                             anchors.verticalCenter: parent.verticalCenter
                             onClicked: {
@@ -803,17 +854,24 @@ ApplicationWindow {
                         }
                         BotonUX{
                             id: btnUXSetLink
-                            UnikFocus{id: ufSetLink; visible:false}
+                            UnikFocus{
+                                id: ufSetLink;
+                                visible:xLinkEditor.currentFocus===2
+                                onVisibleChanged: {
+                                    if(visible){
+                                        tiLinkFileContent.focus=false
+                                        tiLinkFile.focus=false
+                                    }
+                                }
+                            }
                             text: unikSettings.lang==='es'?'Crear':'Make'
                             anchors.verticalCenter: parent.verticalCenter
                             visible: Qt.platform.os!=='android'?tiLinkFile.text!=='unik-tools'&&tiLinkFileContent.text!==''&&tiLinkFile.text!=='':tiLinkFile.text!=='android-apps'&&tiLinkFileContent.text!==''&&tiLinkFile.text!==''
                             onClicked: {
+                                app.al=[]
+                                appSettings.uApp='link_'+tiLinkFile.text+'.ukl'
                                 var linkFileName=pws+'/link_'+tiLinkFile.text+'.ukl'
                                 unik.setFile(linkFileName, tiLinkFileContent.text)
-                                //app.al.push('link_'+tiLinkFile.text+'.ukl')
-                                //app.prima=false
-                                //app.ci=0
-                                //app.ca='link_'+tiLinkFile.text+'.ukl'
                                 xLinkEditor.visible=false
                             }
                             Timer{
@@ -835,11 +893,48 @@ ApplicationWindow {
                     Rectangle{
                         border.width: unikSettings.borderWidth
                         border.color: app.c2
+                        radius: unikSettings.radius
                         width: xLinkEditor.width-app.fs
-                        height: xLinkEditor.height*0.5
+                        height: app.fs*4
                         color: app.c1
+                        anchors.horizontalCenter: parent.horizontalCenter
                         clip: true
                         antialiasing: true
+                        function run(){
+                            app.al=[]
+                            appSettings.uApp='link_'+tiLinkFile.text+'.ukl'
+                            app.ca=appSettings.uApp
+                            var linkFileName=pws+'/link_'+tiLinkFile.text+'.ukl'
+                            var folderMain=appSettings.uApp.replace('link_','').replace('.ukl','')
+                            var mainUrl=pws+'/'+folderMain+'/main.qml'
+                            if(!unik.fileExist(mainUrl)&&tiLinkFileContent.text.indexOf('-git=')<0){
+                                labelStatus.text=unikSettings.lang==='es'?'El archivo principal no existe.':'The main file not exist.'
+                            }else{
+                                if(unik.fileExist(mainUrl)&&tiLinkFileContent.text.indexOf('-folder=')<0&&tiLinkFileContent.text.indexOf('-git=')<0){
+                                    labelStatus.text=unikSettings.lang==='es'?'Se requiere el argumento -folder=<Carpeta de archivo main.qml>\nPor ejemplo: C:/miApp/':'The argument is required -folder=<Folder to main.qml file>\nFor example: C:/myApp/'
+                                }else if(tiLinkFileContent.text.indexOf('-folder=')<0){
+                                    unik.setFile(linkFileName, tiLinkFileContent.text+' -folder='+pws+'/'+folderMain)
+                                    xLinkEditor.visible=false
+                                    xConfig.opacity=0.0
+                                    tlaunch.start()
+                                }else{
+                                    unik.setFile(linkFileName, tiLinkFileContent.text)
+                                    xLinkEditor.visible=false
+                                    xConfig.opacity=0.0
+                                    tlaunch.start()
+                                }
+                            }
+                        }
+                        UnikFocus{
+                            visible:xLinkEditor.currentFocus===3
+                            onVisibleChanged: {
+                                if(visible){
+                                    tiLinkFile.focus=false
+                                    tiLinkFileContent.focus=true
+                                    labelStatus.text=unikSettings.lang==='es'?'Presionar Intro para lanzamiento rápido.':'Press Return for a Quick Launch'
+                                }
+                            }
+                        }
                         TextInput{
                             id: tiLinkFileContent
                             width: parent.width-app.fs
@@ -849,6 +944,39 @@ ApplicationWindow {
                             font.pixelSize: app.fs
                             anchors.centerIn: parent
                             maximumLength: 500
+                            onFocusChanged: if(focus)xLinkEditor.currentFocus=3
+                        }
+                    }
+                    Row{
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: app.fs*0.5
+                        UText{
+                            id: labelStatus
+                            width: xLinkEditor.width-btnUXDelLink.width-app.fs*2
+                            wrapMode: Text.WordWrap
+                        }
+                        BotonUX{
+                            id: btnUXDelLink
+                            UnikFocus{
+                                id: ufDelLink;
+                                visible:xLinkEditor.currentFocus===2
+                                onVisibleChanged: {
+                                    if(visible){
+                                        tiLinkFileContent.focus=false
+                                        tiLinkFile.focus=false
+                                    }
+                                }
+                            }
+                            text: unikSettings.lang==='es'?'Eliminar':'Delete'
+                            anchors.verticalCenter: parent.verticalCenter
+                            visible: Qt.platform.os!=='android'?tiLinkFile.text!=='unik-tools'&&tiLinkFileContent.text!==''&&tiLinkFile.text!=='':tiLinkFile.text!=='android-apps'&&tiLinkFileContent.text!==''&&tiLinkFile.text!==''
+                            onClicked: {
+                                app.al=[]
+                                var linkFileName=pws+'/link_'+tiLinkFile.text+'.ukl'
+                                unik.deleteFile(linkFileName)
+                                tiLinkFile.text=''
+                                tiLinkFileContent.text=''
+                            }
                         }
                     }
                 }
@@ -1047,6 +1175,18 @@ ApplicationWindow {
     Shortcut{
         sequence: 'Esc'
         onActivated: {
+            if(xLinkEditor.visible){
+                if(tiLinkFile.focus){
+                    tiLinkFile.focus=false
+                    xLinkEditor.currentFocus=1
+                }else if(tiLinkFileContent.focus){
+                    tiLinkFileContent.focus=false
+                    xLinkEditor.currentFocus=1
+                }else{
+                    xLinkEditor.visible=false
+                }
+                return
+            }
             if(xFF.visible){
                 xFF.visible=false
                 return
@@ -1065,6 +1205,10 @@ ApplicationWindow {
     Shortcut{
         sequence: 'Left'
         onActivated: {
+            if(xLinkEditor.visible){
+                xLinkEditor.visible=false
+                return
+            }
             if(xFF.visible){
                 lvFF.currentIndex--
                 return
@@ -1096,6 +1240,15 @@ ApplicationWindow {
     Shortcut{
         sequence: 'Right'
         onActivated: {
+            if(xLinkEditor.visible){
+                if(xLinkEditor.currentFocus<3){
+                    xLinkEditor.currentFocus++
+                }else{
+                    xLinkEditor.currentFocus=1
+                }
+                console.log('UCurrentFocus xLinkEditor: '+xLinkEditor.currentFocus)
+                return
+            }
             if(xFF.visible&&!ufCloseListFF.visible){
                 ufCloseListFF.visible=true
                 return
@@ -1126,6 +1279,15 @@ ApplicationWindow {
     Shortcut{
         sequence: 'Down'
         onActivated: {
+            if(xLinkEditor.visible){
+                if(xLinkEditor.currentFocus<3){
+                    xLinkEditor.currentFocus++
+                }else{
+                    xLinkEditor.currentFocus=0
+                }
+                console.log('UCurrentFocus xLinkEditor: '+xLinkEditor.currentFocus)
+                return
+            }
             if(xConfig.opacity===0.0){
                 if(app.ci<app.al.length-1){
                     app.ci++
@@ -1157,6 +1319,15 @@ ApplicationWindow {
     Shortcut{
         sequence: 'Up'
         onActivated: {
+            if(xLinkEditor.visible){
+                if(xLinkEditor.currentFocus>0){
+                    xLinkEditor.currentFocus--
+                }else{
+                    xLinkEditor.currentFocus=3
+                }
+                console.log('UCurrentFocus xLinkEditor: '+xLinkEditor.currentFocus)
+                return
+            }
             if(xConfig.opacity===0.0){
                 if(app.ci>0){
                     app.ci--
