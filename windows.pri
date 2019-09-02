@@ -1,7 +1,3 @@
-#This project Unik for Windows was compiled with Qt 5.12.3 Open Source
-# and Visual Studio Comunity 2017 32Bit
-#by @nextsigner - 28/08/2019
-
 message(windows.pri is loaded)
 
 FILE_VERSION_NAME=windows_version
@@ -16,7 +12,7 @@ DEPENDPATH += $$PWD/libvlc-qt/include
 FILE_VERSION_NAME=$$replace(PWD, /unik,/unik/build_win_32/windows_version)
 FILE_VERSION_NAME3=$$replace(PWD, /unik,/unik/build_win_32/windows_version)
 FILE_VERSION_NAME2=\"$$FILE_VERSION_NAME\"
-write_file($$PWD/build_win_32/windows_version, APPVERSION)
+write_file(windows_version, APPVERSION)
 message(File version location: $$FILE_VERSION_NAME2)
 
 #Building Quazip from Windows 8.1
@@ -29,8 +25,8 @@ SOURCES += $$PWD/quazip/*.c
 EXTRA_BINFILES += $$PWD/windows_version
 EXTRA_BINFILES_WIN = $${EXTRA_BINFILES}
 EXTRA_BINFILES_WIN ~= s,/,\\,g
-DESTDIR_WIN = $$replace(PWD, /unik,/build_win_unik_32/windows_version)
+DESTDIR_WIN = $$replace(PWD, /unik,/unik/build_win_32/windows_version)
 DESTDIR_WIN ~= s,/,\\,g
 for(FILE,EXTRA_BINFILES_WIN){
-        QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${FILE} $${DESTDIR_WIN}$$escape_expand(\n\t))
+        #QMAKE_POST_LINK +=$$quote(cmd /c copy /y $${FILE} $${DESTDIR_WIN}$$escape_expand(\n\t))
 }

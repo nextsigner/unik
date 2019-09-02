@@ -1,21 +1,19 @@
-﻿import QtQuick 2.12
+﻿import QtQuick 2.7
 import QtQuick.Controls 2.12
 import QtQuick.Window 2.2
 import Qt.labs.folderlistmodel 2.2
 import Qt.labs.settings 1.0
-import QtMultimedia 5.12
+import QtMultimedia 5.0
 ApplicationWindow {
     id: app
     objectName: 'awll'
-    visible: true
     visibility:  "Maximized"
-    width: Screen.width
-    height: Screen.height
+    visible: false
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     color: "transparent"
     //flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     //property int fs: width<height?(Qt.platform.os !=='android'?app.height*0.02*unikSettings.zoom:app.height*0.06*unikSettings.zoom):(Qt.platform.os !=='android'?app.height*0.06*unikSettings.zoom:app.width*0.03*unikSettings.zoom)
-    property int fs: Qt.platform.os !=='android'?app.height*0.035*unikSettings.zoom:app.height*0.06*unikSettings.zoom
+    property int fs: Qt.platform.os !=='android'?app.height*0.035*unikSettings.zoom:width<height?app.width*0.025*unikSettings.zoom:app.height*0.035*unikSettings.zoom
     property color c1: "#1fbc05"
     property color c2: "black"
     property color c3: "white"
@@ -26,8 +24,13 @@ ApplicationWindow {
     property int ci: 0
     property var al: []
     property string ca: ''
+    property string uHoverCa: ''
 
     property var objFocus
+    property bool downloading: false
+
+    Connections {id: con1; target: unik;onUkStdChanged:log.setTxtLog(''+unik.ukStd);}
+    Connections {id: con2; target: unik;onUkStdChanged: log.setTxtLog(''+unik.ukStd); }
 
     onClosing: {
         if(Qt.platform.os==='android'){
@@ -41,6 +44,10 @@ ApplicationWindow {
         category: 'conf-appsListLauncher'
         property string uApp
         property int runNumber
+        onUAppChanged: {
+            app.downloading=false
+            xPb.opacity=0.0
+        }
         Component.onCompleted: {
             //if(runNumber===0)sound=true
             runNumber++
@@ -48,8 +55,11 @@ ApplicationWindow {
     }
     UnikSettings{
         id: unikSettings
+        url:'./launcher.json'
         Component.onCompleted: {
-            console.log('UnikColorTheme: '+unikSettings.currentNumColor)
+            console.log('Seted... ')
+            console.log('UnikColorTheme currentNumColor: '+unikSettings.currentNumColor)
+            console.log('UnikColorTheme defaultColors: '+unikSettings.defaultColors)
             var nc=unikSettings.currentNumColor
             var cc1=unikSettings.defaultColors.split('|')
             var cc2=cc1[nc].split('-')
@@ -66,7 +76,7 @@ ApplicationWindow {
         autoPlay: true;
     }
     FolderListModel{
-        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'file:///'+appsDir
+        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'file:///'+pws
         id: fl
         showDirs:  false
         showDotAndDotDot: false
@@ -92,6 +102,9 @@ ApplicationWindow {
         color: 'transparent'
         anchors.centerIn: parent
         focus: true
+        /*Keys.onReturnPressed: {
+            if(xConfig.opacity===0.0)run()
+        }*/
         Rectangle{
             id:xP
             visible: false
@@ -116,6 +129,7 @@ ApplicationWindow {
                 }
             }
         }
+
         Flickable{
             id:flick
             width: app.width
@@ -133,142 +147,229 @@ ApplicationWindow {
                 height: (app.fs*2+app.fs*0.25)*lv.count
                 anchors.horizontalCenter: parent.horizontalCenter
                 onCurrentIndexChanged: {
-                    //console.log('UCurrentIndex: '+currentIndex)
+                    console.log('UCurrentIndex: '+currentIndex)
                     flick.contentY=(app.fs*2+app.fs*0.25)*currentIndex-app.height/2
                 }
-                Component{
-                    id:delegate
+            }
+        }
+        Component{
+            id:delegate
+            Rectangle{
+                id:xItemP
+                width:txt.contentWidth+app.fs*2
+                height:  !btnDelete.visible?app.fs*2:btnDelete.height+4
+                color: 'transparent'
+                anchors.horizontalCenter: parent.horizontalCenter
+                antialiasing: true
+                Row{
+                    id: rowLaunchItem
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+                    height: parent.height
+                    spacing: app.fs*0.5*unikSettings.padding
+                    BotonUX{
+                        id: btnStart
+                        text: unikSettings.lang==='es'?'Iniciar':'Start'
+                        anchors.verticalCenter: parent.verticalCenter
+                        visible: xItem.border.width!==0
+                        onClicked: {
+                            tlaunch.stop()
+                            var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
+                            if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')){
+                                app.runSound(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')
+                            }else{
+                                app.run()
+                            }
+                        }
+                        UBg{opacity: 1.0}
+                    }
+                    Text {
+                        text: '\uf061'
+                        font.family: "FontAwesome"
+                        font.pixelSize: app.fs
+                        color:app.c2
+                        anchors.verticalCenter: parent.verticalCenter
+                        visible: xItem.border.width!==0
+                    }
                     Rectangle{
-                        id:xItemP
+                        id:xItem
                         width: txt.contentWidth+app.fs*2
                         height: app.fs*2
-                        color: 'transparent'
-                        anchors.horizontalCenter: parent.horizontalCenter
+                        color: xItem.border.width!==0?app.c1:app.c2
+                        radius: unikSettings.radius
+                        border.width: fileName===app.ca?unikSettings.borderWidth:0
+                        border.color: fileName===app.ca?app.c2:app.c1
+                        anchors.verticalCenter: parent.verticalCenter
+                        visible:(''+fileName).indexOf('link')===0&&(''+fileName).indexOf('.ukl')>0
                         antialiasing: true
-                        Row{
-                            id: rowLaunchItem
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.right: parent.right
-                            height: parent.height
-                            spacing: app.fs*0.5*unikSettings.padding
-                            BotonUX{
-                                id: btnStart
-                                text: unikSettings.lang==='es'?'Iniciar':'Start'
-                                anchors.verticalCenter: parent.verticalCenter
-                                visible: xItem.border.width!==0
-                                onClicked: {
-                                    tlaunch.stop()
-                                    var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
-                                    if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')){
-                                        app.runSound(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')
-                                    }else{
-                                        app.run()
-                                    }
-                                }
-                                UBg{opacity: 1.0}
+                        onColorChanged: {
+                            if(xItem.border.width!==0){
+                                app.ca=app.al[index]
+                                lv.currentIndex=index
+                                psec.width=0
                             }
-                            Text {
-                                text: '\uf061'
-                                font.family: "FontAwesome"
-                                font.pixelSize: app.fs
-                                color:app.c2
-                                anchors.verticalCenter: parent.verticalCenter
-                                visible: xItem.border.width!==0
-                            }
-                            Rectangle{
-                                id:xItem
-                                width: txt.contentWidth+app.fs*2
-                                height: app.fs*2
-                                color: xItem.border.width!==0?app.c1:app.c2
-                                radius: unikSettings.radius
-                                border.width: fileName===app.ca?unikSettings.borderWidth:0
-                                border.color: fileName===app.ca?app.c2:app.c1
-                                anchors.verticalCenter: parent.verticalCenter
-                                visible:(''+fileName).indexOf('link')===0&&(''+fileName).indexOf('.ukl')>0
-                                antialiasing: true
-                                onColorChanged: {
-                                    if(xItem.border.width!==0){
-                                        app.ca=app.al[index]
-                                        lv.currentIndex=index
-                                        psec.width=0
-                                    }
-                                }
-                                Rectangle{
-                                    id: borde
-                                    anchors.fill: parent
-                                    radius: parent.radius
-                                    border.width: unikSettings.borderWidth
-                                    border.color: xItem.border.width!==0?app.c2:app.c4
-                                    color: 'transparent'
-                                    antialiasing: true
-                                }
-                                MouseArea{
-                                    anchors.fill: parent
-                                    onClicked: {
-                                        app.ci=index
-                                        app.ca=fileName
-                                        flick.contentY=(app.fs*2+app.fs*0.25)*index-app.height/2
+                        }
+                        Rectangle{
+                            id: borde
+                            anchors.fill: parent
+                            radius: parent.radius
+                            border.width: unikSettings.borderWidth
+                            border.color: xItem.border.width!==0?app.c2:app.c4
+                            color: 'transparent'
+                            antialiasing: true
+                        }
+                        MouseArea{
+                            anchors.fill: parent
+                            onClicked: {
+                                app.ci=index
+                                app.ca=fileName
+                                lv.currentIndex=index
+                                flick.contentY=(app.fs*2+app.fs*0.25)*index-app.height/2
 
-                                        if(tlaunch.running){
-                                            tlaunch.stop()
-                                            app.sec=0
-                                            psec.width=0
-                                        }else{
-                                            tlaunch.start()
-                                        }
-                                    }
-                                    onDoubleClicked: {
-                                        /*var p=unik.getFile(appsDir+'/'+fileName)
-                                unik.ejecutarLineaDeComandoAparte('"'+appExec+'" -cfg '+p)
-                                app.close()*/
-                                        app.ci=index
-                                        app.ca=fileName
-                                        flick.contentY=(app.fs*2+app.fs*0.25)*index-app.height/2
-                                        run()
-                                    }
+                                if(tlaunch.running){
+                                    tlaunch.stop()
+                                    app.sec=0
+                                    psec.width=0
+                                }else{
+                                    tlaunch.start()
                                 }
-                                UText {
-                                    id: txt
-                                    text: (''+fileName).substring(5, (''+fileName).length-4)
-                                    font.pixelSize: app.fs
-                                    color:xItem.border.width!==0?app.c2:app.c1
-                                    anchors.centerIn: parent
+                            }
+                            onDoubleClicked: {
+                                lv.currentIndex=index
+                                flick.contentY=(app.fs*2+app.fs*0.25)*index-app.height/2
+
+                                var mn=''
+                                if(Qt.platform.os==='android'){
+                                    mn='link_android-apps.ukl'
+                                }else{
+                                    mn='link_unik-tools.ukl'
                                 }
-                                Timer{
-                                    running: true
-                                    repeat: true
-                                    interval: 250
-                                    onTriggered: {
-                                        if(xItem.border.width!==0){
-                                            app.ci=index
-                                        }
-                                    }
+                                if(fileName===mn){
+                                    return
+                                }
+                                tlaunch.stop()
+                                xConfig.opacity=1.0
+                                xLinkEditor.visible=true
+                                tiLinkFile.text=fileName.replace('link_', '').replace('.ukl', '')
+                                //btnDelete.visible=true
+                            }
+                        }
+                        UText {
+                            id: txt
+                            text: (''+fileName).substring(5, (''+fileName).length-4)
+                            font.pixelSize: app.fs
+                            color:xItem.border.width!==0?app.c2:app.c1
+                            anchors.centerIn: parent
+                        }
+                        Timer{
+                            running: true
+                            repeat: true
+                            interval: 250
+                            onTriggered: {
+                                if(xItem.border.width!==0){
+                                    app.ci=index
                                 }
                             }
                         }
-                        Component.onCompleted: {
-
-                            app.al.push(fileName)
-                            if((''+fileName).indexOf('link')===0&&(''+fileName).indexOf('.json')>0&&!app.prima){
-                                app.ca=app.al[index]
-                                app.prima=true
-                                tap.color='black'
-                                xP.visible=true
+                        Rectangle{
+                            id: xTxtStatus
+                            width: app.fs*10
+                            height: txtStatus.contentHeight+app.fs
+                            border.width: unikSettings.borderWidth
+                            border.color: app.c2
+                            color: app.c1
+                            radius: unikSettings.radius/2
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.left: parent.right
+                            anchors.leftMargin: statusIcon.width+app.fs
+                            visible: false
+                            antialiasing: true
+                            UText {
+                                id: txtStatus
+                                width: parent.width-app.fs
+                                wrapMode: Text.WordWrap
+                                anchors.centerIn: parent
                             }
-                            if( tlaunch.enabled){
-                                tinit.restart()
+                        }
+                        BotonUX{
+                            id: btnDelete
+                            text: unikSettings.lang==='es'?'Eliminar':'Delete'
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.left: xTxtStatus.right
+                            anchors.leftMargin: app.fs
+                            visible: xTxtStatus.visible
+                            onClicked: {
+                                app.al=[]
+                                unik.deleteFile(pws+'/'+fileName)
+                            }
+                            UBg{opacity: 1.0}
+                        }
+                    }
+                    Rectangle{
+                        id: statusIcon
+                        width: app.fs*1.2
+                        height: app.fs*1.2
+                        radius: width*0.5
+                        border.width: unikSettings.borderWidth
+                        border.color: app.c2
+                        color: app.c1
+                        visible: txtStatus.text!==''
+                        antialiasing: true
+                        anchors.verticalCenter: parent.verticalCenter
+                        property string uHover: app.uHoverCa
+                        onUHoverChanged: {
+                            if(uHover!==fileName)xTxtStatus.visible=false
+                        }
+                        Timer{
+                            id: tStatusIcon
+                            running: false
+                            repeat: false
+                            interval: 5000
+                            onTriggered: {
+                                xTxtStatus.visible=false
+                            }
+                        }
+                        Text{
+                            text: '<b>!</b>'
+                            color: app.c2
+                            font.pixelSize: app.fs
+                            anchors.centerIn: parent
+                        }
+                        MouseArea{
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onEntered: {
+                                xTxtStatus.visible=true
+                                tStatusIcon.restart()
+                                app.uHoverCa=fileName
+                            }
+                            onExited: {
+                                tStatusIcon.restart()
                             }
                         }
                     }
                 }
-
+                Component.onCompleted: {
+                    app.al.push(fileName)
+                    var folderMain=fileName.replace('link_','').replace('.ukl','')
+                    var mainUrl=pws+'/'+folderMain+'/main.qml'
+                    if(!unik.fileExist(mainUrl)&&(''+unik.getFile(pws+'/'+fileName).indexOf('-git=')<0)){
+                        var msg=unikSettings.lang==='es'?'Falta archivo principal!':'Main file not found!'
+                        txtStatus.text=msg
+                        tlaunch.stop()
+                        return
+                    }
+                    if((''+fileName).indexOf('link')===0&&(''+fileName).indexOf('.json')>0&&!app.prima){
+                        app.ca=app.al[index]
+                        app.prima=true
+                        tap.color='black'
+                        xP.visible=true
+                    }
+                    if( tlaunch.enabled){
+                        tinit.restart()
+                    }
+                }
             }
-        }
-        Text {
-            text: fl.folder
-            font.pixelSize: app.fs*2
-            color:app.c2
-            visible: false
         }
         Rectangle{
             id: xConfig
@@ -284,7 +385,6 @@ ApplicationWindow {
             visible: opacity!==0.0
             opacity: 0.0
             clip: true
-            antialiasing: true
             property int wmax:btnUX5.width+btnUX6.width+btnUX7.width+btnUX8.width<btnUX1.width+btnUX2.width+btnUX3.width+btnUX4.width? btnUX1.width+btnUX2.width+btnUX3.width+btnUX4.width+(btnUX7.width+app.fs*2):btnUX5.width+btnUX6.width+btnUX7.width+btnUX8.width+(btnUX7.width+app.fs*2)
             property int cantFocus: 12
             property int currentFocus: 1
@@ -311,7 +411,7 @@ ApplicationWindow {
             Column{
                 id: colConfig
                 anchors.centerIn: parent
-                spacing: app.fs*unikSettings.padding
+                spacing: (app.fs*unikSettings.padding)+2
                 opacity: parent.opacity===1.0?1.0:0.0
                 onOpacityChanged:{
                     if(opacity===0.0)xConfig.opacity=0.0
@@ -325,7 +425,7 @@ ApplicationWindow {
                 Row{
                     id: rowBtnSettings
                     anchors.horizontalCenter: parent.horizontalCenter
-                    spacing: app.fs*unikSettings.padding
+                    spacing: (app.fs*unikSettings.padding)+2
                     onWidthChanged: xConfig.width=xConfig.wmax
                     BotonUX{
                         id: btnUX1
@@ -359,7 +459,7 @@ ApplicationWindow {
                         text: unikSettings.lang==='es'?'Ancho de Borde':'Width Radius'
                         onClicked: {
                             if(unikSettings.borderWidth>app.fs*0.05){
-                                unikSettings.borderWidth-=app.fs*0.025
+                                unikSettings.borderWidth-=app.fs*0.05
                             }else{
                                 unikSettings.borderWidth=app.fs*0.5
                             }
@@ -370,8 +470,8 @@ ApplicationWindow {
                         UnikFocus{visible: xConfig.currentFocus===4}
                         text: unikSettings.lang==='es'?'Espacio':'Space'
                         onClicked: {
-                            if(unikSettings.padding>0.2){
-                                unikSettings.padding-=0.05
+                            if(unikSettings.padding>0.1){
+                                unikSettings.padding-=0.1
                             }else{
                                 unikSettings.padding=1.0
                             }
@@ -381,7 +481,7 @@ ApplicationWindow {
                 Row{
                     id: rowBtnSettings2
                     anchors.horizontalCenter: parent.horizontalCenter
-                    spacing: app.fs*unikSettings.padding
+                    spacing: (app.fs*unikSettings.padding)+2
                     onWidthChanged: xConfig.width=xConfig.wmax
                     BotonUX{
                         text: unikSettings.lang==='es'?'Languaje':'Lenguaje'
@@ -425,7 +525,6 @@ ApplicationWindow {
                         id: ufACT;
                         visible: xConfig.currentFocus===9
                         objectName: 'aaa'
-                        radius: parent.radius
                         property int currentFocus: -1
                         property int cantFocus: appColorsThemes.cantColors-1
                         onVisibleChanged: visible?currentFocus=0:currentFocus=-1
@@ -434,10 +533,18 @@ ApplicationWindow {
                 Row{
                     id: rowBtnSettingsFoot
                     anchors.horizontalCenter: parent.horizontalCenter
-                    spacing: app.fs*0.5
+                    spacing: (app.fs*unikSettings.padding)+2
+                    BotonUX{
+                        id: btnUX9
+                        UnikFocus{visible: xConfig.currentFocus===10}
+                        text: tiLinkFile.text!==''?unikSettings.lang==='es'?'Editar Enlace':'Link Edit':unikSettings.lang==='es'?'Crear Enlace':'Link Make'
+                        onClicked: {
+                            xLinkEditor.visible=true
+                        }
+                    }
                     BotonUX{
                         id: btnUX5
-                        UnikFocus{visible: xConfig.currentFocus===10}
+                        UnikFocus{visible: xConfig.currentFocus===11}
                         text: unikSettings.lang==='es'?'Ayuda':'Help'
                         onClicked: {
                             help.visible=true
@@ -447,13 +554,13 @@ ApplicationWindow {
                         id: btnUX6
                         text: unikSettings.lang==='es'?'Cerrar ':'Close'
                         onClicked:xConfig.opacity=0.0
-                        UnikFocus{visible: xConfig.currentFocus===11}
+                        UnikFocus{visible: xConfig.currentFocus===12}
                     }
                     BotonUX{
                         id: btnUX7
                         text: unikSettings.lang==='es'?'Cerrar Unik':'Close Unik'
                         onClicked:Qt.quit()
-                        UnikFocus{visible: xConfig.currentFocus===12}
+                        UnikFocus{visible: xConfig.currentFocus===13}
                     }
                 }
             }
@@ -464,6 +571,7 @@ ApplicationWindow {
                 border.color: parent.border.color
                 color: parent.color
                 visible: false
+                antialiasing: true
                 property var arrY: []
                 onVisibleChanged: {
                     if(!visible){
@@ -483,8 +591,9 @@ ApplicationWindow {
                     onTriggered: xConfig.currentFocus++
                 }
                 Column{
+                    id: colXFF1
                     anchors.centerIn: parent
-                    spacing: app.fs*unikSettings.padding
+                    spacing: (app.fs*unikSettings.padding)+2
                     width: parent.width
                     Row{
                         id: rowFF1
@@ -513,7 +622,7 @@ ApplicationWindow {
                         Rectangle{
                             id: xTxtExample
                             width: xFF.width-lvFF.width-app.fs*6
-                            height: lvFF.height
+                            height: xFF.height-rowFF1.height-colXFF1.spacing-app.fs
                             color: app.c1
                             border.width: unikSettings.borderWidth
                             border.color: app.c2
@@ -563,6 +672,7 @@ ApplicationWindow {
                                 color: app.c1
                                 border.width: unikSettings.borderWidth
                                 border.color: app.c2
+                                antialiasing: true
                                 Text {
                                     id: txtTitFFExample
                                     text: unikSettings.lang==='es'?'Ejemplo de Texto':'Example Text'
@@ -578,11 +688,18 @@ ApplicationWindow {
                         ListView{
                             id: lvFF
                             width: app.fs*8
-                            height: xFF.height-btnUXCloseListFF.height-spacing-app.fs*unikSettings.padding
+                            height: 1// xFF.height-btnUXCloseListFF.height-spacing-app.fs*unikSettings.padding
                             model: Qt.fontFamilies()
                             delegate: delFF
-                            spacing: app.fs*unikSettings.padding
+                            spacing: (app.fs*unikSettings.padding)+2
+                            displayMarginBeginning: heightButton*4+spacing*4
+                            displayMarginEnd: heightButton*4+spacing*4
+                            anchors.verticalCenter: parent.verticalCenter
+                            property int uCurrentIndex: currentIndex
+                            property int heightButton:app.fs*2
                             onCurrentItemChanged: {
+                               //y=currentIndex>uCurrentIndex?0-lvFF.height/2:lvFF.height/2
+                                //uCurrentIndex=currentIndex
                                 //                                var item = lvFF.i(currentIndex)
                                 //                                console.log('XXXXXXXXXXXXXXXXXXXx'+item)
                                 //                                lvFF.contentY=item.y
@@ -591,17 +708,27 @@ ApplicationWindow {
                                 id: delFF
                                 BotonUX{
                                     id: itemFF
-                                    text: modelData
-                                    fontFamily: modelData
+                                    text: ''
                                     onClicked: unikSettings.fontFamily='"'+modelData+'"'
+                                    width:example.contentWidth+app.fs*unikSettings.padding+app.fs
+                                    height: example.contentHeight+app.fs*unikSettings.padding+app.fs
                                     anchors.horizontalCenter: parent.horizontalCenter
                                     onYChanged: xFF.arrY[index]=itemFF.y
                                     UnikFocus{visible: lvFF.currentIndex===index}
+                                    Text {
+                                        id: example
+                                        text: modelData
+                                        font.family: modelData
+                                        font.pixelSize: app.fs
+                                        color: app.c2
+                                        anchors.centerIn: parent
+                                    }
                                     Component.onCompleted: {
                                         if(width>lvFF.width){
                                             lvFF.width=width+app.fs
                                         }
                                         xFF.arrY.push(itemFF.y)
+                                        lvFF.heightButton=height
                                     }
                                 }
                             }
@@ -614,6 +741,118 @@ ApplicationWindow {
                     lvFF.currentIndex=un
                 }
             }
+            Rectangle{
+                id: xLinkEditor
+                width: parent.width
+                height: parent.height
+                color: app.c1
+                border.width: unikSettings.borderWidth
+                border.color: app.c2
+                radius: app.fs*0.25
+                visible: false
+                MouseArea{
+                    anchors.fill: parent
+                }
+                Column{
+                    anchors.centerIn: parent
+                    spacing: app.fs*0.5
+                    property int radius: unikSettings.radius/2
+                    Row{
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: app.fs*0.5
+                        UText{
+                            id: labelLE1
+                            text: unikSettings.lang==='es'?'Enlace: ':'Link: '
+                            anchors.verticalCenter: parent.verticalCenter
+                        }
+                        Rectangle{
+                            border.width: unikSettings.borderWidth
+                            border.color: app.c2
+                            width: xLinkEditor.width*0.5
+                            height: app.fs*2
+                            color: app.c1
+                            clip: true
+                            anchors.verticalCenter: parent.verticalCenter
+                            antialiasing: true
+                            TextInput{
+                                id: tiLinkFile
+                                //text: app.ca.replace('link_','').replace('.ukl', '')
+                                width: parent.width-app.fs
+                                height: app.fs
+                                color: app.c2
+                                font.pixelSize: app.fs
+                                anchors.centerIn: parent
+                                maximumLength: 25
+                                onTextChanged: {
+                                    var linkFileName=pws+'/link_'+tiLinkFile.text+'.ukl'
+                                    var linkFileData=unik.getFile(linkFileName)
+                                    if(unik.fileExist(linkFileName)){
+                                        tiLinkFileContent.text=linkFileData
+                                    }
+                                }
+                            }
+                        }
+                        BotonUX{
+                            id: btnUXSetLinkCancel
+                            UnikFocus{id: ufSetLinkCancel; visible:false}
+                            text: unikSettings.lang==='es'?'Cancelar':'Cancel'
+                            anchors.verticalCenter: parent.verticalCenter
+                            onClicked: {
+                                xLinkEditor.visible=false
+                            }
+                        }
+                        BotonUX{
+                            id: btnUXSetLink
+                            UnikFocus{id: ufSetLink; visible:false}
+                            text: unikSettings.lang==='es'?'Crear':'Make'
+                            anchors.verticalCenter: parent.verticalCenter
+                            visible: Qt.platform.os!=='android'?tiLinkFile.text!=='unik-tools'&&tiLinkFileContent.text!==''&&tiLinkFile.text!=='':tiLinkFile.text!=='android-apps'&&tiLinkFileContent.text!==''&&tiLinkFile.text!==''
+                            onClicked: {
+                                var linkFileName=pws+'/link_'+tiLinkFile.text+'.ukl'
+                                unik.setFile(linkFileName, tiLinkFileContent.text)
+                                //app.al.push('link_'+tiLinkFile.text+'.ukl')
+                                //app.prima=false
+                                //app.ci=0
+                                //app.ca='link_'+tiLinkFile.text+'.ukl'
+                                xLinkEditor.visible=false
+                            }
+                            Timer{
+                                running: xLinkEditor.visible
+                                repeat: true
+                                interval: 500
+                                onTriggered: {
+                                    var linkFileName=pws+'/link_'+tiLinkFile.text+'.ukl'
+                                    var linkFileData=unik.getFile(linkFileName)
+                                    if(unik.fileExist(linkFileName)&&tiLinkFileContent.text!==linkFileData){
+                                        btnUXSetLink.text=unikSettings.lang==='es'?'Modificar':'Modify'
+                                    }else{
+                                        btnUXSetLink.text=unikSettings.lang==='es'?'Crear':'Make'
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    Rectangle{
+                        border.width: unikSettings.borderWidth
+                        border.color: app.c2
+                        width: xLinkEditor.width-app.fs
+                        height: xLinkEditor.height*0.5
+                        color: app.c1
+                        clip: true
+                        antialiasing: true
+                        TextInput{
+                            id: tiLinkFileContent
+                            width: parent.width-app.fs
+                            height: parent.height-app.fs
+                            wrapMode: Text.WordWrap
+                            color: app.c2
+                            font.pixelSize: app.fs
+                            anchors.centerIn: parent
+                            maximumLength: 500
+                        }
+                    }
+                }
+            }
         }
         Text {
             text: '\uf061'
@@ -621,12 +860,12 @@ ApplicationWindow {
             font.pixelSize: app.fs*2
             color:app.c2
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: app.fs*0.5
+            anchors.bottomMargin: app.fs*2
             anchors.left: parent.left
             anchors.leftMargin: app.fs*0.5
             opacity: xConfig.opacity===0.0&&!help.visible?1.0:0.0
             rotation: -180
-            z:flick.z-1
+            z:flick.z+1
             Behavior on opacity{NumberAnimation{duration: 500}}
             BotonUX{
                 text: unikSettings.lang==='es'?'Configurar':'Config'
@@ -650,23 +889,28 @@ ApplicationWindow {
             border.width: unikSettings.borderWidth
             border.color: app.c2
             anchors.centerIn: parent
+            clip: true
             antialiasing: true
-            Text {
-                id: txtHelp
-                text: unikSettings.lang==='es'?h1:h2
-                font.pixelSize: app.fs
-                font.family: unikSettings.fontFamily
-                anchors.centerIn: parent
-                color: app.c2
-                width: parent.width-app.fs*2
-                textFormat: Text.RichText
-                horizontalAlignment: Text.AlignHCenter
-                property string h1
-                property string h2
-                Component.onCompleted: {
-                    h1='<h1>Ayuda de Unik Launcher</h1><p><b>Teclas de Navegaciòn</b></p><ul><li>Izquierda: Salir o Retroceder</li><li>Derecha: Entrar o Ejecutar</li><li>Arriba: Navega entrando a areas</li><li>Abajo: Navega saltando areas</li><li>Escape: Escape, cierre o apagado</li><li>Intro: Entrar o Ejecutar</li></ul><p>Màs informaciòn sobre Unik:</p><p>Unik fue creado gracias a Qt Open Source bajo las licencias LGPL. Màs informaciòn en <a href="http://www.qt.io">qt.io</a><</p></p><p>Sitio Web: www.unikode.org</p><p>Correo Electrònico: nextsigner@gmail.com</p><p>Whatsapp: +541138024370</p><p><b>GitHub: </b>https://github.com/nextsigner/unik</p><p><b>Donaciones: </b>patreon.com/unik</p>'
+            Flickable{
+                anchors.fill: parent
+                contentWidth: parent.width
+                contentHeight: txtHelp.height+app.fs*2
+                Text {
+                    id: txtHelp
+                    text: unikSettings.lang==='es'?h1:h2
+                    font.pixelSize: app.fs
+                    font.family: unikSettings.fontFamily
+                    color: app.c2
+                    width: parent.width-app.fs*2
+                    textFormat: Text.RichText
+                    horizontalAlignment: Text.AlignHCenter
+                    property string h1
+                    property string h2
+                    Component.onCompleted: {
+                        h1='<h1>Ayuda de Unik Launcher</h1><p><b>Teclas de Navegaciòn</b></p><ul><li>Izquierda: Salir o Retroceder</li><li>Derecha: Entrar o Ejecutar</li><li>Arriba: Navega entrando a areas</li><li>Abajo: Navega saltando areas</li><li>Escape: Escape, cierre o apagado</li><li>Intro: Entrar o Ejecutar</li></ul><p>Màs informaciòn sobre Unik:</p><p>Unik fue creado gracias a Qt Open Source bajo las licencias LGPL. Màs informaciòn en <a href="http://www.qt.io">qt.io</a><</p></p><p>Sitio Web: www.unikode.org</p><p>Correo Electrònico: nextsigner@gmail.com</p><p>Whatsapp: +541138024370</p><p><b>GitHub: </b>https://github.com/nextsigner/unik</p><p><b>Donaciones: </b>patreon.com/unik</p>'
 
-                    h2='<h1>Unik Launcher Help</h1><p><b>Keyboard Navigation</b></p><ul><li>Left: Quit or Back</li><li>Right: Get in or Run</li><li>Up: Navigate getting to area</li><li>Down: Navigate jumping to area</li><li>Escape: Escape, close or quit</li><li>Enter: Get in or Run</li></ul><p>About Unik:</p><p>Unik was made with Qt Open Source under LGPL licence. More information in <a href="http://www.qt.io">qt.io</a><</p><p>Web Site: www.unikode.org</p><p>E-Mail: nextsigner@gmail.com</p><p>Whatsapp: +541138024370</p><p><b>GitHub: </b>https://github.com/nextsigner/unik</p><p><b>Donate: </b>patreon.com/unik</p>'
+                        h2='<h1>Unik Launcher Help</h1><p><b>Keyboard Navigation</b></p><ul><li>Left: Quit or Back</li><li>Right: Get in or Run</li><li>Up: Navigate getting to area</li><li>Down: Navigate jumping to area</li><li>Escape: Escape, close or quit</li><li>Enter: Get in or Run</li></ul><p>About Unik:</p><p>Unik was made with Qt Open Source under LGPL licence. More information in <a href="http://www.qt.io">qt.io</a><</p><p>Web Site: www.unikode.org</p><p>E-Mail: nextsigner@gmail.com</p><p>Whatsapp: +541138024370</p><p><b>GitHub: </b>https://github.com/nextsigner/unik</p><p><b>Donate: </b>patreon.com/unik</p>'
+                    }
                 }
             }
             Boton{//Close
@@ -674,7 +918,7 @@ ApplicationWindow {
                 w:app.fs*2
                 h: w
                 t: "\uf00d"
-                d:'Close'
+                d:unikSettings.lang==='es'?'Cerrar':'Close'
                 b:app.c1
                 c: app.c2
                 anchors.right: parent.right
@@ -686,6 +930,93 @@ ApplicationWindow {
                 }
             }
         }
+
+        Rectangle{
+            id: xPb
+            opacity: 0.0
+            width: Screen.desktopAvailableWidth<Screen.desktopAvailableHeight ? Screen.desktopAvailableWidth*0.95 : Screen.desktopAvailableHeight*0.95
+            height: titDownloadLog.contentHeight+log.contentHeight+pblaunch.height+app.fs
+            anchors.centerIn: parent
+            color: app.c1
+            //radius: unikSettings.radius
+            border.width: unikSettings.borderWidth
+            border.color: app.c2
+            clip:true
+            antialiasing: true
+            Behavior on opacity{
+                NumberAnimation{duration: 1000}
+            }
+            Column{
+                id: colDownloadLog
+                anchors.centerIn: parent
+                spacing: app.fs*0.5
+                Text{
+                    id: titDownloadLog
+                    color: app.c2
+                    width: app.width<app.height ? app.width*0.9 : app.height*0.9
+                    height: contentHeight
+                    wrapMode: Text.WordWrap
+                    font.pixelSize: app.fs
+                    horizontalAlignment: Text.AlignHCenter
+                    text: unikSettings.lang==='es'?'<b>Descargando '+app.ca+'</b>':'<b>Downloading '+app.ca+'</b>'
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+                Text{
+                    id: log
+                    color: app.c2
+                    width: app.width<app.height ? app.width*0.9 : app.height*0.9
+                    height: contentHeight
+                    wrapMode: Text.WordWrap
+                    font.pixelSize: app.fs*0.5
+                    horizontalAlignment: Text.AlignHCenter
+                    function setTxtLog(t){
+                        var  d=(''+t).replace(/\n/g, ' ')
+                        var p=true
+                        if(d.indexOf('Socket')>=0){
+                            p=false
+                        }else if(d.indexOf('download git')>=0){
+                            var m0=''+d.replace('download git ','')
+                            var m1=m0.split(' ')
+                            if(m1.length>1){
+                                var m2=(''+m1[1]).replace('%','')
+                                //unik.setFile('/home/nextsigner/nnn', ''+m2)
+                                var m3=parseInt(m2.replace(/ /g,''))
+                                pblaunch.width=pblaunch.parent.width/100*m3
+                            }
+
+                        }
+                        if(p){
+                            log.text=t
+                        }
+                    }
+                }
+
+                Rectangle{
+                    id:pblaunch
+                    height: app.fs*0.5
+                    width: 0
+                    color: 'red'
+                }
+            }
+
+            Boton{//Close
+                id: btnCloseDownload
+                w:app.fs
+                h: w
+                t: "\uf00d"
+                d:unikSettings.lang==='es'?'Cerrar':'Close'
+                b:app.c1
+                c: app.c2
+                anchors.right: parent.right
+                anchors.rightMargin: app.fs*0.5
+                anchors.top: parent.top
+                anchors.topMargin: app.fs*0.5
+                onClicking: {
+                    xPb.visible=false
+                }
+            }
+        }
+
     }
     Shortcut{
         sequence: 'Return'
@@ -928,6 +1259,11 @@ ApplicationWindow {
             psec.width=psec.parent.width/5*(app.sec-1)
         }
     }
+    Component.onCompleted:{
+        if(Qt.platform.os==='android'){
+            unik.debugLog=true
+        }
+    }
     function setColors(){
         var nc=unikSettings.currentNumColor
         var cc1=unikSettings.defaultColors.split('|')
@@ -967,12 +1303,64 @@ MediaPlayer{
                 params+=','+args[i]
             }
         }
-        unik.setUnikStartSettings(params)
-        console.log('New USS params: '+params)
+        console.log('Launching '+appSettings.uApp+'...')
+
+
         if(Qt.platform.os==='android'){
-            //unik.restartApp()
-            
+            var m0
+            var m1
+            var m2
+            var mn
+
+            if(params.indexOf('-git=')>=0&&params.indexOf('-git=')!==params.length-1&&params.length>5){
+                app.downloading=true
+                m0=params.split('-git=')
+                m1=m0[1].split(',')
+                m2=m1[0].split('/')
+                mn=m2[m2.length-1].replace(/.git/g, '')
+
+                unik.cd(pws)
+                unik.mkdir(pws+'/'+mn)
+                xPb.opacity=1.0
+                var d = unik.downloadGit(m1[0], pws)
+                if(app.downloading){
+                    unik.cd(pws+'/'+mn)
+                    engine.load(pws+'/'+mn+'/main.qml')
+                    app.close()
+                    return
+                }
+            }
+            if(params.indexOf('-zip=')>=0&&params.indexOf('-zip=')!==params.length-1&&params.length>5){
+                m0=params.split('-zip=')
+                m1=m0[1].split(',')
+                m2=m1[0].split('/')
+                mn=m2[m2.length-1].replace(/.zip/g, '')
+
+                unik.cd(pws)
+                unik.mkdir(pws+'/'+mn)
+                var d = unik.runAppFromZip(m1[0], pws)
+                unik.cd(pws+'/'+mn)
+                engine.load(pws+'/'+mn+'/main.qml')
+                app.close()
+                return
+
+            }
+
+            if(params.indexOf('-folder=')>=0&&params.indexOf('-folder=')!==params.length-1&&params.length>5){
+                m0=params.split('-folder=')
+                m1=m0[1].split(',')
+                m2=m1[0].split('/')
+                mn=m2[m2.length-1]
+
+                unik.cd(pws)
+                unik.mkdir(pws+'/'+mn)
+                engine.load(pws+'/'+mn+'/main.qml')
+                app.close()
+                return
+            }
         }else{
+            unik.setUnikStartSettings(params)
+            console.log('New USS params: '+params)
             unik.restartApp("")
         }
         //app.close()

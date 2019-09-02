@@ -6,6 +6,5 @@ Rectangle {
     radius: parseInt(r.parent.radius)
     color: app.c1
     opacity: 0.5
-    z:r,parent.z-1
-    antialiasing: true
+    z:r.parent.z-1
 }
