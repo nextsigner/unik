@@ -5,14 +5,14 @@
 
 #1) Edit default.desktop
 
-#2)  ./linuxdeployqt-6-x86_64.AppImage /home/nextsigner/nsp/unik/build_linux/unik -qmldir=/home/nextsigner/nsp/unik -qmake=/home/nextsigner/Qt/5.12.3/gcc_64/bin/qmake -verbose=3
+#2)  ~/linuxdeployqt-continuous-x86_64.AppImage /media/nextsigner/ZONA-A11/nsp/unik/build_linux/unik -qmldir=/media/nextsigner/ZONA-A11/nsp/unik -qmake=/home/nextsigner/Qt/5.12.3/gcc_64/bin/qmake -verbose=3
 
 
 #3 optional) Copy full plugins and qml folder for full qtquick support.
 #Copy <QT-INSTALL>/gcc_64/qml and <QT-INSTALL>/gcc_64/plugins folders manualy to the executable folder location.
 
 #Make Unik AppImage
-#4) ./linuxdeployqt-6-x86_64.AppImage /home/nextsigner/nsp/unik/build_linux/unik -qmldir=/home/nextsigner/nsp/unik -qmake=/home/nextsigner/Qt/5.12.3/gcc_64/bin/qmake -verbose=3 -bundle-non-qt-libs -no-plugins -appimage
+#4) ~/linuxdeployqt-continuous-x86_64.AppImage /media/nextsigner/ZONA-A11/nsp/unik/build_linux/unik -qmldir=/media/nextsigner/ZONA-A11/nsp/unik -qmake=/home/nextsigner/Qt/5.12.3/gcc_64/bin/qmake -verbose=3 -bundle-non-qt-libs -no-plugins -appimage
 
 #5 optional) Copy nss3 files into
 #cp -r /usr/lib/x86_64-linux-gnu/nss <executable path>/
@@ -21,15 +21,17 @@ message(linux.pri is loaded)
 
 !android{
     message(Linux NO ANDROID)
+    OTHER_FILES+=build_linux/default.desktop
     !contains(QMAKE_HOST.arch, arm.*):{
         QT += webengine webview
         DD1=$$replace(PWD, /unik,/unik/build_linux)
         DESTDIR= $$DD1
         message(Ubicaciòn del Ejecutable: $$DESTDIR)
 
+
         FILE_VERSION_NAME=$$replace(PWD, /unik,/unik/build_linux/linux_version)
         FILE_VERSION_NAME2=\"$$FILE_VERSION_NAME\"
-        write_file(/tmp/linux_version, APPVERSION)
+        write_file($$PWD/build_linux/linux_version, APPVERSION)
         message(File version location: $$FILE_VERSION_NAME2)
 
         #Building Quazip from Ubuntu 16.10
@@ -41,9 +43,6 @@ message(linux.pri is loaded)
         HEADERS += $$PWD/quazip/*.h
         SOURCES += $$PWD/quazip/*.cpp
         SOURCES += $$PWD/quazip/*.c
-        OTHER_FILES+=./resources/default.desktop
-        #Make Desktop Unik File
-        #message($$PWD/makeDesktopFile.sh unik_v4.4.4 $$DESTDIR/default.desktop)
 
             #Previus Linux Build Count
             PLBC=$$system(cat linux_build_count$$escape_expand(\n\t))
@@ -52,15 +51,7 @@ message(linux.pri is loaded)
             message(Linux Build Count: $$LBC)
 
            # QMAKE_POST_LINK += $$quote(echo $(($$PLBC + 1)) > linux_build_count$$escape_expand(\n\t))
-
-        #COPIAR ARCHIVOS DENTRO DE APPIMAGE
-        EXTRA_BINFILES += \
-        /tmp/linux_version
-        for(FILE,EXTRA_BINFILES){
-            QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}$$escape_expand(\n\t))
-            message(Copyng $${FILE} $${DESTDIR}$$escape_expand(\n\t))
-        }        
-    }else{
+   }else{
         #Set Working Directory for RPI3 compilation in /home/pi/nsp
         DESTDIR= /home/pi/unik
         message(Current Executable Path: $$DESTDIR)

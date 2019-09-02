@@ -62,6 +62,8 @@ win32 {
     }else{
         VERSION_MEN2=0$$VERSION_MEN1
     }
-    APPVERSION=$$VERSION_MAJ"."$$system(date +%W)$$VERSION_MEN2
-    message(App Version $$APPVERSION)
+    NUMSEM1=$$system(date +%W)
+    NUMSEM2=$$system("echo $(($$NUMSEM1 + 1))")
+    APPVERSION=$$VERSION_MAJ"."$$NUMSEM2$$VERSION_MEN2
+    message(Unix App Version $$APPVERSION)
 }
