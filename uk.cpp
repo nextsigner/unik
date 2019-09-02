@@ -2215,6 +2215,11 @@ QString UK::getFile(QByteArray n)
     return file.readAll();
 }
 
+bool UK::folderExist(const QByteArray folder)
+{
+    return  QDir(folder.constData()).exists();
+}
+
 bool UK::mkdir(const QString path)
 {
     QDir dir0(path);

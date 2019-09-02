@@ -1517,9 +1517,9 @@ int main(int argc, char *argv[])
     engine.addPluginPath(qmlImportPath);
     qInfo()<<"Import Path: "<<qmlImportPath;
     qInfo()<<"Current Dir: "<<QDir::currentPath();
-    qInfo()<<"1-->.>"<<engine.importPathList();
-    qInfo()<<"2-->.>"<<engine.pluginPathList();
-    qInfo()<<"3<<"<<QLibraryInfo::Qml2ImportsPath;
+    qInfo()<<"Engine Import Paths: "<<engine.importPathList();
+    qInfo()<<"Engine Plugin Paths: "<<engine.pluginPathList();
+    qInfo()<<"QLibraryInfo::Qml2ImportsPath: "<<QLibraryInfo::Qml2ImportsPath;
 
     /*if(uap.showLaunch||showLaunch){
                 mainQml="qrc:/appsListLauncher.qml";
@@ -1532,7 +1532,7 @@ int main(int argc, char *argv[])
     QByteArray prevMainQml=mainQml;
     mainQml=uap.showLaunch||showLaunch?":/appsListLauncher.qml":prevMainQml;
     engine.load(uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
-    QQmlComponent component(&engine, QUrl(QStringLiteral("qrc:/appsListLauncher.qml")));
+    QQmlComponent component(&engine, uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
     qInfo()<<"Init unik: "<<mainQml;
     // engine.load(QUrl(QStringLiteral("qrc:/appsListLauncher.qml")));
     //engine.load(mainQml);

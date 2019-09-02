@@ -339,6 +339,7 @@ public slots:
     void deleteFile(QByteArray f);
     bool setFile(QByteArray n, QByteArray d);
     QString getFile(QByteArray n);
+    bool folderExist(const QByteArray folder);
     bool mkdir(const QString path);
     QList<QString> getFolderFileList(const QByteArray folder);
     QString getUpkTempPath();

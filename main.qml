@@ -39,7 +39,15 @@ ApplicationWindow {
     property string pws: pws
     UnikSettings{
         id: unikSettings
-        //property string pws: pws
+        Component.onCompleted: {
+            var nc=unikSettings.currentNumColor
+            var cc1=unikSettings.defaultColors.split('|')
+            var cc2=cc1[nc].split('-')
+            app.c1=cc2[0]
+            app.c2=cc2[1]
+            app.c3=cc2[2]
+            app.c4=cc2[3]
+        }
     }
     Item{
         id:xApp

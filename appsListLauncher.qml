@@ -354,12 +354,39 @@ ApplicationWindow {
                 Component.onCompleted: {
                     app.al.push(fileName)
                     var folderMain=fileName.replace('link_','').replace('.ukl','')
-                    var mainUrl=pws+'/'+folderMain+'/main.qml'
-                    if(!unik.fileExist(mainUrl)&&(''+unik.getFile(pws+'/'+fileName).indexOf('-git=')<0)){
-                        var msg=unikSettings.lang==='es'?'Falta archivo principal!':'Main file not found!'
-                        txtStatus.text=msg
-                        tlaunch.stop()
-                        return
+                    var mainUrlPWS=pws+'/'+folderMain+'/main.qml'
+                    var linkData=unik.getFile(pws+'/'+fileName)
+                    if(!unik.fileExist(mainUrlPWS)&&linkData.indexOf('-git=')<0){
+                        if(linkData.indexOf('-folder=')>=0){
+                            var msg
+                            var m0=linkData.split('\n')
+                            var m1=m0[0].split('-folder=')
+                            var m2=m1[1].split(' ')
+                            console.log('Checking Item Launch folder exist: '+m2[0])
+                            if(!unik.fileExist(m2[0])){
+                                msg=unikSettings.lang==='es'?'La carpeta no existe':'Folder not found'
+                                console.log('Item Launch folder no exist!')
+                                txtStatus.text=msg
+                                tlaunch.stop()
+                                return
+                            }else{
+                                console.log('Item Launch folder exist!')
+                                console.log('Checking Item main file exist: '+m2[0]+'/main.qml')
+                                if(!unik.fileExist(m2[0]+'/main.qml')){
+                                    console.log('Item Launch main file not exist!')
+                                    msg=unikSettings.lang==='es'?'El archivo principal no existe':'Main file not exist'
+                                    txtStatus.text=msg
+                                    tlaunch.stop()
+                                    return
+                                }
+                                console.log('Item Launch main file exist!')
+                            }
+                        }else{
+                            msg=unikSettings.lang==='es'?'Faltan argumentos.':'Arguments not found.'
+                            txtStatus.text=msg
+                            tlaunch.stop()
+                            return
+                        }
                     }
                     if((''+fileName).indexOf('link')===0&&(''+fileName).indexOf('.json')>0&&!app.prima){
                         app.ca=app.al[index]
@@ -911,8 +938,38 @@ ApplicationWindow {
                             var linkFileName=pws+'/link_'+tiLinkFile.text+'.ukl'
                             var folderMain=appSettings.uApp.replace('link_','').replace('.ukl','')
                             var mainUrl=pws+'/'+folderMain+'/main.qml'
+                            var linkData=unik.getFile(pws+'/'+appSettings.uApp)
                             if(!unik.fileExist(mainUrl)&&tiLinkFileContent.text.indexOf('-git=')<0){
-                                labelStatus.text=unikSettings.lang==='es'?'El archivo principal no existe.':'The main file not exist.'
+                                if(linkData.indexOf('-folder=')>=0){
+                                    var msg
+                                    var m0=linkData.split('\n')
+                                    var m1=m0[0].split('-folder=')
+                                    var m2=m1[1].split(' ')
+                                    console.log('Checking Editor Launch folder exist: '+m2[0])
+                                    if(!unik.fileExist(m2[0])){
+                                        labelStatus.text=unikSettings.lang==='es'?'La carpeta no existe':'Folder not found'
+                                        console.log('Editor Launch folder no exist!')
+                                        return
+                                    }else{
+                                        console.log('Editor Launch folder exist!')
+                                        console.log('Checking Editor main file exist: '+m2[0]+'/main.qml')
+                                        if(!unik.fileExist(m2[0]+'/main.qml')){
+                                            console.log('Editor Launch main file not exist!')
+                                            labelStatus.text=unikSettings.lang==='es'?'El archivo principal no existe':'Main file not exist'
+                                            return
+                                        }
+                                        console.log('Editor Launch main file exist!')
+                                        unik.setFile(linkFileName, tiLinkFileContent.text)
+                                        xLinkEditor.visible=false
+                                        xConfig.opacity=0.0
+                                        tlaunch.start()
+                                    }
+                                }else{
+                                    msg=unikSettings.lang==='es'?'Faltan argumentos.':'Arguments not found.'
+                                    txtStatus.text=msg
+                                    tlaunch.stop()
+                                    return
+                                }
                             }else{
                                 if(unik.fileExist(mainUrl)&&tiLinkFileContent.text.indexOf('-folder=')<0&&tiLinkFileContent.text.indexOf('-git=')<0){
                                     labelStatus.text=unikSettings.lang==='es'?'Se requiere el argumento -folder=<Carpeta de archivo main.qml>\nPor ejemplo: C:/miApp/':'The argument is required -folder=<Folder to main.qml file>\nFor example: C:/myApp/'
@@ -928,15 +985,15 @@ ApplicationWindow {
                                     if(!unik.fileExist(m2[0])){
                                         labelStatus.text=unikSettings.lang==='es'?'La carpeta no existe':'Folder not found'
                                     }else{
-                                       if(!unik.fileExist(m2[0]+'/main.qml')){
-                                           labelStatus.text=unikSettings.lang==='es'?'El archivo principal no existe':'Main file not exist'
-                                           //return
-                                       }else{
-                                           unik.setFile(linkFileName, tiLinkFileContent.text)
-                                           xLinkEditor.visible=false
-                                           xConfig.opacity=0.0
-                                           tlaunch.start()
-                                       }
+                                        if(!unik.fileExist(m2[0]+'/main.qml')){
+                                            labelStatus.text=unikSettings.lang==='es'?'El archivo principal no existe':'Main file not exist'
+                                            //return
+                                        }else{
+                                            unik.setFile(linkFileName, tiLinkFileContent.text)
+                                            xLinkEditor.visible=false
+                                            xConfig.opacity=0.0
+                                            tlaunch.start()
+                                        }
                                     }
                                 }else{
                                     unik.setFile(linkFileName, tiLinkFileContent.text)
