@@ -363,7 +363,7 @@ ApplicationWindow {
                             var m1=m0[0].split('-folder=')
                             var m2=m1[1].split(' ')
                             console.log('Checking Item Launch folder exist: '+m2[0])
-                            if(!unik.fileExist(m2[0])){
+                            if(!unik.folderExist(m2[0])){
                                 msg=unikSettings.lang==='es'?'La carpeta no existe':'Folder not found'
                                 console.log('Item Launch folder no exist!')
                                 txtStatus.text=msg
@@ -938,7 +938,7 @@ ApplicationWindow {
                             var linkFileName=pws+'/link_'+tiLinkFile.text+'.ukl'
                             var folderMain=appSettings.uApp.replace('link_','').replace('.ukl','')
                             var mainUrl=pws+'/'+folderMain+'/main.qml'
-                            var linkData=unik.getFile(pws+'/'+appSettings.uApp)
+                            var linkData=tiLinkFileContent.text
                             if(!unik.fileExist(mainUrl)&&tiLinkFileContent.text.indexOf('-git=')<0){
                                 if(linkData.indexOf('-folder=')>=0){
                                     var msg
@@ -946,9 +946,9 @@ ApplicationWindow {
                                     var m1=m0[0].split('-folder=')
                                     var m2=m1[1].split(' ')
                                     console.log('Checking Editor Launch folder exist: '+m2[0])
-                                    if(!unik.fileExist(m2[0])){
+                                    if(!unik.folderExist(m2[0])){
                                         labelStatus.text=unikSettings.lang==='es'?'La carpeta no existe':'Folder not found'
-                                        console.log('Editor Launch folder no exist!')
+                                        console.log('Editor Launch folder not exist!')
                                         return
                                     }else{
                                         console.log('Editor Launch folder exist!')
@@ -982,7 +982,7 @@ ApplicationWindow {
                                     var m0=tiLinkFileContent.text.split('\n')
                                     var m1=m0[0].split('-folder=')
                                     var m2=m1[1].split(' ')
-                                    if(!unik.fileExist(m2[0])){
+                                    if(!unik.folderExist(m2[0])){
                                         labelStatus.text=unikSettings.lang==='es'?'La carpeta no existe':'Folder not found'
                                     }else{
                                         if(!unik.fileExist(m2[0]+'/main.qml')){
