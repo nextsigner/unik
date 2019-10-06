@@ -16,7 +16,8 @@ Download Unik Installers for GNU/Linux, Windows or Macos: (unikode.org)[http://u
 ## Descripción en Español
 Este es el repositorio oficial del proyecto unik qml engine creado por @nextsigner.
 
-Este proyecto Qt es compatible con GNU/Linux, Windows, Macos, Raspberry Pi and Android. Tu puedes clonar y configurar este proyecto segùn tus necesidades.
+Este proyecto Qt es compatible con GNU/Linux, Windows, Macos, Raspberry Pi y Android. Tu puedes clonar y 
+configurar este proyecto segùn tus necesidades.
 
 Más info: nextsigner@gmail.com
 Whatsapps: +54 11 3802 4370
