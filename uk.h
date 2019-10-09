@@ -69,6 +69,9 @@
 #include <QDateTime>
 #include <QStandardPaths>
 #include <QThread>
+
+
+#include "unikqprocess.h"
 #include "row.h"
 #include "unikimageprovider.h"
 

@@ -34,6 +34,7 @@
 #include <QPluginLoader>
 #include <QtWidgets/QMessageBox>
 #include "uk.h"
+#include "unikargsproc.h"
 #ifndef Q_OS_ANDROID
 #include "qmlclipboardadapter.h"
 #ifndef __arm__
@@ -456,6 +457,7 @@ int main(int argc, char *argv[])
     //This register is deprecated.  It will be eliminated.
     qmlRegisterType<UK>("uk", 1, 0, "UK");
     //<--Register Types
+    qmlRegisterType<UnikQProcess>("unik.UnikQProcess", 1, 0, "UnikQProcess");
 
 
     //-->Install a Message Handler for GNU/Linux, Windows and Macos

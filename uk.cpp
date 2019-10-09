@@ -1301,6 +1301,11 @@ void UK::restartApp(QString args)
 
 bool UK::run(QString commandLine)
 {
+    /*UnikQProcess *uqp= new UnikQProcess();
+    connect(uqp, SIGNAL(readyReadStandardOutput()),uqp, SLOT(logData()));
+    connect(uqp, SIGNAL(readyReadStandardError()),uqp, SLOT(logData()));
+    uqp->start("cmd");*/
+
 #ifndef Q_OS_ANDROID
     proc = new QProcess(this);
     connect(proc, SIGNAL(readyReadStandardOutput()),this, SLOT(salidaRun()));
