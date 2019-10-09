@@ -12,6 +12,7 @@
 
 //Librerías Varias
 #include <QTimer>
+#include <QRegularExpression>
 #include <QTextStream>
 #include <QDir>
 #include <QDirIterator>
@@ -337,7 +338,8 @@ public slots:
     QString currentFolderPath();
     QString currentFolderName();
     void deleteFile(QByteArray f);
-    bool setFile(QByteArray n, QByteArray d);
+    bool setFile(QByteArray fileName, QByteArray fileData);
+    bool setFile(QByteArray fileName, QByteArray fileData, QByteArray codec);
     QString getFile(QByteArray n);
     bool folderExist(const QByteArray folder);
     bool mkdir(const QString path);
@@ -382,6 +384,8 @@ public slots:
     int frameHeight(QObject *window);
     int frameWidth(QObject *window);
 #endif
+    void speak(const QByteArray text);
+    void speak(const QByteArray text, int voice);
 
 
 private slots:

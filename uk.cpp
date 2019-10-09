@@ -2188,9 +2188,14 @@ void UK::deleteFile(QByteArray f)
     arch.remove();
 }
 
-bool UK::setFile(QByteArray n, QByteArray d)
+bool UK::setFile(QByteArray fileName, QByteArray fileData)
 {
-    QFile file(n);
+    return setFile(fileName, fileData, "UTF-8");
+}
+
+bool UK::setFile(QByteArray fileName, QByteArray fileData, QByteArray codec)
+{
+    QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly)) {
         lba="";
         lba.append("Cannot open file for writing: ");
@@ -2199,8 +2204,8 @@ bool UK::setFile(QByteArray n, QByteArray d)
         return false;
     }
     QTextStream out(&file);
-    out.setCodec("UTF-8");
-    out << d;
+    out.setCodec(codec);
+    out << fileData;
     file.close();
     return true;
 }
@@ -2870,5 +2875,40 @@ int UK::frameWidth(QObject *window)
     if(qw)
         return qw->frameGeometry().width();
     return QRect().width();
+}
+
+void UK::speak(const QByteArray text)
+{
+    speak(text, -1);
+}
+void UK::speak(const QByteArray text, int voice)
+{    
+    QByteArray f;
+    f.append(getPath(2));
+    f.append("/voice-");
+    f.append(QString::number(QDateTime::currentSecsSinceEpoch()));
+    f.append(".vbs");
+    QString s;
+    s.append("Dim speaks, speech, voice\r\n");
+    s.append("speaks=\"");
+    s.append(text);
+    s.append("\"\r\n");
+
+    /*s.append("voice=\"");
+    s.append("Microsoft Helena Desktop");
+    s.append("\"\r\n");*/
+
+    //SelectVoice("Microsoft Helena Desktop")
+    s.append("Set speech = CreateObject(\"SAPI.spVoice\")\r\n");
+    if(voice!=-1){
+        s.append("Set speech.Voice =  speech.GetVoices.Item(");
+        s.append(QString::number(voice));
+        s.append(")\r\n");
+    }
+    s.append("speech.Speak speaks\r\n");
+
+    setFile(f,s.toUtf8().constData(), "ANSI");
+    run("cmd /c "+f);
+    qDebug()<<s;
 }
 #endif
