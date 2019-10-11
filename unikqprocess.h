@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QProcess>
-#include <QtQuick/QQuickItem>
 #include <QDebug>
 
 class UnikQProcess : public QProcess
@@ -26,10 +25,8 @@ signals:
     void logOut(QString data);
 public slots:
     Q_INVOKABLE void run(const QByteArray cmd);
-    void logOutProcess();
-    void setItem(QQuickItem *item);
-private:
-    QQuickItem *item;
+    void logOutProcess();    
+private:    
 };
 
 #endif // UNIKQPROCESS_H

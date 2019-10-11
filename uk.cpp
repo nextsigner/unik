@@ -2897,11 +2897,7 @@ void UK::speak(const QByteArray text, int voice)
     s.append("Dim speaks, speech, voice\r\n");
     s.append("speaks=\"");
     s.append(text);
-    s.append("\"\r\n");
-
-    /*s.append("voice=\"");
-    s.append("Microsoft Helena Desktop");
-    s.append("\"\r\n");*/
+    s.append("\"\r\n");   
 
     //SelectVoice("Microsoft Helena Desktop")
     s.append("Set speech = CreateObject(\"SAPI.spVoice\")\r\n");

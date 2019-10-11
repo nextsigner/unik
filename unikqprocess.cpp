@@ -16,13 +16,4 @@ void UnikQProcess::logOutProcess()
     setLogData(this->readAll());
 }
 
-void UnikQProcess::setItem(QQuickItem *item)
-{
-    emit logOut("asdsaff---------------------------------");
-}
 
-/*void UnikQProcess::logData()
-{
-    emit logOut("asdsaff---------------------------------");
-    qDebug()<<this->readAll();
-}*/
