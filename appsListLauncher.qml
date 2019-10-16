@@ -32,6 +32,14 @@ ApplicationWindow {
     Connections {id: con1; target: unik;onUkStdChanged:log.setTxtLog(''+unik.ukStd);}
     Connections {id: con2; target: unik;onUkStdChanged: log.setTxtLog(''+unik.ukStd); }
 
+    onCaChanged: {
+        if(unikSettings.sound){
+            let a=app.ca.replace('link_', '').replace('.ukl', '').replace(/-/g, '')
+            let s=unikSettings.lang==='es'?'Ha seleccionado .'+a+'. Presionar intro para iniciar':'Selecting  '+a+'. Press enter for run.'
+            speak(s)
+        }
+    }
+
     onClosing: {
         if(Qt.platform.os==='android'){
             //close.accepted = false;
@@ -120,7 +128,7 @@ ApplicationWindow {
             color: app.c2
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: app.fs*2+app.fs*0.125
+            anchors.verticalCenterOffset: app.fs*2+app.fs*0.125+unikSettings.padding*2+unikSettings.borderWidth
             Behavior on opacity {NumberAnimation{duration: 1500}}
             Rectangle{
                 id:psec
@@ -1629,11 +1637,10 @@ ApplicationWindow {
         }
     }
 
-    property string uT:''
     Shortcut{
         sequence: 'r'
         onActivated: {
-            unik.speak(tSpeak.t)
+            speak(tSpeak.t)
         }
     }
     Rectangle{
@@ -1677,6 +1684,11 @@ ApplicationWindow {
                 }*/
             }
             flick.opacity=1.0
+            if(unikSettings.sound){
+                let a=app.ca.replace('link_', '').replace('.ukl', '').replace(/-/g, '')
+                let s=unikSettings.lang==='es'?'Preparando el inicio de .'+a:'Preparing the star of '+a
+                speak(s)
+            }
         }
 
     }
@@ -1700,7 +1712,7 @@ ApplicationWindow {
             if(app.sec>7){
                 app.sec=0
             }
-            psec.width=psec.parent.width/5*(app.sec-1)
+            psec.width=psec.parent.width/5*(app.sec-1)            
         }
     }
     Timer{
@@ -1716,6 +1728,7 @@ ApplicationWindow {
         if(Qt.platform.os==='android'){
             unik.debugLog=true
         }
+
     }
     function setColors(){
         var nc=unikSettings.currentNumColor
@@ -1745,6 +1758,11 @@ MediaPlayer{
         var obj = Qt.createQmlObject(q, app, 'mpc')
     }
     function run(){
+        if(unikSettings.sound){
+            let a=app.ca.replace('link_', '').replace('.ukl', '').replace(/-/g, '')
+            let s=unikSettings.lang==='es'?'Iniciando .'+a:'Starting '+a
+           unik. speak(s)
+        }
         appSettings.uApp=app.ca
         var p=unik.getFile(appsDir+'/'+app.ca)
         var args=(''+p).split(' ')
