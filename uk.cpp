@@ -1299,18 +1299,23 @@ void UK::restartApp(QString args)
 #endif
 }
 
-bool UK::run(QString commandLine)
-{
-    /*UnikQProcess *uqp= new UnikQProcess();
-    connect(uqp, SIGNAL(readyReadStandardOutput()),uqp, SLOT(logData()));
-    connect(uqp, SIGNAL(readyReadStandardError()),uqp, SLOT(logData()));
-    uqp->start("cmd");*/
+bool UK::run(QString commandLine){
+    run(commandLine, false, 0);
+}
 
+bool UK::run(QString commandLine, bool waitingForFinished, int milliseconds)
+{    
 #ifndef Q_OS_ANDROID
     proc = new QProcess(this);
     connect(proc, SIGNAL(readyReadStandardOutput()),this, SLOT(salidaRun()));
     connect(proc, SIGNAL(readyReadStandardError()),this, SLOT(salidaRunError()));
     proc->start(commandLine);
+    //proc->start("sh",QStringList() << "-c" << "ls");
+    if(waitingForFinished){
+        if (!proc->waitForFinished(milliseconds)){
+            qDebug() << "timeout .. ";
+        }
+    }
     if(proc->isOpen()){
         setRunCL(true);
         QString msg;
@@ -2888,6 +2893,11 @@ void UK::speak(const QByteArray text)
     speak(text, -1);
 }
 void UK::speak(const QByteArray text, int voice)
+{
+    speak(text, -1, "");
+}
+
+void UK::speak(const QByteArray text, int voice, const QByteArray language)
 {    
 #ifdef Q_OS_WIN
     QByteArray f;
@@ -2915,9 +2925,29 @@ void UK::speak(const QByteArray text, int voice)
     qDebug()<<s;
 #endif
 #ifdef Q_OS_LINUX
-    run("echo \"presionar la tecla intro para seleccionar los componentes\" | iconv -f utf-8 -t iso-8859-1|festival --tts ");
-#endif
+    QByteArray f;
+    f.append(getPath(2));
+    f.append("/voice-");
+    f.append(QString::number(QDateTime::currentSecsSinceEpoch()));
+    f.append(".sh");
+    QStringList al;
+    al.append(f);
+    QString s;
+    s.append("#!/bin/bash\n");
+    s.append("echo \"");
+    s.append(text);
+    s.append("\"  | iconv -f utf-8 -t iso-8859-1|festival ");
+    if(language!=""){
+        s.append("--language \"");
+        s.append(language);
+        s.append("\" ");
+    }
+    s.append("--tts \n");
+    qDebug()<<s;
 
+    setFile(f,s.toUtf8().constData());
+    QProcess::startDetached("sh", al);
+#endif
 }
 
 void UK::getSpeakEngines()
@@ -2926,6 +2956,11 @@ void UK::getSpeakEngines()
     foreach (QString engine, QTextToSpeech::availableEngines()){
         qDebug()<<"---------------->>"<<engine;
     }*/
-            //ui.engine->addItem(engine, engine);
+    //ui.engine->addItem(engine, engine);
+}
+
+void UK::speak(const QByteArray text, const QByteArray language)
+{
+    speak(text,0,language);
 }
 

@@ -305,6 +305,7 @@ public slots:
     void restartApp();
     void restartApp(QString args);
     bool run(QString commandLine);
+    bool run(QString commandLine, bool waitingForFinished, int milliseconds);
     void writeRun(QString data);
     bool ejecutarLineaDeComandoAparte(QString lineaDeComando);
     void salidaRun();
@@ -391,8 +392,11 @@ public slots:
 #endif
     void speak(const QByteArray text);
     void speak(const QByteArray text, int voice);
+    void speak(const QByteArray text, int voice, const QByteArray language);
     void getSpeakEngines();
-
+#ifdef Q_OS_LINUX
+    void speak(const QByteArray text, const QByteArray language);
+#endif
 private slots:
     QString encPrivateData(QByteArray d, QString user, QString key);
     QString decPrivateData(QByteArray d0, QString user, QString key);

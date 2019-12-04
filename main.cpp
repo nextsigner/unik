@@ -643,6 +643,15 @@ int main(int argc, char *argv[])
                     //moduloGit.append(m100.at(m100.size()-1));
                     QString mg1=QString(m100.at(m100.size()-1));
                     QString mg2=mg1.replace(".git","");
+                    QString ncp;
+                    ncp.append(pws);
+                    ncp.append("/");
+                    ncp.append(mg2);
+                    QDir fscd(ncp);
+                    if(!fscd.exists()){
+                        fscd.mkdir(ncp);
+                    }
+                    QDir::setCurrent(ncp);
                     moduloGit="";
                     moduloGit.append(mg2);
                     modeGitArg=true;
@@ -1117,6 +1126,14 @@ int main(int argc, char *argv[])
     if(modeFolder){
         ffmqml = "";
         ffmqml.append(appArg2);
+        ffmqml.append("/");
+        u.mkdir(ffmqml);
+    }
+    if(!modeFolder&&modeGit){
+        ffmqml = "";
+        ffmqml.append(pws);
+        ffmqml.append("/");
+        ffmqml.append(moduloGit);
         ffmqml.append("/");
         u.mkdir(ffmqml);
     }

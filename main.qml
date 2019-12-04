@@ -11,7 +11,7 @@ import QtQuick.Particles 2.12
 import QtQuick.XmlListModel 2.12
 import QtQuick.Controls.Styles 1.4
 import QtMultimedia 5.12
-import QtQuick.Templates 2.12
+import QtQuick.Templates 2.5
 import QtWebView 1.1
 import Qt.labs.calendar 1.0
 import Qt.labs.folderlistmodel 2.12
