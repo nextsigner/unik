@@ -8,7 +8,16 @@ UnikQProcess::UnikQProcess(QObject *parent) : QProcess(parent)
 
 void UnikQProcess::run(const QByteArray cmd)
 {
-    start(cmd);
+    run(cmd, false);
+}
+
+void UnikQProcess::run(const QByteArray cmd, bool detached)
+{
+    if(!detached){
+         start(cmd);
+    }else{
+        startDetached(cmd);
+    }
 }
 
 void UnikQProcess::logOutProcess()

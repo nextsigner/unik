@@ -1726,6 +1726,7 @@ int main(int argc, char *argv[])
 
 
 
+    //u.speak("sdafsa");
 
 
 
@@ -1775,6 +1776,8 @@ int main(int argc, char *argv[])
     qInfo()<<"UAP argv: "<<uap.args;
     qInfo()<<"UAP showLaunch: "<<uap.showLaunch;
     //<--Info
+
+
 
 
 

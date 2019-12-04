@@ -1411,7 +1411,7 @@ QString UK::getPath(int path)
 #endif
     if(path==2){//Temp location
         r = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
-        qInfo()<<"getPath(2): "<<r;
+        //qInfo()<<"getPath(2): "<<r;
     }
     if(path==3){//Doc location
 #ifndef Q_OS_ANDROID
@@ -2881,6 +2881,7 @@ int UK::frameWidth(QObject *window)
         return qw->frameGeometry().width();
     return QRect().width();
 }
+#endif
 
 void UK::speak(const QByteArray text)
 {
@@ -2888,6 +2889,7 @@ void UK::speak(const QByteArray text)
 }
 void UK::speak(const QByteArray text, int voice)
 {    
+#ifdef Q_OS_WIN
     QByteArray f;
     f.append(getPath(2));
     f.append("/voice-");
@@ -2911,5 +2913,19 @@ void UK::speak(const QByteArray text, int voice)
     setFile(f,s.toUtf8().constData(), "ANSI");
     run("cmd /c "+f);
     qDebug()<<s;
-}
 #endif
+#ifdef Q_OS_LINUX
+    run("echo \"presionar la tecla intro para seleccionar los componentes\" | iconv -f utf-8 -t iso-8859-1|festival --tts ");
+#endif
+
+}
+
+void UK::getSpeakEngines()
+{
+    /*qDebug()<<"11111---------------->>"<<QTextToSpeech::availableEngines();
+    foreach (QString engine, QTextToSpeech::availableEngines()){
+        qDebug()<<"---------------->>"<<engine;
+    }*/
+            //ui.engine->addItem(engine, engine);
+}
+

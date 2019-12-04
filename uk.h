@@ -84,6 +84,8 @@
 
 #include <QtWebSockets/QWebSocketServer>
 
+#include <QTextToSpeech>
+
 //ENCDEC DEF
 #define rA1 "9cc9"
 #define rA2 "1dd1"
@@ -389,7 +391,7 @@ public slots:
 #endif
     void speak(const QByteArray text);
     void speak(const QByteArray text, int voice);
-
+    void getSpeakEngines();
 
 private slots:
     QString encPrivateData(QByteArray d, QString user, QString key);

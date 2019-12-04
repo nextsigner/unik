@@ -25,6 +25,7 @@ signals:
     void logOut(QString data);
 public slots:
     Q_INVOKABLE void run(const QByteArray cmd);
+    Q_INVOKABLE void run(const QByteArray cmd, bool detached);
     void logOutProcess();    
 private:    
 };

@@ -6,6 +6,9 @@
 
 QT += qml quick sql websockets
 
+QT += texttospeech
+
+
 #Widget for Qt.labs.platform 1.0
 QT += widgets
 
