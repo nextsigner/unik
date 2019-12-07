@@ -9,6 +9,7 @@
 #include <QQmlContext>
 #include <QQuickItem>
 
+#include <QTextToSpeech>
 
 //Librerías Varias
 #include <QTimer>
@@ -397,6 +398,19 @@ public slots:
 #ifdef Q_OS_LINUX
     void speak(const QByteArray text, const QByteArray language);
 #endif
+    //-->To TTS
+    void speakStop();
+    void setRate(int);
+    void setPitch(int);
+    void setVolume(int volume);
+
+    void stateChanged(QTextToSpeech::State state);
+    void engineSelected(int index);
+    void languageSelected(int language);
+    void voiceSelected(int index);
+
+    void localeChanged(const QLocale &locale);
+    //<--TO TTS
 private slots:
     QString encPrivateData(QByteArray d, QString user, QString key);
     QString decPrivateData(QByteArray d0, QString user, QString key);
@@ -407,6 +421,8 @@ private slots:
     void downloadZipProgress(qint64 bytesSend, qint64 bytesTotal);
 
 private:
+    QTextToSpeech *m_speech;
+
     QSqlDatabase db;
     QSqlDatabase firstDB;
     QSqlDatabase secondDB;

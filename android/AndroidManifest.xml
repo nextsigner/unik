@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<manifest package="org.unikode.unik" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="3.35.4" android:versionCode="60" android:installLocation="auto">
-<application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="-- %%INSERT_APP_NAME%% --" android:icon="@drawable/icon">
-<activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation" android:name="org.qtproject.qt5.android.bindings.QtActivity" android:label="-- %%INSERT_APP_NAME%% --" android:launchMode="singleTop">
+<manifest package="org.unikdev.unik" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="3.50.2" android:versionCode="67" android:installLocation="auto">
+<application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="unik" android:icon="@drawable/icon">
+<activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation" android:name="org.qtproject.qt5.android.bindings.QtActivity" android:label="unik" android:launchMode="singleTop">
 <intent-filter>
 <action android:name="android.intent.action.MAIN"/>
 <category android:name="android.intent.category.LAUNCHER"/>
@@ -11,7 +11,7 @@
 <!-- meta-data android:name="android.app.arguments" android:value="arg1 arg2 arg3"/ -->
 <!-- Application arguments -->
 
-<meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
+<meta-data android:name="android.app.lib_name" android:value="unik"/>
 <meta-data android:name="android.app.qt_sources_resource_id" android:resource="@array/qt_sources"/>
 <meta-data android:name="android.app.repository" android:value="default"/>
 <meta-data android:name="android.app.qt_libs_resource_id" android:resource="@array/qt_libs"/>
@@ -89,7 +89,7 @@ signal is sent! -->
 
 </application>
 
-<uses-sdk android:minSdkVersion="26" android:targetSdkVersion="28"/>
+<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="28"/>
 <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
 
 <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.

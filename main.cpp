@@ -14,6 +14,8 @@
 #include <QQuickImageProvider>
 #include <QSettings>
 
+#include <QTextToSpeech>
+
 #ifndef Q_OS_ANDROID
 #include <stdio.h>
 #include <stdlib.h>
@@ -214,6 +216,7 @@ int main(int argc, char *argv[])
     //     qInfo()<<"LD_PRELOAD: "<<qgetenv("LD_PRELOAD");
     //#endif
 
+
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
     app.setApplicationDisplayName("unik qml engine");
@@ -223,6 +226,10 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
+    QTextToSpeech *tts = new QTextToSpeech();
+
+    qDebug()<<"1:ENGINES:::: "<<QTextToSpeech::availableEngines();
+
     //-->Android Permissions
 #ifdef Q_OS_ANDROID
     //UK u; //For other OS this declaration is defined previus the main function
@@ -231,7 +238,7 @@ int main(int argc, char *argv[])
     if(result == QtAndroid::PermissionResult::Denied){
         QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.CAMERA"}));
         if(resultHash["android.permission.CAMERA"] == QtAndroid::PermissionResult::Denied)
-            return 0;
+            //return 0;
     }
     auto  result2 = QtAndroid::checkPermission(QString("android.permission.WRITE_EXTERNAL_STORAGE"));
     if(result2 == QtAndroid::PermissionResult::Denied){

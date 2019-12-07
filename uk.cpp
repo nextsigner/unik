@@ -1,6 +1,9 @@
 ﻿#include "uk.h"
 
-UK::UK(QObject *parent) : QObject(parent)
+#include <QLoggingCategory> //For TextToSpeech
+
+UK::UK(QObject *parent) : QObject(parent),
+  m_speech(0)
 {
     lsim<<"g"<<"h"<<"i"<<"j"<<"k"<<"l"<<"m"<<"n"<<"o"<<"p"<<"q"<<"r"<<"s"<<"t"<<"u"<<"v"<<"w"<<"x"<<"y"<<"z";
     lnum<<"11"<<"33"<<"66"<<"77"<<"88"<<"99"<<"20"<<"30"<<"40"<<"60"<<"70"<<"80"<<"90"<<"12"<<"21"<<"57"<<"82"<<"92"<<"84"<<"72";
@@ -11,13 +14,27 @@ UK::UK(QObject *parent) : QObject(parent)
 #endif
 #endif
 
+    QLoggingCategory::setFilterRules(QStringLiteral("qt.unik.tts=true \n qt.unik.tts.*=true"));
+
+    // Populate engine selection list
+    //ui.engine->addItem("Default", QString("default"));
+    //foreach (QString engines, QTextToSpeech::availableEngines()){
+        //ui.engine->addItem(engine, engine);
+        qDebug()<<"ENGINES::: "<<QTextToSpeech::availableEngines();
+        //}
+
+    //ui.engine->setCurrentIndex(0);
+    engineSelected(0);
 
 
 
-    mPlayer = new QMediaPlayer(this, QMediaPlayer::StreamPlayback);
+
+
+
+    /*mPlayer = new QMediaPlayer(this, QMediaPlayer::StreamPlayback);
     mBuffer = new QBuffer(this);
     mBuffer->open(QIODevice::ReadWrite);
-    mPlayer->setMedia(QMediaContent(), mBuffer);
+    mPlayer->setMedia(QMediaContent(), mBuffer);*/
 
 
 
@@ -2899,54 +2916,65 @@ void UK::speak(const QByteArray text, int voice)
 
 void UK::speak(const QByteArray text, int voice, const QByteArray language)
 {    
-#ifdef Q_OS_WIN
-    QByteArray f;
-    f.append(getPath(2));
-    f.append("/voice-");
-    f.append(QString::number(QDateTime::currentSecsSinceEpoch()));
-    f.append(".vbs");
-    QString s;
-    s.append("Dim speaks, speech, voice\r\n");
-    s.append("speaks=\"");
-    s.append(text);
-    s.append("\"\r\n");   
-
-    //SelectVoice("Microsoft Helena Desktop")
-    s.append("Set speech = CreateObject(\"SAPI.spVoice\")\r\n");
+#ifdef Q_OS_WIN    
     if(voice!=-1){
+        QByteArray f;
+        f.append(getPath(2));
+        f.append("/voice-");
+        f.append(QString::number(QDateTime::currentSecsSinceEpoch()));
+        f.append(".vbs");
+        QString s;
+        s.append("Dim speaks, speech, voice\r\n");
+        s.append("speaks=\"");
+        s.append(text);
+        s.append("\"\r\n");
+
+        //SelectVoice("Microsoft Helena Desktop")
+        s.append("Set speech = CreateObject(\"SAPI.spVoice\")\r\n");
         s.append("Set speech.Voice =  speech.GetVoices.Item(");
         s.append(QString::number(voice));
         s.append(")\r\n");
-    }
-    s.append("speech.Speak speaks\r\n");
+        s.append("speech.Speak speaks\r\n");
 
-    setFile(f,s.toUtf8().constData(), "ANSI");
-    run("cmd /c "+f);
-    qDebug()<<s;
+        setFile(f,s.toUtf8().constData(), "ANSI");
+        run("cmd /c "+f);
+        qDebug()<<s;
+    }else{
+        m_speech->say(text);
+    }
+
 #endif
 #ifdef Q_OS_LINUX
-    QByteArray f;
-    f.append(getPath(2));
-    f.append("/voice-");
-    f.append(QString::number(QDateTime::currentSecsSinceEpoch()));
-    f.append(".sh");
-    QStringList al;
-    al.append(f);
-    QString s;
-    s.append("#!/bin/bash\n");
-    s.append("echo \"");
-    s.append(text);
-    s.append("\"  | iconv -f utf-8 -t iso-8859-1|festival ");
+#ifndef Q_OS_ANDROID
     if(language!=""){
+        QByteArray f;
+        f.append(getPath(2));
+        f.append("/voice-");
+        f.append(QString::number(QDateTime::currentSecsSinceEpoch()));
+        f.append(".sh");
+        QStringList al;
+        al.append(f);
+        QString s;
+        s.append("#!/bin/bash\n");
+        s.append("echo \"");
+        s.append(text);
+        s.append("\"  | iconv -f utf-8 -t iso-8859-1|festival ");
         s.append("--language \"");
         s.append(language);
         s.append("\" ");
-    }
-    s.append("--tts \n");
-    qDebug()<<s;
+        s.append("--tts \n");
+        //qDebug()<<s;
 
-    setFile(f,s.toUtf8().constData());
-    QProcess::startDetached("sh", al);
+        setFile(f,s.toUtf8().constData());
+        QProcess::startDetached("sh", al);
+    }else {
+        m_speech->say(text);
+    }
+#endif
+#endif
+#ifdef Q_OS_ANDROID
+    m_speech->say(text);
+    qDebug()<<"SPEAK::: "<<text;
 #endif
 }
 
@@ -2963,4 +2991,107 @@ void UK::speak(const QByteArray text, const QByteArray language)
 {
     speak(text,0,language);
 }
+
+void UK::speakStop()
+{
+    m_speech->stop();
+}
+void UK::setRate(int rate)
+{
+    m_speech->setRate(rate / 10.0);
+}
+
+void UK::setPitch(int pitch)
+{
+    m_speech->setPitch(pitch / 10.0);
+}
+
+void UK::setVolume(int volume)
+{
+    m_speech->setVolume(volume / 100.0);
+}
+
+void UK::stateChanged(QTextToSpeech::State state)
+{
+    if (state == QTextToSpeech::Speaking) {
+        log("Speech started...");
+    } else if (state == QTextToSpeech::Ready)
+        log("Speech stopped...");
+    else if (state == QTextToSpeech::Paused)
+        log("Speech paused...");
+    else
+        log("Speech error!");
+
+    //ui.pauseButton->setEnabled(state == QTextToSpeech::Speaking);
+    //ui.resumeButton->setEnabled(state == QTextToSpeech::Paused);
+    //ui.stopButton->setEnabled(state == QTextToSpeech::Speaking || state == QTextToSpeech::Paused);
+}
+
+void UK::engineSelected(int index)
+{
+    QString engineName = "default";//ui.engine->itemData(index).toString();
+    delete m_speech;
+    if (engineName == "default")
+        m_speech = new QTextToSpeech(this);
+    else
+        m_speech = new QTextToSpeech(engineName, this);
+    //disconnect(ui.language, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &UK::languageSelected);
+    //ui.language->clear();
+    // Populate the languages combobox before connecting its signal.
+    QVector<QLocale> locales = m_speech->availableLocales();
+    QLocale current = m_speech->locale();
+    foreach (const QLocale &locale, locales) {
+        QString name(QString("%1 (%2)")
+                     .arg(QLocale::languageToString(locale.language()))
+                     .arg(QLocale::countryToString(locale.country())));
+        QVariant localeVariant(locale);
+        //ui.language->addItem(name, localeVariant);
+        if (locale.name() == current.name())
+            current = locale;
+    }
+    setRate(0);
+    setPitch(0);
+    setVolume(100);
+    //connect(ui.stopButton, &QPushButton::clicked, m_speech, &QTextToSpeech::stop);
+    //connect(ui.pauseButton, &QPushButton::clicked, m_speech, &QTextToSpeech::pause);
+    //connect(ui.resumeButton, &QPushButton::clicked, m_speech, &QTextToSpeech::resume);
+
+    connect(m_speech, &QTextToSpeech::stateChanged, this, &UK::stateChanged);
+    connect(m_speech, &QTextToSpeech::localeChanged, this, &UK::localeChanged);
+
+    //connect(ui.language, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &UK::languageSelected);
+    localeChanged(current);
+}
+
+void UK::languageSelected(int language)
+{
+    QLocale locale = QLocale("en_EN");//ui.language->itemData(language).toLocale();
+    m_speech->setLocale(locale);
+}
+
+void UK::voiceSelected(int index)
+{
+    //m_speech->setVoice(m_voices.at(index));
+}
+
+void UK::localeChanged(const QLocale &locale)
+{
+    /*QVariant localeVariant(locale);
+    ui.language->setCurrentIndex(ui.language->findData(localeVariant));
+
+    disconnect(ui.voice, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &UK::voiceSelected);
+    ui.voice->clear();
+
+    m_voices = m_speech->availableVoices();
+    QVoice currentVoice = m_speech->voice();
+    foreach (const QVoice &voice, m_voices) {
+        ui.voice->addItem(QString("%1 - %2 - %3").arg(voice.name())
+                          .arg(QVoice::genderName(voice.gender()))
+                          .arg(QVoice::ageName(voice.age())));
+        if (voice.name() == currentVoice.name())
+            ui.voice->setCurrentIndex(ui.voice->count() - 1);
+    }
+    connect(ui.voice, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &UK::voiceSelected);*/
+}
+
 
