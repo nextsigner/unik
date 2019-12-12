@@ -14,7 +14,8 @@
 #include <QQuickImageProvider>
 #include <QSettings>
 
-#include <QTextToSpeech>
+#include <QtTextToSpeech/QTextToSpeech>
+#include <QLoggingCategory>
 
 #ifndef Q_OS_ANDROID
 #include <stdio.h>
@@ -217,8 +218,10 @@ int main(int argc, char *argv[])
     //#endif
 
 
+
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
+
     app.setApplicationDisplayName("unik qml engine");
     app.setApplicationName("unik");
     app.setOrganizationDomain("http://www.unikode.org/");
@@ -226,9 +229,33 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    QTextToSpeech *tts = new QTextToSpeech();
+    QLoggingCategory::setFilterRules(QStringLiteral("qt.speech.tts=true \n qt.speech.tts.*=true"));
+    qDebug()<<"TTS AVAILABLE ENGINES: "<<QTextToSpeech::availableEngines();
+    QTextToSpeech *tts = new QTextToSpeech(QTextToSpeech::availableEngines().at(0));
+    QStringList ttsEngines;
+    for (int i=0;i<QTextToSpeech::availableEngines().length();i++) {
+        ttsEngines.append(QTextToSpeech::availableEngines().at(i));
+    }
+    QStringList ttsVoices;
+    for (int i=0;i<tts->availableVoices().length();i++) {
+        ttsVoices.append(tts->availableVoices().at(i).name());
+    }
+    QStringList ttsLocales;
+    for (int i=0;i<tts->availableLocales().length();i++) {
+        ttsLocales.append(tts->availableLocales().at(i).name());
+    }
+    engine.rootContext()->setContextProperty("ttsEngines", ttsEngines);
+    engine.rootContext()->setContextProperty("ttsVoices", ttsVoices);
+    engine.rootContext()->setContextProperty("ttsLocales", ttsLocales);
+    engine.rootContext()->setContextProperty("tts", tts);
 
-    qDebug()<<"1:ENGINES:::: "<<QTextToSpeech::availableEngines();
+    QObject::connect(&u, &UK::saying, [tts](const QString text){
+        tts->stop();
+        tts->say(text);
+    });
+    QObject::connect(&u, &UK::stopingSay, [tts](){
+        tts->stop();
+    });
 
     //-->Android Permissions
 #ifdef Q_OS_ANDROID
@@ -238,7 +265,7 @@ int main(int argc, char *argv[])
     if(result == QtAndroid::PermissionResult::Denied){
         QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.CAMERA"}));
         if(resultHash["android.permission.CAMERA"] == QtAndroid::PermissionResult::Denied)
-            //return 0;
+            return 0;
     }
     auto  result2 = QtAndroid::checkPermission(QString("android.permission.WRITE_EXTERNAL_STORAGE"));
     if(result2 == QtAndroid::PermissionResult::Denied){

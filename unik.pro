@@ -6,9 +6,9 @@
 
 QT += qml quick sql websockets
 
-QT += widgets texttospeech
-requires(qtHaveModule(gui))
-qtHaveModule(gui): requires(qtConfig(combobox))
+QT += texttospeech
+#requires(qtHaveModule(gui))
+#qtHaveModule(gui): requires(qtConfig(combobox))
 
 
 #Widget for Qt.labs.platform 1.0

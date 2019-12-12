@@ -1,9 +1,8 @@
 ﻿#include "uk.h"
 
-#include <QLoggingCategory> //For TextToSpeech
 
-UK::UK(QObject *parent) : QObject(parent),
-  m_speech(0)
+UK::UK(QObject *parent) : QObject(parent)//,
+  //m_speech(0)
 {
     lsim<<"g"<<"h"<<"i"<<"j"<<"k"<<"l"<<"m"<<"n"<<"o"<<"p"<<"q"<<"r"<<"s"<<"t"<<"u"<<"v"<<"w"<<"x"<<"y"<<"z";
     lnum<<"11"<<"33"<<"66"<<"77"<<"88"<<"99"<<"20"<<"30"<<"40"<<"60"<<"70"<<"80"<<"90"<<"12"<<"21"<<"57"<<"82"<<"92"<<"84"<<"72";
@@ -14,17 +13,22 @@ UK::UK(QObject *parent) : QObject(parent),
 #endif
 #endif
 
-    QLoggingCategory::setFilterRules(QStringLiteral("qt.unik.tts=true \n qt.unik.tts.*=true"));
 
+    //QLoggingCategory::setFilterRules(QStringLiteral("qt.speech.tts=true \n qt.speech.tts.*=true"));
+    //qDebug()<<"2 TTS AVAILABLE ENGINES: "<<QTextToSpeech::availableEngines();
+    //m_speech = new QTextToSpeech(QTextToSpeech::availableEngines().at(0), this);
+
+    //QLoggingCategory::setFilterRules(QStringLiteral("org.unikode.unik.speech.tts=true \n org.unikode.unik.speech.tts.*=true"));
+    //m_speech = new QTextToSpeech(this);
     // Populate engine selection list
     //ui.engine->addItem("Default", QString("default"));
     //foreach (QString engines, QTextToSpeech::availableEngines()){
         //ui.engine->addItem(engine, engine);
-        qDebug()<<"ENGINES::: "<<QTextToSpeech::availableEngines();
+        //qDebug()<<"ENGINES::: "<<QTextToSpeech::availableEngines();
         //}
 
     //ui.engine->setCurrentIndex(0);
-    engineSelected(0);
+    //engineSelected(0);
 
 
 
@@ -2973,7 +2977,8 @@ void UK::speak(const QByteArray text, int voice, const QByteArray language)
 #endif
 #endif
 #ifdef Q_OS_ANDROID
-    m_speech->say(text);
+    //m_speech->say(text);
+    emit saying(text);
     qDebug()<<"SPEAK::: "<<text;
 #endif
 }
@@ -2994,21 +2999,21 @@ void UK::speak(const QByteArray text, const QByteArray language)
 
 void UK::speakStop()
 {
-    m_speech->stop();
+    emit stopingSay();
 }
 void UK::setRate(int rate)
 {
-    m_speech->setRate(rate / 10.0);
+    //m_speech->setRate(rate / 10.0);
 }
 
 void UK::setPitch(int pitch)
 {
-    m_speech->setPitch(pitch / 10.0);
+    //m_speech->setPitch(pitch / 10.0);
 }
 
 void UK::setVolume(int volume)
 {
-    m_speech->setVolume(volume / 100.0);
+    //m_speech->setVolume(volume / 100.0);
 }
 
 void UK::stateChanged(QTextToSpeech::State state)
@@ -3029,44 +3034,44 @@ void UK::stateChanged(QTextToSpeech::State state)
 
 void UK::engineSelected(int index)
 {
-    QString engineName = "default";//ui.engine->itemData(index).toString();
-    delete m_speech;
-    if (engineName == "default")
-        m_speech = new QTextToSpeech(this);
-    else
-        m_speech = new QTextToSpeech(engineName, this);
+//    QString engineName = "default";//ui.engine->itemData(index).toString();
+//    delete m_speech;
+//    if (engineName == "default")
+//        //m_speech = new QTextToSpeech(this);
+//    else
+        //m_speech = new QTextToSpeech(engineName, this);
     //disconnect(ui.language, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &UK::languageSelected);
     //ui.language->clear();
     // Populate the languages combobox before connecting its signal.
-    QVector<QLocale> locales = m_speech->availableLocales();
-    QLocale current = m_speech->locale();
-    foreach (const QLocale &locale, locales) {
-        QString name(QString("%1 (%2)")
-                     .arg(QLocale::languageToString(locale.language()))
-                     .arg(QLocale::countryToString(locale.country())));
-        QVariant localeVariant(locale);
-        //ui.language->addItem(name, localeVariant);
-        if (locale.name() == current.name())
-            current = locale;
-    }
-    setRate(0);
-    setPitch(0);
-    setVolume(100);
+    //QVector<QLocale> locales = m_speech->availableLocales();
+    //QLocale current = m_speech->locale();
+//    foreach (const QLocale &locale, locales) {
+//        QString name(QString("%1 (%2)")
+//                     .arg(QLocale::languageToString(locale.language()))
+//                     .arg(QLocale::countryToString(locale.country())));
+//        QVariant localeVariant(locale);
+//        //ui.language->addItem(name, localeVariant);
+//        if (locale.name() == current.name())
+//            current = locale;
+//    }
+//    setRate(0);
+//    setPitch(0);
+//    setVolume(100);
     //connect(ui.stopButton, &QPushButton::clicked, m_speech, &QTextToSpeech::stop);
     //connect(ui.pauseButton, &QPushButton::clicked, m_speech, &QTextToSpeech::pause);
     //connect(ui.resumeButton, &QPushButton::clicked, m_speech, &QTextToSpeech::resume);
 
-    connect(m_speech, &QTextToSpeech::stateChanged, this, &UK::stateChanged);
-    connect(m_speech, &QTextToSpeech::localeChanged, this, &UK::localeChanged);
+    //connect(m_speech, &QTextToSpeech::stateChanged, this, &UK::stateChanged);
+    //connect(m_speech, &QTextToSpeech::localeChanged, this, &UK::localeChanged);
 
     //connect(ui.language, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &UK::languageSelected);
-    localeChanged(current);
+    //localeChanged(current);
 }
 
 void UK::languageSelected(int language)
 {
     QLocale locale = QLocale("en_EN");//ui.language->itemData(language).toLocale();
-    m_speech->setLocale(locale);
+    //m_speech->setLocale(locale);
 }
 
 void UK::voiceSelected(int index)

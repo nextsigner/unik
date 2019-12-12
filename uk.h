@@ -9,7 +9,6 @@
 #include <QQmlContext>
 #include <QQuickItem>
 
-#include <QTextToSpeech>
 
 //Librerías Varias
 #include <QTimer>
@@ -278,6 +277,10 @@ public:
 #endif*/
     void restartingApp();
 
+    //TTS Signals
+    void saying(const QString text);
+    void stopingSay();
+
 public slots:
     void ukClose(QQuickCloseEvent *close);
     void engineExited(int n);
@@ -421,7 +424,6 @@ private slots:
     void downloadZipProgress(qint64 bytesSend, qint64 bytesTotal);
 
 private:
-    QTextToSpeech *m_speech;
 
     QSqlDatabase db;
     QSqlDatabase firstDB;
