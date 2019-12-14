@@ -2972,7 +2972,7 @@ void UK::speak(const QByteArray text, int voice, const QByteArray language)
         setFile(f,s.toUtf8().constData());
         QProcess::startDetached("sh", al);
     }else {
-        m_speech->say(text);
+        emit saying(text);
     }
 #endif
 #endif
@@ -3001,19 +3001,19 @@ void UK::speakStop()
 {
     emit stopingSay();
 }
-void UK::setRate(int rate)
+void UK::setTtsRate(int rate)
 {
-    //m_speech->setRate(rate / 10.0);
+    emit settingRate(rate);
 }
 
-void UK::setPitch(int pitch)
+void UK::setTtsPitch(int pitch)
 {
-    //m_speech->setPitch(pitch / 10.0);
+    emit settingPitch(pitch);
 }
 
-void UK::setVolume(int volume)
+void UK::setTtsVolume(int volume)
 {
-    //m_speech->setVolume(volume / 100.0);
+    emit settingVolume(volume);
 }
 
 void UK::stateChanged(QTextToSpeech::State state)
@@ -3070,13 +3070,12 @@ void UK::engineSelected(int index)
 
 void UK::languageSelected(int language)
 {
-    QLocale locale = QLocale("en_EN");//ui.language->itemData(language).toLocale();
-    //m_speech->setLocale(locale);
+    emit selectingLanguaje(language);
 }
 
 void UK::voiceSelected(int index)
 {
-    //m_speech->setVoice(m_voices.at(index));
+    emit selectingVoice(index);
 }
 
 void UK::localeChanged(const QLocale &locale)

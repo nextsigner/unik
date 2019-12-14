@@ -280,6 +280,11 @@ public:
     //TTS Signals
     void saying(const QString text);
     void stopingSay();
+    void selectingLanguaje(const int languaje);
+    void selectingVoice(const int index);
+    void settingRate(const int rate);
+    void settingPitch(const int pitch);
+    void settingVolume(const int volume);
 
 public slots:
     void ukClose(QQuickCloseEvent *close);
@@ -403,9 +408,9 @@ public slots:
 #endif
     //-->To TTS
     void speakStop();
-    void setRate(int);
-    void setPitch(int);
-    void setVolume(int volume);
+    void setTtsRate(int);
+    void setTtsPitch(int);
+    void setTtsVolume(int volume);
 
     void stateChanged(QTextToSpeech::State state);
     void engineSelected(int index);
