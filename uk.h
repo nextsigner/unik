@@ -278,13 +278,16 @@ public:
     void restartingApp();
 
     //TTS Signals
-    void saying(const QString text);
-    void stopingSay();
-    void selectingLanguaje(const int languaje);
-    void selectingVoice(const int index);
-    void settingRate(const int rate);
-    void settingPitch(const int pitch);
-    void settingVolume(const int volume);
+    void ttsSaying(const QString text);
+    void ttsStopingSay();
+    void ttsSelectingEngine(const int index);
+    void ttsSelectingLanguaje(const int languaje);
+    void ttsSelectingVoice(const int index);
+    void ttsSettingRate(const int rate);
+    void ttsSettingPitch(const int pitch);
+    void ttsSettingVolume(const int volume);
+    void ttsResuming();
+    void ttsPausing();
 
 public slots:
     void ukClose(QQuickCloseEvent *close);
@@ -407,17 +410,17 @@ public slots:
     void speak(const QByteArray text, const QByteArray language);
 #endif
     //-->To TTS
-    void speakStop();
+    void ttsSpeakStop();
+    void ttsPause();
+    void ttsResume();
     void setTtsRate(int);
     void setTtsPitch(int);
     void setTtsVolume(int volume);
 
     void stateChanged(QTextToSpeech::State state);
-    void engineSelected(int index);
-    void languageSelected(int language);
-    void voiceSelected(int index);
-
-    void localeChanged(const QLocale &locale);
+    void ttsEngineSelected(int index);
+    void ttsLanguageSelected(int language);
+    void ttsVoiceSelected(int index);
     //<--TO TTS
 private slots:
     QString encPrivateData(QByteArray d, QString user, QString key);

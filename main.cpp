@@ -234,10 +234,14 @@ int main(int argc, char *argv[])
     QLoggingCategory::setFilterRules(QStringLiteral("qt.speech.tts=true \n qt.speech.tts.*=true"));
     qDebug()<<"TTS AVAILABLE ENGINES: "<<QTextToSpeech::availableEngines();
     QTextToSpeech *tts = new QTextToSpeech(QTextToSpeech::availableEngines().at(0));
-    QStringList ttsEngines;
+    QStringList ttsEnginesList;
     for (int i=0;i<QTextToSpeech::availableEngines().length();i++) {
-        ttsEngines.append(QTextToSpeech::availableEngines().at(i));
+        ttsEnginesList.append(QTextToSpeech::availableEngines().at(i));
     }
+    int uTtsVolume=100;
+    int uTtsRate=0;
+    int uTtsPitch=0;
+    QString ttsCurrentEngine;
     QString ttsCurrentVoice;
     QStringList ttsVoicesList;
     QVector<QVoice> ttsVoices = tts->availableVoices();
@@ -251,6 +255,7 @@ int main(int argc, char *argv[])
     }
     QStringList ttsLocales;
     QList<QLocale> ttsLocalesVariants;
+    int uTtsLocalesIndex=0;
     QVector<QLocale> locales = tts->availableLocales();
     QLocale current = tts->locale();
     foreach (const QLocale &locale, locales) {
@@ -263,22 +268,48 @@ int main(int argc, char *argv[])
         if (locale.name() == current.name())
             current = locale;
     }
-    engine.rootContext()->setContextProperty("ttsEngines", ttsEngines);
+    engine.rootContext()->setContextProperty("ttsEngines", ttsEnginesList);
     engine.rootContext()->setContextProperty("ttsVoices", ttsVoicesList);
     engine.rootContext()->setContextProperty("ttsCurrentVoice", ttsCurrentVoice);
     engine.rootContext()->setContextProperty("ttsLocales", ttsLocales);
     engine.rootContext()->setContextProperty("tts", tts);
 
-    QObject::connect(&u, &UK::saying, [tts](const QString text){
+    QObject::connect(&u, &UK::ttsSaying, [tts](const QString text){
         tts->stop();
         tts->say(text);
     });
-    QObject::connect(&u, &UK::stopingSay, [tts](){
+    QObject::connect(&u, &UK::ttsStopingSay, [tts](){
         tts->stop();
     });
-    QObject::connect(&u, &UK::selectingLanguaje, [tts, ttsLocalesVariants, &ttsVoices, &ttsVoicesList, &ttsCurrentVoice](const int languaje){
+
+    QObject::connect(&u, &UK::ttsSelectingEngine, [&tts, ttsLocalesVariants, &ttsVoices, &ttsVoicesList, &ttsCurrentVoice, ttsEnginesList, uTtsLocalesIndex, uTtsRate, uTtsPitch, uTtsVolume](const int index){
+            QString engineName = ttsEnginesList.at(index);//"default";//ui.engine->itemData(index).toString();
+            delete tts;
+            if (engineName == "default"){
+                tts = new QTextToSpeech();
+            }else{
+                tts = new QTextToSpeech(engineName);
+            }
+            QVector<QLocale> locales = tts->availableLocales();
+            QLocale locale = ttsLocalesVariants.at(uTtsLocalesIndex);
+            tts->setLocale(locale);
+            ttsVoices = tts->availableVoices();
+            QVoice currentVoice = tts->voice();
+            foreach (const QVoice &voice, ttsVoices) {
+                ttsVoicesList.append(QString("%1 - %2 - %3").arg(voice.name())
+                                  .arg(QVoice::genderName(voice.gender()))
+                                  .arg(QVoice::ageName(voice.age())));
+                if (voice.name() == currentVoice.name())
+                    ttsCurrentVoice=ttsVoicesList.at(ttsVoicesList.count() - 1);
+            }
+            tts->setRate(uTtsRate);
+            tts->setPitch(uTtsPitch);
+            tts->setVolume(uTtsVolume);
+    });
+    QObject::connect(&u, &UK::ttsSelectingLanguaje, [tts, ttsLocalesVariants, &ttsVoices, &ttsVoicesList, &ttsCurrentVoice, &uTtsLocalesIndex, uTtsRate, uTtsPitch, uTtsVolume](const int languaje){
         QLocale locale = ttsLocalesVariants.at(languaje);
         tts->setLocale(locale);
+        uTtsLocalesIndex = languaje;
         ttsVoices = tts->availableVoices();
         QVoice currentVoice = tts->voice();
         foreach (const QVoice &voice, ttsVoices) {
@@ -288,18 +319,30 @@ int main(int argc, char *argv[])
             if (voice.name() == currentVoice.name())
                 ttsCurrentVoice=ttsVoicesList.at(ttsVoicesList.count() - 1);
         }
+        tts->setRate(uTtsRate);
+        tts->setPitch(uTtsPitch);
+        tts->setVolume(uTtsVolume);
     });
-    QObject::connect(&u, &UK::selectingVoice, [tts, ttsVoices](const int index){
+    QObject::connect(&u, &UK::ttsSelectingVoice, [tts, ttsVoices](const int index){
         tts->setVoice(ttsVoices.at(index));
     });
-    QObject::connect(&u, &UK::settingRate, [tts](const int rate){
+    QObject::connect(&u, &UK::ttsSettingRate, [tts, &uTtsRate](const int rate){
         tts->setRate(rate / 10.0);
+        uTtsRate=rate;
     });
-    QObject::connect(&u, &UK::settingPitch, [tts](const int pitch){
+    QObject::connect(&u, &UK::ttsSettingPitch, [tts, &uTtsPitch](const int pitch){
         tts->setPitch(pitch / 10.0);
+        uTtsPitch=pitch;
     });
-    QObject::connect(&u, &UK::settingVolume, [tts](const int volume){
+    QObject::connect(&u, &UK::ttsSettingVolume, [tts, &uTtsVolume](const int volume){
         tts->setVolume(volume / 100.0);
+        uTtsVolume=volume;
+    });
+    QObject::connect(&u, &UK::ttsSettingVolume, [tts](){
+        tts->pause();
+    });
+    QObject::connect(&u, &UK::ttsSettingVolume, [tts](){
+        tts->resume();
     });
     //<-- TTS
 
@@ -1840,7 +1883,7 @@ int main(int argc, char *argv[])
 
     //-->Connections
     //QObject::connect(&engine, SIGNAL(warnings(QList<QQmlError>)), &u, SLOT(errorQML(QList<QQmlError>)));
-    QObject::connect(&engine, &QQmlEngine::warnings, [&engine](QList<QQmlError> le){
+    QObject::connect(&engine, &QQmlEngine::warnings, [](QList<QQmlError> le){
         u.setUWarning(le.last().toString());
     });
 

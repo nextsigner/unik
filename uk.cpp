@@ -2972,13 +2972,13 @@ void UK::speak(const QByteArray text, int voice, const QByteArray language)
         setFile(f,s.toUtf8().constData());
         QProcess::startDetached("sh", al);
     }else {
-        emit saying(text);
+        emit ttsSaying(text);
     }
 #endif
 #endif
 #ifdef Q_OS_ANDROID
     //m_speech->say(text);
-    emit saying(text);
+    emit ttsSaying(text);
     qDebug()<<"SPEAK::: "<<text;
 #endif
 }
@@ -2997,23 +2997,33 @@ void UK::speak(const QByteArray text, const QByteArray language)
     speak(text,0,language);
 }
 
-void UK::speakStop()
+void UK::ttsSpeakStop()
 {
-    emit stopingSay();
+    emit ttsStopingSay();
+}
+
+void UK::ttsPause()
+{
+    emit ttsPausing();
+}
+
+void UK::ttsResume()
+{
+    emit ttsResuming();
 }
 void UK::setTtsRate(int rate)
 {
-    emit settingRate(rate);
+    emit ttsSettingRate(rate);
 }
 
 void UK::setTtsPitch(int pitch)
 {
-    emit settingPitch(pitch);
+    emit ttsSettingPitch(pitch);
 }
 
 void UK::setTtsVolume(int volume)
 {
-    emit settingVolume(volume);
+    emit ttsSettingVolume(volume);
 }
 
 void UK::stateChanged(QTextToSpeech::State state)
@@ -3032,70 +3042,17 @@ void UK::stateChanged(QTextToSpeech::State state)
     //ui.stopButton->setEnabled(state == QTextToSpeech::Speaking || state == QTextToSpeech::Paused);
 }
 
-void UK::engineSelected(int index)
+void UK::ttsEngineSelected(int index)
 {
-//    QString engineName = "default";//ui.engine->itemData(index).toString();
-//    delete m_speech;
-//    if (engineName == "default")
-//        //m_speech = new QTextToSpeech(this);
-//    else
-        //m_speech = new QTextToSpeech(engineName, this);
-    //disconnect(ui.language, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &UK::languageSelected);
-    //ui.language->clear();
-    // Populate the languages combobox before connecting its signal.
-    //QVector<QLocale> locales = m_speech->availableLocales();
-    //QLocale current = m_speech->locale();
-//    foreach (const QLocale &locale, locales) {
-//        QString name(QString("%1 (%2)")
-//                     .arg(QLocale::languageToString(locale.language()))
-//                     .arg(QLocale::countryToString(locale.country())));
-//        QVariant localeVariant(locale);
-//        //ui.language->addItem(name, localeVariant);
-//        if (locale.name() == current.name())
-//            current = locale;
-//    }
-//    setRate(0);
-//    setPitch(0);
-//    setVolume(100);
-    //connect(ui.stopButton, &QPushButton::clicked, m_speech, &QTextToSpeech::stop);
-    //connect(ui.pauseButton, &QPushButton::clicked, m_speech, &QTextToSpeech::pause);
-    //connect(ui.resumeButton, &QPushButton::clicked, m_speech, &QTextToSpeech::resume);
-
-    //connect(m_speech, &QTextToSpeech::stateChanged, this, &UK::stateChanged);
-    //connect(m_speech, &QTextToSpeech::localeChanged, this, &UK::localeChanged);
-
-    //connect(ui.language, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &UK::languageSelected);
-    //localeChanged(current);
+    emit ttsSelectingEngine(index);
 }
 
-void UK::languageSelected(int language)
+void UK::ttsLanguageSelected(int language)
 {
-    emit selectingLanguaje(language);
+    emit ttsSelectingLanguaje(language);
 }
 
-void UK::voiceSelected(int index)
+void UK::ttsVoiceSelected(int index)
 {
-    emit selectingVoice(index);
+    emit ttsSelectingVoice(index);
 }
-
-void UK::localeChanged(const QLocale &locale)
-{
-    /*QVariant localeVariant(locale);
-    ui.language->setCurrentIndex(ui.language->findData(localeVariant));
-
-    disconnect(ui.voice, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &UK::voiceSelected);
-    ui.voice->clear();
-
-    m_voices = m_speech->availableVoices();
-    QVoice currentVoice = m_speech->voice();
-    foreach (const QVoice &voice, m_voices) {
-        ui.voice->addItem(QString("%1 - %2 - %3").arg(voice.name())
-                          .arg(QVoice::genderName(voice.gender()))
-                          .arg(QVoice::ageName(voice.age())));
-        if (voice.name() == currentVoice.name())
-            ui.voice->setCurrentIndex(ui.voice->count() - 1);
-    }
-    connect(ui.voice, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &UK::voiceSelected);*/
-}
-
-
