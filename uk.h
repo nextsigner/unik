@@ -127,6 +127,19 @@ public:
     QWebChannel *_channel;
     ChatServer* _chatserver;
 
+    QTextToSpeech *tts;
+    QVector<QVoice> ttsVoices;
+    int uTtsVolume=100;
+    int uTtsRate=0;
+    int uTtsPitch=0;
+    QString ttsCurrentEngine;
+    QString ttsCurrentVoice;
+    QStringList ttsVoicesList;
+    QStringList ttsLocales;
+    QStringList ttsEnginesList;
+    QList<QLocale> ttsLocalesVariants;
+    int uTtsLocalesIndex=0;
+
     //Variables Globales
     QString pws;
 
@@ -410,6 +423,7 @@ public slots:
     void speak(const QByteArray text, const QByteArray language);
 #endif
     //-->To TTS
+    //void setTts(QTextToSpeech t);
     void ttsSpeakStop();
     void ttsPause();
     void ttsResume();
@@ -419,7 +433,7 @@ public slots:
 
     void stateChanged(QTextToSpeech::State state);
     void ttsEngineSelected(int index);
-    void ttsLanguageSelected(int language);
+    void ttsLanguageSelected(int languaje);
     void ttsVoiceSelected(int index);
     //<--TO TTS
 private slots:
@@ -432,7 +446,6 @@ private slots:
     void downloadZipProgress(qint64 bytesSend, qint64 bytesTotal);
 
 private:
-
     QSqlDatabase db;
     QSqlDatabase firstDB;
     QSqlDatabase secondDB;

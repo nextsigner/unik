@@ -4,7 +4,7 @@
 # Whatsapps: +54 11 3802 4370
 # GitHub: https://github.com/nextsigner/unik
 
-QT += qml quick sql websockets
+QT += qml quick sql websockets quickcontrols2
 
 QT += texttospeech
 #requires(qtHaveModule(gui))

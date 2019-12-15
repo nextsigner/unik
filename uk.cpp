@@ -2977,8 +2977,7 @@ void UK::speak(const QByteArray text, int voice, const QByteArray language)
 #endif
 #endif
 #ifdef Q_OS_ANDROID
-    //m_speech->say(text);
-    emit ttsSaying(text);
+    tts->say(text);
     qDebug()<<"SPEAK::: "<<text;
 #endif
 }
@@ -2997,33 +2996,38 @@ void UK::speak(const QByteArray text, const QByteArray language)
     speak(text,0,language);
 }
 
+/*void UK::setTts(QTextToSpeech t)
+{
+    //tts = &t;
+}*/
+
 void UK::ttsSpeakStop()
 {
-    emit ttsStopingSay();
+    tts->stop();
 }
 
 void UK::ttsPause()
 {
-    emit ttsPausing();
+    tts->pause();
 }
 
 void UK::ttsResume()
 {
-    emit ttsResuming();
+    tts->resume();
 }
 void UK::setTtsRate(int rate)
 {
-    emit ttsSettingRate(rate);
+    tts->setRate(rate / 10.0);
 }
 
 void UK::setTtsPitch(int pitch)
 {
-    emit ttsSettingPitch(pitch);
+    tts->setPitch(pitch / 10.0);
 }
 
 void UK::setTtsVolume(int volume)
 {
-    emit ttsSettingVolume(volume);
+    tts->setVolume(volume / 100.0);
 }
 
 void UK::stateChanged(QTextToSpeech::State state)
@@ -3037,8 +3041,7 @@ void UK::stateChanged(QTextToSpeech::State state)
     else
         log("Speech error!");
 
-    //ui.pauseButton->setEnabled(state == QTextToSpeech::Speaking);
-    //ui.resumeButton->setEnabled(state == QTextToSpeech::Paused);
+
     //ui.stopButton->setEnabled(state == QTextToSpeech::Speaking || state == QTextToSpeech::Paused);
 }
 
@@ -3047,9 +3050,24 @@ void UK::ttsEngineSelected(int index)
     emit ttsSelectingEngine(index);
 }
 
-void UK::ttsLanguageSelected(int language)
+void UK::ttsLanguageSelected(int languaje)
 {
-    emit ttsSelectingLanguaje(language);
+    QLocale locale = ttsLocalesVariants.at(languaje);
+    tts->setLocale(locale);
+    uTtsLocalesIndex = languaje;
+            ttsVoices = tts->availableVoices();
+            QVoice currentVoice = tts->voice();
+            foreach (const QVoice &voice, ttsVoices) {
+                ttsVoicesList.append(QString("%1 - %2 - %3").arg(voice.name())
+                                  .arg(QVoice::genderName(voice.gender()))
+                                  .arg(QVoice::ageName(voice.age())));
+                if (voice.name() == currentVoice.name())
+                    ttsCurrentVoice=ttsVoicesList.at(ttsVoicesList.count() - 1);
+            }
+            tts->setRate(uTtsRate / 10.0);
+            tts->setPitch(uTtsPitch / 10.0);
+            tts->setVolume(uTtsVolume / 100.0);
+    //emit ttsSelectingLanguaje(language);
 }
 
 void UK::ttsVoiceSelected(int index)
