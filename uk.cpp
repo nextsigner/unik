@@ -14,7 +14,7 @@ UK::UK(QObject *parent) : QObject(parent)//,
 #endif
 
 
-    connect(tts, SIGNAL(stateChanged()), this, SLOT(stateChanged()));
+    //connect(tts, SIGNAL(stateChanged()), this, SLOT(stateChanged()));
 
 
 
@@ -3027,16 +3027,14 @@ void UK::stateChanged(QTextToSpeech::State state)
 
 void UK::ttsEngineSelected(int index)
 {
-    QString engineName = ttsEnginesList.at(index);//"default";//ui.engine->itemData(index).toString();
-                delete tts;
-                if (engineName == "default"){
-                    tts = new QTextToSpeech();
-                }else{
-                    tts = new QTextToSpeech(engineName);
-                }
+    QString engineName = ttsEnginesList.at(index);
+               emit ttsSelectingEngine(index);
                 QVector<QLocale> locales = tts->availableLocales();
-                QLocale locale = ttsLocalesVariants.at(uTtsLocalesIndex);
-                tts->setLocale(locale);
+                QLocale locale;
+                if(ttsLocalesVariants.count()>0){
+                     locale = ttsLocalesVariants.at(uTtsLocalesIndex);
+                    tts->setLocale(locale);
+                }
                 ttsVoices = tts->availableVoices();
                 QVoice currentVoice = tts->voice();
                 foreach (const QVoice &voice, ttsVoices) {
@@ -3055,8 +3053,11 @@ void UK::ttsEngineSelected(int index)
 
 void UK::ttsLanguageSelected(int languaje)
 {
-    QLocale locale = ttsLocalesVariants.at(languaje);
-    tts->setLocale(locale);
+    QLocale locale;
+    if(ttsLocalesVariants.count()>0){
+         locale = ttsLocalesVariants.at(uTtsLocalesIndex);
+        tts->setLocale(locale);
+    }
     uTtsLocalesIndex = languaje;
             ttsVoices = tts->availableVoices();
             QVoice currentVoice = tts->voice();
@@ -3070,7 +3071,8 @@ void UK::ttsLanguageSelected(int languaje)
             tts->setRate(uTtsRate / 10.0);
             tts->setPitch(uTtsPitch / 10.0);
             tts->setVolume(uTtsVolume / 100.0);
-            connect(tts, SIGNAL(stateChanged(QTextToSpeech::State)), this, SLOT(stateChanged(QTextToSpeech::State)));
+            /*connect(tts, SIGNAL(stateChanged(QTextToSpeech::State)), this, SLOT(stateChanged(QTextToSpeech::State)));
+    */
 }
 
 void UK::ttsVoiceSelected(int index)

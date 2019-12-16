@@ -234,7 +234,7 @@ int main(int argc, char *argv[])
 
     //-->Android Permissions
 #ifdef Q_OS_ANDROID
-    UK u; //For other OS this declaration is defined previus the main function
+    //UK u; //For other OS this declaration is defined previus the main function
     u.setObjectName("uk3");
     auto  result = QtAndroid::checkPermission(QString("android.permission.CAMERA"));
     if(result == QtAndroid::PermissionResult::Denied){
@@ -269,9 +269,6 @@ int main(int argc, char *argv[])
     //--> TTS
     QLoggingCategory::setFilterRules(QStringLiteral("qt.speech.tts=true \n qt.speech.tts.*=true"));
     //qDebug()<<"TTS AVAILABLE ENGINES: "<<QTextToSpeech::availableEngines();
-//#ifndef Q_OS_ANDROID
-    //QTextToSpeech *tts = new QTextToSpeech(QTextToSpeech::availableEngines().at(0));
-//#else
     QTextToSpeech *tts2 = new QTextToSpeech(QTextToSpeech::availableEngines().at(0));
     u.tts = qobject_cast<QTextToSpeech *>( tts2 );
     Q_ASSERT( u.tts != nullptr );
@@ -293,18 +290,27 @@ int main(int argc, char *argv[])
         QString name(QString("%1 (%2)")
                      .arg(QLocale::languageToString(locale.language()))
                      .arg(QLocale::countryToString(locale.country())));
-        QVariant localeVariant(locale);
+        QLocale localeVariant(locale);
         u.ttsLocales.append(name);
-        u.ttsLocalesVariants.append(localeVariant.toLocale());
+        u.ttsLocalesVariants.append(localeVariant);
         if (locale.name() == current.name())
             u.ttsCurrentLocale = locale;
     }
+    QObject::connect(&u, &UK::ttsSelectingEngine, [&tts2](const int index){
+                QString engineName = u.ttsEnginesList.at(index);
+                delete tts2;
+                if (engineName == "default"){
+                    tts2 = new QTextToSpeech();
+                }else{
+                    tts2 = new QTextToSpeech(engineName);
+                }
+                u.tts = tts2;
+        });
 
     engine.rootContext()->setContextProperty("ttsEngines", u.ttsEnginesList);
     engine.rootContext()->setContextProperty("ttsVoices", u.ttsVoicesList);
     engine.rootContext()->setContextProperty("ttsCurrentVoice", u.ttsCurrentVoice);
     engine.rootContext()->setContextProperty("ttsLocales", u.ttsLocales);
-//#endif
     //<-- TTS
 
 

@@ -303,6 +303,7 @@ public:
 
     //TTS Signals
     void ttsSpeakingChanged();
+    void ttsSelectingEngine(const int index);
     /*void ttsSaying(const QString text);
     void ttsStopingSay();
     void ttsSelectingEngine(const int index);
