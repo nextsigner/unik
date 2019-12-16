@@ -118,6 +118,8 @@ class UK : public QObject
     Q_PROPERTY(QString stdErr READ getStdErr WRITE setStdErr NOTIFY stdErrChanged)
     Q_PROPERTY(QString initStdString READ getInitStdString WRITE setInitStdString)
     Q_PROPERTY(QString uWarning READ getUWarning WRITE setUWarning NOTIFY uWarningChanged)
+
+    Q_PROPERTY(int ttsSpeaking  READ getTtsSpeaking  WRITE setTtsSpeaking NOTIFY ttsSpeakingChanged)
 public:
     explicit UK(QObject *parent = nullptr);
     ~UK();
@@ -138,7 +140,16 @@ public:
     QStringList ttsLocales;
     QStringList ttsEnginesList;
     QList<QLocale> ttsLocalesVariants;
+    QLocale ttsCurrentLocale;
     int uTtsLocalesIndex=0;
+    int ttsSpeaking=0;
+    int getTtsSpeaking(){
+        return  ttsSpeaking;
+    }
+    void setTtsSpeaking(int s){
+        ttsSpeaking = s;
+        emit ttsSpeakingChanged();
+    }
 
     //Variables Globales
     QString pws;
@@ -291,7 +302,8 @@ public:
     void restartingApp();
 
     //TTS Signals
-    void ttsSaying(const QString text);
+    void ttsSpeakingChanged();
+    /*void ttsSaying(const QString text);
     void ttsStopingSay();
     void ttsSelectingEngine(const int index);
     void ttsSelectingLanguaje(const int languaje);
@@ -300,7 +312,7 @@ public:
     void ttsSettingPitch(const int pitch);
     void ttsSettingVolume(const int volume);
     void ttsResuming();
-    void ttsPausing();
+    void ttsPausing();*/
 
 public slots:
     void ukClose(QQuickCloseEvent *close);
