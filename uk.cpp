@@ -14,7 +14,7 @@ UK::UK(QObject *parent) : QObject(parent)//,
 #endif
 
 
-    //connect(tts, SIGNAL(stateChanged()), this, SLOT(stateChanged()));
+    connect(tts, SIGNAL(stateChanged()), this, SLOT(stateChanged()));
 
 
 
@@ -2960,6 +2960,9 @@ void UK::speak(const QByteArray text, int voice, const QByteArray language)
     }else {
         tts->say(text);
         qDebug()<<"SPEAK::: "<<text;
+        qDebug()<<"SPEAK 1::: "<<ttsCurrentEngine;
+        qDebug()<<"SPEAK 2::: "<<ttsCurrentLocale;
+        qDebug()<<"SPEAK 3::: "<<ttsCurrentVoice;
     }
 #endif
 #endif
@@ -3071,8 +3074,7 @@ void UK::ttsLanguageSelected(int languaje)
             tts->setRate(uTtsRate / 10.0);
             tts->setPitch(uTtsPitch / 10.0);
             tts->setVolume(uTtsVolume / 100.0);
-            /*connect(tts, SIGNAL(stateChanged(QTextToSpeech::State)), this, SLOT(stateChanged(QTextToSpeech::State)));
-    */
+            connect(tts, SIGNAL(stateChanged(QTextToSpeech::State)), this, SLOT(stateChanged(QTextToSpeech::State)));
 }
 
 void UK::ttsVoiceSelected(int index)
