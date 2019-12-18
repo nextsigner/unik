@@ -29,6 +29,8 @@ ApplicationWindow {
     property var objFocus
     property bool downloading: false
 
+    property string uSpeaked: ''
+
     Connections {id: con1; target: unik;onUkStdChanged:log.setTxtLog(''+unik.ukStd);}
     Connections {id: con2; target: unik;onUkStdChanged: log.setTxtLog(''+unik.ukStd); }
 
@@ -84,12 +86,7 @@ ApplicationWindow {
             app.c4=cc2[3]
             app.visible=true
         }
-    }
-    MediaPlayer{
-        id:mp;
-        autoLoad: true;
-        autoPlay: true;
-    }
+    }    
     FolderListModel{
         folder: Qt.platform.os!=='windows'?'file://'+appsDir:'file:///'+pws
         id: fl
@@ -188,13 +185,8 @@ ApplicationWindow {
                         anchors.verticalCenter: parent.verticalCenter
                         visible: xItem.border.width!==0
                         onClicked: {
-                            tlaunch.stop()
-                            var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
-                            if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')){
-                                app.runSound(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')
-                            }else{
-                                app.run()
-                            }
+                            tlaunch.stop()                           
+                            app.run()
                         }
                         UBg{opacity: 1.0}
                     }
@@ -1423,13 +1415,8 @@ ApplicationWindow {
         sequence: 'Return'
         onActivated: {
             if(xConfig.opacity===0.0){
-                tlaunch.stop()
-                var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
-                if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')){
-                    app.runSound(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')
-                }else{
-                    app.run()
-                }
+                tlaunch.stop()               
+                app.run()
             }else{
                 /*if(ufACT.visible&&xConfig.currentFocus===6){
                     return
@@ -1533,13 +1520,8 @@ ApplicationWindow {
             tlaunch.stop()
             xP.opacity=0.0
             if(xConfig.opacity!==1.0){
-                tlaunch.stop()
-                var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
-                if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')){
-                    app.runSound(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')
-                }else{
-                    app.run()
-                }
+                tlaunch.stop()                
+                app.run()
             }else{
                 if(xConfig.currentFocus<xConfig.cantFocus){
                     xConfig.currentFocus++
@@ -1569,10 +1551,10 @@ ApplicationWindow {
                 }
                 tlaunch.stop()
 
-                mp.stop()
                 if(unikSettings.sound){
                     var uModuleName=app.al[app.ci].replace('link_', '').replace('.ukl', '')
-                    mp.source='file:///'+pws+'/'+uModuleName+'/select-'+unikSettings.lang+'.m4a'
+                    var selMsg = unikSettings.lang==='es'?'Seleccionando ':'Selecting '
+                    unik.speak((selMsg+uModuleName).replace(/-/g, ' ').replace(/_/g, ' '))
                 }
             }else{
                 console.log('CurrentFocus: '+xConfig.currentFocus)
@@ -1609,10 +1591,10 @@ ApplicationWindow {
                 }
                 tlaunch.stop()
 
-                mp.stop()
                 if(unikSettings.sound){
                     var uModuleName=app.al[app.ci].replace('link_', '').replace('.ukl', '')
-                    mp.source='file:///'+pws+'/'+uModuleName+'/select-'+unikSettings.lang+'.m4a'
+                    var selMsg = unikSettings.lang==='es'?'Seleccionando ':'Selecting '
+                    unik.speak((selMsg+uModuleName).replace(/-/g, ' ').replace(/_/g, ' '))
                 }
             }else{
                 if(xFF.visible){
@@ -1636,11 +1618,10 @@ ApplicationWindow {
             }
         }
     }
-
     Shortcut{
         sequence: 'r'
         onActivated: {
-            speak(tSpeak.t)
+            speak(app.uSpeaked)
         }
     }
     Rectangle{
@@ -1677,11 +1658,7 @@ ApplicationWindow {
                 app.close()
                 engine.load(appsDir+'/unik-tools/main.qml')
             }else{
-                xP.visible=true
-                /*if(unikSettings.sound){
-                    var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
-                    mp.source='file:///'+pws+'/'+uModuleName+'/launch.m4a'
-                }*/
+                xP.visible=true                
             }
             flick.opacity=1.0
             if(unikSettings.sound){
@@ -1701,13 +1678,8 @@ ApplicationWindow {
         onTriggered: {
             app.sec++
             if(app.sec===7){
-                stop()
-                var uModuleName=appSettings.uApp.replace('link_', '').replace('.ukl', '')
-                if(unikSettings.sound&&unik.fileExist(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')){
-                    app.runSound(pws+'/'+uModuleName+'/launch-'+unikSettings.lang+'.m4a')
-                }else{
-                    app.run()
-                }
+                stop()                
+                app.run()
             }
             if(app.sec>7){
                 app.sec=0
@@ -1715,20 +1687,29 @@ ApplicationWindow {
             psec.width=psec.parent.width/5*(app.sec-1)            
         }
     }
-    Timer{
-        id: tSpeak
-        interval: 1500
-        property string t: ''
-        onTriggered: {
-            unik.speak(t)
-        }
-    }
 
     Component.onCompleted:{
         if(Qt.platform.os==='android'){
             unik.debugLog=true
         }
+        var ml = (''+ttsLocales).split(',')
+        for(var i=0; i < ml.length;i++){
+            if(unikSettings.lang==='es'){
+                if(ml[i].indexOf('Spanish')>=0){
+                    unik.ttsLanguageSelected(i)
+                    console.log('::::::::::::::::::::::::::'+ml[i])
+                    break
+                }
+            }else{
+                if(ml[i].indexOf('English')>=0){
+                    unik.ttsLanguageSelected(i)
+                    console.log('::::::::::::::::::::::::::'+ml[i])
+                    break
+                }
+            }
 
+        }
+        unik.ttsVoiceSelected(0)
     }
     function setColors(){
         var nc=unikSettings.currentNumColor
@@ -1738,24 +1719,6 @@ ApplicationWindow {
         app.c2=cc2[1]
         app.c3=cc2[2]
         app.c4=cc2[3]
-    }
-    function runSound(ids){
-        var q='import QtQuick 2.0
-import QtMultimedia 5.0
-Item {
-MediaPlayer{
-        id:mpc;
-        autoLoad: true;
-        autoPlay: true;
-        source: "file://'+ids+'"
-        onStopped:{
-            console.log("Se detuvo audio mpc"+mpc.source)
-            app.run()
-        }
-    }
-}
-'
-        var obj = Qt.createQmlObject(q, app, 'mpc')
     }
     function run(){
         if(unikSettings.sound){
@@ -1836,8 +1799,8 @@ MediaPlayer{
         //app.close()
     }
     function speak(t){
-        tSpeak.t=t
-        tSpeak.restart()
+        unik.speak(t)
+        app.uSpeaked=t
     }
 }
 
