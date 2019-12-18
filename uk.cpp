@@ -2986,6 +2986,24 @@ void UK::speak(const QByteArray text, const QByteArray language)
     speak(text,0,language);
 }
 
+bool UK::isTtsSpeaking()
+{
+    bool ret=false;
+    if(tts->state() == 1 ){
+        ret = true;
+    }
+    return  ret;
+}
+
+bool UK::isTtsPaused()
+{
+    bool ret=false;
+    if(tts->state() == 2 ){
+        ret = true;
+    }
+    return  ret;
+}
+
 void UK::ttsSpeakStop()
 {
     tts->stop();
@@ -3030,8 +3048,10 @@ void UK::stateChanged(QTextToSpeech::State state)
 
 void UK::ttsEngineSelected(int index)
 {
+    ttsCurrentEngine = ttsEnginesList.at(index);
+    uTtsVoicesIndex = 0;
     QString engineName = ttsEnginesList.at(index);
-               emit ttsSelectingEngine(index);
+                emit ttsSelectingEngine(index);
                 QVector<QLocale> locales = tts->availableLocales();
                 QLocale locale;
                 if(ttsLocalesVariants.count()>0){
@@ -3058,10 +3078,11 @@ void UK::ttsLanguageSelected(int languaje)
 {
     QLocale locale;
     if(ttsLocalesVariants.count()>0){
-         locale = ttsLocalesVariants.at(uTtsLocalesIndex);
+         locale = ttsLocalesVariants.at(languaje);
         tts->setLocale(locale);
     }
     uTtsLocalesIndex = languaje;
+    uTtsVoicesIndex = 0;
             ttsVoices = tts->availableVoices();
             QVoice currentVoice = tts->voice();
             foreach (const QVoice &voice, ttsVoices) {
@@ -3079,5 +3100,7 @@ void UK::ttsLanguageSelected(int languaje)
 
 void UK::ttsVoiceSelected(int index)
 {
+    uTtsVoicesIndex = index;
+    ttsCurrentVoice = ttsVoicesList.at(index);
     tts->setVoice(ttsVoices.at(index));
 }

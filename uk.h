@@ -142,6 +142,7 @@ public:
     QList<QLocale> ttsLocalesVariants;
     QLocale ttsCurrentLocale;
     int uTtsLocalesIndex=0;
+    int uTtsVoicesIndex=0;
     int ttsSpeaking=0;
     int getTtsSpeaking(){
         return  ttsSpeaking;
@@ -437,6 +438,8 @@ public slots:
 #endif
     //-->To TTS
     //void setTts(QTextToSpeech t);
+    bool isTtsSpeaking();
+    bool isTtsPaused();
     void ttsSpeakStop();
     void ttsPause();
     void ttsResume();

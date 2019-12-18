@@ -66,14 +66,13 @@
         UK u;
 #endif
 #ifdef UNIK_COMPILE_ANDROID_ARMV7
-        //UK u;
+        UK u;
 #endif
 #ifdef UNIK_COMPILE_ANDROID_X86
         UK u;
 #endif
 #ifdef UNIK_COMPILE_ANDROID_X86_64
         UK u;
-        //QTextToSpeech tts(QTextToSpeech::availableEngines().at(0));
 #endif
 
 
