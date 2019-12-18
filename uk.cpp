@@ -59,6 +59,11 @@ QString UK::host()
 {
     return h;
 }
+
+void UK::errorQML(QList<QQmlError> le)
+{
+   setUWarning(le.last().toString());
+}
 void UK::ukClose(QQuickCloseEvent *close){
     if(close){
         qInfo("ApplicationWindow closed.");

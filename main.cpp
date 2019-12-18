@@ -1808,8 +1808,8 @@ int main(int argc, char *argv[])
 
 
     //-->Connections
-    //QObject::connect(&engine, SIGNAL(warnings(QList<QQmlError>)), &u, SLOT(errorQML(QList<QQmlError>)));
-    /*QObject::connect(&engine, &QQmlEngine::warnings, [&u](QList<QQmlError> le){
+    QObject::connect(&engine, SIGNAL(warnings(QList<QQmlError>)), &u, SLOT(errorQML(QList<QQmlError>)));
+    /*QObject::connect(&engine, &QQmlEngine::warnings, [=](QList<QQmlError> le){
         u.setUWarning(le.last().toString());
     });*/
 

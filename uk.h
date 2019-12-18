@@ -304,19 +304,10 @@ public:
 
     //TTS Signals
     void ttsSpeakingChanged();
-    void ttsSelectingEngine(const int index);
-    /*void ttsSaying(const QString text);
-    void ttsStopingSay();
-    void ttsSelectingEngine(const int index);
-    void ttsSelectingLanguaje(const int languaje);
-    void ttsSelectingVoice(const int index);
-    void ttsSettingRate(const int rate);
-    void ttsSettingPitch(const int pitch);
-    void ttsSettingVolume(const int volume);
-    void ttsResuming();
-    void ttsPausing();*/
+    void ttsSelectingEngine(const int index);    
 
 public slots:
+    void errorQML(QList<QQmlError> le);
     void ukClose(QQuickCloseEvent *close);
     void engineExited(int n);
     void engineQuited(QObject*);
