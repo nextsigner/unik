@@ -1,8 +1,10 @@
 # Compile this project for Android with Qt 5.13.0 on GNU/Linux
-# For Android we are recomend compile into GNU/Linux Ubuntu 16.04 with Android SDK 29
+# For Android we are recomend compile into
+#OS: GNU/Linux Ubuntu 16.04
+# Android SDK Version: 29
 # and Android NDK r19c
-# For Android armeabi-v7a with API 21-26
-# For Android arm64-v8a with API 21-28
+# For Android All Arch use API 21-28
+#JDK Location: /usr/lib/jvm/java-8-openjdk-amd64
 
 include(openssl.pri)
 FILE_VERSION_NAME=android/assets/android_version
