@@ -7,10 +7,11 @@ import QtMultimedia 5.0
 ApplicationWindow {
     id: app
     objectName: 'awll'
-    visibility:  "Maximized"
-    visible: false
-    flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
+    visibility:  Qt.platform.os !=='android'?"Maximized":"FullScreen"
+    visible: true
+    flags: Qt.platform.os !=='android'?Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint: undefined
     color: "transparent"
+    //color: Qt.platform.os!=='android'?"transparent":app.c1
     //flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     //property int fs: width<height?(Qt.platform.os !=='android'?app.height*0.02*unikSettings.zoom:app.height*0.06*unikSettings.zoom):(Qt.platform.os !=='android'?app.height*0.06*unikSettings.zoom:app.width*0.03*unikSettings.zoom)
     property int fs: Qt.platform.os !=='android'?app.height*0.035*unikSettings.zoom:width<height?app.width*0.025*unikSettings.zoom:app.height*0.035*unikSettings.zoom
@@ -31,6 +32,7 @@ ApplicationWindow {
 
     property string uSpeaked: ''
 
+    //ColorAnimation on color { to: Qt.platform.os!=='android'?"transparent":app.c2; duration: 1000 }
     Connections {id: con1; target: unik;onUkStdChanged:log.setTxtLog(''+unik.ukStd);}
     Connections {id: con2; target: unik;onUkStdChanged: log.setTxtLog(''+unik.ukStd); }
 
@@ -86,7 +88,7 @@ ApplicationWindow {
             app.c4=cc2[3]
             app.visible=true
         }
-    }    
+    }
     FolderListModel{
         folder: Qt.platform.os!=='windows'?'file://'+appsDir:'file:///'+pws
         id: fl
@@ -104,8 +106,8 @@ ApplicationWindow {
     }
     Rectangle{
         anchors.fill: parent
-        color: app.c1
-        visible: unikSettings.showBg
+        color: app.c2
+        visible: Qt.platform.os!=='android'?unikSettings.showBg:false
     }
     Rectangle{
         id:xLauncher
@@ -185,7 +187,7 @@ ApplicationWindow {
                         anchors.verticalCenter: parent.verticalCenter
                         visible: xItem.border.width!==0
                         onClicked: {
-                            tlaunch.stop()                           
+                            tlaunch.stop()
                             app.run()
                         }
                         UBg{opacity: 1.0}
@@ -575,7 +577,7 @@ ApplicationWindow {
                     BotonUX{
                         text: unikSettings.lang==='es'?'Languaje':'Lenguaje'
                         onClicked: {
-                           unikSettings.lang=unikSettings.lang==='es'?'en':'es'
+                            unikSettings.lang=unikSettings.lang==='es'?'en':'es'
                             if(unikSettings.sound){
                                 let s=unikSettings.lang==='es'?'Lenguaje seleccionado Español.':'Languaje selected English. '
                                 speak(s)
@@ -637,7 +639,7 @@ ApplicationWindow {
                                 if(unikSettings.lang==='es'){
                                     s+=!unikSettings.showBg?' activado':'desactivado'
                                 }else{
-                                     s+=!unikSettings.showBg?' enabled':'disabled'
+                                    s+=!unikSettings.showBg?' enabled':'disabled'
                                 }
                                 speak(s)
                             }
@@ -686,7 +688,7 @@ ApplicationWindow {
                         property int currentFocus: -1
                         property int cantFocus: appColorsThemes.cantColors-1
                         onVisibleChanged: {
-                           visible?currentFocus=0:currentFocus=-1
+                            visible?currentFocus=0:currentFocus=-1
                             if(unikSettings.sound&&visible){
                                 let s=unikSettings.lang==='es'?'Seleccionar colores.  Para cambiar ir hacia arriba. Para salir de la selección de colores ir hacia abajo.':'Colors selecction . For change color go to up. For exit of colors selection, go to down.'
                                 speak(s)
@@ -705,7 +707,7 @@ ApplicationWindow {
                             onVisibleChanged: {
                                 if(unikSettings.sound&&visible){
                                     let s=unikSettings.lang==='es'?'Editar enlace. Para editar o crear enlace presionar Intro.':'Edit or make. For edit or make press enter.'
-                                   speak(s)
+                                    speak(s)
                                 }
                             }
                         }
@@ -725,7 +727,7 @@ ApplicationWindow {
                             onVisibleChanged: {
                                 if(unikSettings.sound&&visible){
                                     let s=unikSettings.lang==='es'?'Ver la ayuda. Para ver la ayuda presionar Intro.':'Show help. For show help press enter.'
-                                   speak(s)
+                                    speak(s)
                                 }
                             }
                         }
@@ -742,7 +744,7 @@ ApplicationWindow {
                         id: btnUX6
                         text: unikSettings.lang==='es'?'Cerrar ':'Close'
                         onClicked: {
-                           xConfig.opacity=0.0
+                            xConfig.opacity=0.0
                             if(unikSettings.sound){
                                 let s=unikSettings.lang==='es'?'Cerrando configuración.':'Closing configuration. '
                                 speak(s)
@@ -753,7 +755,7 @@ ApplicationWindow {
                             onVisibleChanged: {
                                 if(unikSettings.sound&&visible){
                                     let s=unikSettings.lang==='es'?'Cerrar area de configuración. Para cerrar presionar Intro.':'Close configuration. For close configuration press enter.'
-                                   speak(s)
+                                    speak(s)
                                 }
                             }
                         }
@@ -764,7 +766,7 @@ ApplicationWindow {
                         onClicked:{
                             if(unikSettings.sound){
                                 let s=unikSettings.lang==='es'?'Apagando Unik.':'Closing Unik. '
-                               speak(s)
+                                speak(s)
                             }
                             Qt.quit()
                         }
@@ -773,7 +775,7 @@ ApplicationWindow {
                             onVisibleChanged: {
                                 if(unikSettings.sound&&visible){
                                     let s=unikSettings.lang==='es'?'Apagar Unik. Para apagar presionar Intro.':'Close Unik. For quit Unik press enter.'
-                                   speak(s)
+                                    speak(s)
                                 }
                             }
                         }
@@ -1409,13 +1411,13 @@ ApplicationWindow {
                     xPb.visible=false
                 }
             }
-        }        
+        }
     }
     Shortcut{
         sequence: 'Return'
         onActivated: {
             if(xConfig.opacity===0.0){
-                tlaunch.stop()               
+                tlaunch.stop()
                 app.run()
             }else{
                 /*if(ufACT.visible&&xConfig.currentFocus===6){
@@ -1520,7 +1522,7 @@ ApplicationWindow {
             tlaunch.stop()
             xP.opacity=0.0
             if(xConfig.opacity!==1.0){
-                tlaunch.stop()                
+                tlaunch.stop()
                 app.run()
             }else{
                 if(xConfig.currentFocus<xConfig.cantFocus){
@@ -1658,12 +1660,12 @@ ApplicationWindow {
                 app.close()
                 engine.load(appsDir+'/unik-tools/main.qml')
             }else{
-                xP.visible=true                
+                xP.visible=true
             }
             flick.opacity=1.0
             if(unikSettings.sound){
-                let a=app.ca.replace('link_', '').replace('.ukl', '').replace(/-/g, '')
-                let s=unikSettings.lang==='es'?'Preparando el inicio de .'+a:'Preparing the star of '+a
+                let a=app.ca.replace('link_', '').replace('.ukl', '').replace(/-/g, ' ')
+                let s=unikSettings.lang==='es'?'Preparando el inicio de '+a:'Preparing the star of '+a
                 speak(s)
             }
         }
@@ -1671,24 +1673,53 @@ ApplicationWindow {
     }
     Timer{
         id: tlaunch
-        running: true
+        running: Qt.platform.os!=='android'
         repeat: true
         interval: 1000
         property bool enabled: true
         onTriggered: {
             app.sec++
             if(app.sec===7){
-                stop()                
+                stop()
                 app.run()
             }
             if(app.sec>7){
                 app.sec=0
             }
-            psec.width=psec.parent.width/5*(app.sec-1)            
+            psec.width=psec.parent.width/5*(app.sec-1)
+        }
+    }
+    Rectangle{
+        id: xSplashBlanco
+        visible: Qt.platform.os==='android'
+        anchors.fill: parent
+        //color: app.c1
+        onOpacityChanged: {
+            if(opacity===0.0)tlaunch.start()
+        }
+        Behavior on opacity {
+            NumberAnimation{duration: 3000}
+        }
+        //ColorAnimation on color { to: app.c2; duration: 2000 }
+        Image {
+            id: splashBlanco
+            source: "assets:/splash.png"
+            width: parent.width*0.25
+            fillMode: Image.PreserveAspectFit
+            anchors.centerIn: parent
+            opacity: 0.0
+            onOpacityChanged: {
+                if(opacity===1.0)xSplashBlanco.opacity=0.0
+            }
+            Behavior on opacity {
+                NumberAnimation{duration: 500}
+            }
+
         }
     }
 
     Component.onCompleted:{
+        splashBlanco.opacity=1.0
         if(Qt.platform.os==='android'){
             unik.debugLog=true
         }
@@ -1697,19 +1728,20 @@ ApplicationWindow {
             if(unikSettings.lang==='es'){
                 if(ml[i].indexOf('Spanish')>=0){
                     unik.ttsLanguageSelected(i)
-                    console.log('::::::::::::::::::::::::::'+ml[i])
+                    //console.log('::::::::::::::::::::::::::'+ml[i])
                     break
                 }
             }else{
                 if(ml[i].indexOf('English')>=0){
                     unik.ttsLanguageSelected(i)
-                    console.log('::::::::::::::::::::::::::'+ml[i])
+                    //console.log('::::::::::::::::::::::::::'+ml[i])
                     break
                 }
             }
-
         }
-        unik.ttsVoiceSelected(0)
+        if(Qt.platform.os!=='android'){
+            unik.ttsVoiceSelected(0)
+        }
     }
     function setColors(){
         var nc=unikSettings.currentNumColor
@@ -1724,7 +1756,7 @@ ApplicationWindow {
         if(unikSettings.sound){
             let a=app.ca.replace('link_', '').replace('.ukl', '').replace(/-/g, '')
             let s=unikSettings.lang==='es'?'Iniciando .'+a:'Starting '+a
-           unik. speak(s)
+            unik. speak(s)
         }
         appSettings.uApp=app.ca
         var p=unik.getFile(appsDir+'/'+app.ca)

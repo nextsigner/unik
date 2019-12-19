@@ -16,6 +16,7 @@
 
 #include <QtTextToSpeech/QTextToSpeech>
 #include <QLoggingCategory>
+#include <QSplashScreen>
 
 #ifndef Q_OS_ANDROID
 #include <stdio.h>
@@ -228,8 +229,6 @@ int main(int argc, char *argv[])
     app.setOrganizationName("unikode.org");
 
     QQmlApplicationEngine engine;
-
-
 
     //-->Android Permissions
 #ifdef Q_OS_ANDROID
@@ -1642,7 +1641,7 @@ int main(int argc, char *argv[])
     qmlImportPath.append(ncqmls);
     engine.addImportPath(ffmqml);
     engine.addImportPath(QDir::currentPath());
-    engine.addPluginPath("/sdcard/Documents/unik/unik-ws-android-client-1");
+    //engine.addPluginPath("/sdcard/Documents/unik/unik-ws-android-client-1");
 #ifdef UNIK_COMPILE_ANDROID_X86
     engine.addPluginPath("assets:/lib/x86");
 #endif
@@ -1782,7 +1781,6 @@ int main(int argc, char *argv[])
     //u.createLink("unik", "/home/nextsigner/Escritorio/eee4.desktop",  "rrr777", "Pequeña 222vo", "/home/nextsigner/Imàgenes/ladaga.jpg");
 
 
-
     /*Atention! Not ejecute this method u.initWebSocketServer() with out the a correct load of the UnikWebSocketServerView or similar.*/
     //u.initWebSocketServer("127.0.0.1", 12345, "chatserver");
 
@@ -1796,16 +1794,9 @@ int main(int argc, char *argv[])
     //-------------------------------------------<6
 
 
-
-    //u.speak("sdafsa");
-
-
-
     //-->Prepare Url for load QML
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     //<--Prepare Url for load QML
-
-
 
     //-->Connections
     QObject::connect(&engine, SIGNAL(warnings(QList<QQmlError>)), &u, SLOT(errorQML(QList<QQmlError>)));
@@ -1835,11 +1826,6 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);*/
     //<--Connections
 
-
-
-
-
-
     //-->Info
     qInfo()<<"debugLog: "<< debugLog;
     qInfo()<<"appExec: "<<appExec;
@@ -1847,13 +1833,6 @@ int main(int argc, char *argv[])
     qInfo()<<"UAP argv: "<<uap.args;
     qInfo()<<"UAP showLaunch: "<<uap.showLaunch;
     //<--Info
-
-
-
-
-
-
-    //engine.load(url);
 
     //-->Latest codes
 #ifdef _WIN32
