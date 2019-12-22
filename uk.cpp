@@ -1796,7 +1796,8 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
     log("downloading zip file from: "+url);
     uZipUrl=QString(url);
     uZipSize=0;
- #ifndef Q_OS_ANDROID
+ #ifndef Q_OS_OSX
+#ifndef Q_OS_ANDROID
     #ifndef Q_OS_WIN
     #ifndef Q_OS_LINUX
     QEventLoop eventLoop0;
@@ -1821,6 +1822,7 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
         }
     }
     );
+#endif
 #endif
 #endif
 #endif
@@ -2972,6 +2974,10 @@ void UK::speak(const QByteArray text, int voice, const QByteArray language)
 #endif
 #endif
 #ifdef Q_OS_ANDROID
+    tts->say(text);
+    qDebug()<<"SPEAK::: "<<text;
+#endif
+#ifdef Q_OS_OSX
     tts->say(text);
     qDebug()<<"SPEAK::: "<<text;
 #endif

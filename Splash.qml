@@ -6,9 +6,11 @@ ApplicationWindow {
     objectName: 'awsplash'
     visible: true
     visibility:  "Maximized"
+    width: Screen.width
+    height: Screen.height
     color: "transparent"
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
-    property int fs: appSplash.width*0.02*unikSettings.zoom
+    property int fs: Qt.platform.os!=='osx'?appSplash.width*0.02*unikSettings.zoom:appSplash.width*0.02
     property bool ver: true
     property color c1: "#1fbc05"
     property color c2: "white"
@@ -31,6 +33,10 @@ ApplicationWindow {
     }
     UnikSettings{
         id: unikSettings
+        //zoom: 24
+        Component.onCompleted:{
+            app.fs = appSplash.width*0.02*unikSettings.zoom
+        }
     }
     Timer{
         running: !ver

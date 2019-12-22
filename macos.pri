@@ -38,4 +38,6 @@ for(FILE,EXTRA_BINFILES){
 #QMAKE_BUNDLE_DATA += APP_QML_FILES
 
 #Deploy command line example
-#/Users/qt/Qt5.9.1/5.9.1/clang_64/bin/macdeployqt /Users/qt/nsp/unik-recursos/build_osx_clang64/unik.app -qmldir=/Users/qt/nsp/unik -no-strip -dmg
+#1) /Users/qt/Qt5.12.3/5.12.3/clang_64/bin/macdeployqt /Users/qt/nsp/unik-recursos/build_osx_clang64/unik.app -qmldir=/Users/qt/nsp/unik
+#2) /Users/qt/Qt5.12.3/5.12.3/clang_64/bin/macdeployqt /Users/qt/nsp/unik-recursos/build_osx_clang64/unik.app -qmldir=/Users/qt/nsp/unik -no-strip -dmg
+

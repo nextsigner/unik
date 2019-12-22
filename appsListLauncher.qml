@@ -39,7 +39,7 @@ ApplicationWindow {
     onCaChanged: {
         if(unikSettings.sound){
             let a=app.ca.replace('link_', '').replace('.ukl', '').replace(/-/g, '')
-            let s=unikSettings.lang==='es'?'Ha seleccionado .'+a+'. Presionar intro para iniciar':'Selecting  '+a+'. Press enter for run.'
+            let s=unikSettings.lang==='es'?'Ha seleccionado '+a+'. Presionar intro para iniciar':'Selecting  '+a+'. Press enter for run.'
             speak(s)
         }
     }

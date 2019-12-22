@@ -266,7 +266,7 @@ int main(int argc, char *argv[])
 
     //--> TTS
     QLoggingCategory::setFilterRules(QStringLiteral("qt.speech.tts=true \n qt.speech.tts.*=true"));
-    //qDebug()<<"TTS AVAILABLE ENGINES: "<<QTextToSpeech::availableEngines();
+    //∫qDebug()<<"TTS AVAILABLE ENGINES: "<<QTextToSpeech::availableEngines();
     QTextToSpeech *tts2 = new QTextToSpeech(QTextToSpeech::availableEngines().at(0));
     u.tts = qobject_cast<QTextToSpeech *>( tts2 );
     Q_ASSERT( u.tts != nullptr );
