@@ -1312,7 +1312,7 @@ void UK::restartApp(QString args)
 }
 
 bool UK::run(QString commandLine){
-    run(commandLine, false, 0);
+    return run(commandLine, false, 0);
 }
 
 bool UK::run(QString commandLine, bool waitingForFinished, int milliseconds)
@@ -2937,7 +2937,8 @@ void UK::speak(const QByteArray text, int voice, const QByteArray language)
         run("cmd /c "+f);
         qDebug()<<s;
     }else{
-        m_speech->say(text);
+        tts->say(text);
+        qDebug()<<"SPEAK::: "<<text;
     }
 
 #endif
@@ -3070,6 +3071,9 @@ void UK::ttsEngineSelected(int index)
                     tts->setLocale(locale);
                 }
                 ttsVoices = tts->availableVoices();
+                uTtsVoicesIndex = 0;
+                ttsVoicesList.clear();
+                ttsVoices = tts->availableVoices();
                 QVoice currentVoice = tts->voice();
                 foreach (const QVoice &voice, ttsVoices) {
                     ttsVoicesList.append(QString("%1 - %2 - %3").arg(voice.name())
@@ -3094,6 +3098,7 @@ void UK::ttsLanguageSelected(int languaje)
     }
     uTtsLocalesIndex = languaje;
     uTtsVoicesIndex = 0;
+    ttsVoicesList.clear();
             ttsVoices = tts->availableVoices();
             QVoice currentVoice = tts->voice();
             foreach (const QVoice &voice, ttsVoices) {

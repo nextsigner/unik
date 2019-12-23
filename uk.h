@@ -427,6 +427,9 @@ public slots:
 #ifdef Q_OS_LINUX
     void speak(const QByteArray text, const QByteArray language);
 #endif
+#ifdef Q_OS_WIN
+    void speak(const QByteArray text, const QByteArray language);
+#endif
 #ifdef Q_OS_MACOS
     void speak(const QByteArray text, const QByteArray language);
 #endif
