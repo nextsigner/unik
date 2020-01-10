@@ -17,7 +17,7 @@ Rectangle {
     onVisibleChanged: {
         if(visible){
             app.objFocus=r.objFocus
-            mp.stop()
+            //mp.stop()
             if(!unik.fileExist(pws+'/unik-tools/unik/audio/'+r.idSound+'.m4a')){
                 return
             }

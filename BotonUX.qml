@@ -16,6 +16,7 @@ Rectangle {
     property string t2
     property color backgroudColor: app.c1
     property color fontColor: app.c2
+    property string fontFamily: 'Arial'
     property var objToRunQml
     property string qmlCode:''
     property int speed: 100
@@ -91,6 +92,7 @@ Rectangle {
     UText {
         id: a
         font.pixelSize: r.fontSize
+        font.family: r.fontFamily
         color: r.fontColor
         anchors.centerIn: parent
         visible: r.enabled
@@ -99,6 +101,7 @@ Rectangle {
         id: a2
         text:a.text
         font.pixelSize: r.fontSize
+        font.family: r.fontFamily
         color: r.backgroudColor
         x: !maBX.p?a.x:a.x+2
         y:a.y
@@ -108,9 +111,10 @@ Rectangle {
     }
     UText {
         id: txtCancel
-        text: '<b>?</b>'
+        text: '<b>...</b>'
         font.pixelSize: r.fontSize*2
-        color: 'red'
+        font.family: r.fontFamily
+        color: app.c1
         anchors.centerIn: parent
         visible: !r.enabled
     }

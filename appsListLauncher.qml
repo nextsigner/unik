@@ -67,7 +67,7 @@ ApplicationWindow {
     }
     UnikSettings{
         id: unikSettings
-        url:'./launcher.json'
+        url:pws+'/launcher.json'
         onCurrentNumColorChanged: {
             if(unikSettings.sound&&currentNumColor>=0){
                 let s=unikSettings.lang==='es'?'Color actual ':'Current color  '
@@ -426,7 +426,15 @@ ApplicationWindow {
             property int wmax:btnUX5.width+btnUX6.width+btnUX7.width+btnUX8.width<btnUX1.width+btnUX2.width+btnUX3.width+btnUX4.width? btnUX1.width+btnUX2.width+btnUX3.width+btnUX4.width+(btnUX7.width+app.fs*2):btnUX5.width+btnUX6.width+btnUX7.width+btnUX8.width+(btnUX7.width+app.fs*2)
             property int cantFocus: 13
             property int currentFocus: 1
+            onVisibleChanged: {
+                if(visible){
+                    tlaunch.stop()
+                    tinit.stop()
+                }
+            }
             onOpacityChanged:{
+                tlaunch.stop()
+                tinit.stop()
                 if(opacity===0.0){
                     colConfig.opacity=0.0
                 }
@@ -1467,6 +1475,8 @@ ApplicationWindow {
     Shortcut{
         sequence: 'Left'
         onActivated: {
+            tinit.stop()
+            tlaunch.stop()
             if(xLinkEditor.visible){
                 xLinkEditor.visible=false
                 return
@@ -1695,7 +1705,7 @@ ApplicationWindow {
         anchors.fill: parent
         //color: app.c1
         onOpacityChanged: {
-            if(opacity===0.0)tlaunch.start()
+            if(opacity===0.0&&xConfig.opacity===0)tlaunch.start()
         }
         Behavior on opacity {
             NumberAnimation{duration: 3000}
@@ -1703,7 +1713,7 @@ ApplicationWindow {
         //ColorAnimation on color { to: app.c2; duration: 2000 }
         Image {
             id: splashBlanco
-            source: "assets:/splash.png"
+            source: Qt.platform.os==='android'?"assets:/splash.png":"logo.png"
             width: parent.width*0.25
             fillMode: Image.PreserveAspectFit
             anchors.centerIn: parent

@@ -213,13 +213,6 @@ static void android_message_handler(QtMsgType type,
 #endif
 int main(int argc, char *argv[])
 {
-    //#ifdef Q_OS_LINUX
-    //    qputenv("LD_PRELOAD","/usr/lib/x86_64-linux-gnu/libnss3.so");
-    //     qInfo()<<"LD_PRELOAD: "<<qgetenv("LD_PRELOAD");
-    //#endif
-
-
-
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
@@ -227,6 +220,34 @@ int main(int argc, char *argv[])
     app.setApplicationName("unik");
     app.setOrganizationDomain("http://www.unikode.org/");
     app.setOrganizationName("unikode.org");
+
+
+/*#ifdef Q_OS_LINUX
+     qputenv("LD_PRELOAD","/media/nextsigner/ZONA-A11/nsp/unik/build_linux/libpepflashplayer.so");
+     qInfo()<<"LD_PRELOAD: "<<qgetenv("LD_PRELOAD");
+     QString ffp;
+     //ffp.append(qApp->applicationDirPath());
+     //ffp.append("/lib/libpepflashplayer.so");
+     ffp.append("/media/nextsigner/ZONA-A11/nsp/unik/build_linux/PepperFlash/32.0.0.303/libpepflashplayer.so");
+     qDebug()<<"Cargando FlashPlayer "<<ffp;
+     QPluginLoader* pluginLoader =
+             new QPluginLoader(ffp);
+     qDebug()<<"FlashPlayer Metadata: "<<pluginLoader->metaData().count();
+
+     bool ret = pluginLoader->load();
+     //QThread::sleep(10);
+     if (!ret){
+         qDebug()<<"Plugin Loader no cargó FlashPlayer "<<pluginLoader->errorString();
+     }else{
+         qDebug()<<"Plugin Loader cargó FlashPlayer ";
+     }
+     if (!pluginLoader->isLoaded()){
+         qDebug()<<"2 Plugin Loader no cargó FlashPlayer "<<pluginLoader->isWidgetType();
+     }else{
+         qDebug()<<"2 Plugin Loader cargó FlashPlayer ";
+     }
+#endif*/
+
 
     QQmlApplicationEngine engine;
 
@@ -1766,7 +1787,7 @@ int main(int argc, char *argv[])
 #else
     QByteArray uklData;
     uklData.append("-git=https://github.com/nextsigner/unik-android-apps.git");
-    uklData.append(" -dir=");
+    uklData.append(" -folder=");
     uklData.append(pws);
     uklData.append("/unik-android-apps");
     QByteArray uklUrl;
