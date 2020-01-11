@@ -34,6 +34,18 @@ message(linux.pri is loaded...)
         write_file($$PWD/build_linux/linux_version, APPVERSION)
         message(File version location: $$FILE_VERSION_NAME2)
 
+
+         DESKTOPDATA=""
+         DESKTOPDATA+="[Desktop Entry]"
+        DESKTOPDATA+="Categories=Qt;Settings;"
+        DESKTOPDATA+="Type=Application"
+        DESKTOPDATA+="Name=unik_v"$$APPVERSION
+        DESKTOPDATA+="Exec=AppRun %F"
+        DESKTOPDATA+="Icon=default"
+        DESKTOPDATA+="Comment=Unik Qml Engine by Unikode.org"
+        DESKTOPDATA+="Terminal=true"
+        write_file($$PWD/build_linux/default.desktop, DESKTOPDATA)
+
         #Building Quazip from Ubuntu 16.10
         #Compile quazip.pro and install with sudo make install from the $$OUT_PWD
         INCLUDEPATH += $$PWD/quazip
