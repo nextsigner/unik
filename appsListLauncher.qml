@@ -1781,12 +1781,12 @@ ApplicationWindow {
         }
         console.log('Launching '+appSettings.uApp+'...')
 
-        if(Qt.platform.os==='android'){
-            var m0
-            var m1
-            var m2
-            var mn
+        var m0
+        var m1
+        var m2
+        var mn
 
+        if(Qt.platform.os==='android'){
             if(params.indexOf('-git=')>=0&&params.indexOf('-git=')!==params.length-1&&params.length>5){
                 app.downloading=true
                 m0=params.split('-git=')
@@ -1834,9 +1834,56 @@ ApplicationWindow {
                 return
             }
         }else{
-            unik.setUnikStartSettings(params)
-            console.log('New USS params: '+params)
-            unik.restartApp("")
+            if(params.indexOf('-git=')>=0&&params.indexOf('-git=')!==params.length-1&&params.length>5){
+                app.downloading=true
+                m0=params.split('-git=')
+                m1=m0[1].split(',')
+                m2=m1[0].split('/')
+                mn=m2[m2.length-1].replace(/.git/g, '')
+
+                unik.cd(pws)
+                unik.mkdir(pws+'/'+mn)
+                xPb.opacity=1.0
+                var d = unik.downloadGit(m1[0], pws)
+                if(app.downloading){
+                    unik.ejecutarLineaDeComandoAparte(unik.getPath(0)+' -folder='+pws+'/'+mn)
+                    Qt.quit()
+                    return
+                }
+            }
+            if(params.indexOf('-zip=')>=0&&params.indexOf('-zip=')!==params.length-1&&params.length>5){
+                m0=params.split('-zip=')
+                m1=m0[1].split(',')
+                m2=m1[0].split('/')
+                mn=m2[m2.length-1].replace(/.zip/g, '')
+
+
+                unik.cd(pws)
+                unik.mkdir(pws+'/'+mn)
+                var d = unik.runAppFromZip(m1[0], pws)
+                unik.cd(pws+'/'+mn)
+                unik.ejecutarLineaDeComandoAparte(unik.getPath(0)+' -folder='+pws+'/'+mn)
+                Qt.quit()
+                return
+                /*engine.load(pws+'/'+mn+'/main.qml')
+                app.close()*/
+            }
+
+            if(params.indexOf('-folder=')>=0&&params.indexOf('-folder=')!==params.length-1&&params.length>5){
+                m0=params.split('-folder=')
+                m1=m0[1].split(',')
+                m2=m1[0].split('/')
+                mn=m2[m2.length-1]
+
+                unik.ejecutarLineaDeComandoAparte(unik.getPath(0)+' -folder='+pws+'/'+mn)
+                Qt.quit()
+                return
+
+                /*unik.cd(pws)
+                unik.mkdir(pws+'/'+mn)
+                engine.load(pws+'/'+mn+'/main.qml')
+                app.close()*/
+            }
         }
         //app.close()
     }
