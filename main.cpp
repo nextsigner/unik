@@ -575,7 +575,9 @@ int main(int argc, char *argv[])
     ffmqml.append("/unik-tools-rpi/");
 #endif
 #endif
-    QDir::setCurrent(ffmqml);
+    if(!qApp->arguments().contains("-install")){
+        QDir::setCurrent(ffmqml);
+    }
     //<--Set Path WorkSpace and Folder for Main QML
 
 
@@ -639,7 +641,9 @@ int main(int argc, char *argv[])
                 if(!fscd.exists()){
                     fscd.mkdir(ncp);
                 }
-                QDir::setCurrent(ncp);
+                if(!qApp->arguments().contains("-install")){
+                    QDir::setCurrent(ncp);
+                }
 
 #ifndef Q_OS_WIN
                 engine.addImportPath(QDir::currentPath());
@@ -672,7 +676,9 @@ int main(int argc, char *argv[])
                 if(!fscd.exists()){
                     fscd.mkdir(ncp);
                 }
-                QDir::setCurrent(ncp);
+                if(!qApp->arguments().contains("-install")){
+                    QDir::setCurrent(ncp);
+                }
                 showLaunch=false;
                 uap.showLaunch=false;
                 modeFolder=true;
@@ -738,7 +744,9 @@ int main(int argc, char *argv[])
                     if(!fscd.exists()){
                         fscd.mkdir(ncp);
                     }
-                    QDir::setCurrent(ncp);
+                    if(!qApp->arguments().contains("-install")){
+                        QDir::setCurrent(ncp);
+                    }
                     moduloGit="";
                     moduloGit.append(mg2);
                     modeGitArg=true;
@@ -836,9 +844,14 @@ int main(int argc, char *argv[])
         iconData.append("[Desktop Entry]\n");
         iconData.append("Categories=Development;Qt;Settings;\n");
         iconData.append("Type=Application\n");
-        iconData.append("Name=unik_v4.02.1\n");
+        iconData.append("Name=unik_v");
+        iconData.append(nv);
+        iconData.append("\n");
         iconData.append("Exec=");
-        iconData.append(qApp->applicationDirPath()+"/unik");
+        //iconData.append(QDir::currentPath()+"/unik_v");
+        //iconData.append(nv);
+        //iconData.append("-x86_64.AppImage");
+        iconData.append("unik");
         iconData.append("\n");
         iconData.append("Icon=");
         iconData.append(cf+"/unik.png\n");
@@ -850,6 +863,17 @@ int main(int argc, char *argv[])
         }else{
             qInfo()<<"Unik installed in category Development.";
         }
+        if(u.fileExist("/usr/local/bin/unik")){
+            u.deleteFile("/usr/local/bin/unik");
+        }
+        QByteArray cmdLN;
+        cmdLN.append("sudo ln ");
+        cmdLN.append(QDir::currentPath()+"/unik_v");
+        cmdLN.append(nv);
+        cmdLN.append("-x86_64.AppImage");
+        cmdLN.append(" /usr/local/bin/unik");
+        u.ejecutarLineaDeComandoAparte(cmdLN);
+        qInfo()<<"Unik Current Path: "<<QDir::currentPath();
         return 0;
     }
 #endif
