@@ -35,7 +35,7 @@ ApplicationWindow {
         id: unikSettings
         //zoom: 24
         Component.onCompleted:{
-            app.fs = appSplash.width*0.02*unikSettings.zoom
+            appSplash.fs = appSplash.width*0.02*unikSettings.zoom
         }
     }
     Timer{

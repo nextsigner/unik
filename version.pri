@@ -64,6 +64,13 @@ win32 {
     }
     NUMSEM1=$$system(date +%W)
     NUMSEM2=$$system("echo $(($$NUMSEM1 + 1))")
+    message(Week Number $$NUMSEM2)
+    greaterThan(NUMSEM2, 9){
+        message(Week Number is major that 9)
+    }else{
+        message(Week Number is minor that 9)
+        NUMSEM2="0"$$system("echo $(($$NUMSEM1 + 1))")
+    }
     APPVERSION=$$VERSION_MAJ"."$$NUMSEM2$$VERSION_MEN2
     message(Unix App Version $$APPVERSION)
 }

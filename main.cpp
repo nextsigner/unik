@@ -422,9 +422,11 @@ int main(int argc, char *argv[])
         if(a=="-nl"){
             showLaunch=false;
         }
-        qInfo()<<"UAP ADDING ARG "<<i<<" : "<<argv[i];
+        //qInfo()<<"UAP ADDING ARG "<<i<<" : "<<argv[i];
     }
-    uap.init();
+    if(!qApp->arguments().contains("-install")){
+        uap.init();
+    }
     showLaunch=uap.showLaunch;
     //<--Load UAP
 
@@ -460,13 +462,13 @@ int main(int argc, char *argv[])
 #endif
     fvp.append("/");
     fvp.append(nomVersion);
-    qDebug() << "UNIK FILE VERSION: " << fvp;
+    //qDebug() << "UNIK FILE VERSION: " << fvp;
     QFile fileVersion(fvp);
     fileVersion.open(QIODevice::ReadOnly);
-    nv = fileVersion.readAll();
+    nv = fileVersion.readAll().replace("\n", "");
     fileVersion.close();
 
-    qDebug() << "UNIK VERSION: " << nv;
+    qDebug() << "Unik version: " << nv;
     app.setApplicationVersion(nv.toUtf8());
     //<--Set Unik Version
 
@@ -601,8 +603,17 @@ int main(int argc, char *argv[])
         if(uap.args.at(i)==QByteArray("-debug")){
             debugLog=true;
         }
+
         QString arg;
         arg.append(uap.args.at(i));
+
+        //>-install
+        if(arg.contains("-install")){
+            install=true;
+            break;
+        }
+        //<-install
+
         if(arg.contains("-user=")){
             QStringList marg = arg.split("-user=");
             if(marg.size()==2){
@@ -645,6 +656,7 @@ int main(int argc, char *argv[])
                 uap.showLaunch=false;
             }
         }
+
         //>-folder
         if(arg.contains("-folder=")){
             QStringList marg = arg.split("-folder=");
@@ -796,13 +808,52 @@ int main(int argc, char *argv[])
             qInfo()<<"WebSocket Server init request...";
             params=true;
         }
-        //>-folder
-        if(arg.contains("-install")){
-            install=true;
-        }
     }
     //<--Iterator for setting all application arguments from app args or cfg.json.
 
+    //->Comienza install gnu/linux
+#ifdef Q_OS_LINUX
+    if(install){
+        QByteArray cf;
+        cf.append(u.getPath(4));
+        cf.append("/img");
+        qInfo()<<"Unik Image Folder: "<<cf;
+        QDir configFolder(cf);
+        if(!configFolder.exists()){
+            qInfo()<<"Making Unik Image Folder...";
+            u.mkdir(cf);
+        }
+        QFile icon2(cf+"/unik.png");
+        if(!icon2.exists()){
+            QByteArray cf2;
+            cf2.append(qApp->applicationDirPath());
+            cf2.append("/default.png");
+            QFile icon(cf2);
+            icon.copy(cf+"/unik.png");
+            qInfo()<<"Copyng unik icon file: "<<cf2<<" to "<<cf+"/unik.png";
+        }
+        QByteArray iconData;
+        iconData.append("[Desktop Entry]\n");
+        iconData.append("Categories=Development;Qt;Settings;\n");
+        iconData.append("Type=Application\n");
+        iconData.append("Name=unik_v4.02.1\n");
+        iconData.append("Exec=");
+        iconData.append(qApp->applicationDirPath()+"/unik");
+        iconData.append("\n");
+        iconData.append("Icon=");
+        iconData.append(cf+"/unik.png\n");
+        iconData.append("Comment=Unik Qml Engine by Unikode.org\n");
+        iconData.append("Terminal=false\n");
+        u.setFile("/usr/share/applications/unik.desktop", iconData);
+        if(!u.fileExist("/usr/share/applications/unik.desktop")){
+            qInfo()<<"Error when install Unik. Run Unik whit sudo permission for install this app into GNU/Linux";
+        }else{
+            qInfo()<<"Unik installed in category Development.";
+        }
+        return 0;
+    }
+#endif
+    //<-Finaliza install gnu/linux
 
 
     //-->WebSockets and WebSocketServer configuration
@@ -1102,50 +1153,50 @@ int main(int argc, char *argv[])
         updateUnikTools=false;
     }
 
-    //->Comienza configuracion OS
-#ifdef Q_OS_LINUX
-    if(install){
-        QByteArray cf;
-        cf.append(u.getPath(4));
-        cf.append("/img");
-        qInfo()<<"Unik Image Folder: "<<cf;
-        QDir configFolder(cf);
-        if(!configFolder.exists()){
-            qInfo()<<"Making Unik Image Folder...";
-            u.mkdir(cf);
-        }
-        QFile icon2(cf+"/unik.png");
-        if(!icon2.exists()){
-            QByteArray cf2;
-            cf2.append(qApp->applicationDirPath());
-            cf2.append("/default.png");
-            QFile icon(cf2);
-            icon.copy(cf+"/unik.png");
-            qInfo()<<"Copyng unik icon file: "<<cf2<<" to "<<cf+"/unik.png";
-        }
-        QByteArray iconData;
-        iconData.append("[Desktop Entry]\n");
-        iconData.append("Categories=Development;Qt;Settings;\n");
-        iconData.append("Type=Application\n");
-        iconData.append("Name=unik_v4.02.1\n");
-        iconData.append("Exec=");
-        iconData.append(qApp->applicationDirPath()+"/unik");
-        iconData.append("\n");
-        iconData.append("Icon=");
-        iconData.append(cf+"/unik.png\n");
-        iconData.append("Comment=Unik Qml Engine by Unikode.org\n");
-        iconData.append("Terminal=false\n");
-        u.setFile("/usr/share/applications/unik.desktop", iconData);
-        if(!u.fileExist("/usr/share/applications/unik.desktop")){
-            qInfo()<<"Error when install Unik. Run Unik whit sudo permission for install this app into GNU/Linux";
-            return 0;
-        }else{
-            qInfo()<<"Unik installed in category Development.";
-        }
+//    //->Comienza configuracion OS
+//#ifdef Q_OS_LINUX
+//    if(install){
+//        QByteArray cf;
+//        cf.append(u.getPath(4));
+//        cf.append("/img");
+//        qInfo()<<"Unik Image Folder: "<<cf;
+//        QDir configFolder(cf);
+//        if(!configFolder.exists()){
+//            qInfo()<<"Making Unik Image Folder...";
+//            u.mkdir(cf);
+//        }
+//        QFile icon2(cf+"/unik.png");
+//        if(!icon2.exists()){
+//            QByteArray cf2;
+//            cf2.append(qApp->applicationDirPath());
+//            cf2.append("/default.png");
+//            QFile icon(cf2);
+//            icon.copy(cf+"/unik.png");
+//            qInfo()<<"Copyng unik icon file: "<<cf2<<" to "<<cf+"/unik.png";
+//        }
+//        QByteArray iconData;
+//        iconData.append("[Desktop Entry]\n");
+//        iconData.append("Categories=Development;Qt;Settings;\n");
+//        iconData.append("Type=Application\n");
+//        iconData.append("Name=unik_v4.02.1\n");
+//        iconData.append("Exec=");
+//        iconData.append(qApp->applicationDirPath()+"/unik");
+//        iconData.append("\n");
+//        iconData.append("Icon=");
+//        iconData.append(cf+"/unik.png\n");
+//        iconData.append("Comment=Unik Qml Engine by Unikode.org\n");
+//        iconData.append("Terminal=false\n");
+//        u.setFile("/usr/share/applications/unik.desktop", iconData);
+//        if(!u.fileExist("/usr/share/applications/unik.desktop")){
+//            qInfo()<<"Error when install Unik. Run Unik whit sudo permission for install this app into GNU/Linux";
+//            return 0;
+//        }else{
+//            qInfo()<<"Unik installed in category Development.";
+//        }
 
-    }
-#endif
-    //<-Finaliza configuracion OS
+//    }
+//#endif
+//    //<-Finaliza configuracion OS
     //----------------------------<1
 
 

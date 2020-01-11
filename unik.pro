@@ -4,10 +4,10 @@
 # Whatsapps: +54 11 3802 4370
 # GitHub: https://github.com/nextsigner/unik
 
-QT += qml quick sql websockets quickcontrols2
+QT += qml quick sql websockets
 
 QT += texttospeech
-#requires(qtHaveModule(gui))
+requires(qtHaveModule(gui))
 #qtHaveModule(gui): requires(qtConfig(combobox))
 
 

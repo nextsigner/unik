@@ -2,8 +2,10 @@
 
 UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
 {
-    qInfo()<<"\n\n\nUAP: init... ";
-    qInfo()<<"UAP: Prepare WorkSpace...";
+    if(!qApp->arguments().contains("-install")){
+        qInfo()<<"\n\n\nUAP: init... ";
+        qInfo()<<"UAP: Prepare WorkSpace...";
+    }
 
 #ifdef Q_OS_ANDROID
     QStringList systemEnvironment = QProcess::systemEnvironment();
@@ -53,9 +55,13 @@ UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
     if(settings.value("ws").toString().isEmpty()){
         settings.setValue("ws", dp.toUtf8()+"/unik");
         ws=dp.toUtf8()+"/unik";
-        qInfo()<<"UAP WorkSpace by default: "<<ws;
+        if(!qApp->arguments().contains("-install")){
+            qInfo()<<"UAP WorkSpace by default: "<<ws;
+        }
     }else{
-        qInfo()<<"Current WorkSpace: "<<settings.value("ws").toString().toUtf8();
+        if(!qApp->arguments().contains("-install")){
+            qInfo()<<"Current WorkSpace: "<<settings.value("ws").toString().toUtf8();
+        }
         QFileInfo fi(settings.value("ws").toString().toUtf8());
         if(!fi.isWritable()){
             QString ndulw;
@@ -73,7 +79,9 @@ UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
         }
     }
 #endif
-    qInfo()<<"UAP: WorkSpace defined as "<<ws;
+    if(!qApp->arguments().contains("-install")){
+        qInfo()<<"UAP: WorkSpace defined as "<<ws;
+    }
 }
 
 void UnikArgsProc::init()

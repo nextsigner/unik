@@ -17,7 +17,7 @@
 #5 optional) Copy nss3 files into
 #cp -r /usr/lib/x86_64-linux-gnu/nss <executable path>/
 
-message(linux.pri is loaded)
+message(linux.pri is loaded...)
 
 !android{
     message(Linux NO ANDROID)

@@ -1,6 +1,7 @@
 #ifndef UNIKARGSPROC_H
 #define UNIKARGSPROC_H
 
+#include <QGuiApplication>
 #include <QObject>
 #include <QSettings>
 #include <QFileInfo>

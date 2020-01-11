@@ -14,7 +14,7 @@ UK::UK(QObject *parent) : QObject(parent)//,
 #endif
 
 
-    connect(tts, SIGNAL(stateChanged()), this, SLOT(stateChanged()));
+    //connect(tts, SIGNAL(stateChanged()), this, SLOT(stateChanged()));
 
 
 
