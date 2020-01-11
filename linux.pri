@@ -17,7 +17,7 @@
 #5 optional) Copy nss3 files into
 #cp -r /usr/lib/x86_64-linux-gnu/nss <executable path>/
 
-message(linux.pri is loaded...)
+message(linux.pri is loaded......)
 
 !android{
     message(Linux NO ANDROID)
@@ -34,7 +34,6 @@ message(linux.pri is loaded...)
         write_file($$PWD/build_linux/linux_version, APPVERSION)
         message(File version location: $$FILE_VERSION_NAME2)
 
-
          DESKTOPDATA=""
          DESKTOPDATA+="[Desktop Entry]"
         DESKTOPDATA+="Categories=Qt;Settings;"
@@ -46,6 +45,13 @@ message(linux.pri is loaded...)
         DESKTOPDATA+="Terminal=true"
         write_file($$PWD/build_linux/default.desktop, DESKTOPDATA)
 
+        DEPLOYDATASH=""
+        DEPLOYDATASH+=$${LITERAL_HASH}!/bin/bash
+        DEPLOYDATASH+="echo Iniciando deploy.sh"
+        DEPLOYDATASH+="cd ../"
+        DEPLOYDATASH+="cd ./unik-dev-apps/unik"
+        #DEPLOYDATASH+="~/linuxdeployqt-continuous-x86_64.AppImage $$PWD/build_linux/unik -qmldir=$$PWD -qmake=/home/nextsigner/Qt/5.12.3/gcc_64/bin/qmake -verbose=3 -bundle-non-qt-libs -no-plugins -appimage && cp "
+        write_file($$PWD/deploy.sh, DEPLOYDATASH)
         #Building Quazip from Ubuntu 16.10
         #Compile quazip.pro and install with sudo make install from the $$OUT_PWD
         INCLUDEPATH += $$PWD/quazip
