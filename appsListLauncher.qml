@@ -154,7 +154,7 @@ ApplicationWindow {
             Behavior on contentY{NumberAnimation{duration: 500}}
             ListView{
                 id: lv
-                visible: lv.count!=1&&Qt.platform.os==='android'
+                visible: Qt.platform.os!=='android'?true:lv.count!==1
                 spacing: (app.fs*unikSettings.padding)+2
                 model:fl
                 delegate: delegate
