@@ -3,7 +3,6 @@ import QtQuick.Controls 2.12
 import QtQuick.Window 2.2
 import Qt.labs.folderlistmodel 2.2
 import Qt.labs.settings 1.0
-import QtMultimedia 5.0
 ApplicationWindow {
     id: app
     objectName: 'awll'
@@ -49,22 +48,14 @@ ApplicationWindow {
             //close.accepted = false;
         }
     }
-    onCiChanged: if(app.al[app.ci])app.ca=app.al[app.ci]
-    FontLoader {name: "FontAwesome";source: "qrc:/fontawesome-webfont.ttf";}
-    Settings{
-        id: appSettings
-        category: 'conf-appsListLauncher'
-        property string uApp
-        property int runNumber
-        onUAppChanged: {
-            app.downloading=false
-            xPb.opacity=0.0
-        }
-        Component.onCompleted: {
-            //if(runNumber===0)sound=true
-            runNumber++
+    onCiChanged: {
+        if(app.al[app.ci]){
+            app.ca=app.al[app.ci]
+            appSettings.uApp=app.ca
         }
     }
+    FontLoader {name: "FontAwesome";source: "qrc:/fontawesome-webfont.ttf";}
+
     UnikSettings{
         id: unikSettings
         url:pws+'/launcher.json'
@@ -87,6 +78,20 @@ ApplicationWindow {
             app.c3=cc2[2]
             app.c4=cc2[3]
             app.visible=true
+        }
+    }
+    Settings{
+        id: appSettings
+        category: 'conf-appsListLauncher'
+        property string uApp
+        property int runNumber
+        onUAppChanged: {
+            app.downloading=false
+            xPb.opacity=0.0
+        }
+        Component.onCompleted: {
+            //if(runNumber===0)sound=true
+            runNumber++
         }
     }
     FolderListModel{
@@ -431,6 +436,13 @@ ApplicationWindow {
                 if(visible){
                     tlaunch.stop()
                     tinit.stop()
+                }else{
+                    for(var i=0;i<app.al.length;i++){
+                        if(appSettings.uApp===app.al[i]){
+                            app.ca=app.al[i]
+                            lv.currentIndex=i
+                        }
+                    }
                 }
             }
             onOpacityChanged:{
@@ -438,6 +450,12 @@ ApplicationWindow {
                 tinit.stop()
                 if(opacity===0.0){
                     colConfig.opacity=0.0
+                    for(var i=0;i<app.al.length;i++){
+                        if(appSettings.uApp===app.al[i]){
+                            app.ca=app.al[i]
+                            lv.currentIndex=i
+                        }
+                    }
                 }
                 if(opacity===1.0){
                     colConfig.opacity=1.0
@@ -1656,6 +1674,8 @@ ApplicationWindow {
                 appSettings.uApp=app.al[0]
             }
             var vacio=true
+
+            //Centrando LisvView principal
             for(var i=0;i<app.al.length;i++){
                 if((''+app.al[i]).indexOf('.ukl')>0){
                     //app.visible=true
@@ -1663,6 +1683,7 @@ ApplicationWindow {
                 }
                 if(appSettings.uApp===app.al[i]){
                     app.ca=app.al[i]
+                    lv.currentIndex=i
                 }
             }
             if(vacio){
@@ -1718,7 +1739,7 @@ ApplicationWindow {
         //ColorAnimation on color { to: app.c2; duration: 2000 }
         Image {
             id: splashBlanco
-            source: Qt.platform.os==='android'?"assets:/splash.png":"logo.png"
+            source: Qt.platform.os==='android'?"assets:/splash.png":undefined
             width: parent.width*0.25
             fillMode: Image.PreserveAspectFit
             anchors.centerIn: parent
@@ -1734,6 +1755,14 @@ ApplicationWindow {
     }
 
     Component.onCompleted:{
+        let pathUnik=pws+'/unik'
+        if(!unik.folderExist(pathUnik)){
+            unik.mkdir(pathUnik)
+        }
+        let fileCa=pathUnik+'/ca.dat'
+        app.ca = unik.getFile(fileCa)
+        appSettings.uApp = app.ca
+
         splashBlanco.opacity=1.0
         if(Qt.platform.os==='android'){
             unik.debugLog=true
@@ -1756,7 +1785,7 @@ ApplicationWindow {
         }
         if(Qt.platform.os!=='android'){
             unik.ttsVoiceSelected(0)
-        }
+        }       
     }
     function setColors(){
         var nc=unikSettings.currentNumColor
@@ -1768,12 +1797,19 @@ ApplicationWindow {
         app.c4=cc2[3]
     }
     function run(){
+        let pathUnik=pws+'/unik'
+        if(!unik.folderExist(pathUnik)){
+            unik.mkdir(pathUnik)
+        }
+        let fileCa=pathUnik+'/ca.dat'
+        unik.setFile(fileCa, app.ca)
+
         if(unikSettings.sound){
             let a=app.ca.replace('link_', '').replace('.ukl', '').replace(/-/g, '')
             let s=unikSettings.lang==='es'?'Iniciando .'+a:'Starting '+a
             unik. speak(s)
         }
-        appSettings.uApp=app.ca
+        //appSettings.uApp=app.ca
         var p=unik.getFile(appsDir+'/'+app.ca)
         var args=(''+p).split(' ')
         var params=''
