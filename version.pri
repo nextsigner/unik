@@ -35,7 +35,15 @@ win32 {
     NUMWEEK=$$system("set /a  $$VERSION_MEN4 + 1")
     message(DIA: $$MDIA4)
     message(MES: $$MDIA4)
-    message(NUMWEEK: $$NUMWEEK)
+
+    greaterThan(NUMWEEK, 9){
+        message(Week Number is major that 9)
+    }else{
+        message(Week Number is minor that 9)
+        NUMWEEK="0"$$NUMWEEK
+    }
+    message(Week Number $$NUMWEEK)
+
     #message(Date: $$MDIA1)
     #message(Month: $$member(VERSION_MAJ2, 1))
     #message(Week: $$NUMWEEK)

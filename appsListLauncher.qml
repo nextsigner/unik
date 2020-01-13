@@ -14,7 +14,7 @@ ApplicationWindow {
     //color: Qt.platform.os!=='android'?"transparent":app.c1
     //flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     //property int fs: width<height?(Qt.platform.os !=='android'?app.height*0.02*unikSettings.zoom:app.height*0.06*unikSettings.zoom):(Qt.platform.os !=='android'?app.height*0.06*unikSettings.zoom:app.width*0.03*unikSettings.zoom)
-    property int fs: Qt.platform.os !=='android'?app.height*0.035*unikSettings.zoom:width<height?app.width*0.025*unikSettings.zoom:app.height*0.035*unikSettings.zoom
+    property int fs: Qt.platform.os !=='android'?app.height*0.035*unikSettings.zoom:width<height?app.width*0.04*unikSettings.zoom:app.height*0.035*unikSettings.zoom
     property color c1: "#1fbc05"
     property color c2: "black"
     property color c3: "white"
@@ -153,7 +153,8 @@ ApplicationWindow {
             Behavior on opacity{NumberAnimation{duration: 500}}
             Behavior on contentY{NumberAnimation{duration: 500}}
             ListView{
-                id:lv
+                id: lv
+                visible: lv.count!=1&&Qt.platform.os==='android'
                 spacing: (app.fs*unikSettings.padding)+2
                 model:fl
                 delegate: delegate
@@ -1688,6 +1689,10 @@ ApplicationWindow {
         interval: 1000
         property bool enabled: true
         onTriggered: {
+            if(lv.count===1&&Qt.platform.os==='android'){
+                app.run()
+                return
+            }
             app.sec++
             if(app.sec===7){
                 stop()
