@@ -65,11 +65,14 @@ win32 {
     VERSION_MAJ= $$system("echo $(($$VERSION_MAJ1 - $$VERSION_YEAR))")
     VERSION_MEN1= $$system("echo $((($$system(date +%-m) * $$system(date +%-d)) + $$system(date +%-H) + $$system(date +%-M)))")
 
-    greaterThan(VERSION_MEN1, 99){
-        VERSION_MEN2=$$VERSION_MEN1
-    }else{
-        VERSION_MEN2=0$$VERSION_MEN1
+    NUMCOMP=$$cat($$PWD/num_comp)
+    isEmpty(NUMCOMP){
+        NUMCOMP = 0
     }
+    NNUMCOMP=$$system("echo $(($$NUMCOMP + 1))")
+    NUMCOMP=$$NNUMCOMP
+    write_file($$PWD/num_comp, NNUMCOMP)
+
     NUMSEM1=$$system(date +%W)
     NUMSEM2=$$system("echo $(($$NUMSEM1 + 1))")
     message(Week Number $$NUMSEM2)
@@ -79,6 +82,6 @@ win32 {
         message(Week Number is minor that 9)
         NUMSEM2="0"$$system("echo $(($$NUMSEM1 + 1))")
     }
-    APPVERSION=$$VERSION_MAJ"."$$NUMSEM2$$VERSION_MEN2
+    APPVERSION=$$VERSION_MAJ"."$$NUMSEM2"."$$NUMCOMP
     message(Unix App Version $$APPVERSION)
 }
