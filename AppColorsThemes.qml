@@ -59,7 +59,7 @@ Rectangle{
             id: gridPackColor
             spacing: app.fs*0.25
             anchors.horizontalCenter: parent.horizontalCenter
-            rows: 2
+            rows: 4
             Repeater{
                 id:rep1               
                 Rectangle{
@@ -86,12 +86,12 @@ Rectangle{
                         Rectangle{
                             width: app.fs
                             height: width
-                            border.width: 2
-                            border.color: app.c2
+                            //border.width: 2
+                            //border.color: app.c2
                             color: 'transparent'
                             Rectangle{
-                                width: parent.width-8
-                                height: parent.width-8
+                                width: parent.width-2
+                                height: parent.width-2
                                 color: gridColors.arr[0]
                                 anchors.centerIn: parent
                             }
@@ -99,12 +99,12 @@ Rectangle{
                         Rectangle{
                             width: app.fs
                             height: width
-                            border.width: 2
-                            border.color: app.c2
+                            //border.width: 2
+                            //border.color: app.c2
                             color: 'transparent'
                             Rectangle{
-                                width: parent.width-8
-                                height: parent.width-8
+                                width: parent.width-2
+                                height: parent.width-2
                                 color: gridColors.arr[1]
                                 anchors.centerIn: parent
                             }
@@ -112,12 +112,12 @@ Rectangle{
                         Rectangle{
                             width: app.fs
                             height: width
-                            border.width: 2
-                            border.color: app.c2
+                            //border.width: 2
+                            //border.color: app.c2
                             color: 'transparent'
                             Rectangle{
-                                width: parent.width-8
-                                height: parent.width-8
+                                width: parent.width-2
+                                height: parent.width-2
                                 color: gridColors.arr[2]
                                 anchors.centerIn: parent
                             }
@@ -125,12 +125,12 @@ Rectangle{
                         Rectangle{
                             width: app.fs
                             height: width
-                            border.width: 2
-                            border.color: app.c2
+                            //border.width: 2
+                            //border.color: app.c2
                             color: 'transparent'
                             Rectangle{
-                                width: parent.width-8
-                                height: parent.width-8
+                                width: parent.width-2
+                                height: parent.width-2
                                 color: gridColors.arr[3]
                                 anchors.centerIn: parent
                             }

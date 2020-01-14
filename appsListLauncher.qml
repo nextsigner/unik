@@ -13,7 +13,7 @@ ApplicationWindow {
     //color: Qt.platform.os!=='android'?"transparent":app.c1
     //flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     //property int fs: width<height?(Qt.platform.os !=='android'?app.height*0.02*unikSettings.zoom:app.height*0.06*unikSettings.zoom):(Qt.platform.os !=='android'?app.height*0.06*unikSettings.zoom:app.width*0.03*unikSettings.zoom)
-    property int fs: Qt.platform.os !=='android'?app.height*0.035*unikSettings.zoom:width<height?app.width*0.04*unikSettings.zoom:app.height*0.035*unikSettings.zoom
+    property int fs: Qt.platform.os !=='android'?app.height*0.035*unikSettings.zoom:width<height?app.width*0.035*unikSettings.zoom:app.height*0.035*unikSettings.zoom
     property color c1: "#1fbc05"
     property color c2: "black"
     property color c3: "white"
@@ -45,7 +45,14 @@ ApplicationWindow {
 
     onClosing: {
         if(Qt.platform.os==='android'){
-            //close.accepted = false;
+            if(xConfig.opacity===1.0){
+                close.accepted = false;
+                xConfig.opacity=0.0
+            }else{
+                close.accepted = true;
+                Qt.quit()
+            }
+
         }
     }
     onCiChanged: {
@@ -159,6 +166,7 @@ ApplicationWindow {
             Behavior on contentY{NumberAnimation{duration: 500}}
             ListView{
                 id: lv
+                enabled: xConfig.opacity!==1.0
                 visible: Qt.platform.os!=='android'?true:lv.count!==1
                 spacing: (app.fs*unikSettings.padding)+2
                 model:fl
@@ -417,8 +425,8 @@ ApplicationWindow {
         }
         Rectangle{
             id: xConfig
-            width: !visible?0:wmax
-            height: colConfig.height+app.fs
+            width:appColorsThemes.width+app.fs*2 //Qt.platform.os!=='android'?!visible?0:wmax:Screen.width
+            height: colConfig.height+app.fs*3
             color: app.c1
             border.width: unikSettings.borderWidth
             border.color: app.c2
@@ -461,6 +469,9 @@ ApplicationWindow {
                     colConfig.opacity=1.0
                 }
             }
+            MouseArea{
+                anchors.fill: parent
+            }
             Behavior on width{
                 NumberAnimation{
                     duration: 500;
@@ -473,336 +484,374 @@ ApplicationWindow {
                     easing.type: Easing.InExpo
                 }
             }
-            Column{
-                id: colConfig
-                anchors.centerIn: parent
-                spacing: (app.fs*unikSettings.padding)+2
-                opacity: parent.opacity===1.0?1.0:0.0
-                onOpacityChanged:{
-                    if(opacity===0.0)xConfig.opacity=0.0
-                }
-                Behavior on opacity{
-                    NumberAnimation{
-                        duration: 500;
-                        easing.type: Easing.InOutBounce
-                    }
-                }
-                Row{
-                    id: rowBtnSettings
+            Flickable{
+                anchors.fill: parent
+                contentWidth: xConfig.width
+                contentHeight: xConfig.height*1.5
+                Column{
+                    id: colConfig
+                    //anchors.centerIn: parent
                     anchors.horizontalCenter: parent.horizontalCenter
                     spacing: (app.fs*unikSettings.padding)+2
-                    onWidthChanged: xConfig.width=xConfig.wmax
-                    BotonUX{
-                        id: btnUX1
-                        UnikFocus{
-                            visible: xConfig.currentFocus===1
-                            onVisibleChanged: {
-                                if(unikSettings.sound&&visible){
-                                    let s=unikSettings.lang==='es'?'Tamaño de Letra. Para cambiar presinar intro.':'Font size . For change press enter.'
-                                    speak(s)
-                                }
-                            }
-                        }
-                        text: unikSettings.lang==='es'?'Tamaño Letra '+parseFloat(unikSettings.zoom).toFixed(1):'Font Size '+parseFloat(unikSettings.zoom).toFixed(1)
-                        onClicked: {
-                            var uzoom=parseFloat(unikSettings.zoom).toFixed(1)
-                            if(uzoom>0.5){
-                                uzoom-=0.1
-                            }else{
-                                uzoom=1.2
-                            }
-                            unikSettings.zoom=uzoom.toFixed(1);
-                            if(unikSettings.sound){
-                                let s=unikSettings.lang==='es'?'Tamaño de letra ':'Font size '
-                                s+=' '+parseFloat(unikSettings.zoom).toFixed(1);
-                                speak(s)
-                            }
+                    opacity: parent.opacity===1.0?1.0:0.0
+                    onOpacityChanged:{
+                        if(opacity===0.0)xConfig.opacity=0.0
+                    }
+                    Behavior on opacity{
+                        NumberAnimation{
+                            duration: 500;
+                            easing.type: Easing.InOutBounce
                         }
                     }
-                    BotonUX{
-                        id: btnUX2
-                        UnikFocus{
-                            visible: xConfig.currentFocus===2
-                            onVisibleChanged: {
-                                if(unikSettings.sound&&visible){
-                                    let s=unikSettings.lang==='es'?'Redondeado de borde del boton. Para cambiar presinar intro.':'Radius border of button . For change press enter.'
-                                    speak(s)
-                                }
-                            }
-                        }
-                        text: unikSettings.lang==='es'?'Radio de Borde':'Border Radius'
-                        onClicked: {
-                            if(unikSettings.radius>app.fs*0.5){
-                                unikSettings.radius-=app.fs*0.05
-                            }else{
-                                unikSettings.radius=app.fs*2
-                            }
-                            if(unikSettings.sound){
-                                let s=unikSettings.lang==='es'?'Tamaño de radio de boton ':'Button Radius size '
-                                s+=' '+parseInt(unikSettings.radius)
-                                speak(s)
-                            }
-                        }
-                    }
-                    BotonUX{
-                        id: btnUX3
-                        UnikFocus{
-                            visible: xConfig.currentFocus===3
-                            onVisibleChanged: {
-                                if(unikSettings.sound&&visible){
-                                    let s=unikSettings.lang==='es'?'Ancho del borde del boton. Para cambiar presinar intro.':'Border with button . For change  press enter.'
-                                    speak(s)
-                                }
-                            }
-                        }
-                        text: unikSettings.lang==='es'?'Ancho de Borde':'Width Radius'
-                        onClicked: {
-                            if(unikSettings.borderWidth>app.fs*0.05){
-                                unikSettings.borderWidth-=app.fs*0.05
-                            }else{
-                                unikSettings.borderWidth=app.fs*0.5
-                            }
-                            if(unikSettings.sound){
-                                let s=unikSettings.lang==='es'?'Ancho de borde de boton ':'Woth border of Button size '
-                                s+=' '+parseInt(unikSettings.borderWidth)
-                                speak(s)
-                            }
-                        }
-                    }
-                    BotonUX{
-                        id: btnUX4
-                        UnikFocus{
-                            visible: xConfig.currentFocus===4
-                            onVisibleChanged: {
-                                if(unikSettings.sound&&visible){
-                                    let s=unikSettings.lang==='es'?'Espacio interior del boton. Para cambier presinar intro.':'Space inside of button . For changespacing press enter.'
-                                    speak(s)
-                                }
-                            }
-                        }
-                        text: unikSettings.lang==='es'?'Espacio':'Space'
-                        onClicked: {
-                            if(unikSettings.padding>0.1){
-                                unikSettings.padding-=0.1
-                            }else{
-                                unikSettings.padding=1.0
-                            }
-                            if(unikSettings.sound){
-                                let s=unikSettings.lang==='es'?'Espacio del interior del boton ':'Spacing of inside button  size '
-                                s+=' '+parseInt(parseFloat(unikSettings.padding).toFixed(1)*100)
-                                s+=unikSettings.lang==='es'?' por ciento ':' percent'
-                                speak(s)
-                            }
-                        }
-                    }
-                }
-                Row{
-                    id: rowBtnSettings2
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    spacing: (app.fs*unikSettings.padding)+2
-                    onWidthChanged: xConfig.width=xConfig.wmax
-                    BotonUX{
-                        text: unikSettings.lang==='es'?'Languaje':'Lenguaje'
-                        onClicked: {
-                            unikSettings.lang=unikSettings.lang==='es'?'en':'es'
-                            if(unikSettings.sound){
-                                let s=unikSettings.lang==='es'?'Lenguaje seleccionado Español.':'Languaje selected English. '
-                                speak(s)
-                            }
-                        }
-                        UnikFocus{
-                            visible: xConfig.currentFocus===5
-                            onVisibleChanged: {
-                                if(unikSettings.sound&&visible){
-                                    let s=unikSettings.lang==='es'?'Seleccionar idioma a ingles. Para cambiar presinar intro.':'Languaje change to Spanish . For change press enter.'
-                                    speak(s)
-                                }
-                            }
-                        }
-                    }
-                    BotonUX{
-                        text: unikSettings.lang==='es'?'Sonido '+yesno:'Sound '+yesno
-                        property string yes: unikSettings.lang==='es'?'SI':'YES'
-                        property string no: unikSettings.lang==='es'?'NO':'NOT'
-                        property string yesno: unikSettings.sound?yes:no
-                        onClicked: {
-                            unikSettings.sound=!unikSettings.sound
-                            let s=''
-                            if(unikSettings.sound){
-                                s=unikSettings.lang==='es'?'Sonido activado ':'Sound enabled '
-                            }else{
-                                s=unikSettings.lang==='es'?'Sonido desactivado ':'Sound disabled '
-                            }
-                            speak(s)
-                        }
-                        UnikFocus{
-                            visible: xConfig.currentFocus===6
-                            onVisibleChanged: {
-                                if(unikSettings.sound&&visible){
-                                    let s=unikSettings.lang==='es'?'Desactivar sonidos. Para desactivar sonidos presionar intro.':'Disable sound . For to disable sounds press enter.'
-                                    speak(s)
-                                }
-                            }
-                        }
-                    }
-                    BotonUX{
-                        UnikFocus{
-                            visible: xConfig.currentFocus===7
-                            onVisibleChanged: {
-                                if(unikSettings.sound&&visible){
-                                    let s=unikSettings.lang==='es'?'Fondo transparente. Para el tipo de fonde presinar intro.':'Transparent background . For change background mode press enter.'
-                                    speak(s)
-                                }
-                            }
-                        }
-                        property string yes: unikSettings.lang==='es'?'SI':'YES'
-                        property string no: unikSettings.lang==='es'?'NO':'NOT'
-                        property string yesno: unikSettings.showBg?no:yes
-                        text: unikSettings.lang==='es'?'Fondo Transparente '+yesno:'Transparent Background '+yesno
-                        onClicked: {
-                            unikSettings.showBg=!unikSettings.showBg
-                            if(unikSettings.sound){
-                                let s=unikSettings.lang==='es'?'Fondo transparente ':'Transparent background '
-                                if(unikSettings.lang==='es'){
-                                    s+=!unikSettings.showBg?' activado':'desactivado'
-                                }else{
-                                    s+=!unikSettings.showBg?' enabled':'disabled'
-                                }
-                                speak(s)
-                            }
-                        }
-                    }
-                    BotonUX{
-                        id: btnUX8
-                        UnikFocus{
-                            id:ufBntFF;
-                            visible: xConfig.currentFocus===8
-                            onVisibleChanged: {
-                                if(unikSettings.sound&&visible){
-                                    let s=unikSettings.lang==='es'?'Tipo de Letra. Para seleccionar otro tipo de letra presinar intro.':'Font family . For change font family press enter.'
-                                    speak(s)
-                                }
-                            }
-                        }
-                        text: unikSettings.lang==='es'?'Tipo de Letra':'Font Family'
-                        onClicked: {
-                            xFF.visible=true
-                            if(unikSettings.sound){
-                                let s=unikSettings.lang==='es'?'Seleccionar tipo de letra ':'Select font family '
-                                speak(s)
-                            }
-                        }
-                    }
-                }
-                AppColorsThemes{
-                    id: appColorsThemes
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    showBtnClose: false
-                    currentFocus: ufACT.currentFocus
-                    onCurrentFocusChanged: {
-                        if(unikSettings.sound){
-                            let s=unikSettings.lang==='es'?'Color seleccionado ':'Current color selected '
-                            s+=parseInt(currentFocus+1)
-                            s+=unikSettings.lang==='es'?'. Para usar esta combinación de color presionar Intro.':'. For use this color combination press enter.'
-                            speak(s)
-                        }
-                    }
-                    objectName: 'bbbb'
-                    UnikFocus{
-                        id: ufACT;
-                        visible: xConfig.currentFocus===9
-                        objectName: 'aaa'
-                        property int currentFocus: -1
-                        property int cantFocus: appColorsThemes.cantColors-1
-                        onVisibleChanged: {
-                            visible?currentFocus=0:currentFocus=-1
-                            if(unikSettings.sound&&visible){
-                                let s=unikSettings.lang==='es'?'Seleccionar colores.  Para cambiar ir hacia arriba. Para salir de la selección de colores ir hacia abajo.':'Colors selecction . For change color go to up. For exit of colors selection, go to down.'
-                                speak(s)
-                            }
-                        }
-                    }
-                }
-                Row{
-                    id: rowBtnSettingsFoot
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    spacing: (app.fs*unikSettings.padding)+2
-                    BotonUX{
-                        id: btnUX9
-                        UnikFocus{
-                            visible: xConfig.currentFocus===10
-                            onVisibleChanged: {
-                                if(unikSettings.sound&&visible){
-                                    let s=unikSettings.lang==='es'?'Editar enlace. Para editar o crear enlace presionar Intro.':'Edit or make. For edit or make press enter.'
-                                    speak(s)
-                                }
-                            }
-                        }
-                        text: tiLinkFile.text!==''?unikSettings.lang==='es'?'Editar Enlace':'Link Edit':unikSettings.lang==='es'?'Crear Enlace':'Link Make'
-                        onClicked: {
-                            xLinkEditor.visible=true
-                            if(unikSettings.sound){
-                                let s=unikSettings.lang==='es'?'Crear o editar enlace de aplicación Unik.':'Make or edit link of unik application. '
-                                speak(s)
-                            }
-                        }
-                    }
-                    BotonUX{
-                        id: btnUX5
-                        UnikFocus{
-                            visible: xConfig.currentFocus===11
-                            onVisibleChanged: {
-                                if(unikSettings.sound&&visible){
-                                    let s=unikSettings.lang==='es'?'Ver la ayuda. Para ver la ayuda presionar Intro.':'Show help. For show help press enter.'
-                                    speak(s)
-                                }
-                            }
-                        }
-                        text: unikSettings.lang==='es'?'Ayuda':'Help'
-                        onClicked: {
-                            help.visible=true
-                            if(unikSettings.sound){
-                                let s=unikSettings.lang==='es'?'Mostrando la Ayuda.':'Showing Help. '
-                                speak(s)
-                            }
-                        }
-                    }
-                    BotonUX{
-                        id: btnUX6
-                        text: unikSettings.lang==='es'?'Cerrar ':'Close'
-                        onClicked: {
+                    Boton{//Close
+                        id: btnCloseXConfig
+                        w:app.fs*2
+                        h: w
+                        t: "\uf00d"
+                        d:unikSettings.lang==='es'?'Cerrar':'Close'
+                        b:app.c1
+                        c: app.c2
+                        anchors.right: parent.right
+                        anchors.rightMargin: app.fs
+                        onClicking: {
                             xConfig.opacity=0.0
-                            if(unikSettings.sound){
-                                let s=unikSettings.lang==='es'?'Cerrando configuración.':'Closing configuration. '
-                                speak(s)
+                        }
+                    }
+                    Item {width: 1; height: app.fs}
+                    Row{
+                        id: rowBtnSettings
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: (app.fs*unikSettings.padding)+2
+                        //onWidthChanged: xConfig.width=xConfig.wmax
+                        BotonUX{
+                            id: btnUX1
+                            UnikFocus{
+                                visible: xConfig.currentFocus===1
+                                onVisibleChanged: {
+                                    if(unikSettings.sound&&visible){
+                                        let s=unikSettings.lang==='es'?'Tamaño de Letra. Para cambiar presinar intro.':'Font size . For change press enter.'
+                                        speak(s)
+                                    }
+                                }
+                            }
+                            text: unikSettings.lang==='es'?'Tamaño Letra '+parseFloat(unikSettings.zoom).toFixed(1):'Font Size '+parseFloat(unikSettings.zoom).toFixed(1)
+                            onClicked: {
+                                var uzoom=parseFloat(unikSettings.zoom).toFixed(1)
+                                if(uzoom>0.5){
+                                    uzoom-=0.1
+                                }else{
+                                    uzoom=1.2
+                                }
+                                unikSettings.zoom=uzoom.toFixed(1);
+                                if(unikSettings.sound){
+                                    let s=unikSettings.lang==='es'?'Tamaño de letra ':'Font size '
+                                    s+=' '+parseFloat(unikSettings.zoom).toFixed(1);
+                                    speak(s)
+                                }
                             }
                         }
-                        UnikFocus{
-                            visible: xConfig.currentFocus===12
-                            onVisibleChanged: {
-                                if(unikSettings.sound&&visible){
-                                    let s=unikSettings.lang==='es'?'Cerrar area de configuración. Para cerrar presionar Intro.':'Close configuration. For close configuration press enter.'
+                        BotonUX{
+                            id: btnUX2
+                            UnikFocus{
+                                visible: xConfig.currentFocus===2
+                                onVisibleChanged: {
+                                    if(unikSettings.sound&&visible){
+                                        let s=unikSettings.lang==='es'?'Redondeado de borde del boton. Para cambiar presinar intro.':'Radius border of button . For change press enter.'
+                                        speak(s)
+                                    }
+                                }
+                            }
+                            text: unikSettings.lang==='es'?'Radio de Borde':'Border Radius'
+                            onClicked: {
+                                if(unikSettings.radius>app.fs*0.5){
+                                    unikSettings.radius-=app.fs*0.05
+                                }else{
+                                    unikSettings.radius=app.fs*2
+                                }
+                                if(unikSettings.sound){
+                                    let s=unikSettings.lang==='es'?'Tamaño de radio de boton ':'Button Radius size '
+                                    s+=' '+parseInt(unikSettings.radius)
                                     speak(s)
                                 }
                             }
                         }
                     }
-                    BotonUX{
-                        id: btnUX7
-                        text: unikSettings.lang==='es'?'Cerrar Unik':'Close Unik'
-                        onClicked:{
-                            if(unikSettings.sound){
-                                let s=unikSettings.lang==='es'?'Apagando Unik.':'Closing Unik. '
+                    Row{
+                        id: rowBtnSettings11
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: (app.fs*unikSettings.padding)+2
+                        //onWidthChanged: xConfig.width=xConfig.wmax
+                        BotonUX{
+                            id: btnUX3
+                            UnikFocus{
+                                visible: xConfig.currentFocus===3
+                                onVisibleChanged: {
+                                    if(unikSettings.sound&&visible){
+                                        let s=unikSettings.lang==='es'?'Ancho del borde del boton. Para cambiar presinar intro.':'Border with button . For change  press enter.'
+                                        speak(s)
+                                    }
+                                }
+                            }
+                            text: unikSettings.lang==='es'?'Ancho de Borde':'Width Radius'
+                            onClicked: {
+                                if(unikSettings.borderWidth>app.fs*0.05){
+                                    unikSettings.borderWidth-=app.fs*0.05
+                                }else{
+                                    unikSettings.borderWidth=app.fs*0.5
+                                }
+                                if(unikSettings.sound){
+                                    let s=unikSettings.lang==='es'?'Ancho de borde de boton ':'Woth border of Button size '
+                                    s+=' '+parseInt(unikSettings.borderWidth)
+                                    speak(s)
+                                }
+                            }
+                        }
+                        BotonUX{
+                            id: btnUX4
+                            UnikFocus{
+                                visible: xConfig.currentFocus===4
+                                onVisibleChanged: {
+                                    if(unikSettings.sound&&visible){
+                                        let s=unikSettings.lang==='es'?'Espacio interior del boton. Para cambier presinar intro.':'Space inside of button . For changespacing press enter.'
+                                        speak(s)
+                                    }
+                                }
+                            }
+                            text: unikSettings.lang==='es'?'Espacio':'Space'
+                            onClicked: {
+                                if(unikSettings.padding>0.1){
+                                    unikSettings.padding-=0.1
+                                }else{
+                                    unikSettings.padding=1.0
+                                }
+                                if(unikSettings.sound){
+                                    let s=unikSettings.lang==='es'?'Espacio del interior del boton ':'Spacing of inside button  size '
+                                    s+=' '+parseInt(parseFloat(unikSettings.padding).toFixed(1)*100)
+                                    s+=unikSettings.lang==='es'?' por ciento ':' percent'
+                                    speak(s)
+                                }
+                            }
+                        }
+                    }
+                    Row{
+                        id: rowBtnSettings2
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: (app.fs*unikSettings.padding)+2
+                        //onWidthChanged: xConfig.width=xConfig.wmax
+                        BotonUX{
+                            text: unikSettings.lang==='es'?'Languaje':'Lenguaje'
+                            onClicked: {
+                                unikSettings.lang=unikSettings.lang==='es'?'en':'es'
+                                if(unikSettings.sound){
+                                    let s=unikSettings.lang==='es'?'Lenguaje seleccionado Español.':'Languaje selected English. '
+                                    speak(s)
+                                }
+                            }
+                            UnikFocus{
+                                visible: xConfig.currentFocus===5
+                                onVisibleChanged: {
+                                    if(unikSettings.sound&&visible){
+                                        let s=unikSettings.lang==='es'?'Seleccionar idioma a ingles. Para cambiar presinar intro.':'Languaje change to Spanish . For change press enter.'
+                                        speak(s)
+                                    }
+                                }
+                            }
+                        }
+                        BotonUX{
+                            text: unikSettings.lang==='es'?'Sonido '+yesno:'Sound '+yesno
+                            property string yes: unikSettings.lang==='es'?'SI':'YES'
+                            property string no: unikSettings.lang==='es'?'NO':'NOT'
+                            property string yesno: unikSettings.sound?yes:no
+                            onClicked: {
+                                unikSettings.sound=!unikSettings.sound
+                                let s=''
+                                if(unikSettings.sound){
+                                    s=unikSettings.lang==='es'?'Sonido activado ':'Sound enabled '
+                                }else{
+                                    s=unikSettings.lang==='es'?'Sonido desactivado ':'Sound disabled '
+                                }
                                 speak(s)
                             }
-                            Qt.quit()
+                            UnikFocus{
+                                visible: xConfig.currentFocus===6
+                                onVisibleChanged: {
+                                    if(unikSettings.sound&&visible){
+                                        let s=unikSettings.lang==='es'?'Desactivar sonidos. Para desactivar sonidos presionar intro.':'Disable sound . For to disable sounds press enter.'
+                                        speak(s)
+                                    }
+                                }
+                            }
                         }
-                        UnikFocus{
-                            visible: xConfig.currentFocus===13
-                            onVisibleChanged: {
-                                if(unikSettings.sound&&visible){
-                                    let s=unikSettings.lang==='es'?'Apagar Unik. Para apagar presionar Intro.':'Close Unik. For quit Unik press enter.'
+                    }
+                    Row{
+                        id: rowBtnSettings22
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: (app.fs*unikSettings.padding)+2
+                        //onWidthChanged: xConfig.width=xConfig.wmax
+                        BotonUX{
+                            UnikFocus{
+                                visible: xConfig.currentFocus===7
+                                onVisibleChanged: {
+                                    if(unikSettings.sound&&visible){
+                                        let s=unikSettings.lang==='es'?'Fondo transparente. Para el tipo de fonde presinar intro.':'Transparent background . For change background mode press enter.'
+                                        speak(s)
+                                    }
+                                }
+                            }
+                            property string yes: unikSettings.lang==='es'?'SI':'YES'
+                            property string no: unikSettings.lang==='es'?'NO':'NOT'
+                            property string yesno: unikSettings.showBg?no:yes
+                            text: unikSettings.lang==='es'?'Fondo Transparente '+yesno:'Transparent Background '+yesno
+                            onClicked: {
+                                unikSettings.showBg=!unikSettings.showBg
+                                if(unikSettings.sound){
+                                    let s=unikSettings.lang==='es'?'Fondo transparente ':'Transparent background '
+                                    if(unikSettings.lang==='es'){
+                                        s+=!unikSettings.showBg?' activado':'desactivado'
+                                    }else{
+                                        s+=!unikSettings.showBg?' enabled':'disabled'
+                                    }
                                     speak(s)
+                                }
+                            }
+                        }
+                        BotonUX{
+                            id: btnUX8
+                            UnikFocus{
+                                id:ufBntFF;
+                                visible: xConfig.currentFocus===8
+                                onVisibleChanged: {
+                                    if(unikSettings.sound&&visible){
+                                        let s=unikSettings.lang==='es'?'Tipo de Letra. Para seleccionar otro tipo de letra presinar intro.':'Font family . For change font family press enter.'
+                                        speak(s)
+                                    }
+                                }
+                            }
+                            text: unikSettings.lang==='es'?'Tipo de Letra':'Font Family'
+                            onClicked: {
+                                xFF.visible=true
+                                if(unikSettings.sound){
+                                    let s=unikSettings.lang==='es'?'Seleccionar tipo de letra ':'Select font family '
+                                    speak(s)
+                                }
+                            }
+                        }
+                    }
+                    AppColorsThemes{
+                        id: appColorsThemes
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        showBtnClose: false
+                        currentFocus: ufACT.currentFocus
+                        onCurrentFocusChanged: {
+                            if(unikSettings.sound){
+                                let s=unikSettings.lang==='es'?'Color seleccionado ':'Current color selected '
+                                s+=parseInt(currentFocus+1)
+                                s+=unikSettings.lang==='es'?'. Para usar esta combinación de color presionar Intro.':'. For use this color combination press enter.'
+                                speak(s)
+                            }
+                        }
+                        objectName: 'bbbb'
+                        UnikFocus{
+                            id: ufACT;
+                            visible: xConfig.currentFocus===9
+                            objectName: 'aaa'
+                            property int currentFocus: -1
+                            property int cantFocus: appColorsThemes.cantColors-1
+                            onVisibleChanged: {
+                                visible?currentFocus=0:currentFocus=-1
+                                if(unikSettings.sound&&visible){
+                                    let s=unikSettings.lang==='es'?'Seleccionar colores.  Para cambiar ir hacia arriba. Para salir de la selección de colores ir hacia abajo.':'Colors selecction . For change color go to up. For exit of colors selection, go to down.'
+                                    speak(s)
+                                }
+                            }
+                        }
+                    }
+                    Row{
+                        id: rowBtnSettingsFoot
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: (app.fs*unikSettings.padding)+2
+                        BotonUX{
+                            id: btnUX9
+                            UnikFocus{
+                                visible: xConfig.currentFocus===10
+                                onVisibleChanged: {
+                                    if(unikSettings.sound&&visible){
+                                        let s=unikSettings.lang==='es'?'Editar enlace. Para editar o crear enlace presionar Intro.':'Edit or make. For edit or make press enter.'
+                                        speak(s)
+                                    }
+                                }
+                            }
+                            text: tiLinkFile.text!==''?unikSettings.lang==='es'?'Editar Enlace':'Link Edit':unikSettings.lang==='es'?'Crear Enlace':'Link Make'
+                            onClicked: {
+                                xLinkEditor.visible=true
+                                if(unikSettings.sound){
+                                    let s=unikSettings.lang==='es'?'Crear o editar enlace de aplicación Unik.':'Make or edit link of unik application. '
+                                    speak(s)
+                                }
+                            }
+                        }
+                        BotonUX{
+                            id: btnUX5
+                            UnikFocus{
+                                visible: xConfig.currentFocus===11
+                                onVisibleChanged: {
+                                    if(unikSettings.sound&&visible){
+                                        let s=unikSettings.lang==='es'?'Ver la ayuda. Para ver la ayuda presionar Intro.':'Show help. For show help press enter.'
+                                        speak(s)
+                                    }
+                                }
+                            }
+                            text: unikSettings.lang==='es'?'Ayuda':'Help'
+                            onClicked: {
+                                help.visible=true
+                                if(unikSettings.sound){
+                                    let s=unikSettings.lang==='es'?'Mostrando la Ayuda.':'Showing Help. '
+                                    speak(s)
+                                }
+                            }
+                        }
+                    }
+                    Row{
+                        id: rowBtnSettingsFoot2
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: (app.fs*unikSettings.padding)+2
+                        BotonUX{
+                            id: btnUX6
+                            text: unikSettings.lang==='es'?'Cerrar ':'Close'
+                            onClicked: {
+                                xConfig.opacity=0.0
+                                if(unikSettings.sound){
+                                    let s=unikSettings.lang==='es'?'Cerrando configuración.':'Closing configuration. '
+                                    speak(s)
+                                }
+                            }
+                            UnikFocus{
+                                visible: xConfig.currentFocus===12
+                                onVisibleChanged: {
+                                    if(unikSettings.sound&&visible){
+                                        let s=unikSettings.lang==='es'?'Cerrar area de configuración. Para cerrar presionar Intro.':'Close configuration. For close configuration press enter.'
+                                        speak(s)
+                                    }
+                                }
+                            }
+                        }
+                        BotonUX{
+                            id: btnUX7
+                            text: unikSettings.lang==='es'?'Cerrar Unik':'Close Unik'
+                            onClicked:{
+                                if(unikSettings.sound){
+                                    let s=unikSettings.lang==='es'?'Apagando Unik.':'Closing Unik. '
+                                    speak(s)
+                                }
+                                Qt.quit()
+                            }
+                            UnikFocus{
+                                visible: xConfig.currentFocus===13
+                                onVisibleChanged: {
+                                    if(unikSettings.sound&&visible){
+                                        let s=unikSettings.lang==='es'?'Apagar Unik. Para apagar presionar Intro.':'Close Unik. For quit Unik press enter.'
+                                        speak(s)
+                                    }
                                 }
                             }
                         }
@@ -988,7 +1037,7 @@ ApplicationWindow {
             }
             Rectangle{
                 id: xLinkEditor
-                width: parent.width
+                width: parent.width//Qt.platform.os!=='android'?!visible?0:wmax:Screen.width
                 height: parent.height
                 color: app.c1
                 border.width: unikSettings.borderWidth
@@ -1306,7 +1355,7 @@ ApplicationWindow {
         Rectangle{
             id: help
             visible: false
-            width: parent.width
+            width: xConfig.width//Qt.platform.os!=='android'?!visible?0:wmax:Screen.width
             height: parent.height
             color: app.c1
             border.width: unikSettings.borderWidth
@@ -1330,9 +1379,9 @@ ApplicationWindow {
                     property string h1
                     property string h2
                     Component.onCompleted: {
-                        h1='<h1>Ayuda de Unik Launcher</h1><p><b>Teclas de Navegaciòn</b></p><ul><li>Izquierda: Salir o Retroceder</li><li>Derecha: Entrar o Ejecutar</li><li>Arriba: Navega entrando a areas</li><li>Abajo: Navega saltando areas</li><li>Escape: Escape, cierre o apagado</li><li>Intro: Entrar o Ejecutar</li></ul><p>Màs informaciòn sobre Unik:</p><p>Unik fue creado gracias a Qt Open Source bajo las licencias LGPL. Màs informaciòn en <a href="http://www.qt.io">qt.io</a><</p></p><p>Sitio Web: www.unikode.org</p><p>Correo Electrònico: nextsigner@gmail.com</p><p>Whatsapp: +541138024370</p><p><b>GitHub: </b>https://github.com/nextsigner/unik</p><p><b>Donaciones: </b>patreon.com/unik</p>'
+                        h1='<h1>Ayuda de Unik Launcher</h1><p><b>Teclas de Navegaciòn</b></p><ul><li>Izquierda: Salir o Retroceder</li><li>Derecha: Entrar o Ejecutar</li><li>Arriba: Navega entrando a areas</li><li>Abajo: Navega saltando areas</li><li>Escape: Escape, cierre o apagado</li><li>Intro: Entrar o Ejecutar</li></ul><p>Màs informaciòn sobre Unik:</p><p>Unik fue creado gracias a Qt Open Source</p><p>bajo las licencias LGPL. Màs informaciòn en <a href="http://www.qt.io">qt.io</a><</p><p>Sitio Web: www.unikode.org</p><p>Correo Electrònico: nextsigner@gmail.com</p><p>Whatsapp: +541138024370</p><p><b>GitHub: </b>https://github.com/nextsigner/unik</p><p><b>Donaciones: </b>patreon.com/unik</p>'
 
-                        h2='<h1>Unik Launcher Help</h1><p><b>Keyboard Navigation</b></p><ul><li>Left: Quit or Back</li><li>Right: Get in or Run</li><li>Up: Navigate getting to area</li><li>Down: Navigate jumping to area</li><li>Escape: Escape, close or quit</li><li>Enter: Get in or Run</li></ul><p>About Unik:</p><p>Unik was made with Qt Open Source under LGPL licence. More information in <a href="http://www.qt.io">qt.io</a><</p><p>Web Site: www.unikode.org</p><p>E-Mail: nextsigner@gmail.com</p><p>Whatsapp: +541138024370</p><p><b>GitHub: </b>https://github.com/nextsigner/unik</p><p><b>Donate: </b>patreon.com/unik</p>'
+                        h2='<h1>Unik Launcher Help</h1><p><b>Keyboard Navigation</b></p><ul><li>Left: Quit or Back</li><li>Right: Get in or Run</li><li>Up: Navigate getting to area</li><li>Down: Navigate jumping to area</li><li>Escape: Escape, close or quit</li><li>Enter: Get in or Run</li></ul><p>About Unik:</p><p>Unik was made with Qt Open Source</p><p>under LGPL licence. More information in <a href="http://www.qt.io">qt.io</a><</p><p>Web Site: www.unikode.org</p><p>E-Mail: nextsigner@gmail.com</p><p>Whatsapp: +541138024370</p><p><b>GitHub: </b>https://github.com/nextsigner/unik</p><p><b>Donate: </b>patreon.com/unik</p>'
                     }
                 }
             }
@@ -1785,7 +1834,7 @@ ApplicationWindow {
         }
         if(Qt.platform.os!=='android'){
             unik.ttsVoiceSelected(0)
-        }       
+        }
     }
     function setColors(){
         var nc=unikSettings.currentNumColor

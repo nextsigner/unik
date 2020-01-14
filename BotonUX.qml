@@ -25,7 +25,7 @@ Rectangle {
         id: xR1
         color: 'transparent'
         border.width: unikSettings.borderWidth
-        border.color: r.fontColor
+        border.color: app.c3//r.fontColor
         radius: unikSettings.radius
         width: parent.width
         height: parent.height
