@@ -93,11 +93,11 @@ Item{
         numberRun++
     }
     function getCfgFile(){
-        console.log('getCfgFile()...')
+        //console.log('getCfgFile()...')
         var unikCfgFile=r.url
         console.log('unikCfgFile: '+unikCfgFile)
         var unikCfgFileData=unik.getFile(unikCfgFile)
-        console.log('unikCfgFileData: '+unikCfgFileData)
+        //console.log('unikCfgFileData: '+unikCfgFileData)
         var json
         if(unikCfgFileData!=='error') {
             try {
@@ -129,11 +129,11 @@ Item{
     }
 
     function setCfgFile(){
-        console.log('getCfgFile()...')
+        console.log('setCfgFile()...')
         var unikCfgFile=r.url
-        console.log('unikCfgFile: '+unikCfgFile)
+        //console.log('unikCfgFile: '+unikCfgFile)
         var unikCfgFileData=unik.getFile(unikCfgFile)
-        console.log('unikCfgFileData: '+unikCfgFileData)
+        //console.log('unikCfgFileData: '+unikCfgFileData)
         var json
         if(unikCfgFileData!=='error') {
             try {
@@ -154,7 +154,7 @@ Item{
                     sound: appSettingsUnik.sound,
                     defaultColors: appSettingsUnik.defaultColors
                 }
-                console.log('Settings cfg file '+unikCfgFile+' \n'+JSON.stringify(json))
+                //console.log('Settings cfg file '+unikCfgFile+' \n'+JSON.stringify(json))
                 unik.setFile(unikCfgFile, JSON.stringify(json))
                 unik.setFile('/home/nextsigner/aaa.json', JSON.stringify(json))
             }

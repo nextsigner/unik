@@ -16,7 +16,7 @@ Rectangle {
     property string t2
     property color backgroudColor: app.c1
     property color fontColor: app.c2
-    property string fontFamily: 'Arial'
+    property string fontFamily: unikSettings.fontFamily
     property var objToRunQml
     property string qmlCode:''
     property int speed: 100

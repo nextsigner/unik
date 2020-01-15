@@ -104,7 +104,7 @@ ApplicationWindow {
     FolderListModel{
         //folder: Qt.platform.os!=='windows'?'file://'+appsDir:'file:///'+pws
         //folder: Qt.platform.os!=='android'?'file:./':'file://'+unik.currentFolderPath()//.replace('/unik-android-apps', '')
-        folder: Qt.platform.os!=='android'?'file:./':'file://'+pws
+        folder: Qt.platform.os!=='android'?'file://'+pws:'file://'+pws
         id: fl
         showDirs:  false
         showDotAndDotDot: false
@@ -1801,7 +1801,11 @@ ApplicationWindow {
                 if(Qt.platform.os==='android'){
                     engine.load(appsDir+'/unik-android-apps/main.qml')
                 }else{
-                    engine.load(appsDir+'/unik-tools/main.qml')
+                    console.log('AppListLauncher no dectecta los enlaces ukl en la carpeta '+fl.folder)
+                    console.log('Ultima uApp definida '+appSettings.uApp)
+                    console.log('Ultima app.ca definida '+app.ca)
+                    console.log('Ultima app.ci definida '+app.ci)
+                    engine.load('qrc:/main.qml')
                 }
             }else{
                 xP.visible=true
@@ -1919,6 +1923,9 @@ ApplicationWindow {
         app.c4=cc2[3]
     }
     function run(){
+        if(lv.count===0){
+            return
+        }
         let pathUnik=pws+'/unik'
         if(!unik.folderExist(pathUnik)){
             unik.mkdir(pathUnik)
