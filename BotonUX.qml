@@ -20,7 +20,9 @@ Rectangle {
     property var objToRunQml
     property string qmlCode:''
     property int speed: 100
+    property alias ma: maBX
     signal clicked
+    signal clickingInPos(int pos)
     Rectangle{
         id: xR1
         color: 'transparent'
@@ -69,7 +71,7 @@ Rectangle {
             width: xR1.width
             height: xR1.height
             radius: unikSettings.radius
-            rotation: -270
+            rotation: -180
             antialiasing: true
             onOpacityChanged: {
                 if(opacity>=0.5&&!maBX.p){
@@ -145,6 +147,7 @@ Rectangle {
             b1.opacity=0.5
             if(r.qmlCode===''){
                 r.clicked()
+                r.clickingInPos(mouseX)
                 return
             }
             run.start()

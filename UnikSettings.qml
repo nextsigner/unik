@@ -81,6 +81,13 @@ Item{
     }
     Component.onCompleted: {
         if(r.url!=='conf-unik'){
+            console.log('Archivo Unik Settings: '+r.url)
+            if(!unik.fileExist(r.url)){
+                console.log('Archivo Unik Settings inexistente.')
+                setCfgFile()
+            }else{
+                console.log('Archivo Unik Settings existente.')
+            }
             getCfgFile()
         }
         numberRun++
@@ -153,7 +160,7 @@ Item{
             }
         }else{
             var jsonCode='{
-"cfg":{"zoom":0.5,"padding":0.5,"radius":38,"borderWidth":2,"fontFamily":"Arial", "sound" : false, "showBg": true, "lang" : "es", "currentNumColor": 0, "defaultColors":"black-white-#666-#aaa|black-white-#aaa-#666|white-black-#aaa-#666|white-black-#666-#aaa|black-red-#ff6666-white|black-red-white-#ff6666|black-#ff6666-red-white|black-#ff6666-white-red|red-black-#ff6666-white|red-black-white-#ff6666|#ff2200-#ff8833-black-white|#ff2200-#ff8833-white-black|black-#ff8833-#ff3388-#ddcccc|black-#ff8833-#ddcccc-#ff3388|#1fbc05-black-green-white|#1fbc05-black-white-green|black-#1fbc05-white-green|black-#1fbc05-green-white|green-white-red-blue|green-white-blue-red" }
+"cfg":{"zoom":1.2,"padding":0.5,"radius":38,"borderWidth":2,"fontFamily":"Arial", "sound" : false, "showBg": true, "lang" : "es", "currentNumColor": 0, "defaultColors":"black-white-#666-#aaa|black-white-#aaa-#666|white-black-#aaa-#666|white-black-#666-#aaa|black-red-#ff6666-white|black-red-white-#ff6666|black-#ff6666-red-white|black-#ff6666-white-red|red-black-#ff6666-white|red-black-white-#ff6666|#ff2200-#ff8833-black-white|#ff2200-#ff8833-white-black|black-#ff8833-#ff3388-#ddcccc|black-#ff8833-#ddcccc-#ff3388|#1fbc05-black-green-white|#1fbc05-black-white-green|black-#1fbc05-white-green|black-#1fbc05-green-white|green-white-red-blue|green-white-blue-red" }
 }
 '
             unik.setFile(unikCfgFile, jsonCode)

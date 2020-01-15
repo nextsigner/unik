@@ -8,7 +8,7 @@ ApplicationWindow {
     objectName: 'awll'
     visibility:  Qt.platform.os !=='android'?"Maximized":"FullScreen"
     visible: true
-    flags: Qt.platform.os !=='android'?Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint: undefined
+    flags: Qt.platform.os !=='android'?Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint: Qt.Window
     color: "transparent"
     //color: Qt.platform.os!=='android'?"transparent":app.c1
     //flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
@@ -49,8 +49,8 @@ ApplicationWindow {
                 close.accepted = false;
                 xConfig.opacity=0.0
             }else{
-                close.accepted = true;
-                Qt.quit()
+                //close.accepted = true;
+                //Qt.quit()
             }
 
         }
@@ -102,7 +102,9 @@ ApplicationWindow {
         }
     }
     FolderListModel{
-        folder: Qt.platform.os!=='windows'?'file://'+appsDir:'file:///'+pws
+        //folder: Qt.platform.os!=='windows'?'file://'+appsDir:'file:///'+pws
+        //folder: Qt.platform.os!=='android'?'file:./':'file://'+unik.currentFolderPath()//.replace('/unik-android-apps', '')
+        folder: Qt.platform.os!=='android'?'file:./':'file://'+pws
         id: fl
         showDirs:  false
         showDotAndDotDot: false
@@ -166,8 +168,8 @@ ApplicationWindow {
             Behavior on contentY{NumberAnimation{duration: 500}}
             ListView{
                 id: lv
-                enabled: xConfig.opacity!==1.0
-                visible: Qt.platform.os!=='android'?true:lv.count!==1
+                //enabled: xConfig.opacity!==1.0
+                //visible: Qt.platform.os!=='android'?true:lv.count!==1
                 spacing: (app.fs*unikSettings.padding)+2
                 model:fl
                 delegate: delegate
@@ -503,7 +505,8 @@ ApplicationWindow {
                             easing.type: Easing.InOutBounce
                         }
                     }
-                    Boton{//Close
+                    Item {width: 1; height: app.fs}
+                    Boton{
                         id: btnCloseXConfig
                         w:app.fs*2
                         h: w
@@ -534,13 +537,17 @@ ApplicationWindow {
                                     }
                                 }
                             }
-                            text: unikSettings.lang==='es'?'Tamaño Letra '+parseFloat(unikSettings.zoom).toFixed(1):'Font Size '+parseFloat(unikSettings.zoom).toFixed(1)
-                            onClicked: {
+                            text: unikSettings.lang==='es'?'<b>-</b> Tamaño Letra '+parseFloat(unikSettings.zoom).toFixed(1)+' <b>+</b>':'<b>-</b> Font Size '+parseFloat(unikSettings.zoom).toFixed(1)+' <b>+</b>'
+                            onClickingInPos:  {
                                 var uzoom=parseFloat(unikSettings.zoom).toFixed(1)
-                                if(uzoom>0.5){
-                                    uzoom-=0.1
+                                if(pos<width/2){
+                                    if(uzoom>0.5){
+                                        uzoom-=0.1
+                                    }
                                 }else{
-                                    uzoom=1.2
+                                    if(uzoom<1.2){
+                                        uzoom=parseFloat(uzoom)+0.1
+                                    }
                                 }
                                 unikSettings.zoom=uzoom.toFixed(1);
                                 if(unikSettings.sound){
@@ -561,12 +568,16 @@ ApplicationWindow {
                                     }
                                 }
                             }
-                            text: unikSettings.lang==='es'?'Radio de Borde':'Border Radius'
-                            onClicked: {
-                                if(unikSettings.radius>app.fs*0.5){
-                                    unikSettings.radius-=app.fs*0.05
+                            text: unikSettings.lang==='es'?'<b>-</b> Radio de Borde <b>+</b>':'<b>-</b> Border Radius <b>+</b>'
+                            onClickingInPos: {
+                                if(pos<width/2){
+                                    if(unikSettings.radius>0){
+                                        unikSettings.radius-=1
+                                    }
                                 }else{
-                                    unikSettings.radius=app.fs*2
+                                    if(unikSettings.radius<app.fs*2){
+                                        unikSettings.radius+=1
+                                    }
                                 }
                                 if(unikSettings.sound){
                                     let s=unikSettings.lang==='es'?'Tamaño de radio de boton ':'Button Radius size '
@@ -592,13 +603,19 @@ ApplicationWindow {
                                     }
                                 }
                             }
-                            text: unikSettings.lang==='es'?'Ancho de Borde':'Width Radius'
-                            onClicked: {
-                                if(unikSettings.borderWidth>app.fs*0.05){
-                                    unikSettings.borderWidth-=app.fs*0.05
+                            text: unikSettings.lang==='es'?'<b>-</b> Ancho de Borde <b>+</b>':'<b>-</b> Width Radius<b>+</b>'
+                            onClickingInPos: {
+                                var uBorderWidth=unikSettings.borderWidth
+                                if(pos<width/2){
+                                    if(unikSettings.borderWidth>app.fs*0.05){
+                                        uBorderWidth=parseInt(uBorderWidth - 1)
+                                    }
                                 }else{
-                                    unikSettings.borderWidth=app.fs*0.5
+                                    if(unikSettings.borderWidth<parseInt(app.fs*0.5)){
+                                        uBorderWidth=parseInt(uBorderWidth + 1)
+                                    }
                                 }
+                                unikSettings.borderWidth=uBorderWidth
                                 if(unikSettings.sound){
                                     let s=unikSettings.lang==='es'?'Ancho de borde de boton ':'Woth border of Button size '
                                     s+=' '+parseInt(unikSettings.borderWidth)
@@ -617,13 +634,20 @@ ApplicationWindow {
                                     }
                                 }
                             }
-                            text: unikSettings.lang==='es'?'Espacio':'Space'
-                            onClicked: {
-                                if(unikSettings.padding>0.1){
-                                    unikSettings.padding-=0.1
+                            text: unikSettings.lang==='es'?'<b>-</b> Espacio <b>+</b>':'<b>-</b> Space <b>+</b>'
+                            onClickingInPos:  {
+                                let upadding=parseFloat(unikSettings.padding).toFixed(1)
+                                if(pos<width/2){
+                                    if(upadding>0.1){
+                                        upadding-=0.1
+                                    }
                                 }else{
-                                    unikSettings.padding=1.0
+                                    if(upadding<1.0){
+                                        upadding=parseFloat(upadding)+0.1
+                                    }
                                 }
+                                unikSettings.padding=upadding.toFixed(1);
+
                                 if(unikSettings.sound){
                                     let s=unikSettings.lang==='es'?'Espacio del interior del boton ':'Spacing of inside button  size '
                                     s+=' '+parseInt(parseFloat(unikSettings.padding).toFixed(1)*100)
@@ -860,7 +884,9 @@ ApplicationWindow {
             }
             Rectangle{
                 id: xFF
-                anchors.fill: parent
+                //anchors.fill: parent
+                width: parent.width
+                height: parent.height
                 border.width: parent.border.width
                 border.color: parent.border.color
                 color: parent.color
@@ -886,17 +912,21 @@ ApplicationWindow {
                 }
                 Column{
                     id: colXFF1
-                    anchors.centerIn: parent
+                    //anchors.centerIn: parent
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: parent.top
+                    anchors.topMargin: app.fs
                     spacing: (app.fs*unikSettings.padding)+2
                     width: parent.width
                     Row{
                         id: rowFF1
                         z:rowFF2.z+1
-                        spacing: app.fs*unikSettings.padding
+                        spacing: app.fs
                         height: btnUXCloseListFF.height
                         anchors.horizontalCenter: parent.horizontalCenter
                         UText{
-                            text: unikSettings.lang==='es'?'Tipo de Fuente Actual: '+unikSettings.fontFamily:'Current Font Family: '+unikSettings.fontFamily
+                            text: unikSettings.lang==='es'?'Tipo de Fuente Actual\n'+unikSettings.fontFamily:'Current Font Family: '+unikSettings.fontFamily
+                            horizontalAlignment: Text.AlignHCenter
                             anchors.verticalCenter: parent.verticalCenter
                         }
                         BotonUX{
@@ -909,20 +939,77 @@ ApplicationWindow {
                             }
                         }
                     }
-                    Row{
+                    Column{
                         id:rowFF2
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        spacing: app.fs*2
+                        width: xFF.width
+                        height: xFF.height-rowFF1.height-parent.spacing
+                        spacing: app.fs*0.5
+                        ListView{
+                            id: lvFF
+                            clip: true
+                            width: parent.width
+                            height: xFF.height*0.3
+                            model: Qt.fontFamilies()
+                            delegate: delFF
+                            spacing: (app.fs*unikSettings.padding)+2
+                            displayMarginBeginning: heightButton*4+spacing*4
+                            displayMarginEnd: heightButton*4+spacing*4
+                            property int uCurrentIndex: currentIndex
+                            property int heightButton:app.fs*2
+                            onCurrentItemChanged: {
+                                //y=currentIndex>uCurrentIndex?0-lvFF.height/2:lvFF.height/2
+                                //uCurrentIndex=currentIndex
+                                //                                var item = lvFF.i(currentIndex)
+                                //                                console.log('XXXXXXXXXXXXXXXXXXXx'+item)
+                                //                                lvFF.contentY=item.y
+                            }
+                            Component{
+                                id: delFF
+                                BotonUX{
+                                    id: itemFF
+                                    text: ''
+                                    onClicked: unikSettings.fontFamily='"'+modelData+'"'
+                                    width:example.contentWidth+app.fs*unikSettings.padding+app.fs
+                                    height: example.contentHeight+app.fs*unikSettings.padding+app.fs
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    onYChanged: xFF.arrY[index]=itemFF.y
+                                    UnikFocus{visible: lvFF.currentIndex===index}
+                                    Text {
+                                        id: example
+                                        text: modelData
+                                        font.family: modelData
+                                        font.pixelSize: app.fs
+                                        color: app.c2
+                                        anchors.centerIn: parent
+                                    }
+                                    Component.onCompleted: {
+                                        if(width>lvFF.width){
+                                            lvFF.width=width+app.fs
+                                        }
+                                        xFF.arrY.push(itemFF.y)
+                                        lvFF.heightButton=height
+                                    }
+                                }
+                            }
+                            Rectangle{
+                                anchors.fill: parent
+                                color: 'transparent'
+                                border.width: 1
+                                border.color: app.c2
+                            }
+                        }
                         Rectangle{
                             id: xTxtExample
-                            width: xFF.width-lvFF.width-app.fs*6
-                            height: xFF.height-rowFF1.height-colXFF1.spacing-app.fs
+                            width: lvFF.width-app.fs//app.fs*16//xFF.width-lvFF.width-app.fs*6
+                            height: parent.height-rowFF1.height//-colXFF1.spacing-app.fs
                             color: app.c1
-                            border.width: unikSettings.borderWidth
-                            border.color: app.c2
+                            //border.width: unikSettings.borderWidth
+                            //border.color: app.c2
+                            anchors.horizontalCenter: parent.horizontalCenter
                             property string txt: unikSettings.lang==='es'?'Unik fue creado con el framework Qt Open Source.':'Unik was made with the framework Qt Open Source.'
                             Column{
-                                anchors.centerIn: parent
+                                //anchors.centerIn: parent
+                                y: txtTitFFExample.height+app.fs*3
                                 spacing: app.fs*0.5*unikSettings.padding
                                 Text {
                                     text: xTxtExample.txt
@@ -979,56 +1066,7 @@ ApplicationWindow {
                                 }
                             }
                         }
-                        ListView{
-                            id: lvFF
-                            width: app.fs*8
-                            height: 1// xFF.height-btnUXCloseListFF.height-spacing-app.fs*unikSettings.padding
-                            model: Qt.fontFamilies()
-                            delegate: delFF
-                            spacing: (app.fs*unikSettings.padding)+2
-                            displayMarginBeginning: heightButton*4+spacing*4
-                            displayMarginEnd: heightButton*4+spacing*4
-                            anchors.verticalCenter: parent.verticalCenter
-                            property int uCurrentIndex: currentIndex
-                            property int heightButton:app.fs*2
-                            onCurrentItemChanged: {
-                                //y=currentIndex>uCurrentIndex?0-lvFF.height/2:lvFF.height/2
-                                //uCurrentIndex=currentIndex
-                                //                                var item = lvFF.i(currentIndex)
-                                //                                console.log('XXXXXXXXXXXXXXXXXXXx'+item)
-                                //                                lvFF.contentY=item.y
-                            }
-                            Component{
-                                id: delFF
-                                BotonUX{
-                                    id: itemFF
-                                    text: ''
-                                    onClicked: unikSettings.fontFamily='"'+modelData+'"'
-                                    width:example.contentWidth+app.fs*unikSettings.padding+app.fs
-                                    height: example.contentHeight+app.fs*unikSettings.padding+app.fs
-                                    anchors.horizontalCenter: parent.horizontalCenter
-                                    onYChanged: xFF.arrY[index]=itemFF.y
-                                    UnikFocus{visible: lvFF.currentIndex===index}
-                                    Text {
-                                        id: example
-                                        text: modelData
-                                        font.family: modelData
-                                        font.pixelSize: app.fs
-                                        color: app.c2
-                                        anchors.centerIn: parent
-                                    }
-                                    Component.onCompleted: {
-                                        if(width>lvFF.width){
-                                            lvFF.width=width+app.fs
-                                        }
-                                        xFF.arrY.push(itemFF.y)
-                                        lvFF.heightButton=height
-                                    }
-                                }
-                            }
-                        }
-                    }
-
+                                            }
                 }
                 Component.onCompleted: {
                     var un=lvFF.model.indexOf(unikSettings.fontFamily)
@@ -1051,6 +1089,8 @@ ApplicationWindow {
                         currentFocus=0
                         //labelStatus.text=unikSettings.lang==='es'?'':''
                     }else{
+                        tiLinkFile.focus=false
+                        tiLinkFileContent.focus=false
                         currentFocus=-1
                         app.objFocus=btnUX9
                         labelStatus.text=''
@@ -1069,7 +1109,10 @@ ApplicationWindow {
                     anchors.fill: parent
                 }
                 Column{
-                    anchors.centerIn: parent
+                    anchors.centerIn: Qt.platform.os!=='android'?parent:undefined
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: Qt.platform.os==='android'?parent.top:undefined
+                    anchors.topMargin: Qt.platform.os==='android'?app.fs:0
                     spacing: app.fs*0.5
                     property int radius: unikSettings.radius/2
                     UText{
@@ -1088,7 +1131,7 @@ ApplicationWindow {
                             border.width: unikSettings.borderWidth
                             border.color: app.c2
                             radius: unikSettings.radius
-                            width: xLinkEditor.width*0.5
+                            width: xLinkEditor.width-labelLE1.width-app.fs
                             height: app.fs*2
                             color: app.c1
                             clip: true
@@ -1128,63 +1171,7 @@ ApplicationWindow {
                                 }
                             }
                         }
-                        BotonUX{
-                            id: btnUXSetLinkCancel
-                            UnikFocus{
-                                id: ufSetLinkCancel;
-                                visible:xLinkEditor.currentFocus===1
-                                onVisibleChanged: {
-                                    if(visible){
-                                        tiLinkFileContent.focus=false
-                                        tiLinkFile.focus=false
-                                        labelStatus.text=unikSettings.lang==='es'?'Cancelar y Cerrar el Editor de Enlace.':'Cancel and Close the Link Editor.'
-                                    }
-                                }
-                            }
-                            text: unikSettings.lang==='es'?'Cancelar':'Cancel'
-                            anchors.verticalCenter: parent.verticalCenter
-                            onClicked: {
-                                xLinkEditor.visible=false
-                            }
-                        }
-                        BotonUX{
-                            id: btnUXSetLink
-                            UnikFocus{
-                                id: ufSetLink;
-                                visible:xLinkEditor.currentFocus===2
-                                onVisibleChanged: {
-                                    if(visible){
-                                        tiLinkFileContent.focus=false
-                                        tiLinkFile.focus=false
-                                        labelStatus.text=unikSettings.lang==='es'?'Hacer click o presionar retorno para crear este enlace.':'Click or press return for make this link.'
-                                    }
-                                }
-                            }
-                            text: unikSettings.lang==='es'?'Crear':'Make'
-                            anchors.verticalCenter: parent.verticalCenter
-                            visible: Qt.platform.os!=='android'?tiLinkFile.text!=='unik-tools'&&tiLinkFileContent.text!==''&&tiLinkFile.text!=='':tiLinkFile.text!=='android-apps'&&tiLinkFileContent.text!==''&&tiLinkFile.text!==''
-                            onClicked: {
-                                app.al=[]
-                                appSettings.uApp='link_'+tiLinkFile.text+'.ukl'
-                                var linkFileName=pws+'/link_'+tiLinkFile.text+'.ukl'
-                                unik.setFile(linkFileName, tiLinkFileContent.text)
-                                xLinkEditor.visible=false
-                            }
-                            Timer{
-                                running: xLinkEditor.visible
-                                repeat: true
-                                interval: 500
-                                onTriggered: {
-                                    var linkFileName=pws+'/link_'+tiLinkFile.text+'.ukl'
-                                    var linkFileData=unik.getFile(linkFileName)
-                                    if(unik.fileExist(linkFileName)&&tiLinkFileContent.text!==linkFileData){
-                                        btnUXSetLink.text=unikSettings.lang==='es'?'Modificar':'Modify'
-                                    }else{
-                                        btnUXSetLink.text=unikSettings.lang==='es'?'Crear':'Make'
-                                    }
-                                }
-                            }
-                        }
+
                     }
                     Rectangle{
                         border.width: unikSettings.borderWidth
@@ -1290,13 +1277,32 @@ ApplicationWindow {
                             onFocusChanged: if(focus)xLinkEditor.currentFocus=3
                         }
                     }
+                    UText{
+                        id: labelStatus
+                        width: xLinkEditor.width-btnUXDelLink.width-app.fs*2
+                        wrapMode: Text.WordWrap
+                    }
                     Row{
                         anchors.horizontalCenter: parent.horizontalCenter
                         spacing: app.fs*0.5
-                        UText{
-                            id: labelStatus
-                            width: xLinkEditor.width-btnUXDelLink.width-app.fs*2
-                            wrapMode: Text.WordWrap
+                        BotonUX{
+                            id: btnUXSetLinkCancel
+                            UnikFocus{
+                                id: ufSetLinkCancel;
+                                visible:xLinkEditor.currentFocus===1
+                                onVisibleChanged: {
+                                    if(visible){
+                                        tiLinkFileContent.focus=false
+                                        tiLinkFile.focus=false
+                                        labelStatus.text=unikSettings.lang==='es'?'Cancelar y Cerrar el Editor de Enlace.':'Cancel and Close the Link Editor.'
+                                    }
+                                }
+                            }
+                            text: unikSettings.lang==='es'?'Cancelar':'Cancel'
+                            anchors.verticalCenter: parent.verticalCenter
+                            onClicked: {
+                                xLinkEditor.visible=false
+                            }
                         }
                         BotonUX{
                             id: btnUXDelLink
@@ -1322,6 +1328,45 @@ ApplicationWindow {
                                 tiLinkFileContent.text=''
                             }
                         }
+                        BotonUX{
+                            id: btnUXSetLink
+                            UnikFocus{
+                                id: ufSetLink;
+                                visible:xLinkEditor.currentFocus===2
+                                onVisibleChanged: {
+                                    if(visible){
+                                        tiLinkFileContent.focus=false
+                                        tiLinkFile.focus=false
+                                        labelStatus.text=unikSettings.lang==='es'?'Hacer click o presionar retorno para crear este enlace.':'Click or press return for make this link.'
+                                    }
+                                }
+                            }
+                            text: unikSettings.lang==='es'?'Crear':'Make'
+                            anchors.verticalCenter: parent.verticalCenter
+                            visible: Qt.platform.os!=='android'?tiLinkFile.text!=='unik-tools'&&tiLinkFileContent.text!==''&&tiLinkFile.text!=='':tiLinkFile.text!=='android-apps'&&tiLinkFileContent.text!==''&&tiLinkFile.text!==''//&&tiLinkFile.text.length>=5&&(tiLinkFile.text.indexOf('-git=')>=0||tiLinkFile.text.indexOf('-folder=')>=0)
+                            onClicked: {
+                                app.al=[]
+                                appSettings.uApp='link_'+tiLinkFile.text+'.ukl'
+                                var linkFileName=pws+'/link_'+tiLinkFile.text+'.ukl'
+                                unik.setFile(linkFileName, tiLinkFileContent.text)
+                                xLinkEditor.visible=false
+                            }
+                            Timer{
+                                running: xLinkEditor.visible
+                                repeat: true
+                                interval: 500
+                                onTriggered: {
+                                    var linkFileName=pws+'/link_'+tiLinkFile.text+'.ukl'
+                                    var linkFileData=unik.getFile(linkFileName)
+                                    if(unik.fileExist(linkFileName)&&tiLinkFileContent.text!==linkFileData){
+                                        btnUXSetLink.text=unikSettings.lang==='es'?'Modificar':'Modify'
+                                    }else{
+                                        btnUXSetLink.text=unikSettings.lang==='es'?'Crear':'Make'
+                                    }
+                                }
+                            }
+                        }
+
                     }
                 }
             }
@@ -1345,6 +1390,7 @@ ApplicationWindow {
                 anchors.right: parent.left
                 anchors.rightMargin: app.fs
                 rotation: -180
+                visible: xConfig.opacity===0.0
                 onClicked: {
                     tlaunch.stop()
                     xConfig.opacity=1.0
@@ -1369,6 +1415,7 @@ ApplicationWindow {
                 contentHeight: txtHelp.height+app.fs*2
                 Text {
                     id: txtHelp
+                    y: btnCloseACT.height+app.fs
                     text: unikSettings.lang==='es'?h1:h2
                     font.pixelSize: app.fs
                     font.family: unikSettings.fontFamily
@@ -1405,6 +1452,7 @@ ApplicationWindow {
 
         Rectangle{
             id: xPb
+            //visible: lv.count===1&&Qt.platform.os==='android'?false:true
             opacity: 0.0
             width: Screen.desktopAvailableWidth<Screen.desktopAvailableHeight ? Screen.desktopAvailableWidth*0.95 : Screen.desktopAvailableHeight*0.95
             height: titDownloadLog.contentHeight+log.contentHeight+pblaunch.height+app.fs
@@ -1489,6 +1537,17 @@ ApplicationWindow {
             }
         }
     }
+
+    UText{
+        id: devInfo
+        text: '1:'+fl.folder+'\n2:'+lv.count+'\n3:'+app.ca+'\n4:'+app.ci
+        wrapMode: Text.WrapAnywhere
+        width: 300
+        color: 'red'
+        font.pixelSize: 20
+        visible: false
+    }
+
     Shortcut{
         sequence: 'Return'
         onActivated: {
@@ -1739,7 +1798,11 @@ ApplicationWindow {
                 tlaunch.enabled=false
                 tlaunch.stop()
                 app.close()
-                engine.load(appsDir+'/unik-tools/main.qml')
+                if(Qt.platform.os==='android'){
+                    engine.load(appsDir+'/unik-android-apps/main.qml')
+                }else{
+                    engine.load(appsDir+'/unik-tools/main.qml')
+                }
             }else{
                 xP.visible=true
             }
@@ -1756,13 +1819,14 @@ ApplicationWindow {
         id: tlaunch
         running: Qt.platform.os!=='android'
         repeat: true
-        interval: 1000
+        interval: 1000//lv.count===1&&Qt.platform.os==='android'?100:1000
         property bool enabled: true
         onTriggered: {
-            if(lv.count===1&&Qt.platform.os==='android'){
+            /*if(lv.count===1&&Qt.platform.os==='android'){
+                app.ca='link_android-apps.ukl'
                 app.run()
                 return
-            }
+            }*/
             app.sec++
             if(app.sec===7){
                 stop()
@@ -1806,10 +1870,19 @@ ApplicationWindow {
     Component.onCompleted:{
         let pathUnik=pws+'/unik'
         if(!unik.folderExist(pathUnik)){
+            devInfo.text+='\n di1'
             unik.mkdir(pathUnik)
+        }else{
+            devInfo.text+='\n di2'
         }
         let fileCa=pathUnik+'/ca.dat'
-        app.ca = unik.getFile(fileCa)
+        let uCaDat=unik.getFile(fileCa)
+        if(!unik.fileExist(fileCa)||uCaDat==='error'){
+            app.ca = 'link_android-apps.ukl'
+            unik.setFile(fileCa, app.ca)
+        }else{
+            app.ca = unik.getFile(fileCa)
+        }
         appSettings.uApp = app.ca
 
         splashBlanco.opacity=1.0
@@ -1871,6 +1944,10 @@ ApplicationWindow {
         }
         console.log('Launching '+appSettings.uApp+'...')
 
+        if(appSettings.uApp==='error'){
+
+        }
+
         var m0
         var m1
         var m2
@@ -1889,9 +1966,11 @@ ApplicationWindow {
                 xPb.opacity=1.0
                 var d = unik.downloadGit(m1[0], pws)
                 if(app.downloading){
-                    unik.cd(pws+'/'+mn)
-                    engine.load(pws+'/'+mn+'/main.qml')
-                    app.close()
+                    unik.setUnikStartSettings(params)
+                    unik.restartApp()
+                    //unik.cd(pws+'/'+mn)
+                    //engine.load(pws+'/'+mn+'/main.qml')
+                    //app.close()
                     return
                 }
             }
@@ -1904,9 +1983,11 @@ ApplicationWindow {
                 unik.cd(pws)
                 unik.mkdir(pws+'/'+mn)
                 var d = unik.runAppFromZip(m1[0], pws)
-                unik.cd(pws+'/'+mn)
-                engine.load(pws+'/'+mn+'/main.qml')
-                app.close()
+                unik.setUnikStartSettings(params)
+                unik.restartApp()
+                //unik.cd(pws+'/'+mn)
+                //engine.load(pws+'/'+mn+'/main.qml')
+                //app.close()
                 return
 
             }
@@ -1917,10 +1998,13 @@ ApplicationWindow {
                 m2=m1[0].split('/')
                 mn=m2[m2.length-1]
 
-                unik.cd(pws)
-                unik.mkdir(pws+'/'+mn)
-                engine.load(pws+'/'+mn+'/main.qml')
-                app.close()
+                unik.setUnikStartSettings(params)
+                unik.restartApp()
+
+                //unik.cd(pws)
+                //unik.mkdir(pws+'/'+mn)
+                //engine.load(pws+'/'+mn+'/main.qml')
+                //app.close()
                 return
             }
         }else{

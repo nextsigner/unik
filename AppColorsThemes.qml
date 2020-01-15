@@ -1,13 +1,14 @@
 import QtQuick 2.0
+import QtQuick.Window 2.0
 
 Rectangle{
     id:r
-    width: rowTit.width>(cantColors/2)*app.fs*3+app.fs?rowTit.width+app.fs:(cantColors/2)*app.fs*3+app.fs
+    width: Qt.platform.os==='android'?Screen.width-app.fs:Screen.width/2//app.width-app.fs//rowTit.width+app.fs*2//rowTit.width>(cantColors/4)*app.fs*3+app.fs?rowTit.width+app.fs:(cantColors/2)*app.fs*3+app.fs
     height: gridPackColor.height+app.fs*3
     color:app.c4
     border.width: unikSettings.borderWidth
     border.color: app.c2
-    radius: unikSettings.radius
+    radius: unikSettings.radius*0.5
     property alias showBtnClose: btnCloseACT.visible
     property int currentFocus: -1
     property int cantColors//: gridPackColor.children.length-1    
@@ -45,25 +46,20 @@ Rectangle{
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: app.fs
             Text {
-                text: unikSettings.lang==='es'?'<b>Color de Unik: '+parseInt(unikSettings.currentNumColor+1)+'</b>':'<b>Unik Color: '+parseInt(unikSettings.currentNumColor+1)+'</b>'
+                text: unikSettings.lang==='es'?'<b>Color de Unik actual: '+parseInt(unikSettings.currentNumColor+1)+'</b>':'<b>Current Unik Colors: '+parseInt(unikSettings.currentNumColor+1)+'</b>'
                 font.pixelSize: app.fs
-                color: app.c2
-            }
-            Text {
-                text: unikSettings.lang==='es'?'<b>Cantidad de Colores: '+r.cantColors+'</b>':'<b>Count Colors: '+r.cantColors+'</b>'
-                font.pixelSize: app.fs
-                color: app.c2
+                color: app.c1
             }
         }
         Grid{
             id: gridPackColor
-            spacing: app.fs*0.25
+            spacing: app.fs*0.5
             anchors.horizontalCenter: parent.horizontalCenter
             rows: 4
             Repeater{
                 id:rep1               
                 Rectangle{
-                    width: app.fs*2.5
+                    width: app.fs*4
                     height: width
                     border.width: unikSettings.currentNumColor===index&&!uf.visible?4:1
                     border.color: '#000'
@@ -84,7 +80,7 @@ Rectangle{
                         columns: 2
                         property var arr: modelData.split('-')
                         Rectangle{
-                            width: app.fs
+                            width: app.fs*1.5
                             height: width
                             //border.width: 2
                             //border.color: app.c2
@@ -97,7 +93,7 @@ Rectangle{
                             }
                         }
                         Rectangle{
-                            width: app.fs
+                            width: app.fs*1.5
                             height: width
                             //border.width: 2
                             //border.color: app.c2
@@ -110,7 +106,7 @@ Rectangle{
                             }
                         }
                         Rectangle{
-                            width: app.fs
+                            width: app.fs*1.5
                             height: width
                             //border.width: 2
                             //border.color: app.c2
@@ -123,7 +119,7 @@ Rectangle{
                             }
                         }
                         Rectangle{
-                            width: app.fs
+                            width: app.fs*1.5
                             height: width
                             //border.width: 2
                             //border.color: app.c2
@@ -135,7 +131,6 @@ Rectangle{
                                 anchors.centerIn: parent
                             }
                         }
-
                     }
                     Component.onCompleted: r.cantColors++
                 }
