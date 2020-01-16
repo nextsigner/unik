@@ -38,7 +38,7 @@ windows{
 mac{
     include(macos.pri)
 }
-
+message(DestDir: $$DESTDIR)
 android{
     include(android.pri)
 }

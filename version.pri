@@ -69,7 +69,17 @@ win32 {
     isEmpty(NUMCOMP){
         NUMCOMP = 0
     }
-    NNUMCOMP=$$system("echo $(($$NUMCOMP + 1))")
+
+    android{
+        contains(ANDROID_TARGET_ARCH,x86) {
+            !contains(ANDROID_TARGET_ARCH,x86_64) {
+                NNUMCOMP=$$system("echo $(($$NUMCOMP + 1))")
+            }
+        }
+    }else{
+        NNUMCOMP=$$system("echo $(($$NUMCOMP + 1))")
+    }
+
     NUMCOMP=$$NNUMCOMP
     write_file($$PWD/num_comp, NNUMCOMP)
 

@@ -46,8 +46,7 @@ message(linux.pri is loaded......)
         write_file($$PWD/build_linux/default.desktop, DESKTOPDATA)
 
         #Make deploy.sh for GNU/Linux (Run sudo ./deploy.sh)
-        #With sudo this script run changing folder and showing in the current terminal.
-        #Without sudo, running with . ./deploy.sh this script not work changing folder.
+        #With sudo this script run changing folder and so
         DEPLOYDATASH=""
         DEPLOYDATASH+=$${LITERAL_HASH}!/bin/bash
         DEPLOYDATASH+="echo Iniciando deploy.sh..."

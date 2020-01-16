@@ -1,0 +1,3 @@
+#!/bin/bash
+echo Iniciando deploy_android.sh...
+mv /media/nextsigner/ZONA-A11/nsp/build-unik-Android_for_x86_64_Clang_Qt_5_13_0_for_Android_x86_64-Release/android-build/build/outputs/apk/android-build-release-signed.apk /media/nextsigner/ZONA-A11/nsp/unik-dev-apps/unik/unik_v4.03.15_x86_64.apk
