@@ -584,6 +584,7 @@ int main(int argc, char *argv[])
 
 
     engine.rootContext()->setContextProperty("pws", pws);
+    //qDebug()<<"PWS L587: "<<pws;
 
     //-->Load the splah QML file.
 #ifdef Q_OS_ANDROID

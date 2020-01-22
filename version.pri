@@ -31,8 +31,8 @@ win32 {
     VERSION_MEN1=$$system("echo  %time%")
     VERSION_MEN2 =$$split(VERSION_MEN1, ":")#07 08 2018
     VERSION_MEN3 =$$member(VERSION_MEN2, 1)
-    VERSION_MEN4=$$system("resources\\week.bat $$MDIA4 $$MES $$member(VERSION_MAJ2, 2)")
-    NUMWEEK=$$system("set /a  $$VERSION_MEN4 + 1")
+    NUMWEEK=$$system("resources\\week.bat $$MDIA4 $$MES $$member(VERSION_MAJ2, 2)")
+    #NUMWEEK=$$system("set /a  $$VERSION_MEN4 + 1")
     message(DIA: $$MDIA4)
     message(MES: $$MDIA4)
 
@@ -48,17 +48,15 @@ win32 {
     #message(Month: $$member(VERSION_MAJ2, 1))
     #message(Week: $$NUMWEEK)
 
-    VERSION_MEN5=$$system("echo  %time%")
-    VERSION_MEN6 =$$split(VERSION_MEN5, ":")
-    VERSION_MEN7 =$$member(VERSION_MEN6, 0)
-    VERSION_MEN8 =$$member(VERSION_MEN6, 1)
-    VERSION_MEN9=$$system("set /a  $$MDIA4 + $$MMES4 + $$VERSION_MEN7 + $$VERSION_MEN8")
-    greaterThan(VERSION_MEN9, 99){
-        VERSION_MEN10=$$VERSION_MEN9
-    }else{
-        VERSION_MEN10=0$$VERSION_MEN9
+    NUMCOMP=$$cat($$PWD/num_comp_win)
+    isEmpty(NUMCOMP){
+        NUMCOMP = 0
     }
-    APPVERSION=$$VERSION_MAJ7"."$$NUMWEEK$$VERSION_MEN10
+    NNUMCOMP=$$system("set /a  $$NUMCOMP + 1")
+    NUMCOMP=$$NNUMCOMP
+    write_file($$PWD/num_comp_win, NNUMCOMP)
+    APPVERSION=$$VERSION_MAJ7"."$$NUMWEEK"."$$NUMCOMP
+    write_file($$PWD/build_win_32/windows_version, APPVERSION)
     message(Windows App Version $$APPVERSION)
 } else:unix {
     VERSION_MAJ1=$$system(date +%Y)
@@ -74,7 +72,11 @@ win32 {
         contains(ANDROID_TARGET_ARCH,x86) {
             !contains(ANDROID_TARGET_ARCH,x86_64) {
                 NNUMCOMP=$$system("echo $(($$NUMCOMP + 1))")
+            }else{
+                NNUMCOMP=$$NUMCOMP
             }
+        }else{
+            NNUMCOMP=$$NUMCOMP
         }
     }else{
         NNUMCOMP=$$system("echo $(($$NUMCOMP + 1))")

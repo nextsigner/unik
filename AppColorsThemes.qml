@@ -1,6 +1,5 @@
 import QtQuick 2.0
 import QtQuick.Window 2.0
-
 Rectangle{
     id:r
     width: Qt.platform.os==='android'?Screen.width-app.fs:Screen.width/2//app.width-app.fs//rowTit.width+app.fs*2//rowTit.width>(cantColors/4)*app.fs*3+app.fs?rowTit.width+app.fs:(cantColors/2)*app.fs*3+app.fs

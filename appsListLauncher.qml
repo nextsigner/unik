@@ -104,7 +104,7 @@ ApplicationWindow {
     FolderListModel{
         //folder: Qt.platform.os!=='windows'?'file://'+appsDir:'file:///'+pws
         //folder: Qt.platform.os!=='android'?'file:./':'file://'+unik.currentFolderPath()//.replace('/unik-android-apps', '')
-        folder: Qt.platform.os!=='android'?'file://'+pws:'file://'+pws
+        folder: Qt.platform.os==='windows'?'file:///'+pws:'file://'+pws
         id: fl
         showDirs:  false
         showDotAndDotDot: false
@@ -177,8 +177,9 @@ ApplicationWindow {
                 height: (app.fs*2+app.fs*0.25)*lv.count
                 anchors.horizontalCenter: parent.horizontalCenter
                 onCurrentIndexChanged: {
-                    console.log('UCurrentIndex: '+currentIndex)
-                    flick.contentY=(app.fs*2+app.fs*0.25)*currentIndex-app.height/2
+                    //console.log('UCurrentIndex: '+currentIndex)
+                    //flick.contentY=(app.fs*2+app.fs*0.25)*currentIndex-app.height/2
+                    flick.contentY=(app.fs*2+app.fs*0.25)*app.ci-app.height/2
                 }
             }
         }
@@ -1801,7 +1802,7 @@ ApplicationWindow {
                 if(Qt.platform.os==='android'){
                     engine.load(appsDir+'/unik-android-apps/main.qml')
                 }else{
-                    console.log('AppListLauncher no dectecta los enlaces ukl en la carpeta '+fl.folder)
+                    console.log('AppListLauncher no detecta los enlaces ukl en la carpeta '+fl.folder)
                     console.log('Ultima uApp definida '+appSettings.uApp)
                     console.log('Ultima app.ca definida '+app.ca)
                     console.log('Ultima app.ci definida '+app.ci)
@@ -1856,7 +1857,7 @@ ApplicationWindow {
         //ColorAnimation on color { to: app.c2; duration: 2000 }
         Image {
             id: splashBlanco
-            source: Qt.platform.os==='android'?"assets:/splash.png":undefined
+            source: Qt.platform.os==='android'?"assets:/splash.png":''
             width: parent.width*0.25
             fillMode: Image.PreserveAspectFit
             anchors.centerIn: parent

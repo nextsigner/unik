@@ -2335,17 +2335,6 @@ bool UK::createLink(QString execString, QString arguments, QString lnkLocationFi
     QByteArray upf;
     upf.append(up);
     QByteArray vbs = "";
-    /*vbs.append("set WshShell = WScript.CreateObject(\"WScript.Shell\") \n") ;
-    vbs.append("strDesktop = WshShell.SpecialFolders(\"Desktop\")  \n") ;
-     vbs.append("set oShellLink = WshShell.CreateShortcut( \""+lnkLocationFileName+"\")  \n") ;
-              vbs.append("oShellLink.TargetPath = \""+upf+"\"  \n") ;
-              vbs.append("oShellLink.WindowStyle = 1  \n") ;
-              vbs.append("oShellLink.Hotkey = \"CTRL+SHIFT+R\"  \n") ;
-              vbs.append("oShellLink.IconLocation = \"unik.exe, 0\"  \n") ;
-              vbs.append("oShellLink.Description = \"Unik Qml Engine\"  \n") ;
-              vbs.append("oShellLink.WorkingDirectory = strDesktop  \n") ;
-              vbs.append("oShellLink.Save  \n") ;*/
-
     vbs.append("set WshShell = WScript.CreateObject(\"WScript.Shell\")\n");
     vbs.append("set objShell = CreateObject(\"Shell.Application\")\n");
     vbs.append("set oShellLink = WshShell.CreateShortcut(\""+lnkLocationFileName+"\")\n");
@@ -2362,8 +2351,8 @@ bool UK::createLink(QString execString, QString arguments, QString lnkLocationFi
     url.append("/createLnk.vbs");
     setFile(url, vbs);
     run("cmd /c start "+url);
-    qDebug()<<"vbs: "<<url;
-    qDebug()<<"vbs data: "<<vbs;
+    //qDebug()<<"vbs: "<<url;
+    //qDebug()<<"vbs data: "<<vbs;
     return true;
 }
 #endif

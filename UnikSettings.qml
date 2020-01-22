@@ -1,7 +1,6 @@
 import QtQuick 2.0
 import Qt.labs.settings 1.0
 import QtQuick.Window 2.0
-
 Item{
     id: r
     property string url: 'conf-unik'
