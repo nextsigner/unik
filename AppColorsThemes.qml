@@ -10,14 +10,16 @@ Rectangle{
     radius: unikSettings.radius*0.5
     property alias showBtnClose: btnCloseACT.visible
     property int currentFocus: -1
-    property int cantColors//: gridPackColor.children.length-1    
+    property int cantColors//: gridPackColor.children.length-1
     Timer{
         running: true
         repeat: true
         interval: 500
         onTriggered: {
-            var ac=unikSettings.defaultColors.split('|')
-            rep1.model=ac
+            if(unikSettings.defaultColors){
+                var ac=unikSettings.defaultColors.split('|')
+                rep1.model=ac
+            }
         }
     }
     Boton{//Close
@@ -56,7 +58,7 @@ Rectangle{
             anchors.horizontalCenter: parent.horizontalCenter
             rows: 4
             Repeater{
-                id:rep1               
+                id:rep1
                 Rectangle{
                     width: app.fs*4
                     height: width

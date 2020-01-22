@@ -22,5 +22,6 @@
         <file>Borde.qml</file>
         <file>AppColorsThemes.qml</file>
         <file>mainError.qml</file>
+        <file>USettings.qml</file>
     </qresource>
 </RCC>

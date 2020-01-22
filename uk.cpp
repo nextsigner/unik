@@ -62,7 +62,8 @@ QString UK::host()
 
 void UK::errorQML(QList<QQmlError> le)
 {
-   setUWarning(le.last().toString());
+   setUkStd(le.last().toString());
+    setUWarning(le.last().toString());
 }
 void UK::ukClose(QQuickCloseEvent *close){
     if(close){

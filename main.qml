@@ -37,17 +37,22 @@ ApplicationWindow {
     property color c4: "white"
     property int area: 0
     property string pws: pws
-    UnikSettings{
+    USettings{
         id: unikSettings
-        Component.onCompleted: {
+        url: unik.getPath(3)+'/unik/unik.json'
+        function refresh(){
             var nc=unikSettings.currentNumColor
-            var cc1=unikSettings.defaultColors.split('|')
-            var cc2=cc1[nc].split('-')
-            app.c1=cc2[0]
-            app.c2=cc2[1]
-            app.c3=cc2[2]
-            app.c4=cc2[3]
+            if(unikSettings.defaultColors){
+                var cc1=unikSettings.defaultColors.split('|')
+                var cc2=cc1[nc].split('-')
+                app.c1=cc2[0]
+                app.c2=cc2[1]
+                app.c3=cc2[2]
+                app.c4=cc2[3]
+            }
         }
+        Component.onCompleted: refresh()
+        onDataChanged:  refresh()
     }
     Item{
         id:xApp
@@ -209,11 +214,12 @@ ApplicationWindow {
                     width: xTaLog.width
                     height: xTaLog.height
                     contentWidth: xTaLog.width
-                    contentHeight: taLogAndroid.contentHeight
+                    contentHeight: taLogAndroid.contentHeight+app.fs*4
                     visible: Qt.platform.os==='android'
                     Text {
                         id: taLogAndroid
                         text: taLog.text
+                        textFormat: Text.RichText
                         width: xTaLog.width
                         color: 'yellow'
                         onTextChanged: {
@@ -223,10 +229,12 @@ ApplicationWindow {
                         wrapMode: Text.WordWrap
                     }
                 }
-                ScrollView {
+                Flickable {
                     id: view
                     width: parent.width
                     height: parent.height
+                    contentWidth: xTaLog.width
+                    contentHeight: taLog.contentHeight+app.fs*4
                     visible: Qt.platform.os!=='android'
                     TextArea {
                         id: taLog
@@ -248,16 +256,29 @@ ApplicationWindow {
                         wrapMode: Text.WordWrap
                     }
                 }
-                Connections{
+                /*Connections{
                     target: unik;
                     onUkStdChanged:{
                         //taLog.text+=(unik.ukStd).replace(/\/\n/g, '<br />')
-                        taLog.text+=unik.ukStd
+                        taLog.text+='-------------'+unik.ukStd+'--------------'
                         if(Qt.platform.os==='android'){
                             fkAndroid.contentY=taLogAndroid.contentHeight
                         }
                     }
                 }
+                Connections{
+                    target: unik;
+                    onUkStdErrChanged:{
+                        //taLog.text+=(unik.ukStd).replace(/\/\n/g, '<br />')
+                        taLog.text+='-------------'+unik.ukStdErr+'--------------'
+                        if(Qt.platform.os==='android'){
+                            fkAndroid.contentY=taLogAndroid.contentHeight
+                        }
+                    }
+                }*/
+                Connections {target: unik;onUkStdChanged: taLog.text+=unik.ukStd.replace(/\n/g, '<br />');}
+                Connections {target: unik;onStdErrChanged: taLog.text+=unik.getStdErr().replace(/\n/g, '<br />');}
+
             }
             Rectangle{
                 id: xEditor
@@ -385,11 +406,13 @@ ApplicationWindow {
     }
     function setColors(){
         var nc=unikSettings.currentNumColor
-        var cc1=unikSettings.defaultColors.split('|')
-        var cc2=cc1[nc].split('-')
-        app.c1=cc2[0]
-        app.c2=cc2[1]
-        app.c3=cc2[2]
-        app.c4=cc2[3]
+        if(unikSettings.defaultColors){
+            var cc1=unikSettings.defaultColors.split('|')
+            var cc2=cc1[nc].split('-')
+            app.c1=cc2[0]
+            app.c2=cc2[1]
+            app.c3=cc2[2]
+            app.c4=cc2[3]
+        }
     }
 }
