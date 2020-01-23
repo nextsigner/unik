@@ -734,15 +734,49 @@ int main(int argc, char *argv[])
         //<-url
 
         //>-remoteFolder
+        if(arg.contains("-folderTo=")){
+            QStringList marg = arg.split("-folderTo=");
+            appArg2="";
+            if(marg.size()==2){
+                appArg2.append(marg.at(1));
+                folderTo=appArg2;
+                qInfo()<<"[-remoteFolder 2] Running in mode -remoteFolder folderTo: "<<appArg2;
+            }
+        }
         if(arg.contains("-remoteFolder=")){
             QStringList marg = arg.split("-remoteFolder=");
             if(marg.size()==2){
                 modoDeEjecucion="-remoteFolder";
-                //return 0;
                 appArg1="";
                 appArg1.append(marg.at(1));
                 qInfo()<<"[-remoteFolder 1] Running in mode -remoteFolder url: "<<appArg1;
-                QStringList marg2 = arg.split("-folderTo=");
+                if(!folderTo.isEmpty()){
+                    appArg2.append(folderTo);
+                    qInfo()<<"[-remoteFolder 2] Running in mode -remoteFolder folderTo: "<<appArg2;
+                }else{
+                    appArg2.append(u.getPath(2));
+                    appArg2.append("/");
+                    appArg2.append(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
+                    u.mkdir(appArg2);
+                    if(u.folderExist(appArg2)){
+                        qInfo()<<"[-remoteFolder 2] Running in mode -remoteFolder folderTo temp: "<<appArg2;
+                        folderTo=appArg2;
+                        QDir fscd(folderTo);
+                        if(fscd.exists()){
+                            QDir::setCurrent(folderTo);
+                        }
+                    }
+                }
+                QDir fscd(folderTo);
+                if(fscd.exists()){
+                    QDir::setCurrent(folderTo);
+                    modeRemoteFolder=true;
+                    showLaunch=false;
+                    uap.showLaunch=false;
+                    modeFolder=false;
+                    makeUpk=false;
+                }
+                /*QStringList marg2 = arg.split("-folderTo=");
                 appArg2="";
                 if(marg2.size()==2){
                     appArg2.append(marg2.at(1));
@@ -757,7 +791,6 @@ int main(int argc, char *argv[])
                         folderTo=appArg2;
                         QDir fscd(folderTo);
                         if(fscd.exists()){
-                            //fscd.mkdir(folderTo);
                             QDir::setCurrent(folderTo);
                             modeRemoteFolder=true;
                             showLaunch=false;
@@ -765,19 +798,16 @@ int main(int argc, char *argv[])
                             modeFolder=false;
                             makeUpk=false;
                         }
-                        }else{
+                    }else{
                         qInfo()<<"[-remoteFolder 2] Fail when make path in mode -remoteFolder folderTo temp: "<<appArg2;
                         return  0;
                     }
                 }
+                */
             }
         }
         if(arg.contains("-fileList=")){
             QStringList marg = arg.split("-fileList=");
-            qInfo()<<"1::::::::::::::::::::::: "<<uap.args;
-            qInfo()<<"2::::::::::::::::::::::: "<<arg;
-            qInfo()<<"3::::::::::::::::::::::: "<<marg.size();
-             //return 0;
             if(marg.size()==2){
                 fileList=QString(marg.at(1)).split("|");
             }else{
