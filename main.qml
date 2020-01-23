@@ -219,7 +219,7 @@ ApplicationWindow {
                     Text {
                         id: taLogAndroid
                         text: taLog.text
-                        textFormat: Text.RichText
+                        //textFormat: Text.RichText
                         width: xTaLog.width
                         color: 'yellow'
                         onTextChanged: {
@@ -240,12 +240,12 @@ ApplicationWindow {
                         id: taLog
                         text: qsTr("Unik Main Qml")
                         width: xTaLog.width
-                        height: xTaLog.height
+                        height: contentHeight
                         onTextChanged: {
                             //taLog.flickableItem.contentY=taLog.flickableItem.contentHeight
                         }
                         color: app.c1
-                        textFormat: Text.RichText
+                        //textFormat: Text.RichText
                         /*backgroundVisible: false
                         textColor: app.c1
                         style: TextAreaStyle{
@@ -256,29 +256,16 @@ ApplicationWindow {
                         wrapMode: Text.WordWrap
                     }
                 }
-                /*Connections{
+                Connections{
                     target: unik;
                     onUkStdChanged:{
                         //taLog.text+=(unik.ukStd).replace(/\/\n/g, '<br />')
-                        taLog.text+='-------------'+unik.ukStd+'--------------'
+                        taLog.text+=unik.ukStd.replace(/<br \/>/g, '\n')
                         if(Qt.platform.os==='android'){
                             fkAndroid.contentY=taLogAndroid.contentHeight
                         }
                     }
                 }
-                Connections{
-                    target: unik;
-                    onUkStdErrChanged:{
-                        //taLog.text+=(unik.ukStd).replace(/\/\n/g, '<br />')
-                        taLog.text+='-------------'+unik.ukStdErr+'--------------'
-                        if(Qt.platform.os==='android'){
-                            fkAndroid.contentY=taLogAndroid.contentHeight
-                        }
-                    }
-                }*/
-                Connections {target: unik;onUkStdChanged: taLog.text+=unik.ukStd.replace(/\n/g, '<br />');}
-                Connections {target: unik;onStdErrChanged: taLog.text+=unik.getStdErr().replace(/\n/g, '<br />');}
-
             }
             Rectangle{
                 id: xEditor
@@ -370,6 +357,8 @@ ApplicationWindow {
                 }
             }
         }
+        ULogView{id: logView}
+        UWarnings{id: uWarnings}
     }
     Shortcut{
         sequence: 'Esc'
@@ -384,25 +373,25 @@ ApplicationWindow {
             var altoBarra = a1-unik.frameHeight(app)
             app.height = a1-altoBarra
         }
-        var s=unik.initStdString
-        var stdinit='Start Unik Init Message:<br/>'+s+'<br/>End Unik Init Message.<br/>'
-        var txt ='<br/>'
-        txt += "OS: "+Qt.platform.os+'<br/>'
-        txt += 'Doc location: '+appsDir+'<br/>'
-        txt += 'WorkSpace location: '+pws+'<br/>'
-        txt += '<br/>UAP Arguments:'+uap+'<br/>'
-        txt+="<br/>"+appStatus+'<br/>'
+        var stdinit='Start Unik Init Message:\n'+unik.initStdString+'\nEnd Unik Init Message.'
+        var txt =''
+        txt += "OS: "+Qt.platform.os+'\n\n'
+        txt += 'Doc location: '+appsDir+'\n\n'
+        txt += 'WorkSpace location: '+pws+'\n\n'
+        txt += 'UAP Arguments:'+uap+'\n\n'
+        txt+=""+appStatus+'\n\n'
 
-        txt += "<br/>Unik Init Errors:<br/>"
-        txt += 'sourcePath: '+sourcePath+'<br/>'
+        txt += "Unik Init Errors:\n\n"
+        txt += 'sourcePath: '+sourcePath+'\n\n'
         if(unik.fileExist(appsDir+'/cfg.json')){
-            txt += '\ncfg.json:<br/>'+unik.getFile(appsDir+'/cfg.json')+'<br/>'
+            txt += 'cfg.json:\n'+unik.getFile(appsDir+'/cfg.json')+'\n\n'
         }else{
-            txt += '\ncfg.json:<br/>No cfg.json file seted.<br/>'
+            txt += 'cfg.json:\nNo cfg.json file seted.\n\n'
         }
-        txt+="<br/><br/><br/>"
-        taLog.text+=stdinit.replace(/\n/g, '<br />')
-        taLog.text+=txt.replace(/\n/g, '<br />')
+        txt+="\n\n\n"
+        //txt+="!!!!!!"+unik.initStdString
+        taLog.text+=stdinit//.replace(/\n/g, '<br />')
+        taLog.text+=txt//.replace(/\n/g, '<br />')
     }
     function setColors(){
         var nc=unikSettings.currentNumColor

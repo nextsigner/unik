@@ -23,5 +23,7 @@
         <file>AppColorsThemes.qml</file>
         <file>mainError.qml</file>
         <file>USettings.qml</file>
+        <file>UWarnings.qml</file>
+        <file>ULogView.qml</file>
     </qresource>
 </RCC>

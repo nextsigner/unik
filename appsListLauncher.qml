@@ -74,9 +74,9 @@ ApplicationWindow {
             }
         }
         Component.onCompleted: {
-            console.log('Seted... ')
-            console.log('UnikColorTheme currentNumColor: '+unikSettings.currentNumColor)
-            console.log('UnikColorTheme defaultColors: '+unikSettings.defaultColors)
+            //  console.log('Seted... ')
+            //console.log('UnikColorTheme currentNumColor: '+unikSettings.currentNumColor)
+            //console.log('UnikColorTheme defaultColors: '+unikSettings.defaultColors)
             var nc=unikSettings.currentNumColor
             var cc1=unikSettings.defaultColors.split('|')
             var cc2=cc1[nc].split('-')

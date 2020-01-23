@@ -389,7 +389,14 @@ int main(int argc, char *argv[])
     QString pos="";
     bool modeFolder=false;
     bool modeFolderToUpk=false;
+
+
     bool modeRemoteFolder=false;
+    QString folderFrom;
+    QString folderTo;
+    QStringList fileList;
+
+    bool modeUrl=false;
     bool modeUpk=false;
     bool modeGit=false;
     bool modeZip=false;
@@ -691,6 +698,95 @@ int main(int argc, char *argv[])
             }
         }
         //<-folder
+
+        //>-url
+        if(arg.contains("-url=")){
+            QStringList marg = arg.split("-url=");
+            if(marg.size()==2){
+                modoDeEjecucion="-url";
+                //return 0;
+                appArg1="";
+                appArg1.append(marg.at(0));
+                appArg2="";
+                appArg2.append(marg.at(1));
+                qInfo()<<"[-folder 1] Running in mode -url appArg1: "<<appArg1<<" appArg2: "<<appArg2;
+                return 0;
+                QString ncp;
+                ncp.append(appArg2);
+
+                /*QDir fscd(ncp);
+                if(!fscd.exists()){
+                    fscd.mkdir(ncp);
+                }
+                if(!qApp->arguments().contains("-install")){
+                    QDir::setCurrent(ncp);
+                }*/
+                /*showLaunch=false;
+                uap.showLaunch=false;
+                modeFolder=true;
+                makeUpk=false;
+                qInfo()<<"[-folder 1] Running in mode -folder="<<ncp;
+                qInfo()<<"[-folder 2] Current application directory: "<<QDir::currentPath();
+                updateUnikTools=false;
+                params=true;*/
+            }
+        }
+        //<-url
+
+        //>-remoteFolder
+        if(arg.contains("-remoteFolder=")){
+            QStringList marg = arg.split("-remoteFolder=");
+            if(marg.size()==2){
+                modoDeEjecucion="-remoteFolder";
+                //return 0;
+                appArg1="";
+                appArg1.append(marg.at(1));
+                qInfo()<<"[-remoteFolder 1] Running in mode -remoteFolder url: "<<appArg1;
+                QStringList marg2 = arg.split("-folderTo=");
+                appArg2="";
+                if(marg2.size()==2){
+                    appArg2.append(marg2.at(1));
+                    qInfo()<<"[-remoteFolder 2] Running in mode -remoteFolder folderTo: "<<appArg2;
+                }else{
+                    appArg2.append(u.getPath(2));
+                    appArg2.append("/");
+                    appArg2.append(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
+                    u.mkdir(appArg2);
+                    if(u.folderExist(appArg2)){
+                        qInfo()<<"[-remoteFolder 2] Running in mode -remoteFolder folderTo temp: "<<appArg2;
+                        folderTo=appArg2;
+                        QDir fscd(folderTo);
+                        if(fscd.exists()){
+                            //fscd.mkdir(folderTo);
+                            QDir::setCurrent(folderTo);
+                            modeRemoteFolder=true;
+                            showLaunch=false;
+                            uap.showLaunch=false;
+                            modeFolder=false;
+                            makeUpk=false;
+                        }
+                        }else{
+                        qInfo()<<"[-remoteFolder 2] Fail when make path in mode -remoteFolder folderTo temp: "<<appArg2;
+                        return  0;
+                    }
+                }
+            }
+        }
+        if(arg.contains("-fileList=")){
+            QStringList marg = arg.split("-fileList=");
+            qInfo()<<"1::::::::::::::::::::::: "<<uap.args;
+            qInfo()<<"2::::::::::::::::::::::: "<<arg;
+            qInfo()<<"3::::::::::::::::::::::: "<<marg.size();
+             //return 0;
+            if(marg.size()==2){
+                fileList=QString(marg.at(1)).split("|");
+            }else{
+                fileList.append("main.qml");
+            }
+        }else{
+            fileList.append("main.qml");
+        }
+        //<-remoteFolder
 
         if(arg.contains("-zip=")){
             QStringList marg = arg.split("-zip=");
@@ -1100,7 +1196,7 @@ int main(int argc, char *argv[])
 
     //---------------------------->1
     //Direct upk mode.
-    if((argc == 2||argc == 3||argc == 4)&&!modeGit){
+    if((argc == 2||argc == 3||argc == 4)&&!modeGit&&!modeRemoteFolder){
         QString argUpk;
         argUpk.append(argv[1]);
         QString ext=argUpk.mid(argUpk.size()-4,argUpk.size());
@@ -1151,12 +1247,13 @@ int main(int argc, char *argv[])
     }
 
     //MODO -remoteFolder
-    if((argc == 5 || argc == 6) && QByteArray(argv[1])==QByteArray("-remoteFolder")){
+
+    if(modeRemoteFolder){
         modoDeEjecucion="-remoteFolder";
-        /*appArg1=QByteArray(argv[2]);
-            appArg2=QByteArray(argv[3]);
-            appArg3=QByteArray(argv[4]);
-            QByteArray ncf;
+        //appArg1=QByteArray(argv[2]);
+            //appArg2=QByteArray(argv[3]);
+            //appArg3=QByteArray(argv[4]);
+            /*QByteArray ncf;
             ncf.append("{\"mode\":\"");
             ncf.append(argv[1]);
             ncf.append("\",");
@@ -1174,8 +1271,12 @@ int main(int argc, char *argv[])
             u.deleteFile(r);
             u.setFile(r, ncf);*/
         modeRemoteFolder=true;
+        modeGit=false;
+        modeUpk=false;
+        modeZip=false;
         makeUpk=false;
         updateUnikTools=false;
+        showLaunch=false;
     }
 
 //    //->Comienza configuracion OS
@@ -1524,16 +1625,17 @@ int main(int argc, char *argv[])
         }
     }
     if(modeRemoteFolder){
-        QString urlRemoteFolder;
-        urlRemoteFolder.append(QByteArray(appArg1));
-        if(debugLog){
-            qDebug()<<"unik working in mode: -remoteFolder";
-            qDebug()<<"Remote Folder Url: "<<urlRemoteFolder;
+        QString remoteMain;
+        remoteMain.append(appArg1);
+        for (int i=0;i<fileList.size();i++) {
+            qDebug()<<"-remoteFolder downloading "<<fileList.at(i);
+            u.downloadRemoteFolder(remoteMain, fileList.at(i), folderTo);
         }
-        u.downloadRemoteFolder(urlRemoteFolder, appArg2, appArg3);
+
         ffmqml = "";
-        ffmqml.append(appArg3);
-        makeUpk=false;
+        ffmqml.append(folderTo);
+        ffmqml.append("/");
+        qDebug()<<"2 unik working in mode: -remoteFolder "<<ffmqml;
     }
     //-----------------------------------------<3
 
@@ -1562,11 +1664,11 @@ int main(int argc, char *argv[])
 
     //------------------------------------------->5
     QString qmlImportPath;
-    if(modeRemoteFolder){
+    /*if(modeRemoteFolder){
         ffmqml = "";
         ffmqml.append(appArg3);
         ffmqml.append("/");
-    }
+    }*/
 
     QByteArray mainQml;
     mainQml.append(ffmqml);
@@ -1688,10 +1790,16 @@ int main(int argc, char *argv[])
     log4.append(debugLog ? "true" : "false");
     log4.append("\n");
 
+    QObject::connect(&engine, SIGNAL(warnings(QList<QQmlError>)), &u, SLOT(errorQML(QList<QQmlError>)));
+    QObject::connect(&engine, &QQmlEngine::warnings, [=](QList<QQmlError> le){
+        u.setUWarning(le.last().toString());
+    });
+
+
     engine.rootContext()->setContextProperty("appStatus", log4);
-    if(u.debugLog){
+    //if(u.debugLog){
         qInfo()<<log4;
-    }
+    //}
 #ifndef Q_OS_ANDROID
     if (!engine.rootObjects().isEmpty()){
         QObject *aw0 = engine.rootObjects().at(0);

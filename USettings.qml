@@ -76,9 +76,9 @@ Item{
     function getCfgFile(){
         //console.log('getCfgFile()...')
         var unikCfgFile=r.url
-        console.log('unikCfgFile: '+unikCfgFile)
+        //console.log('unikCfgFile: '+unikCfgFile)
         var unikCfgFileData=unik.getFile(unikCfgFile)
-        console.log('unikCfgFileData: '+unikCfgFileData)
+        //console.log('unikCfgFileData: '+unikCfgFileData)
         var json
         if(unikCfgFileData!=='error') {
             try {

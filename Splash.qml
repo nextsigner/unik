@@ -31,12 +31,21 @@ ApplicationWindow {
             close.accepted = false;
         }
     }
-    UnikSettings{
+    USettings{
         id: unikSettings
-        //zoom: 24
-        Component.onCompleted:{
-            appSplash.fs = appSplash.width*0.02*unikSettings.zoom
+        url: unik.getPath(3)+'/unik/unik.json'
+        function refresh(){
+            var nc=unikSettings.currentNumColor
+            if(unikSettings.defaultColors){
+                var cc1=unikSettings.defaultColors.split('|')
+                var cc2=cc1[nc].split('-')
+                appSplash.c1=cc2[0]
+                appSplash.c2=cc2[1]
+                appSplash.fs = appSplash.width*0.02*unikSettings.zoom
+            }
         }
+        Component.onCompleted: refresh()
+        onDataChanged:  refresh()
     }
     Timer{
         running: !ver

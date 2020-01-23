@@ -11,6 +11,7 @@ ApplicationWindow{
     property color c1: "#1fbc05"
     property color c2: "#4fec35"
 
+
     Connections {id: con1; target: unik;onUkStdChanged:log.setTxtLog(''+unik.ukStd);}
     Connections {id: con2; target: unik;onUkStdChanged: log.setTxtLog(''+unik.ukStd); }
 
@@ -19,8 +20,20 @@ ApplicationWindow{
         //con2.target=undefined
         //close.accepted = false
     }
-    UnikSettings{
+    USettings{
         id: unikSettings
+        url: unik.getPath(3)+'/unik/unik.json'
+        function refresh(){
+            var nc=unikSettings.currentNumColor
+            if(unikSettings.defaultColors){
+                var cc1=unikSettings.defaultColors.split('|')
+                var cc2=cc1[nc].split('-')
+                appSplash.c1=cc2[0]
+                appSplash.c2=cc2[1]
+            }
+        }
+        Component.onCompleted: refresh()
+        onDataChanged:  refresh()
     }
     Timer{
         running: true
