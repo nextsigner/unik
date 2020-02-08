@@ -4,14 +4,14 @@ import QtQuick.Window 2.0
 ApplicationWindow {
     id: appSplash
     objectName: 'awsplash'
-    visible: true
+    visible: ver
     visibility:  Qt.platform.os==='android'?"FullScreen":"Maximized"
     width: Screen.width
     height: Screen.height
     color: "transparent"
     flags: Qt.platform.os==='android'?Qt.Window:Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
-    property int fs: Qt.platform.os!=='android'?appSplash.width*0.02*unikSettings.zoom:appSplash.width*0.035*unikSettings.zoom
-    property bool ver: true
+    property int fs: Qt.platform.os!=='android'?appSplash.width*0.02*unikSettings.zoom:appSplash.width*0.04*unikSettings.zoom
+    //property bool ver: true
     property color c1: "black"
     property color c2: "black"
     property color c3: "black"
@@ -61,7 +61,7 @@ ApplicationWindow {
     }
     Rectangle{
         id:r
-        width: appSplash.width*0.1
+        width: Qt.platform.os!=='android'?appSplash.width*0.1:appSplash.width*0.2
         height: width
         color: "transparent"
         anchors.centerIn: parent
