@@ -582,6 +582,9 @@ int main(int argc, char *argv[])
     ffmqml.append("/unik-tools-rpi/");
 #endif
 #endif
+    if(!u.folderExist(pws+"/unik")){
+        u.mkdir(pws+"/unik");
+    }
     if(!qApp->arguments().contains("-install")){
         QDir::setCurrent(ffmqml);
     }
@@ -595,8 +598,8 @@ int main(int argc, char *argv[])
 
     //-->Load the splah QML file.
 #ifdef Q_OS_ANDROID
-    engine.load("qrc:/SplashAndroid.qml");
-    //engine.load("qrc:/Splash.qml");
+    //engine.load("qrc:/SplashAndroid.qml");
+    engine.load("qrc:/Splash.qml");
 #else
 #ifndef __arm__
     engine.load("qrc:/Splash.qml");
@@ -1830,16 +1833,13 @@ int main(int argc, char *argv[])
     //if(u.debugLog){
         qInfo()<<log4;
     //}
-#ifndef Q_OS_ANDROID
-    if (!engine.rootObjects().isEmpty()){
-        QObject *aw0 = engine.rootObjects().at(0);
-        if(aw0->property("objectName")=="awsplash"){
-            aw0->setProperty("ver", false);
-        }
-    }
-#else
 
-#endif
+     if (!engine.rootObjects().isEmpty()){
+         QObject *aw0 = engine.rootObjects().at(0);
+         if(aw0->property("objectName")=="awsplash"){
+             aw0->setProperty("ver", false);
+         }
+    }
     if (!engine.rootObjects().isEmpty()){
         u.splashvisible=false;
         engine.rootContext()->setContextProperty("splashvisible", u.splashvisible);

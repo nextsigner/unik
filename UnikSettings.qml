@@ -128,7 +128,7 @@ Item{
     }
 
     function setCfgFile(){
-        console.log('setCfgFile()...')
+        console.log('setCfgFile()... '+r.url)
         var unikCfgFile=r.url
         //console.log('unikCfgFile: '+unikCfgFile)
         var unikCfgFileData=unik.getFile(unikCfgFile)
@@ -155,11 +155,11 @@ Item{
                 }
                 //console.log('Settings cfg file '+unikCfgFile+' \n'+JSON.stringify(json))
                 unik.setFile(unikCfgFile, JSON.stringify(json))
-                unik.setFile('/home/nextsigner/aaa.json', JSON.stringify(json))
+                //unik.setFile('/home/nextsigner/aaa.json', JSON.stringify(json))
             }
         }else{
             var jsonCode='{
-"cfg":{"zoom":1.2,"padding":0.5,"radius":38,"borderWidth":2,"fontFamily":"Arial", "sound" : false, "showBg": true, "lang" : "es", "currentNumColor": 0, "defaultColors":"black-white-#666-#aaa|black-white-#aaa-#666|white-black-#aaa-#666|white-black-#666-#aaa|black-red-#ff6666-white|black-red-white-#ff6666|black-#ff6666-red-white|black-#ff6666-white-red|red-black-#ff6666-white|red-black-white-#ff6666|#ff2200-#ff8833-black-white|#ff2200-#ff8833-white-black|black-#ff8833-#ff3388-#ddcccc|black-#ff8833-#ddcccc-#ff3388|#1fbc05-black-green-white|#1fbc05-black-white-green|black-#1fbc05-white-green|black-#1fbc05-green-white|green-white-red-blue|green-white-blue-red" }
+"cfg":{"zoom":1.2,"padding":0.5,"radius":6,"borderWidth":2,"fontFamily":"Arial", "sound" : false, "showBg": true, "lang" : "es", "currentNumColor": 0, "defaultColors":"black-white-#666-#aaa|black-white-#aaa-#666|white-black-#aaa-#666|white-black-#666-#aaa|black-red-#ff6666-white|black-red-white-#ff6666|black-#ff6666-red-white|black-#ff6666-white-red|red-black-#ff6666-white|red-black-white-#ff6666|#ff2200-#ff8833-black-white|#ff2200-#ff8833-white-black|black-#ff8833-#ff3388-#ddcccc|black-#ff8833-#ddcccc-#ff3388|#1fbc05-black-green-white|#1fbc05-black-white-green|black-#1fbc05-white-green|black-#1fbc05-green-white|green-white-red-blue|green-white-blue-red" }
 }
 '
             unik.setFile(unikCfgFile, jsonCode)

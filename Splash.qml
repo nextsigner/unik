@@ -10,12 +10,12 @@ ApplicationWindow {
     height: Screen.height
     color: "transparent"
     flags: Qt.platform.os==='android'?Qt.Window:Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
-    property int fs: Qt.platform.os!=='osx'?appSplash.width*0.02*unikSettings.zoom:appSplash.width*0.02*unikSettings.zoom
+    property int fs: Qt.platform.os!=='android'?appSplash.width*0.02*unikSettings.zoom:appSplash.width*0.035*unikSettings.zoom
     property bool ver: true
-    property color c1: "#1fbc05"
-    property color c2: "white"
-    property color c3: "red"
-    property color c4: "blue"
+    property color c1: "black"
+    property color c2: "black"
+    property color c3: "black"
+    property color c4: "black"
 
     property int uProgressBarPorc: 0
     Connections {target: unik;onUkStdChanged: logtxt.setTxtLog(''+unik.ukStd);}
@@ -31,13 +31,14 @@ ApplicationWindow {
     }
     onClosing: {
         if(Qt.platform.os==='android'){
-            close.accepted = false;
+            //close.accepted = true;
         }
     }
     USettings{
         id: unikSettings
-        url: unik.getPath(3)+'/unik/unik.json'
+        url: pws+'/unik/unik.json'//unik.getPath(3)+'/unik/unik/unik.json'
         function refresh(){
+            //unik.setFile('/sdcard/Documents/unik/s.dat', 'File exits '+unik.getPath(3)+'/unik/unik/unik.json'+': '+unik.fileExist(unik.getPath(3)+'/unik/unik/unik.json'))
             var nc=unikSettings.currentNumColor
             if(unikSettings.defaultColors){
                 var cc1=unikSettings.defaultColors.split('|')

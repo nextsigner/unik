@@ -65,7 +65,7 @@ ApplicationWindow {
 
     UnikSettings{
         id: unikSettings
-        url:pws+'/launcher.json'
+        url:pws+'/unik/unik.json'//pws+'/launcher.json'
         onCurrentNumColorChanged: {
             if(unikSettings.sound&&currentNumColor>=0){
                 let s=unikSettings.lang==='es'?'Color actual ':'Current color  '
@@ -1873,6 +1873,10 @@ ApplicationWindow {
     }
 
     Component.onCompleted:{
+       /*if(appSplash){
+            appSplash.visible=false
+           appSplash.close()
+       }*/
         let pathUnik=pws+'/unik'
         if(!unik.folderExist(pathUnik)){
             devInfo.text+='\n di1'
