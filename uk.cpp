@@ -1796,7 +1796,22 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
 {
     log("downloading zip file from: "+url);
     uZipUrl=QString(url);
-    uZipSize=0;
+    uZipLocalLocation="";
+    uZipLocalLocation.append(ubicacion);
+    uZipSize=-1;
+    getZipFileSizeForDownload(url);
+    int v=0;
+    while (uZipSize<=0) {
+        qInfo()<<"VVV: "<<v;
+        if(v>1000){
+            break;
+        }
+        v++;
+    }
+    //qInfo()<<":::---"<<uZipSize;
+    //return false;
+    //qApp->quit();
+
  #ifndef Q_OS_OSX
 #ifndef Q_OS_ANDROID
     #ifndef Q_OS_WIN
@@ -1857,6 +1872,28 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
         delete reply;
     }
     return false;
+}
+
+void UK::getZipFileSizeForDownload(QByteArray url)
+{
+    //uZipSize=-1;
+    QNetworkRequest req;
+    //QNetworkAccessManager mgr3;
+    qnam = new QNetworkAccessManager(this);
+    req.setUrl(QUrl(url.constData()));
+    reply2 = qnam->head(req);
+    connect(reply2,SIGNAL(finished()),this,SLOT(setUZipFileSize()));
+}
+
+void UK::setUZipFileSize()
+{
+    uZipSize = reply2->header(QNetworkRequest::ContentLengthHeader).toUInt();
+    reply2->deleteLater();
+    qnam->deleteLater();
+    qInfo()<<"FZS:"<<uZipSize;
+    if(uZipSize==0){
+        getZipFileSizeForDownload(uZipUrl.toUtf8());
+    }
 }
 
 void UK::sendFile(QString file, QString phpReceiver)
@@ -2851,18 +2888,24 @@ QString UK::desCompData(QString d)
 
 void UK::downloadZipProgress(qint64 bytesSend, qint64 bytesTotal)
 {    
-    double porc;
-    if(bytesTotal==-1){
-        if(uZipSize<=bytesTotal){
-            porc = (((double)bytesSend)/uZipSize)*100;
+    double porc;    
+    if(bytesTotal!=-1){
+        if(uZipSize>=bytesTotal){
+            porc = (((double)bytesSend)/(double)uZipSize)*100;
         }else {
             porc = (((double)bytesSend)/bytesTotal)*100;
         }
-    }else if(bytesTotal==-1&&uZipSize!=-1){
-        porc = (((double)bytesSend)/uZipSize)*100;
+    }else if(uZipSize>0){
+        porc = (((double)bytesSend)/(double)uZipSize)*100;
     }else{
-        porc = (((double)bytesSend)/bytesTotal)*100;
+        if(uZipSize>bytesTotal){
+            porc = (((double)bytesSend)/(double)uZipSize)*100;
+        }else {
+            porc = (((double)bytesSend)/(double)bytesTotal)*100;
+        }
     }
+    //porc = (((double)bytesSend)/bytesTotal)*100;
+    //qInfo()<<"------>"<<bytesTotal;
     QString d1;
     d1.append(QString::number(porc));
     QStringList sd1=d1.split(".");
@@ -2871,6 +2914,8 @@ void UK::downloadZipProgress(qint64 bytesSend, qint64 bytesTotal)
     nl.append(uZipUrl);
     nl.append(" %");
     nl.append(sd1.at(0));
+    //nl.append(" Size: ");
+    //nl.append(QString::number(uZipSize));
     log(nl);
 }
 

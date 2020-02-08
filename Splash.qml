@@ -5,15 +5,18 @@ ApplicationWindow {
     id: appSplash
     objectName: 'awsplash'
     visible: true
-    visibility:  "Maximized"
+    visibility:  Qt.platform.os==='android'?"FullScreen":"Maximized"
     width: Screen.width
     height: Screen.height
     color: "transparent"
-    flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
-    property int fs: Qt.platform.os!=='osx'?appSplash.width*0.02*unikSettings.zoom:appSplash.width*0.02
+    flags: Qt.platform.os==='android'?Qt.Window:Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
+    property int fs: Qt.platform.os!=='osx'?appSplash.width*0.02*unikSettings.zoom:appSplash.width*0.02*unikSettings.zoom
     property bool ver: true
     property color c1: "#1fbc05"
     property color c2: "white"
+    property color c3: "red"
+    property color c4: "blue"
+
     property int uProgressBarPorc: 0
     Connections {target: unik;onUkStdChanged: logtxt.setTxtLog(''+unik.ukStd);}
     Connections {target: unik;onStdErrChanged: logtxt.setTxtLog(''+unik.getStdErr());}
@@ -41,6 +44,8 @@ ApplicationWindow {
                 var cc2=cc1[nc].split('-')
                 appSplash.c1=cc2[0]
                 appSplash.c2=cc2[1]
+                appSplash.c3=cc2[2]
+                appSplash.c4=cc2[3]
                 appSplash.fs = appSplash.width*0.02*unikSettings.zoom
             }
         }
@@ -86,8 +91,8 @@ ApplicationWindow {
     }
     Item{
         id:xLogTxt
-        width: appSplash.fs*20
-        height: logtxt.contentHeight+appSplash.fs*0.2
+        width: appSplash.fs*30
+        height: colData.height+appSplash.fs//logtxt.contentHeight+appSplash.fs*0.2
         anchors.top: r.bottom
         anchors.topMargin: appSplash.fs
         anchors.horizontalCenter: r.horizontalCenter
@@ -106,78 +111,68 @@ ApplicationWindow {
             height: parent.width
             rotation: -90
             anchors.centerIn: parent
-            radius: appSplash.fs*0.2
-            gradient: Gradient {
-                GradientStop {
-                    position: 0.00;
-                    color: "#ff6600";
-                }
-                GradientStop {
-                    position: 1.00;
-                    color: "#ff0000";
-                }
-            }
+            radius: unikSettings.radius
+            border.width:unikSettings.borderWidth
+            border.color: appSplash.c4
+            color: appSplash.c1
         }
-        Rectangle{
-            width: parent.height-appSplash.fs*0.2
-            height: parent.width-appSplash.fs*0.2
-            rotation: 90
+        Column{
+            id: colData
+            spacing: appSplash.fs
             anchors.centerIn: parent
-            radius: appSplash.fs*0.2
-            gradient: Gradient {
-                GradientStop {
-                    position: 0.00;
-                    color: "#ff6600";
-                }
-                GradientStop {
-                    position: 1.00;
-                    color: "#ff0000";
-                }
-            }
-        }
-        Rectangle{
-            id:pb
-            height: parent.height*0.1
-            width: 0
-            color: 'white'
-            anchors.bottom: parent.bottom
-        }
-        Text{
-            id: logtxt
-            color: appSplash.c2
-            font.pixelSize: appSplash.fs*0.5
-            //anchors.verticalCenter: parent.verticalCenter
-            width: parent.width-appSplash.fs
-            height: contentHeight
-            anchors.centerIn: parent
-            wrapMode: Text.WrapAnywhere
-            //anchors.verticalCenterOffset: appSplash.fs*0.5
-            function setTxtLog(t){
-                var  d=(''+t).replace(/\n/g, ' ')
-                var p=true
-                if(d.indexOf('Socket')>=0){
-                    p=false
-                }else if(d.indexOf('download git')>=0){
-                    var m0=''+d.replace('download git ','')
-                    var m1=m0.split(' ')
-                    if(m1.length>1){
-                        var m2=(''+m1[1]).replace('%','')
-                        //unik.setFile('/home/nextsigner/nnn', ''+m2)
-                        var m3=parseInt(m2.replace(/ /g,''))
-                        if(m3>appSplash.uProgressBarPorc){
-                            pb.width=pb.parent.width/100*m3
-                            appSplash.uProgressBarPorc=m3
+            Text{
+                id: logtxt
+                color: appSplash.c2
+                font.pixelSize: appSplash.fs*0.5
+                //anchors.verticalCenter: parent.verticalCenter
+                width: parent.parent.width-appSplash.fs
+                height: contentHeight
+                anchors.horizontalCenter: parent.horizontalCenter
+                wrapMode: Text.WrapAnywhere
+                //anchors.verticalCenterOffset: appSplash.fs*0.5
+                function setTxtLog(t){
+                    var  d=(''+t).replace(/\n/g, ' ')
+                    var p=true
+                    if(d.indexOf('Socket')>=0){
+                        p=false
+                    }else if(d.indexOf('download git')>=0){
+                        var m0=''+d.replace('download git ','')
+                        var m1=m0.split(' ')
+                        if(m1.length>1){
+                            if((''+m1[1]).indexOf('%inf')>=0){
+                                logtxt.text=unikSettings.lang==='es'?'Descargando modulo git...':'Downloading git module...'
+                                return
+                            }
+                            var m2=(''+m1[1]).replace('%','')
+                            //unik.setFile('/home/nextsigner/nnn', ''+m2)
+                            var m3=parseInt(m2.replace(/ /g,''))
+                            if(m3>appSplash.uProgressBarPorc){
+                                pb.width=pb.parent.width/100*m3
+                                appSplash.uProgressBarPorc=m3
+                            }
                         }
                     }
+                    if(unikSettings.lang==='es'){
+                        d=d.replace('download git ', 'Descargando modulo git ')
+                    }else{
+                        d=d.replace('download git ', 'Downloading git module ')
+                    }
+                    if(p){
+                        logtxt.text=d
+                    }
                 }
-                if(p){
-                    logtxt.text=t
-                }
+            }
+
+            Rectangle{
+                id:pb
+                height: appSplash.fs*0.2
+                width: 1
+                color: appSplash.c2
             }
         }
     }
-    MouseArea{
+    /*MouseArea{
         anchors.fill: parent
         onClicked: r.opacity = 0.0
-    }    
+    }*/
 }

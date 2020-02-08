@@ -355,6 +355,9 @@ public slots:
     QByteArray getHttpFile(QByteArray url);
     void httpReadyRead();
     bool downloadZipFile(QByteArray url, QByteArray ubicacion);
+    void getZipFileSizeForDownload(QByteArray url);
+    void setUZipFileSize();
+
     void sendFile(QString file, QString phpReceiver);
     void uploadProgress(qint64 bytesSend, qint64 bytesTotal);
     void downloadProgress(qint64 bytesSend, qint64 bytesTotal);
@@ -470,7 +473,8 @@ private:
     //UnikSqliteCrypto dbc;
 
    QString uZipUrl;
-   int uZipSize;
+   QString uZipLocalLocation;
+   qint64 uZipSize;
    int uZipSizeReg;
    bool doResume;
    bool httpRequestAborted;
