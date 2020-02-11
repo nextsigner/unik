@@ -18,11 +18,11 @@ Rectangle {
         if(visible){
             app.objFocus=r.objFocus
             //mp.stop()
-            if(!unik.fileExist(pws+'/unik-tools/unik/audio/'+r.idSound+'.m4a')){
+            /*if(!unik.fileExist(pws+'/unik-tools/unik/audio/'+r.idSound+'.m4a')){
                 return
             }
             mp.source='file://'+pws+'/unik-tools/unik/audio/'+r.idSound+'.m4a'
-            mp.play()
+            mp.play()*/
         }
     }
     Timer{

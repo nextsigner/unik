@@ -610,6 +610,9 @@ int main(int argc, char *argv[])
     //<--Load the splah QML file
 
 
+    //QThread::sleep(20);
+
+
 
     //-->Iterator for setting all application arguments from app args or cfg.json.
     for (int i = 0; i < uap.args.length(); ++i) {
@@ -1675,6 +1678,7 @@ int main(int argc, char *argv[])
 
 
     //------------------------------------------>4
+    //engine.rootContext()->setContextProperty("ver", true);
     engine.rootContext()->setContextProperty("version", app.applicationVersion());
     engine.rootContext()->setContextProperty("host", u.host());
     engine.rootContext()->setContextProperty("appName", appName);
@@ -1682,6 +1686,10 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("sourcePath", ffmqml);
     engine.rootContext()->setContextProperty("unikDocs", pws);
     engine.rootContext()->setContextProperty("pws", pws);
+    //engine.rootContext()->setContextProperty("splashsuspend", false);
+
+    u.setProperty("splashsuspend", false);
+    u.setProperty("launcherLoaded", false);
 
     QString pwsFolderModel;
 #ifdef Q_OS_WIN
@@ -1834,14 +1842,19 @@ int main(int argc, char *argv[])
         qInfo()<<log4;
     //}
 
-     if (!engine.rootObjects().isEmpty()){
-         QObject *aw0 = engine.rootObjects().at(0);
-         if(aw0->property("objectName")=="awsplash"){
-             aw0->setProperty("ver", false);
+     /*if (!engine.rootObjects().isEmpty()){
+         for (int i=0;i<engine.rootObjects().count();i++) {
+             QObject *aw0 = engine.rootObjects().at(i);
+             if(aw0->property("objectName")=="awsplash"){
+                 aw0->setProperty("ver", false);
+                 //engine.rootContext()->setContextProperty("ver", false);
+             }
          }
-    }
+    }*/
+
     if (!engine.rootObjects().isEmpty()){
-        u.splashvisible=false;
+        //u.splashvisible=false;
+        u.splashvisible=true;
         engine.rootContext()->setContextProperty("splashvisible", u.splashvisible);
     }
 #ifdef Q_OS_WIN
@@ -1929,7 +1942,10 @@ int main(int argc, char *argv[])
     qInfo()<<"uap.showLaunch: "<<uap.showLaunch;
     QByteArray prevMainQml=mainQml;
     mainQml=uap.showLaunch||showLaunch?":/appsListLauncher.qml":prevMainQml;
-    engine.load(uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
+    QObject::connect(&u, &UK::splashFinished, [&engine, &uap, showLaunch, mainQml](){
+        engine.load(uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
+    });
+
     QQmlComponent component(&engine, uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
     qInfo()<<"Init unik: "<<mainQml;
     //u.setFile("/sdcard/Documents/unik/url.txt", mainQml);

@@ -1741,6 +1741,11 @@ QVariant UK::getProperty(const QString name)
     return _engine->rootContext()->property(name.toUtf8());
 }
 
+int UK::getEngineObjectsCount()
+{
+    return _engine->rootObjects().count();
+}
+
 bool UK::isRPI()
 {
 #ifdef __arm__
@@ -1802,15 +1807,12 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
     getZipFileSizeForDownload(url);
     int v=0;
     while (uZipSize<=0) {
-        qInfo()<<"VVV: "<<v;
+        //qInfo()<<"uZipSize V: "<<v;
         if(v>1000){
             break;
         }
         v++;
     }
-    //qInfo()<<":::---"<<uZipSize;
-    //return false;
-    //qApp->quit();
 
  #ifndef Q_OS_OSX
 #ifndef Q_OS_ANDROID

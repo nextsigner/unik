@@ -5,9 +5,9 @@ Rectangle{
     id: xUWarnings
     width: app.width-app.fs
     height:parent.height
-    color: app.c1
+    color: app.c2
     border.width: unikSettings.borderWidth
-    border.color: app.c2
+    border.color: app.c1
     visible: false
     clip: true
     property bool notShowAgain: false
@@ -40,7 +40,7 @@ Rectangle{
             id: txtUWarnings
             text: unikSettings.lang==='es'?'<b>Unik Advertencias</b><br /><br />':'<b>Unik Warnings</b><br /><br />'
             font.pixelSize: app.fs
-            color: app.c2
+            color: app.c1
             width: parent.width-app.fs*3
             wrapMode: Text.WordWrap
             textFormat: Text.RichText
@@ -53,12 +53,12 @@ Rectangle{
     }
     Boton{//Close
         id: btnCloseXUWarning
-        w:app.fs*2
+        w:app.fs*3
         h: w
         t: "\uf00d"
         d:unikSettings.lang==='es'?'Cerrar':'Close'
-        b:app.c1
-        c: app.c2
+        b:app.c2
+        c: app.c1
         anchors.right: parent.right
         anchors.rightMargin: app.fs*0.5
         anchors.top: parent.top
@@ -69,12 +69,12 @@ Rectangle{
     }
     Boton{//Close for ever
         id: btnCloseXUWarningNotAgain
-        w:app.fs*2
+        w:app.fs*3
         h: w
         t: "\uf011"
         d:unikSettings.lang==='es'?'Cerrar - No mostrar mas':'Close - Not Show Again'
-        b:app.c1
-        c: app.c2
+        b:app.c2
+        c: app.c1
         anchors.right: btnCloseXUWarning.right
         anchors.top: btnCloseXUWarning.bottom
         anchors.topMargin: app.fs*0.5
@@ -85,12 +85,12 @@ Rectangle{
     }
     Boton{//Clear
         id: btnCloseXUWarningClear
-        w:app.fs*2
+        w:app.fs*3
         h: w
         t: "\uf12d"
         d:unikSettings.lang==='es'?'Limpiar':'Clear'
-        b:app.c1
-        c: app.c2
+        b:app.c2
+        c: app.c1
         anchors.right: btnCloseXUWarningNotAgain.right
         anchors.top: btnCloseXUWarningNotAgain.bottom
         anchors.topMargin: app.fs*0.5

@@ -52,11 +52,12 @@ Rectangle{
                 color: app.c1
             }
         }
-        Grid{
+        Flow{
             id: gridPackColor
             spacing: app.fs*0.5
             anchors.horizontalCenter: parent.horizontalCenter
-            rows: 4
+            width: r.width-app.fs
+            //rows: 4
             Repeater{
                 id:rep1
                 Rectangle{

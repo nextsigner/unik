@@ -8,7 +8,7 @@ ApplicationWindow {
     objectName: 'awll'
     visibility:  Qt.platform.os !=='android'?"Maximized":"FullScreen"
     visible: true
-    flags: Qt.platform.os !=='android'?Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint: Qt.Window
+    flags: Qt.platform.os !=='android'?Qt.Window | Qt.FramelessWindowHint: Qt.Window
     color: "transparent"
     //color: Qt.platform.os!=='android'?"transparent":app.c1
     //flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
@@ -381,7 +381,7 @@ ApplicationWindow {
                     app.al.push(fileName)
                     var folderMain=fileName.replace('link_','').replace('.ukl','')
                     var mainUrlPWS=pws+'/'+folderMain+'/main.qml'
-                    var linkData=unik.getFile(pws+'/'+fileName)
+                    var linkData=unik.getFile(pws+'/'+fileName).replace(/\n/g, '')
                     if(!unik.fileExist(mainUrlPWS)&&linkData.indexOf('-git=')<0){
                         if(linkData.indexOf('-folder=')>=0){
                             var msg
@@ -762,8 +762,32 @@ ApplicationWindow {
                             }
                         }
                     }
+                    BotonUX{
+                        id: btnUX82
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        UnikFocus{
+                            id:ufBntFF2;
+                            visible: xConfig.currentFocus===8
+                            onVisibleChanged: {
+                                if(unikSettings.sound&&visible){
+                                    let s=unikSettings.lang==='es'?'Tipo de Letra. Para seleccionar otro tipo de letra presinar intro.':'Font family . For change font family press enter.'
+                                    speak(s)
+                                }
+                            }
+                        }
+                        text: unikSettings.lang==='es'?(appColorsThemes.visible?'Ocultar Temas de Colores':'Ver Temas de Colores'):(appColorsThemes.visible?'Hide Colors Themes':'Show Colors Themes')
+                        onClicked: {
+                            appColorsThemes.visible=!appColorsThemes.visible
+                            if(unikSettings.sound){
+                                let s=unikSettings.lang==='es'?'Seleccionar tipo de letra ':'Select font family '
+                                speak(s)
+                            }
+                        }
+                    }
+
                     AppColorsThemes{
                         id: appColorsThemes
+                        visible: false
                         anchors.horizontalCenter: parent.horizontalCenter
                         showBtnClose: false
                         currentFocus: ufACT.currentFocus
@@ -1164,7 +1188,7 @@ ApplicationWindow {
                                 onFocusChanged: if(focus)xLinkEditor.currentFocus=0
                                 onTextChanged: {
                                     var linkFileName=pws+'/link_'+tiLinkFile.text+'.ukl'
-                                    var linkFileData=unik.getFile(linkFileName)
+                                    var linkFileData=unik.getFile(linkFileName).replace(/\n/g, '')
                                     if(unik.fileExist(linkFileName)){
                                         tiLinkFileContent.text=linkFileData
                                     }
@@ -1358,7 +1382,7 @@ ApplicationWindow {
                                 interval: 500
                                 onTriggered: {
                                     var linkFileName=pws+'/link_'+tiLinkFile.text+'.ukl'
-                                    var linkFileData=unik.getFile(linkFileName)
+                                    var linkFileData=unik.getFile(linkFileName).replace(/\n/g, '')
                                     if(unik.fileExist(linkFileName)&&tiLinkFileContent.text!==linkFileData){
                                         btnUXSetLink.text=unikSettings.lang==='es'?'Modificar':'Modify'
                                     }else{
@@ -1832,7 +1856,11 @@ ApplicationWindow {
                 app.run()
                 return
             }*/
-            app.sec++
+            if(unik.getProperty("splashsuspend")){
+                app.sec=0
+            }else{
+                app.sec++
+            }
             if(app.sec===7){
                 stop()
                 app.run()
@@ -1877,6 +1905,7 @@ ApplicationWindow {
             appSplash.visible=false
            appSplash.close()
        }*/
+        unik.setProperty("launcherLoaded", true)
         let pathUnik=pws+'/unik'
         if(!unik.folderExist(pathUnik)){
             devInfo.text+='\n di1'
@@ -1885,12 +1914,12 @@ ApplicationWindow {
             devInfo.text+='\n di2'
         }
         let fileCa=pathUnik+'/ca.dat'
-        let uCaDat=unik.getFile(fileCa)
+        let uCaDat=unik.getFile(fileCa).replace(/\n/g, '')
         if(!unik.fileExist(fileCa)||uCaDat==='error'){
             app.ca = 'link_android-apps.ukl'
             unik.setFile(fileCa, app.ca)
         }else{
-            app.ca = unik.getFile(fileCa)
+            app.ca = unik.getFile(fileCa).replace(/\n/g, '')
         }
         appSettings.uApp = app.ca
 
@@ -1944,7 +1973,7 @@ ApplicationWindow {
             unik. speak(s)
         }
         //appSettings.uApp=app.ca
-        var p=unik.getFile(appsDir+'/'+app.ca)
+        var p=unik.getFile(appsDir+'/'+app.ca).replace(/\n/g, '')
         var args=(''+p).split(' ')
         var params=''
         for(var i=0; i<args.length;i++){
@@ -1976,15 +2005,18 @@ ApplicationWindow {
                 unik.cd(pws)
                 unik.mkdir(pws+'/'+mn)
                 xPb.opacity=1.0
-                var d = unik.downloadGit(m1[0], pws)
-                if(app.downloading){
+                //var d = unik.downloadGit(m1[0], pws)
+                unik.setUnikStartSettings(params)
+                unik.restartApp()
+                return
+                /*if(app.downloading){
                     unik.setUnikStartSettings(params)
                     unik.restartApp()
                     //unik.cd(pws+'/'+mn)
                     //engine.load(pws+'/'+mn+'/main.qml')
                     //app.close()
                     return
-                }
+                }*/
             }
             if(params.indexOf('-zip=')>=0&&params.indexOf('-zip=')!==params.length-1&&params.length>5){
                 m0=params.split('-zip=')

@@ -4,14 +4,14 @@ import QtQuick.Window 2.0
 ApplicationWindow {
     id: appSplash
     objectName: 'awsplash'
-    visible: ver
+    visible: true//Qt.platform.os==='android'?ver:true
     visibility:  Qt.platform.os==='android'?"FullScreen":"Maximized"
     width: Screen.width
     height: Screen.height
     color: "transparent"
     flags: Qt.platform.os==='android'?Qt.Window:Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
-    property int fs: Qt.platform.os!=='android'?appSplash.width*0.02*unikSettings.zoom:appSplash.width*0.04*unikSettings.zoom
-    //property bool ver: true
+    property int fs: Qt.platform.os!=='android'?appSplash.width*0.02*unikSettings.zoom:appSplash.width*0.05*unikSettings.zoom
+    property bool ver: true
     property color c1: "black"
     property color c2: "black"
     property color c3: "black"
@@ -20,7 +20,11 @@ ApplicationWindow {
     property int uProgressBarPorc: 0
     Connections {target: unik;onUkStdChanged: logtxt.setTxtLog(''+unik.ukStd);}
     Connections {target: unik;onStdErrChanged: logtxt.setTxtLog(''+unik.getStdErr());}
-    onVerChanged: xLogTxt.opacity=0.0
+    onVerChanged: {
+        console.log('VERCH!'+ver)
+        r.opacity=0.0
+        xLogTxt.opacity=0.0
+    }
     onVisibleChanged: {
         if(!visible){
             appSplash.flags =  Qt.Window
@@ -53,15 +57,113 @@ ApplicationWindow {
         Component.onCompleted: refresh()
         onDataChanged:  refresh()
     }
+    MouseArea{
+        anchors.fill: parent
+        Rectangle{
+            id: xMouseAreaCleanCfg
+            anchors.fill: parent
+            color: 'red'
+            opacity: 0.0
+            SequentialAnimation{
+                id: anMouseAreaCleanCfg
+                running: false
+                NumberAnimation {
+                    target: xMouseAreaCleanCfg
+                    property: "opacity"
+                    from: 0.0
+                    to: 0.5
+                    duration: 250
+                    easing.type: Easing.InOutQuad
+                }
+                NumberAnimation {
+                    target: xMouseAreaCleanCfg
+                    property: "opacity"
+                    from: 0.5
+                    to: 0.0
+                    duration: 250
+                    easing.type: Easing.InOutQuad
+                }
+            }
+        }
+        onClicked: {
+            anMouseAreaCleanCfg.restart()
+            tWaitHide.v=0
+            //tWaitHide.restart()
+            tWaitHide.running=!tWaitHide.running
+            unik.setProperty("splashsuspend", !unik.getProperty("splashsuspend"))
+        }
+        onDoubleClicked: {
+            anMouseAreaCleanCfg.restart()
+            let cfgFileLocation=appsDir+'/cfg.json'
+            unik.deleteFile(cfgFileLocation)
+            if(Qt.platform.os==='android'){
+                unik.restartApp()
+            }else{
+                unik.restartApp("")
+            }
+        }
+    }
+    /*Timer{
+        running: true
+        repeat: true
+        interval: 500
+        onTriggered: {
+            if(unik.getEngineObjectsCount()>1){
+                appSplash.color="red"
+            }
+            console.log('TS:'+imgLogo.width)
+            console.log('TS2:'+unik.getEngineObjectsCount())
+            console.log('TS3:'+appSplash.ver)
+            r.color='red'
+            imgLogo.width=300
+            imgLogo.height=50
+        }
+    }*/
     Timer{
-        running: !ver
-        repeat: false
-        interval: 1000
-        onTriggered: r.opacity=0.0
+        id: tRaise
+        running: true//appSplash.visible
+        repeat: true
+        interval: 250
+        onTriggered: {
+            if(unik.getProperty("launcherLoaded")){
+                appSplash.color = "transparent"
+                r.opacity=0.0
+                appSplash.visible=false
+                appSplash.close()
+                stop()
+            }
+        }
+    }
+    Timer{
+        id: tWaitHide
+        running: true
+        repeat: true
+        interval: 500
+        property int v: 0
+        onTriggered: {
+            if(v===0){
+                if(logtxt.text.indexOf(' git ')<0){
+                    logtxt.text='Iniciando Unik .'
+                }
+            }else{
+                if(logtxt.text.indexOf(' git ')<0){
+                    logtxt.text+='.'
+                }
+            }
+            if(v>6){
+                unik.notifySplashFinished()
+                appSplash.color = "transparent"
+                r.opacity=0.0
+                appSplash.visible=false
+                stop()
+            }
+            v++
+            //console.log('VVVVVVV:'+v)
+        }
     }
     Rectangle{
         id:r
-        width: Qt.platform.os!=='android'?appSplash.width*0.1:appSplash.width*0.2
+        width: Qt.platform.os!=='android'?appSplash.width*0.1:appSplash.width*0.3
         height: width
         color: "transparent"
         anchors.centerIn: parent
@@ -77,26 +179,53 @@ ApplicationWindow {
             }
         }
         Image {
+            id: imgLogo
             anchors.fill: parent
+            //width: 500
+            //height: 400
             source: "qrc:/resources/logo_unik_500x500.png"
         }
         Text{
             text: "by <b>unikode.org</b>"
-            font.pixelSize: parent.width*0.05
+            font.pixelSize: Qt.platform.os!=='android'?appSplash.fs:appSplash.fs*1.4
             anchors.right: parent.right
-            anchors.rightMargin: appSplash.width*0.01
+            anchors.rightMargin: Qt.platform.os!=='android'?appSplash.width*0.01:appSplash.fs
             anchors.top: parent.top
             color: appSplash.c2
             anchors.topMargin: appSplash.width*0.005
         }
+        Text{
+            text: unikSettings.lang==='es'?'Launcher detenido.\nPresionar un vez el logo para reanudar\ny 2 veces para reinicir Unik':'Launcher stopped.\nPress one click for continue\nand two click for restart Unik.'
+            width: appSplash.width*0.75
+            visible: !tWaitHide.running
+            font.pixelSize: Qt.platform.os!=='android'?appSplash.fs:appSplash.fs*2
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.top
+            anchors.bottomMargin: appSplash.fs*2
+            color: appSplash.c2
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
+            Rectangle{
+                width: parent.contentWidth+appSplash.fs*2
+                height: parent.contentHeight+appSplash.fs*2
+                anchors.centerIn: parent
+                color: appSplash.c1
+                border.width: unikSettings.borderWidth
+                border.color: appSplash.c2
+                radius: unikSettings.radius*0.5
+                z:parent.z-1
+            }
+        }
     }
     Item{
         id:xLogTxt
-        width: appSplash.fs*30
+        //width: appSplash.fs*30
+        width:  Qt.platform.os!=='android'?appSplash.fs*30:appSplash.width*0.8
         height: colData.height+appSplash.fs//logtxt.contentHeight+appSplash.fs*0.2
         anchors.top: r.bottom
         anchors.topMargin: appSplash.fs
         anchors.horizontalCenter: r.horizontalCenter
+        opacity: r.opacity
         onOpacityChanged: {
             if(opacity===0.0){
                 appSplash.visible=false
@@ -112,7 +241,7 @@ ApplicationWindow {
             height: parent.width
             rotation: -90
             anchors.centerIn: parent
-            radius: unikSettings.radius
+            radius: unikSettings.radius*0.35
             border.width:unikSettings.borderWidth
             border.color: appSplash.c4
             color: appSplash.c1
@@ -124,7 +253,7 @@ ApplicationWindow {
             Text{
                 id: logtxt
                 color: appSplash.c2
-                font.pixelSize: appSplash.fs*0.5
+                font.pixelSize: Qt.platform.os!=='android'?appSplash.fs:appSplash.fs*2
                 //anchors.verticalCenter: parent.verticalCenter
                 width: parent.parent.width-appSplash.fs
                 height: contentHeight
@@ -170,6 +299,13 @@ ApplicationWindow {
                 width: 1
                 color: appSplash.c2
             }
+        }
+    }
+    Shortcut{
+        sequence: 'Esc'
+        onActivated: {
+            tWaitHide.stop()
+            Qt.quit()
         }
     }
     /*MouseArea{

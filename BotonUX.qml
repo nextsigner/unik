@@ -4,7 +4,7 @@ Rectangle {
     width: a.contentWidth+(r.fontSize*2*(unikSettings.padding*2))+(unikSettings.borderWidth*2)+app.fs
     height: a.contentHeight+(r.fontSize*2*(unikSettings.padding*2))+(unikSettings.borderWidth*2)
     opacity: enabled?1.0:0.5
-    objectName: 'sin_nombre'
+    //objectName: 'sin_nombre'
     color: 'transparent'
     radius: xR1.radius
     border.color: xR1.border.color

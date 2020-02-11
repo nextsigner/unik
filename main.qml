@@ -24,7 +24,8 @@ ApplicationWindow {
     id: app
     objectName: 'unik-main-errors'
     visible: true
-    flags: Qt.FramelessWindowHint//Qt.Window | Qt.FramelessWindowHint
+    visibility: Qt.platform.os==='android'?"FullScreen":"Maximized"
+    //flags: Qt.FramelessWindowHint//Qt.Window | Qt.FramelessWindowHint
     width: Screen.desktopAvailableWidth
     height: Screen.desktopAvailableHeight
     title: qsTr("uniK-status")
@@ -37,6 +38,7 @@ ApplicationWindow {
     property color c4: "white"
     property int area: 0
     property string pws: pws
+    property var objFocus
     USettings{
         id: unikSettings
         url: unik.getPath(3)+'/unik/unik.json'
@@ -68,7 +70,7 @@ ApplicationWindow {
         }
         Item{
             id: xTools
-            width: app.fs*1.5
+            width: app.fs*3
             height: parent.height
             z:99999
             Column{
@@ -209,7 +211,7 @@ ApplicationWindow {
                 color: 'transparent'
                 visible: app.area===0
                 clip: true
-                Flickable{
+                /*Flickable{
                     id:fkAndroid
                     width: xTaLog.width
                     height: xTaLog.height
@@ -228,14 +230,14 @@ ApplicationWindow {
                         font.pixelSize: app.fs
                         wrapMode: Text.WordWrap
                     }
-                }
+                }*/
                 Flickable {
                     id: view
                     width: parent.width
-                    height: parent.height
+                    height: taLog.focus&&Qt.platform.os==='android'?parent.height*0.5:parent.height
                     contentWidth: xTaLog.width
                     contentHeight: taLog.contentHeight+app.fs*4
-                    visible: Qt.platform.os!=='android'
+                    //visible: Qt.platform.os!=='android'
                     TextArea {
                         id: taLog
                         text: qsTr("Unik Main Qml")
@@ -260,24 +262,28 @@ ApplicationWindow {
                     target: unik;
                     onUkStdChanged:{
                         //taLog.text+=(unik.ukStd).replace(/\/\n/g, '<br />')
-                        taLog.text+=unik.ukStd.replace(/<br \/>/g, '\n')
-                        if(Qt.platform.os==='android'){
+                        taLog.text+=unik.ukStd.replace(/<br \/>/g, '\n').replace(/\n/g, '\n\n')
+                        /*if(Qt.platform.os==='android'){
                             fkAndroid.contentY=taLogAndroid.contentHeight
-                        }
+                        }*/
                     }
                 }
             }
             Rectangle{
                 id: xEditor
                 width: parent.width
-                height: parent.height-row1.height
-                color: app.c3
+                height: parent.height-app.fs*4
+                border.width: unikSettings.borderWidth
+                border.color: app.c1
                 visible: app.area===1
+                color: app.c2
                 onVisibleChanged: {
                     if(visible){
                         if(unik.fileExist(appsDir+'/cfg.json')){
                             txtEdit.text = unik.getFile(appsDir+'/cfg.json')
                         }
+                    }else{
+                        txtEdit.focus=false
                     }
                 }
                 TextEdit {
@@ -285,12 +291,22 @@ ApplicationWindow {
                     width: parent.width*0.98
                     height: parent.height/3
                     anchors.horizontalCenter: parent.horizontalCenter
-                    font.pixelSize: app.width*0.02
+                    font.pixelSize: app.fs*1.5
                     color: app.c1
+                    wrapMode: Text.WrapAnywhere
+                    Keys.onReturnPressed: {
+                        if(!isValidJson())return
+                        var p = appsDir+'/cfg.json'
+                        console.log("Config Path: "+p)
+                        console.log("New Config Data: "+txtEdit.text)
+                        unik.setFile(p, txtEdit.text)
+                        app.area=0
+                    }
                 }
+
                 Rectangle{
                     width: labelbtn2.contentWidth*1.2
-                    height: app.width*0.02
+                    height: app.fs*2
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: app.width*0.005
                     anchors.left: parent.left
@@ -298,7 +314,7 @@ ApplicationWindow {
                     Text {
                         id:labelbtn2
                         text: "Cancel"
-                        font.pixelSize: app.width*0.015
+                        font.pixelSize: app.fs*0.8
                         anchors.centerIn: parent
                     }
                     MouseArea{
@@ -310,14 +326,14 @@ ApplicationWindow {
                 }
                 Rectangle{
                     width: labelbtnDelete.contentWidth*1.2
-                    height: app.width*0.02
+                    height: app.fs*2
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: app.width*0.005
                     anchors.horizontalCenter: parent.horizontalCenter
                     Text {
                         id:labelbtnDelete
                         text: "Delete Config File"
-                        font.pixelSize: app.width*0.015
+                        font.pixelSize: app.fs*0.8
                         anchors.centerIn: parent
                     }
                     MouseArea{
@@ -333,7 +349,7 @@ ApplicationWindow {
                 }
                 Rectangle{
                     width: labelbtn3.contentWidth*1.2
-                    height: app.width*0.02
+                    height: app.fs*2
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: app.width*0.005
                     anchors.right: parent.right
@@ -341,12 +357,13 @@ ApplicationWindow {
                     Text {
                         id:labelbtn3
                         text: "Set Config"
-                        font.pixelSize: app.width*0.015
+                        font.pixelSize: app.fs*0.8
                         anchors.centerIn: parent
                     }
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
+                            if(!isValidJson())return
                             var p = appsDir+'/cfg.json'
                             console.log("Config Path: "+p)
                             console.log("New Config Data: "+txtEdit.text)
@@ -357,8 +374,16 @@ ApplicationWindow {
                 }
             }
         }
-        ULogView{id: logView}
-        UWarnings{id: uWarnings}
+        ULogView{
+            id: logView
+            width: parent.width-app.fs*3
+            anchors.right: parent.right
+        }
+        UWarnings{
+            id: uWarnings
+            width: parent.width-app.fs*3
+            anchors.right: parent.right
+        }
     }
     Shortcut{
         sequence: 'Esc'
@@ -404,4 +429,21 @@ ApplicationWindow {
             app.c4=cc2[3]
         }
     }
+    function isValidJson(){
+        let msg0=unikSettings.lang==='es'?'Error al crear el archivo JSON de configuración de Unik. Para poder utilizar este archivo debe corregir los error.':'Error when making the JSON setup file for Unik. For use this file you should repair all error.'
+        let pfr=unikSettings.lang==='es'?'Formato o sintáxis requerida: ':'Format or syntax required: '
+        let fr=pfr+' {"arg0":"-folder=...", "arg1": "-git=..."}'
+        var json
+        var fc=false
+        try {
+            json = JSON.parse(txtEdit.text);
+            fc=true
+        } catch(e) {
+            logView.showLog(e)
+            logView.showLog('\n\n')
+            logView.showLog(msg0+'\n\n')
+            logView.showLog(fr+'\n\n')
+        }
+        return fc;
+   }
 }

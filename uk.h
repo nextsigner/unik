@@ -287,6 +287,7 @@ public:
 
  signals:
     //Señales para QML
+    void splashFinished();
     void log();
     void uWarningChanged();
     void porcChanged();
@@ -307,6 +308,9 @@ public:
     void ttsSelectingEngine(const int index);    
 
 public slots:
+    Q_INVOKABLE void notifySplashFinished(){
+        emit splashFinished();
+    };
     void errorQML(QList<QQmlError> le);
     void ukClose(QQuickCloseEvent *close);
     void engineExited(int n);
@@ -349,6 +353,7 @@ public slots:
     QQuickWindow *mainWindow(int n);
     void setProperty(const QString name, const QVariant &value);
     QVariant getProperty(const QString name);
+    int getEngineObjectsCount();
     bool isRPI();
 
     //Funciones Network
