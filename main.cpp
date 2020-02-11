@@ -554,7 +554,7 @@ int main(int argc, char *argv[])
 #else
     qInstallMessageHandler(android_message_handler);
 #endif*/
-    qInstallMessageHandler(android_message_handler);
+    //qInstallMessageHandler(android_message_handler);
 
 #endif //<-[100]
     //<--Install a Message Handler for GNU/Linux, Windows and Macos
@@ -1442,6 +1442,9 @@ int main(int argc, char *argv[])
         ffmqml.append(appArg2);
         ffmqml.append("/");
         u.mkdir(ffmqml);
+        QString cmn;
+        cmn.append(ffmqml);
+        u.setProperty("currentModule", cmn);
     }
     if(!modeFolder&&modeGit){
         ffmqml = "";
@@ -1450,6 +1453,11 @@ int main(int argc, char *argv[])
         ffmqml.append(moduloGit);
         ffmqml.append("/");
         u.mkdir(ffmqml);
+        QString cmn;
+        cmn.append(urlGit);
+        cmn.append(" ");
+        cmn.append(ffmqml);
+        u.setProperty("currentModule", cmn);
     }
     QString arg1Control;
     if(modeUpk){
@@ -1691,6 +1699,8 @@ int main(int argc, char *argv[])
     u.setProperty("splashsuspend", false);
     u.setProperty("launcherLoaded", false);
 
+    u.setProperty("currentModule", "Unik Qml Engine");
+
     QString pwsFolderModel;
 #ifdef Q_OS_WIN
     //pwsFolderModel.append("file:///");
@@ -1772,6 +1782,11 @@ int main(int argc, char *argv[])
             lba="";
             lba.append("Zip downloaded.");
             qInfo()<<lba;
+            QString cmn;
+            cmn.append(urlGit);
+            cmn.append(" ");
+            cmn.append(tmpZipPath);
+            u.setProperty("currentModule", cmn);
         }else{
             lba="";
             lba.append("Fail Zip download: ");
@@ -1942,21 +1957,6 @@ int main(int argc, char *argv[])
     qInfo()<<"uap.showLaunch: "<<uap.showLaunch;
     QByteArray prevMainQml=mainQml;
     mainQml=uap.showLaunch||showLaunch?":/appsListLauncher.qml":prevMainQml;
-    QObject::connect(&u, &UK::splashFinished, [&engine, &uap, showLaunch, mainQml](){
-        engine.load(uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
-    });
-
-    QQmlComponent component(&engine, uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
-    qInfo()<<"Init unik: "<<mainQml;
-    //u.setFile("/sdcard/Documents/unik/url.txt", mainQml);
-    /*if(uap.showLaunch||showLaunch){
-                mainQml="qrc:/appsListLauncher.qml";
-            }
-            qInfo()<<"Init unik: "<<mainQml;
-            engine.load(probe.isEmpty() ? QUrl(mainQml) : QUrl(probe));
-            QQmlComponent component(&engine, probe.isEmpty() ? QUrl(mainQml) : QUrl(probe));
-            */
-
 
     engine.addImportPath(qmlImportPath);
     QByteArray m1;
@@ -1969,25 +1969,33 @@ int main(int argc, char *argv[])
 
 
 
-    //------------------------------------------->6
-    if (engine.rootObjects().length()<2&&component.errors().size()>0){
-        u.log("Errors detected!");
-        for (int i = 0; i < component.errors().size(); ++i) {
-            listaErrores.append(component.errors().at(i).toString());
-            listaErrores.append("\n");
-        }
-        //qDebug()<<"------->"<<component.errors();
+    /*QQmlComponent component(&engine, uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
+    QObject::connect(&component, &QQmlComponent::progressChanged, [&component](){
+        qInfo()<<"Progreso del componente: "<<component.progress();
+    });*/
 
-#ifdef Q_OS_ANDROID
-        engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-#else
-#ifndef __arm__
-        engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
-#else
-        engine.load("://main_rpi.qml");
-#endif
-#endif
-    }
+     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, [=](QObject *object, const QUrl &url){
+        qInfo()<<"Unik Object created: ObjectName="<<object->objectName()<<" Url="<<url;
+    });
+
+
+    QObject::connect(&u, &UK::splashFinished, [&engine, &uap, showLaunch, mainQml, &listaErrores](){
+        engine.load(uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
+        QQmlComponent component(&engine, uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
+        qInfo()<<"Init unik: "<<mainQml;
+        if (engine.rootObjects().length()<2&&component.errors().size()>0){
+            u.log("Errors detected!");
+            for (int i = 0; i < component.errors().size(); ++i) {
+                listaErrores.append(component.errors().at(i).toString());
+                listaErrores.append("\n");
+            }
+            engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
+         }
+    });
+
+
+
+    //------------------------------------------->6
     if(engine.rootObjects().size()>1){
         QObject *aw = engine.rootObjects().at(1);
         QObject::connect(aw, SIGNAL(closing(QQuickCloseEvent *)), &u, SLOT(ukClose(QQuickCloseEvent *)));

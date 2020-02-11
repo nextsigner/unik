@@ -141,9 +141,11 @@ ApplicationWindow {
         interval: 500
         property int v: 0
         onTriggered: {
+            let msg0=unikSettings.lang==='es'?'Iniciendo ':'Starting '
+            let msg1=unik.getProperty("currentModule")
             if(v===0){
                 if(logtxt.text.indexOf(' git ')<0){
-                    logtxt.text='Iniciando Unik .'
+                    logtxt.text=''+msg0+' '+msg1
                 }
             }else{
                 if(logtxt.text.indexOf(' git ')<0){
@@ -155,6 +157,7 @@ ApplicationWindow {
                 appSplash.color = "transparent"
                 r.opacity=0.0
                 appSplash.visible=false
+                appSplash.close()
                 stop()
             }
             v++
@@ -253,7 +256,7 @@ ApplicationWindow {
             Text{
                 id: logtxt
                 color: appSplash.c2
-                font.pixelSize: Qt.platform.os!=='android'?appSplash.fs:appSplash.fs*2
+                font.pixelSize: Qt.platform.os!=='android'?appSplash.fs:appSplash.fs*1.5
                 //anchors.verticalCenter: parent.verticalCenter
                 width: parent.parent.width-appSplash.fs
                 height: contentHeight
@@ -266,6 +269,10 @@ ApplicationWindow {
                     if(d.indexOf('Socket')>=0){
                         p=false
                     }else if(d.indexOf('download git')>=0){
+                        tWaitHide.v=0
+                        tWaitHide.running=false
+                        unik.setProperty("splashsuspend", true)
+                        //tWaitHide.running=false//!tWaitHide.running
                         var m0=''+d.replace('download git ','')
                         var m1=m0.split(' ')
                         if(m1.length>1){
@@ -289,6 +296,11 @@ ApplicationWindow {
                     }
                     if(p){
                         logtxt.text=d
+                    }
+                    if(logtxt.text.indexOf('Updated: ')===0){
+                        tWaitHide.v=0
+                        tWaitHide.running=true
+                        unik.setProperty("splashsuspend", false)
                     }
                 }
             }

@@ -1155,7 +1155,7 @@ ApplicationWindow {
                         Rectangle{
                             border.width: unikSettings.borderWidth
                             border.color: app.c2
-                            radius: unikSettings.radius
+                            radius: unikSettings.radius*0.25
                             width: xLinkEditor.width-labelLE1.width-app.fs
                             height: app.fs*2
                             color: app.c1
@@ -1201,7 +1201,7 @@ ApplicationWindow {
                     Rectangle{
                         border.width: unikSettings.borderWidth
                         border.color: app.c2
-                        radius: unikSettings.radius
+                        radius: unikSettings.radius*0.25
                         width: xLinkEditor.width-app.fs
                         height: app.fs*4
                         color: app.c1
