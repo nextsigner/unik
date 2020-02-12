@@ -29,9 +29,9 @@ message(linux.pri is loaded......)
         message(Ubicaciòn del Ejecutable: $$DESTDIR)
 
 
-        FILE_VERSION_NAME=$$replace(PWD, /unik,/unik/build_linux/linux_version)
-        FILE_VERSION_NAME2=\"$$FILE_VERSION_NAME\"
-        write_file($$PWD/build_linux/linux_version, APPVERSION)
+        FILE_VERSION=$$replace(PWD, /unik,/unik/build_linux/version)
+        #FILE_VERSION_NAME2=\"$$FILE_VERSION_NAME\"
+        write_file($$FILE_VERSION, APPVERSION)
         message(File version location: $$FILE_VERSION_NAME2)
 
          DESKTOPDATA=""
@@ -65,12 +65,6 @@ message(linux.pri is loaded......)
         HEADERS += $$PWD/quazip/*.h
         SOURCES += $$PWD/quazip/*.cpp
         SOURCES += $$PWD/quazip/*.c
-
-            #Previus Linux Build Count
-            PLBC=$$system(cat linux_build_count$$escape_expand(\n\t))
-            #Previus Linux Build Count
-            LBC=$$system(echo $(($$PLBC + 1))$$escape_expand(\n\t))
-            message(Linux Build Count: $$LBC)
 
            # QMAKE_POST_LINK += $$quote(echo $(($$PLBC + 1)) > linux_build_count$$escape_expand(\n\t))
    }else{

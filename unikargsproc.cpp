@@ -2,7 +2,7 @@
 
 UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
 {
-    if(!qApp->arguments().contains("-install")){
+    if(!qApp->arguments().contains("-install")&&!qApp->arguments().contains("-version")){
         qInfo()<<"\n\n\nUAP: init... ";
         qInfo()<<"UAP: Prepare WorkSpace...";
     }
@@ -55,11 +55,11 @@ UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
     if(settings.value("ws").toString().isEmpty()){
         settings.setValue("ws", dp.toUtf8()+"/unik");
         ws=dp.toUtf8()+"/unik";
-        if(!qApp->arguments().contains("-install")){
+        if(!qApp->arguments().contains("-install")&&!qApp->arguments().contains("-version")){
             qInfo()<<"UAP WorkSpace by default: "<<ws;
         }
     }else{
-        if(!qApp->arguments().contains("-install")){
+        if(!qApp->arguments().contains("-install")&&!qApp->arguments().contains("-version")){
             qInfo()<<"Current WorkSpace: "<<settings.value("ws").toString().toUtf8();
         }
         QFileInfo fi(settings.value("ws").toString().toUtf8());
@@ -79,7 +79,7 @@ UnikArgsProc::UnikArgsProc(QObject *parent) : QObject(parent)
         }
     }
 #endif
-    if(!qApp->arguments().contains("-install")){
+    if(!qApp->arguments().contains("-install")&&!qApp->arguments().contains("-version")){
         qInfo()<<"UAP: WorkSpace defined as "<<ws;
     }
 }

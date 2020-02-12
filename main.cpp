@@ -416,10 +416,19 @@ int main(int argc, char *argv[])
 #endif
     //<--Variables Declarations
 
-
-
-
-
+    //-->Set Unik Version
+    QString nv;
+    QByteArray fvp;
+#ifdef Q_OS_ANDROID
+    fvp.append("assets:");
+#else
+    fvp.append(qApp->applicationDirPath());
+#endif
+    fvp.append("/version");
+    nv = u.getFile(fvp);
+    nv = QString(nv).replace("\n", "");
+    app.setApplicationVersion(nv);
+    //<--Set Unik Version
 
     //-->Load UAP
     for (int i = 0; i < argc; ++i) {
@@ -429,59 +438,19 @@ int main(int argc, char *argv[])
         if(a=="-nl"){
             showLaunch=false;
         }
-        //qInfo()<<"UAP ADDING ARG "<<i<<" : "<<argv[i];
-    }
+        //>-version
+        if(a=="-version"){
+            qInfo()<<"Unik version: "<<nv;
+            return 0;
+        }
+        //<-version
+    }    
+
     if(!qApp->arguments().contains("-install")){
         uap.init();
     }
     showLaunch=uap.showLaunch;
-    //<--Load UAP
-
-
-
-
-    //-->Set Unik Version
-#ifdef Q_OS_LINUX
-#ifdef Q_OS_ANDROID
-    nomVersion="android_version";
-#else
-#ifdef __arm__
-    nomVersion="linux_rpi_version";
-#else
-    nomVersion="linux_version";
-#endif
-#endif
-#endif
-#ifdef Q_OS_WIN
-    //carpComp.append(QString(UNIK_CURRENTDIR_COMPILATION));
-    nomVersion="windows_version";
-#endif
-#ifdef Q_OS_OSX
-    //carpComp.append("/Users/qt/nsp/unik-recursos/build_osx_clang64/unik.app/Contents/MacOS");
-    nomVersion="macos_version";
-#endif
-    QString nv;
-    QString fvp;
-#ifdef Q_OS_ANDROID
-    fvp.append("assets:");
-#else
-    fvp.append(qApp->applicationDirPath());
-#endif
-    fvp.append("/");
-    fvp.append(nomVersion);
-    //qDebug() << "UNIK FILE VERSION: " << fvp;
-    QFile fileVersion(fvp);
-    fileVersion.open(QIODevice::ReadOnly);
-    nv = fileVersion.readAll().replace("\n", "");
-    fileVersion.close();
-
-    qDebug() << "Unik version: " << nv;
-    app.setApplicationVersion(nv.toUtf8());
-    //<--Set Unik Version
-
-
-
-
+    //<--Load UAP    
 
 
     //-->Init Components
@@ -629,6 +598,8 @@ int main(int argc, char *argv[])
             break;
         }
         //<-install
+
+
 
         if(arg.contains("-user=")){
             QStringList marg = arg.split("-user=");
