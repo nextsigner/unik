@@ -4,22 +4,4 @@ build_linux/*
 !build_linux/default.png
 !build_linux/default.desktop
 
-build_win_32/Qt*.dll
-build_win_32/Qt*/
-build_win_32/7zip/*
-build_win_32/audio/*
-build_win_32/position/*
-build_win_32/platforms/*
-build_win_32/qmltooling/*
-build_win_32/scenegraph/*
-build_win_32/resources/*
-build_win_32/playlistformats/*
-build_win_32/mediaservice/*
-build_win_32/imageformats/*
-build_win_32/iconengines/*
-build_win_32/geoservices/*
-build_win_32/bearer/*
-build_win_32/styles/*
-build_Win_32/webview/*
-build_win_32/sqldrivers/*
-build_win_32/translations/*
+build_win_32/*
