@@ -2086,14 +2086,13 @@ ApplicationWindow {
                 /*engine.load(pws+'/'+mn+'/main.qml')
                 app.close()*/
             }
-
             if(params.indexOf('-folder=')>=0&&params.indexOf('-folder=')!==params.length-1&&params.length>5){
                 m0=params.split('-folder=')
                 m1=m0[1].split(',')
                 m2=m1[0].split('/')
                 mn=m2[m2.length-1]
 
-                unik.ejecutarLineaDeComandoAparte(unik.getPath(0)+' -folder='+pws+'/'+mn)
+                unik.ejecutarLineaDeComandoAparte(unik.getPath(0)+' '+('-folder='+pws+'/'+mn).replace(/ /g, '%20'))
                 Qt.quit()
                 return
 

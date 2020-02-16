@@ -1693,7 +1693,7 @@ int main(int argc, char *argv[])
     }*/
 
     QByteArray mainQml;
-    mainQml.append(ffmqml);
+    mainQml.append(ffmqml.replace("%20", " "));
     mainQml.append("main.qml");
     qInfo()<<"[0] main: "<<mainQml;
 
@@ -1862,11 +1862,12 @@ int main(int argc, char *argv[])
                 engine.load(QUrl::fromLocalFile(mainQml));
                 QQmlComponent component(&engine, QUrl::fromLocalFile(mainQml));
             }*/
-    QByteArray prevMainQml=mainQml;
+    /*QByteArray prevMainQml=mainQml;
     mainQml=uap.showLaunch||showLaunch?":/appsListLauncher.qml":prevMainQml;
     engine.load(uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
     QQmlComponent component(&engine, uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
     qInfo()<<"Init unik: "<<mainQml;
+    */
     // engine.load(QUrl(QStringLiteral("qrc:/appsListLauncher.qml")));
     //engine.load(mainQml);
     //engine.load(QUrl::fromLocalFile(mainQml));
@@ -1945,9 +1946,9 @@ int main(int argc, char *argv[])
         qInfo()<<"Progreso del componente: "<<component.progress();
     });*/
 
-     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, [=](QObject *object, const QUrl &url){
+     /*QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, [=](QObject *object, const QUrl &url){
         qInfo()<<"Unik Object created: ObjectName="<<object->objectName()<<" Url="<<url;
-    });
+    });*/
 
 
     QObject::connect(&u, &UK::splashFinished, [&engine, &uap, showLaunch, mainQml, &listaErrores](){
@@ -2014,12 +2015,14 @@ int main(int argc, char *argv[])
 #ifndef Q_OS_ANDROID
     QByteArray uklData;
     uklData.append("-folder=");
-    uklData.append(pws);
+    uklData.append(QString(pws).replace(" ", "%20"));
     uklData.append("/unik-tools");
     QByteArray uklUrl;
     uklUrl.append(pws);
     uklUrl.append("/link_unik-tools.ukl");
     u.setFile(uklUrl, uklData);
+    qInfo()<<"UKL file location: "<<uklUrl;
+    qInfo()<<"UKL file data: "<<uklData;
 #else
     QByteArray uklData;
     uklData.append("-git=https://github.com/nextsigner/unik-android-apps.git");

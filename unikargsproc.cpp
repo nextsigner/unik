@@ -186,7 +186,7 @@ void UnikArgsProc::procCfgArgs()
 void UnikArgsProc::procUSSArgs()
 {
     QSettings settings;
-    args=settings.value("uss").toString().split(",");
+    args=settings.value("uss").toString().replace("%20", " ").split(",");
     settings.setValue("uss",QString(""));
     qInfo()<<"UAP USS Arguments: "<<args;
 }

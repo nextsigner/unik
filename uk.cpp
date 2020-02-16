@@ -282,7 +282,7 @@ bool UK::runAppFromZip(QByteArray url, QByteArray localFolder)
             nfn.append("/");
             nfn.append(zip.getFileNameList().at(v));
             QString nfn2 = nfn.replace("-master/", "/");
-            QString nfn3 = nfn2.replace(" ", "%20");
+            QString nfn3 = nfn2;//.replace("%20", " ");
 
             if(nfn3.at(nfn3.size()-1)!="/"){
                 qInfo()<<"Destino de archivo: "<<nfn3;
@@ -1007,7 +1007,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
             nfn.append("/");
             nfn.append(zip.getFileNameList().at(v));
             QString nfn2 = nfn.replace("-master/", "/");
-            QString nfn3 = nfn2.replace(" ", "%20");
+            QString nfn3 = nfn2;//.replace(" ", "%20");
 
             if(nfn3.at(nfn3.size()-1)!="/"){
                 qInfo()<<"Destino de archivo: "<<nfn3;
