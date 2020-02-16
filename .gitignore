@@ -4,3 +4,4 @@ build_linux/*
 !build_linux/default.png
 !build_linux/default.desktop
 
+build_win_32/*

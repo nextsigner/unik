@@ -1946,12 +1946,15 @@ int main(int argc, char *argv[])
         qInfo()<<"Progreso del componente: "<<component.progress();
     });*/
 
-     /*QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, [=](QObject *object, const QUrl &url){
+     /*wQObject::connect(&engine, &QQmlApplicationEngine::objectCreated, [=](QObject *object, const QUrl &url){
         qInfo()<<"Unik Object created: ObjectName="<<object->objectName()<<" Url="<<url;
     });*/
 
 
-    QObject::connect(&u, &UK::splashFinished, [&engine, &uap, showLaunch, mainQml, &listaErrores](){
+    int vsf=0;
+    QObject::connect(&u, &UK::splashFinished, [&vsf, &engine, &uap, showLaunch, mainQml, &listaErrores](){
+        if (vsf==0){
+            vsf++;
         engine.load(uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
         QQmlComponent component(&engine, uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
         qInfo()<<"Init unik: "<<mainQml;
@@ -1963,6 +1966,7 @@ int main(int argc, char *argv[])
             }
             engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
          }
+        }
     });
 
 
