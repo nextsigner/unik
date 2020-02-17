@@ -2379,7 +2379,7 @@ bool UK::createLink(QString execString, QString arguments, QString lnkLocationFi
     vbs.append("set objShell = CreateObject(\"Shell.Application\")\n");
     vbs.append("set oShellLink = WshShell.CreateShortcut(\""+lnkLocationFileName+"\")\n");
     vbs.append("oShellLink.TargetPath = \""+execString+"\"\n");
-    vbs.append("oShellLink.Arguments = \""+arguments+"\"\n");
+    vbs.append("oShellLink.Arguments = \""+arguments.replace(" ", "%20")+"\"\n");
     vbs.append("oShellLink.WindowStyle = 1\n");
     QByteArray d;
     d.append(description.toUtf8());
@@ -2390,7 +2390,9 @@ bool UK::createLink(QString execString, QString arguments, QString lnkLocationFi
     url.append(getPath(2));
     url.append("/createLnk.vbs");
     setFile(url, vbs);
-    run("cmd /c start "+url);
+    if(!QString(url).contains(" ")){
+        run("cmd /c start "+url);
+    }
     //qDebug()<<"vbs: "<<url;
     //qDebug()<<"vbs data: "<<vbs;
     return true;

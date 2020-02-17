@@ -141,7 +141,7 @@ ApplicationWindow {
         interval: 500
         property int v: 0
         onTriggered: {
-            let msg0=unikSettings.lang==='es'?'Iniciendo ':'Starting '
+            let msg0=unikSettings.lang==='es'?'Iniciando ':'Starting '
             let msg1=unik.getProperty("currentModule")
             if(v===0){
                 if(logtxt.text.indexOf(' git ')<0){
@@ -308,8 +308,10 @@ ApplicationWindow {
             Rectangle{
                 id:pb
                 height: appSplash.fs*0.2
+                opacity: width===1?0.1:1.0
                 width: 1
                 color: appSplash.c2
+                Behavior on opacity {NumberAnimation{duration: 250}}
             }
         }
     }
