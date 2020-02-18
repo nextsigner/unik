@@ -108,7 +108,7 @@ QString UK::getUnikProperty(const QByteArray propertyName)
 void UK::setUnikStartSettings(const QString params)
 {
     QSettings settings;
-    settings.setValue("uss",params);
+    settings.setValue("uss",QString(params).replace(" ", "%20"));
 }
 
 QList<QString> UK::getUnikStartSetting()

@@ -1,8 +1,17 @@
 FIRTS_APP_YEAR=2016
-PREVNUMSEMCOMP=$$cat($$PWD/unum_sem_comp)
-isEmpty(PREVNUMSEMCOMP){
+
+win32 {
+    PREVNUMSEMCOMP=$$cat($$PWD/unum_sem_comp_win)
+    isEmpty(PREVNUMSEMCOMP){
+        PREVNUMSEMCOMP = 0
+        write_file($$PWD/unum_sem_comp_win, PREVNUMSEMCOMP)
+    }
+}else{
+    PREVNUMSEMCOMP=$$cat($$PWD/unum_sem_comp)
+    isEmpty(PREVNUMSEMCOMP){
         PREVNUMSEMCOMP = 0
         write_file($$PWD/unum_sem_comp, PREVNUMSEMCOMP)
+    }
 }
 
 
@@ -10,17 +19,26 @@ win32 {
     #FORMAT SYSTEM DATE WITH Spanish/Argentina
     VERSION_MAJ1=$$system("echo  %date%")
     VERSION_MAJ2 =$$split(VERSION_MAJ1, "/")#07 08 2018
-    #message(VERSION_MAJ2 $$VERSION_MAJ2)
     VERSION_MAJ3 =$$member(VERSION_MAJ2, 2)
-    VERSION_MAJ4 =$$split(VERSION_MAJ3, "")
-    VERSION_MAJ5 =$$member(VERSION_MAJ4, 2)
-    VERSION_MAJ6 =$$member(VERSION_MAJ4, 3)
     VERSION_MAJ7=$$system("set /a  $$VERSION_MAJ3 - $$FIRTS_APP_YEAR")
 
-
     NUMWEEK=$$system("resources\\week2.bat")
-    message("resources\\week.bat $$MDIA4 $$MES $$member(VERSION_MAJ2, 2)")
+    write_file($$PWD/unum_sem_comp_win, NUMWEEK)
+    NUMCOMP=$$cat($$PWD/num_comp_win)
+    isEmpty(NUMCOMP){
+        NUMCOMP = 0
+    }
+    NNUMCOMP=$$system("set /a  $$NUMCOMP + 1")
 
+    message(Previus Week Number $$PREVNUMSEMCOMP)
+    RESCOMP=$$system("$$PWD/resources/compare_numsem.bat $$NUMWEEK $$PREVNUMSEMCOMP")
+    greaterThan(RESCOMP, 0){
+        message(Number Week not was changed: $$NUMWEEK  $$PREVNUMSEMCOMP)
+    }else{
+        message(Number Week changed: $$NUMWEEK $$PREVNUMSEMCOMP)
+        NNUMCOMP=0
+    }
+    NUMCOMP=$$NNUMCOMP
     greaterThan(NUMWEEK, 9){
         message(Week Number is major that 9)
     }else{
@@ -28,16 +46,9 @@ win32 {
         NUMWEEK="0"$$NUMWEEK
     }
     message(Week Number $$NUMWEEK)
-
-    NUMCOMP=$$cat($$PWD/num_comp_win)
-    isEmpty(NUMCOMP){
-        NUMCOMP = 0
-    }
-    NNUMCOMP=$$system("set /a  $$NUMCOMP + 1")
-    NUMCOMP=$$NNUMCOMP
     write_file($$PWD/num_comp_win, NNUMCOMP)
     APPVERSION=$$VERSION_MAJ7"."$$NUMWEEK"."$$NUMCOMP
-    write_file($$PWD/build_win_32/windows_version, APPVERSION)
+    write_file($$PWD/build_win_32/version, APPVERSION)
     message(Windows App Version $$APPVERSION)
 } else:unix {
     VERSION_MAJ1=$$system(date +%Y)

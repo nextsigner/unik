@@ -652,9 +652,9 @@ int main(int argc, char *argv[])
             if(marg.size()==2){
                 modoDeEjecucion="-folder";
                 appArg1="";
-                appArg1.append(marg.at(0));
+                appArg1.append(QString(marg.at(0)).replace("%20", " "));
                 appArg2="";
-                appArg2.append(marg.at(1));
+                appArg2.append(QString(marg.at(1)).replace("%20", " "));
                 QString ncp;
                 ncp.append(appArg2);
                 QDir fscd(ncp);
