@@ -1892,7 +1892,7 @@ void UK::setUZipFileSize()
     uZipSize = reply2->header(QNetworkRequest::ContentLengthHeader).toUInt();
     reply2->deleteLater();
     qnam->deleteLater();
-    qInfo()<<"FZS:"<<uZipSize;
+    //qInfo()<<"Downloading "<<uZipSize;
     if(uZipSize==0){
         getZipFileSizeForDownload(uZipUrl.toUtf8());
     }

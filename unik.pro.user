@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.11.1, 2020-02-17T17:00:04. -->
+<!-- Written by QtCreator 4.11.1, 2020-02-18T07:33:43. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -289,7 +289,7 @@
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:D:/nsp/unik/unik.pro</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">D:/nsp/unik/unik.pro</value>
-    <value type="QString" key="RunConfiguration.Arguments">-folder=D:/nsp/unik-dev-apps/mercurio</value>
+    <value type="QString" key="RunConfiguration.Arguments"></value>
     <value type="bool" key="RunConfiguration.Arguments.multi">false</value>
     <value type="QString" key="RunConfiguration.OverrideDebuggerStartup"></value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
