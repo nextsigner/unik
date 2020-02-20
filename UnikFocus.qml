@@ -32,7 +32,7 @@ Rectangle {
         property int v: 0
         onTriggered: {
             if(v===0){
-                parent.c=app.c3
+                parent.c=app.c2
                 v++
             }else{
                 parent.c=r.parent.border.color

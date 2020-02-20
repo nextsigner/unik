@@ -14,6 +14,7 @@ Item{
     property int radius: 6
     property int borderWidth: 4
     property string fontFamily: 'Arial'
+    property string jsonCode: '{"cfg":{"zoom":0.8,"padding":0.25,"radius":6,"borderWidth":2,"fontFamily":"Arial", "sound" : false, "showBg": false, "lang" : "es", "currentNumColor": 3, "defaultColors":"black-white-#666-#aaa|black-white-#aaa-#666|white-black-#aaa-#666|white-black-#666-#aaa|#1fbc05-black-green-white|#1fbc05-black-white-green|black-#1fbc05-white-green|black-#1fbc05-green-white|black-red-#ff6666-white|black-red-white-#ff6666|black-#ff6666-red-white|black-#ff6666-white-red|red-black-#ff6666-white|red-black-white-#ff6666|#ff2200-#ff8833-black-white|#ff2200-#ff8833-white-black|black-#ff8833-#ff3388-#ddcccc|black-#ff8833-#ddcccc-#ff3388|green-white-red-blue|green-white-blue-red" }}'
     signal dataChanged
     onCurrentNumColorChanged: {
         if(loaded){
@@ -101,8 +102,7 @@ Item{
             }
             r.loaded=true
         }else{
-            var jsonCode='{"cfg":{"zoom":1.2,"padding":0.5,"radius":38,"borderWidth":2,"fontFamily":"Arial", "sound" : false, "showBg": true, "lang" : "es", "currentNumColor": 0, "defaultColors":"black-white-#666-#aaa|black-white-#aaa-#666|white-black-#aaa-#666|white-black-#666-#aaa|black-red-#ff6666-white|black-red-white-#ff6666|black-#ff6666-red-white|black-#ff6666-white-red|red-black-#ff6666-white|red-black-white-#ff6666|#ff2200-#ff8833-black-white|#ff2200-#ff8833-white-black|black-#ff8833-#ff3388-#ddcccc|black-#ff8833-#ddcccc-#ff3388|#1fbc05-black-green-white|#1fbc05-black-white-green|black-#1fbc05-white-green|black-#1fbc05-green-white|green-white-red-blue|green-white-blue-red" }}'
-            unik.setFile(unikCfgFile, jsonCode)
+            unik.setFile(unikCfgFile, r.jsonCode)
             getCfgFile()
         }
     }
@@ -139,8 +139,7 @@ Item{
                 //unik.setFile('/home/nextsigner/aaa.json', JSON.stringify(json))
             }
         }else{
-            var jsonCode='{"cfg":{"zoom":1.2,"padding":0.5,"radius":38,"borderWidth":2,"fontFamily":"Arial", "sound" : false, "showBg": true, "lang" : "es", "currentNumColor": 0, "defaultColors":"black-white-#666-#aaa|black-white-#aaa-#666|white-black-#aaa-#666|white-black-#666-#aaa|black-red-#ff6666-white|black-red-white-#ff6666|black-#ff6666-red-white|black-#ff6666-white-red|red-black-#ff6666-white|red-black-white-#ff6666|#ff2200-#ff8833-black-white|#ff2200-#ff8833-white-black|black-#ff8833-#ff3388-#ddcccc|black-#ff8833-#ddcccc-#ff3388|#1fbc05-black-green-white|#1fbc05-black-white-green|black-#1fbc05-white-green|black-#1fbc05-green-white|green-white-red-blue|green-white-blue-red" }}'
-            unik.setFile(unikCfgFile, jsonCode)
+            unik.setFile(unikCfgFile, r.jsonCode)
             getCfgFile()
             setCfgFile()
         }

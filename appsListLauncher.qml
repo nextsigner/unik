@@ -213,7 +213,7 @@ ApplicationWindow {
                         text: '\uf061'
                         font.family: "FontAwesome"
                         font.pixelSize: app.fs
-                        color:app.c2
+                        color:app.c1
                         anchors.verticalCenter: parent.verticalCenter
                         visible: xItem.border.width!==0
                     }
@@ -767,7 +767,7 @@ ApplicationWindow {
                         anchors.horizontalCenter: parent.horizontalCenter
                         UnikFocus{
                             id:ufBntFF2;
-                            visible: xConfig.currentFocus===8
+                            visible: xConfig.currentFocus===9
                             onVisibleChanged: {
                                 if(unikSettings.sound&&visible){
                                     let s=unikSettings.lang==='es'?'Tipo de Letra. Para seleccionar otro tipo de letra presinar intro.':'Font family . For change font family press enter.'
@@ -802,7 +802,7 @@ ApplicationWindow {
                         objectName: 'bbbb'
                         UnikFocus{
                             id: ufACT;
-                            visible: xConfig.currentFocus===9
+                            visible: xConfig.currentFocus===10
                             objectName: 'aaa'
                             property int currentFocus: -1
                             property int cantFocus: appColorsThemes.cantColors-1
@@ -822,7 +822,7 @@ ApplicationWindow {
                         BotonUX{
                             id: btnUX9
                             UnikFocus{
-                                visible: xConfig.currentFocus===10
+                                visible: xConfig.currentFocus===11
                                 onVisibleChanged: {
                                     if(unikSettings.sound&&visible){
                                         let s=unikSettings.lang==='es'?'Editar enlace. Para editar o crear enlace presionar Intro.':'Edit or make. For edit or make press enter.'
@@ -842,7 +842,7 @@ ApplicationWindow {
                         BotonUX{
                             id: btnUX5
                             UnikFocus{
-                                visible: xConfig.currentFocus===11
+                                visible: xConfig.currentFocus===12
                                 onVisibleChanged: {
                                     if(unikSettings.sound&&visible){
                                         let s=unikSettings.lang==='es'?'Ver la ayuda. Para ver la ayuda presionar Intro.':'Show help. For show help press enter.'
@@ -875,7 +875,7 @@ ApplicationWindow {
                                 }
                             }
                             UnikFocus{
-                                visible: xConfig.currentFocus===12
+                                visible: xConfig.currentFocus===13
                                 onVisibleChanged: {
                                     if(unikSettings.sound&&visible){
                                         let s=unikSettings.lang==='es'?'Cerrar area de configuración. Para cerrar presionar Intro.':'Close configuration. For close configuration press enter.'
@@ -895,7 +895,7 @@ ApplicationWindow {
                                 Qt.quit()
                             }
                             UnikFocus{
-                                visible: xConfig.currentFocus===13
+                                visible: xConfig.currentFocus===14
                                 onVisibleChanged: {
                                     if(unikSettings.sound&&visible){
                                         let s=unikSettings.lang==='es'?'Apagar Unik. Para apagar presionar Intro.':'Close Unik. For quit Unik press enter.'
@@ -1580,10 +1580,6 @@ ApplicationWindow {
                 tlaunch.stop()
                 app.run()
             }else{
-                /*if(ufACT.visible&&xConfig.currentFocus===6){
-                    return
-                }*/
-
                 if(!ufACT.visible){
                     app.objFocus.run()
                 }else{
