@@ -9,7 +9,7 @@ ApplicationWindow {
     visibility:  Qt.platform.os !=='android'?"Maximized":"FullScreen"
     visible: true
     flags: Qt.platform.os !=='android'?Qt.Window | Qt.FramelessWindowHint: Qt.Window
-    color: "transparent"
+    color: Qt.platform.os!=='android'?"transparent":app.c3
     //color: Qt.platform.os!=='android'?"transparent":app.c1
     //flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     //property int fs: width<height?(Qt.platform.os !=='android'?app.height*0.02*unikSettings.zoom:app.height*0.06*unikSettings.zoom):(Qt.platform.os !=='android'?app.height*0.06*unikSettings.zoom:app.width*0.03*unikSettings.zoom)
@@ -120,7 +120,7 @@ ApplicationWindow {
     }
     Rectangle{
         anchors.fill: parent
-        color: app.c2
+        color: app.c3
         visible: Qt.platform.os!=='android'?unikSettings.showBg:false
     }
     Rectangle{
@@ -1400,7 +1400,7 @@ ApplicationWindow {
             text: '\uf061'
             font.family: "FontAwesome"
             font.pixelSize: app.fs*2
-            color:app.c2
+            color:app.c1
             anchors.bottom: parent.bottom
             anchors.bottomMargin: app.fs*2
             anchors.left: parent.left

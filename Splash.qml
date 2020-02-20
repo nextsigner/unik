@@ -166,7 +166,7 @@ ApplicationWindow {
     }
     Rectangle{
         id:r
-        width: Qt.platform.os!=='android'?appSplash.width*0.1:appSplash.width*0.3
+        width: Qt.platform.os!=='android'?appSplash.width*0.15:appSplash.width*0.3
         height: width
         color: "transparent"
         anchors.centerIn: parent
@@ -187,15 +187,15 @@ ApplicationWindow {
             //width: 500
             //height: 400
             source: "qrc:/resources/logo_unik_500x500.png"
-        }
-        Text{
-            text: "by <b>unikode.org</b>"
-            font.pixelSize: Qt.platform.os!=='android'?appSplash.fs:appSplash.fs*1.4
-            anchors.right: parent.right
-            anchors.rightMargin: Qt.platform.os!=='android'?appSplash.width*0.01:appSplash.fs
-            anchors.top: parent.top
-            color: appSplash.c2
-            anchors.topMargin: appSplash.width*0.005
+            Text{
+                text: "by <b>unikode.org</b>"
+                font.pixelSize: appSplash.fs*0.5
+                anchors.right: parent.right
+                anchors.rightMargin: appSplash.fs*0.25
+                anchors.top: parent.top
+                anchors.topMargin: appSplash.fs*1.2
+                color: appSplash.c2
+            }
         }
         Text{
             text: unikSettings.lang==='es'?'Launcher detenido.\nPresionar un vez el logo para reanudar\ny 2 veces para reinicir Unik':'Launcher stopped.\nPress one click for continue\nand two click for restart Unik.'
