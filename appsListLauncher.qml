@@ -2058,7 +2058,7 @@ ApplicationWindow {
                 unik.cd(pws)
                 unik.mkdir(pws+'/'+mn)
                 xPb.opacity=1.0
-                var d = unik.downloadGit(m1[0], pws)
+                d = unik.downloadGit(m1[0], pws)
                 if(app.downloading){
                     unik.ejecutarLineaDeComandoAparte(unik.getPath(0)+' '+('-folder='+pws+'/'+mn).replace(/ /g, '%20'))
                     Qt.quit()

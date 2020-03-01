@@ -26,13 +26,9 @@ message(linux.pri is loaded......)
         QT += webengine webview
         DD1=$$replace(PWD, /unik,/unik/build_linux)
         DESTDIR= $$DD1
-        message(Ubicaciòn del Ejecutable: $$DESTDIR)
-
-
-        FILE_VERSION=$$replace(PWD, /unik,/unik/build_linux/version)
-        #FILE_VERSION_NAME2=\"$$FILE_VERSION_NAME\"
-        write_file($$FILE_VERSION, APPVERSION)
-        message(File version location: $$FILE_VERSION_NAME2)
+        FILE_VERSION_LOCATION=$$DD1/version
+        system(echo "$$APPVERSION" > $$FILE_VERSION_LOCATION)
+        message(File version location: $$FILE_VERSION_LOCATION)
 
          DESKTOPDATA=""
          DESKTOPDATA+="[Desktop Entry]"

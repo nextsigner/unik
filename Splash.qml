@@ -140,6 +140,7 @@ ApplicationWindow {
         repeat: true
         interval: 500
         property int v: 0
+        property bool splashClosedNotify: false
         onTriggered: {
             let msg0=unikSettings.lang==='es'?'Iniciando ':'Starting '
             let msg1=unik.getProperty("currentModule")
@@ -153,12 +154,15 @@ ApplicationWindow {
                 }
             }
             if(v>6){
-                unik.notifySplashFinished()
-                appSplash.color = "transparent"
-                r.opacity=0.0
-                appSplash.visible=false
-                appSplash.close()
-                stop()
+                if(!splashClosedNotify){
+                    unik.notifySplashFinished()
+                    appSplash.color = "transparent"
+                    r.opacity=0.0
+                    appSplash.visible=false
+                    appSplash.close()
+                    stop()
+                }
+                splashClosedNotify=true
             }
             v++
             //console.log('VVVVVVV:'+v)
@@ -299,6 +303,7 @@ ApplicationWindow {
                     }
                     if(logtxt.text.indexOf('Updated: ')===0){
                         tWaitHide.v=0
+                        //tWaitHide.repeat=false
                         tWaitHide.running=true
                         unik.setProperty("splashsuspend", false)
                     }

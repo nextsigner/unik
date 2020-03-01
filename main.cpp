@@ -1138,17 +1138,17 @@ int main(int argc, char *argv[])
     //<--Check and Donwload Main Module
 
     //-->Define the Main Module Location
-    QString mainModName;
-    mainModName.append(pws);
+    QString mainModLocation;
+    mainModLocation.append(pws);
 #ifndef Q_OS_ANDROID
-    mainModName.append("/unik-tools");
+    mainModLocation.append("/unik-tools");
 #else
-    mainModName.append("/unik-android-apps");
+    mainModLocation.append("/unik-android-apps");
 #endif
 
 #ifdef __arm__
 #ifndef Q_OS_ANDROID
-    mainModName.append("-rpi");
+    mainModLocation.append("-rpi");
 #endif
 #endif
 
@@ -1156,8 +1156,8 @@ int main(int argc, char *argv[])
     //-->Checking if exist the Main Module Path.
     qInfo()<<"Checking UTP exists...";
     QDir dirWS(pws);
-    QDir dirUnikToolsLocation(mainModName);
-    QFile mainFile(mainModName+"/main.qml");
+    QDir dirUnikToolsLocation(mainModLocation);
+    QFile mainFile(mainModLocation+"/main.qml");
     if (!dirWS.exists()||!dirUnikToolsLocation.exists()||!mainFile.exists()) {
         dirWS.mkpath(".");
         qInfo()<<"Making folder "<<pws;
@@ -1958,7 +1958,8 @@ int main(int argc, char *argv[])
         engine.load(uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
         QQmlComponent component(&engine, uap.showLaunch||showLaunch?QUrl(QStringLiteral("qrc:/appsListLauncher.qml")):QUrl::fromLocalFile(mainQml));
         qInfo()<<"Init unik: "<<mainQml;
-        if (engine.rootObjects().length()<2&&component.errors().size()>0){
+        //if (engine.rootObjects().length()<2&&component.errors().size()>0){
+        if (component.errors().size()>0){
             u.log("Errors detected!");
             for (int i = 0; i < component.errors().size(); ++i) {
                 listaErrores.append(component.errors().at(i).toString());
@@ -1966,10 +1967,13 @@ int main(int argc, char *argv[])
             }
             engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
          }
+        }else{
+            if (vsf>0){
+                qInfo()<<"VSF:: "<<vsf;
+                return 0;
+            }
         }
     });
-
-
 
     //------------------------------------------->6
     if(engine.rootObjects().size()>1){

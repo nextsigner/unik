@@ -10,7 +10,8 @@ win32 {
     PREVNUMSEMCOMP=$$cat($$PWD/unum_sem_comp)
     isEmpty(PREVNUMSEMCOMP){
         PREVNUMSEMCOMP = 0
-        write_file($$PWD/unum_sem_comp, PREVNUMSEMCOMP)
+         system(echo "$$PREVNUMSEMCOMP" > $$PWD/unum_sem_comp)
+       #write_file($$PWD/unum_sem_comp, PREVNUMSEMCOMP)
     }
 }
 
@@ -75,9 +76,20 @@ win32 {
     }
 
     NUMSEM1=$$system(date +%W)
-    NUMWEEK=$$system("echo $(($$NUMSEM1 + 1))")
+    NUMSEMM1=$$split(NUMSEM1, '')
+    NUMSEMM2=$$member(NUMSEMM1, 0)
+    NUMSEMM3=$$member(NUMSEMM1, 1)
+    message(Firts number of Week $$NUMSEMM2)
+    isEqual(NUMSEMM2, 0){
+        message(Firts number of Week is zero)
+        NUMWEEK=$$system("echo $(($$NUMSEMM3 + 1))")
+    }else{
+        message(Firts number of Week is not zero)
+        NUMWEEK=$$system("echo $(($$NUMSEM1 + 1))")
+   }
     message(Week Number $$NUMWEEK)
-    write_file($$PWD/unum_sem_comp, NUMWEEK)
+    system(echo "$$NUMWEEK" > $$PWD/unum_sem_comp)
+   #write_file($$PWD/unum_sem_comp, NUMWEEK)
 
     message(Previus Week Number $$PREVNUMSEMCOMP)
     RESCOMP=$$system("sh $$PWD/resources/compare_numsem.sh $$NUMWEEK $$PREVNUMSEMCOMP")
@@ -89,13 +101,16 @@ win32 {
     }
 
     NUMCOMP=$$NNUMCOMP
-    write_file($$PWD/num_comp, NNUMCOMP)
+    system(echo "$$NNUMCOMP" > $$PWD/num_comp)
+    #write_file($$PWD/num_comp, NNUMCOMP)
 
-    greaterThan(NUMWEEK, 9){
+    greaterThan(NUMWEEK, 9):isEqual(NUMWEEK, 9){
         message(Week Number is major that 9)
     }else{
-        message(Week Number is minor that 9)
-        NUMWEEK="0"$$system("echo $(($$NUMSEM1 + 1))")
+        message(Week Number is minor that 10)
+        #NUMWEEK="0"$$system("echo $(($$NUMWEEK + 1))")
+        NUMWEEK=$$system("echo $(($$NUMWEEK + 1))")
+
     }
     APPVERSION=$$VERSION_MAJ"."$$NUMWEEK"."$$NUMCOMP
     message(Unix App Version $$APPVERSION)
