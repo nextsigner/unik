@@ -3,16 +3,14 @@ import QtQuick.Controls 2.12
 import QtQuick.Window 2.2
 import Qt.labs.folderlistmodel 2.2
 import Qt.labs.settings 1.0
+
 ApplicationWindow {
     id: app
     objectName: 'awll'
     visibility:  Qt.platform.os !=='android'?"Maximized":"FullScreen"
     visible: true
-    flags: Qt.platform.os !=='android'?Qt.Window | Qt.FramelessWindowHint: Qt.Window
+    flags: Qt.platform.os !=='android'?app.flags | Qt.FramelessWindowHint: Qt.Window
     color: Qt.platform.os!=='android'?"transparent":app.c3
-    //color: Qt.platform.os!=='android'?"transparent":app.c1
-    //flags: Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
-    //property int fs: width<height?(Qt.platform.os !=='android'?app.height*0.02*unikSettings.zoom:app.height*0.06*unikSettings.zoom):(Qt.platform.os !=='android'?app.height*0.06*unikSettings.zoom:app.width*0.03*unikSettings.zoom)
     property int fs: Qt.platform.os !=='android'?app.height*0.035*unikSettings.zoom:width<height?app.width*0.035*unikSettings.zoom:app.height*0.035*unikSettings.zoom
     property color c1: "#1fbc05"
     property color c2: "black"
@@ -32,8 +30,6 @@ ApplicationWindow {
     property string uSpeaked: ''
 
     //ColorAnimation on color { to: Qt.platform.os!=='android'?"transparent":app.c2; duration: 1000 }
-    Connections {id: con1; target: unik;onUkStdChanged:log.setTxtLog(''+unik.ukStd);}
-    Connections {id: con2; target: unik;onUkStdChanged: log.setTxtLog(''+unik.ukStd); }
 
     onCaChanged: {
         if(unikSettings.sound){
@@ -42,7 +38,6 @@ ApplicationWindow {
             speak(s)
         }
     }
-
     onClosing: {
         if(Qt.platform.os==='android'){
             if(xConfig.opacity===1.0){
@@ -130,6 +125,7 @@ ApplicationWindow {
         color: 'transparent'
         anchors.centerIn: parent
         focus: true
+        opacity: 0.0
         /*Keys.onReturnPressed: {
             if(xConfig.opacity===0.0)run()
         }*/
@@ -1562,7 +1558,6 @@ ApplicationWindow {
             }
         }
     }
-
     UText{
         id: devInfo
         text: '1:'+fl.folder+'\n2:'+lv.count+'\n3:'+app.ca+'\n4:'+app.ci
@@ -1869,7 +1864,7 @@ ApplicationWindow {
     }
     Rectangle{
         id: xSplashBlanco
-        visible: Qt.platform.os==='android'
+        visible: false//Qt.platform.os==='android'
         anchors.fill: parent
         //color: app.c1
         onOpacityChanged: {
@@ -1896,11 +1891,17 @@ ApplicationWindow {
         }
     }
 
+    Connections {id: con1; target: unik;onUkStdChanged:log.setTxtLog(''+unik.ukStd);}
+    Connections {id: con2; target: unik;onUkStdChanged: log.setTxtLog(''+unik.ukStd); }
+    Timer{
+        running: true
+        repeat: false
+        interval: 1000
+        onTriggered: {
+            xLauncher.opacity=1.0
+        }
+    }
     Component.onCompleted:{
-       /*if(appSplash){
-            appSplash.visible=false
-           appSplash.close()
-       }*/
         unik.setProperty("launcherLoaded", true)
         let pathUnik=pws+'/unik'
         if(!unik.folderExist(pathUnik)){
