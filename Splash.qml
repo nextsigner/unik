@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Window 2.0
+import QtGraphicalEffects 1.0
 ApplicationWindow {
     id: appSplash
     objectName: 'awsplash'
@@ -10,7 +11,7 @@ ApplicationWindow {
     height: Screen.height
     color: "transparent"
     flags: Qt.platform.os==='android'?Qt.Window:Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
-    property int fs: Qt.platform.os!=='android'?appSplash.width*0.02*unikSettings.zoom:appSplash.width*0.05*unikSettings.zoom
+    property int fs: Qt.platform.os!=='android'?appSplash.width*0.02*unikSettings.zoom:appSplash.width*0.06*unikSettings.zoom
     property bool ver: true
     property color c1: "black"
     property color c2: "black"
@@ -21,7 +22,6 @@ ApplicationWindow {
     Connections {target: unik;onUkStdChanged: logtxt.setTxtLog(''+unik.ukStd);}
     Connections {target: unik;onStdErrChanged: logtxt.setTxtLog(''+unik.getStdErr());}
     onVerChanged: {
-        console.log('VERCH!'+ver)
         r.opacity=0.0
         xLogTxt.opacity=0.0
     }
@@ -62,7 +62,7 @@ ApplicationWindow {
         Rectangle{
             id: xMouseAreaCleanCfg
             anchors.fill: parent
-            color: 'red'
+            color: appSplash.c1
             opacity: 0.0
             SequentialAnimation{
                 id: anMouseAreaCleanCfg
@@ -175,32 +175,70 @@ ApplicationWindow {
         color: "transparent"
         anchors.centerIn: parent
         opacity: xLogTxt.opacity
-        /*onOpacityChanged: {
-            if(opacity===0.0){
-                appSplash.visible=false
-            }
-        }*/
         Behavior on opacity{
             NumberAnimation{
                 duration:500
             }
         }
         Image {
-            id: imgLogo
+            id: imgLogoBack
             anchors.fill: parent
-            //width: 500
-            //height: 400
-            source: "qrc:/resources/logo_unik_500x500.png"
-            Text{
-                text: "by <b>unikode.org</b>"
-                font.pixelSize: appSplash.fs*0.5
-                anchors.right: parent.right
-                anchors.rightMargin: appSplash.fs*0.25
-                anchors.top: parent.top
-                anchors.topMargin: appSplash.fs*1.2
-                color: appSplash.c2
+            source: "qrc:/resources/splash_icon_2.png"
+            visible: false
+        }
+        Rectangle {
+            id: mask1
+            anchors.fill: parent
+            color: appSplash.c3
+            Rectangle {
+                opacity: 0.5
+                width: parent.height
+                height: parent.width
+                rotation: 90
+                color: 'green'
+                gradient: Gradient {
+                    GradientStop {
+                        position: 0.00;
+                        color: appSplash.c1;
+                    }
+                    GradientStop {
+                        position: 1.00;
+                        color: appSplash.c2;
+                    }
+                }
+            }
+
+            layer.enabled: true
+            layer.effect: OpacityMask {
+                maskSource: imgLogoBack
             }
         }
+
+        Image {
+            id: imgLogo
+            anchors.fill: parent
+            source: "qrc:/resources/splash_icon_1.png"
+            visible: false
+        }
+        Image {
+            id: imgLogo3
+            anchors.fill: parent
+            source: "qrc:/resources/splash_icon_3.png"
+            visible: false
+        }
+        ColorOverlay{
+            source: imgLogo
+            anchors.fill: imgLogo
+            color: appSplash.c1
+        }
+        Glow {
+            anchors.fill: imgLogo3
+            radius: 10
+            samples: 15
+            color: appSplash.c1
+            source: imgLogo3
+        }
+
         Text{
             text: unikSettings.lang==='es'?'Launcher detenido.\nPresionar un vez el logo para reanudar\ny 2 veces para reinicir Unik':'Launcher stopped.\nPress one click for continue\nand two click for restart Unik.'
             width: appSplash.width*0.75
@@ -250,7 +288,7 @@ ApplicationWindow {
             anchors.centerIn: parent
             radius: unikSettings.radius*0.35
             border.width:unikSettings.borderWidth
-            border.color: appSplash.c4
+            border.color: appSplash.c2
             color: appSplash.c1
         }
         Column{
@@ -301,7 +339,7 @@ ApplicationWindow {
                     if(p){
                         logtxt.text=d
                     }
-                    if(logtxt.text.indexOf('Updated: ')===0){
+                    if(logtxt.text.indexOf('Updated: ')===0||(logtxt.text.indexOf('unik-android-apps')>0&&logtxt.text.indexOf('%100')>0)){
                         tWaitHide.v=0
                         //tWaitHide.repeat=false
                         tWaitHide.running=true

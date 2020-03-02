@@ -25,5 +25,8 @@
         <file>USettings.qml</file>
         <file>UWarnings.qml</file>
         <file>ULogView.qml</file>
+        <file>resources/splash_icon_2.png</file>
+        <file>resources/splash_icon_1.png</file>
+        <file>resources/splash_icon_3.png</file>
     </qresource>
 </RCC>

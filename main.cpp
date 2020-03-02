@@ -1970,7 +1970,7 @@ int main(int argc, char *argv[])
         }else{
             if (vsf>0){
                 qInfo()<<"VSF:: "<<vsf;
-                return 0;
+                //return 0;
             }
         }
     });
