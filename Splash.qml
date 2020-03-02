@@ -9,7 +9,7 @@ ApplicationWindow {
     visibility:  Qt.platform.os==='android'?"FullScreen":"Maximized"
     width: Screen.width
     height: Screen.height
-    color: "transparent"
+    color: Qt.platform.os!=='android'?"transparent":appSplash.c3
     flags: Qt.platform.os==='android'?Qt.Window:Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     property int fs: Qt.platform.os!=='android'?appSplash.width*0.02*unikSettings.zoom:appSplash.width*0.06*unikSettings.zoom
     property bool ver: true
@@ -221,15 +221,27 @@ ApplicationWindow {
             visible: false
         }
         Image {
+            id: imgLogoUnikode
+            anchors.fill: parent
+            source: "qrc:/resources/splash_icon_4.png"
+            visible: false
+        }
+        ColorOverlay{
+            source: imgLogoUnikode
+            anchors.fill: imgLogoUnikode
+            color: appSplash.c2
+        }
+        Image {
             id: imgLogo3
             anchors.fill: parent
             source: "qrc:/resources/splash_icon_3.png"
             visible: false
         }
         ColorOverlay{
+            id: colorOverlayBorde
             source: imgLogo
             anchors.fill: imgLogo
-            color: appSplash.c1
+            color: appSplash.c2
         }
         Glow {
             anchors.fill: imgLogo3
@@ -237,6 +249,13 @@ ApplicationWindow {
             samples: 15
             color: appSplash.c1
             source: imgLogo3
+        }
+        Glow {
+            anchors.fill: imgLogo
+            radius: 10
+            samples: 15
+            color: appSplash.c1
+            source: colorOverlayBorde
         }
 
         Text{

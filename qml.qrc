@@ -28,5 +28,6 @@
         <file>resources/splash_icon_2.png</file>
         <file>resources/splash_icon_1.png</file>
         <file>resources/splash_icon_3.png</file>
+        <file>resources/splash_icon_4.png</file>
     </qresource>
 </RCC>
