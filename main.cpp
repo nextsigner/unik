@@ -2111,8 +2111,8 @@ int main(int argc, char *argv[])
 #endif
    //<--Latest codes
 
-#ifdef  Q_ANDROID
-    QtAndroid::hideSplashScreen();
+#ifdef  Q_OS_ANDROID
+    //QtAndroid::hideSplashScreen(5);
 #endif
     return app.exec();
 }
