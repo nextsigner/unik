@@ -195,7 +195,10 @@ ApplicationWindow {
                 id: mask1
                 anchors.fill: parent
                 color: appSplash.c3
-                opacity: 0.0
+                Rectangle {
+                    anchors.fill: parent
+                    color: appSplash.c1
+                }
                 Rectangle {
                     width: parent.height
                     height: parent.width
@@ -218,10 +221,8 @@ ApplicationWindow {
                 layer.enabled: true
                 layer.effect: OpacityMask {
                     maskSource: imgLogoBack
-                    Component.onCompleted: mask1.opacity=0.5
                 }
             }
-
             Image {
                 id: imgLogoBorde
                 anchors.fill: parent
