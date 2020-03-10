@@ -10,8 +10,9 @@ ApplicationWindow {
     visibility:  Qt.platform.os==='android'?"FullScreen":"Maximized"
     width: Screen.width
     height: Screen.height
-    color: 'transparent'
-    flags: Qt.platform.os==='android'?appSplash.flags:Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
+    color: "transparent"
+    //flags: Qt.platform.os==='android'?appSplash.flags:Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
+    //flags: Qt.platform.os==='android'?appSplash.flags:Qt.WindowStaysOnTopHint
     property int fs: Qt.platform.os!=='android'?appSplash.width*0.02*unikSettings.zoom:appSplash.width*0.06*unikSettings.zoom
     property bool ver: true
     property color c1: "black"
@@ -112,7 +113,7 @@ ApplicationWindow {
     }
     Timer{
         id: tRaise
-        running: true//appSplash.visible
+        running: Qt.platform.os==='android'//appSplash.visible
         repeat: true
         interval: 250
         onTriggered: {

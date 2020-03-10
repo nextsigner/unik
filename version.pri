@@ -30,7 +30,7 @@ win32 {
         NUMCOMP = 0
     }
     NNUMCOMP=$$system("set /a  $$NUMCOMP + 1")
-
+    message(Previus numcomp $$NNUMCOMP)
     message(Previus Week Number $$PREVNUMSEMCOMP)
     RESCOMP=$$system("$$PWD/resources/compare_numsem.bat $$NUMWEEK $$PREVNUMSEMCOMP")
     greaterThan(RESCOMP, 0){
