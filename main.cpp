@@ -222,6 +222,7 @@ int main(int argc, char *argv[])
     app.setOrganizationName("unikode.org");
 
 
+
 /*#ifdef Q_OS_LINUX
      qputenv("LD_PRELOAD","/media/nextsigner/ZONA-A11/nsp/unik/build_linux/libpepflashplayer.so");
      qInfo()<<"LD_PRELOAD: "<<qgetenv("LD_PRELOAD");
