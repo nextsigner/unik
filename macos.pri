@@ -1,4 +1,4 @@
-message(linux.pri is loaded)
+message(macos.pri is loaded)
 
 QT += webengine
 DESTDIR=../unik-recursos/build_osx_clang64
@@ -15,8 +15,6 @@ message(Unikode Desarrollo en Mac)
 ICON = logo.icns
 QMAKE_INFO_PLIST = Info.plist
 
-#Building Quazip from Ubuntu 16.10
-#Compile quazip.pro and install with sudo make install from the $$OUT_PWD
 INCLUDEPATH += $$PWD/quazip
 LIBS += -lz
 LIBS+=-L/usr/local/zlib/lib
@@ -32,10 +30,6 @@ for(FILE,EXTRA_BINFILES){
     QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}/unik.app/Contents/MacOS$$escape_expand(\n\t))
     message(Copyng $${FILE} $${DESTDIR}/unik.app/Contents/MacOS$$escape_expand(\n\t))
 }
-
-#APP_QML_FILES.files = ffmpegsumo.so
-#APP_QML_FILES.path = Contents/Resources
-#QMAKE_BUNDLE_DATA += APP_QML_FILES
 
 #Deploy command line example
 #1) /Users/qt/Qt5.12.3/5.12.3/clang_64/bin/macdeployqt /Users/qt/nsp/unik-recursos/build_osx_clang64/unik.app -qmldir=/Users/qt/nsp/unik
