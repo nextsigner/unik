@@ -1991,7 +1991,7 @@ ApplicationWindow {
         var m2
         var mn
 
-        if(Qt.platform.os==='android'){
+        if(Qt.platform.os==='android'||Qt.platform.os==='osx'){
             if(params.indexOf('-git=')>=0&&params.indexOf('-git=')!==params.length-1&&params.length>5){
                 app.downloading=true
                 m0=params.split('-git=')

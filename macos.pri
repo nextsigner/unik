@@ -7,7 +7,7 @@ DESTDIR=../unik-recursos/build_osx_clang64
 
 FILE_VERSION_NAME=$$replace(PWD, /unik,/build_osx_clang64/macos_version)
 FILE_VERSION_NAME2=\"$$FILE_VERSION_NAME\"
-write_file(/tmp/macos_version, APPVERSION)
+write_file(/tmp/version, APPVERSION)
 message(File version location: $$FILE_VERSION_NAME2)
 
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.11
@@ -27,7 +27,7 @@ SOURCES += $$PWD/quazip/*.c
 
 #COPIAR ARCHIVOS DENTRO DE APPIMAGE
 EXTRA_BINFILES += \
-/tmp/macos_version
+/tmp/version
 for(FILE,EXTRA_BINFILES){
     QMAKE_POST_LINK += $$quote(cp $${FILE} $${DESTDIR}/unik.app/Contents/MacOS$$escape_expand(\n\t))
     message(Copyng $${FILE} $${DESTDIR}/unik.app/Contents/MacOS$$escape_expand(\n\t))

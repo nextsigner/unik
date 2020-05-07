@@ -11,7 +11,7 @@ ApplicationWindow {
     width: Screen.width
     height: Screen.height
     color: "transparent"
-    //flags: Qt.platform.os==='android'?appSplash.flags:Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
+    flags: Qt.platform.os==='android'?appSplash.flags:Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     //flags: Qt.platform.os==='android'?appSplash.flags:Qt.WindowStaysOnTopHint
     property int fs: Qt.platform.os!=='android'?appSplash.width*0.02*unikSettings.zoom:appSplash.width*0.06*unikSettings.zoom
     property bool ver: true
