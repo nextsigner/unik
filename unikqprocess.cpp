@@ -3,7 +3,7 @@
 UnikQProcess::UnikQProcess(QObject *parent) : QProcess(parent)
 {
     connect(this, SIGNAL(readyReadStandardOutput()), this, SLOT(logOutProcess()));
-    connect(this, SIGNAL(readyReadStandardError()), this, SLOT(logOutProcess()));
+    connect(this, SIGNAL(readyReadStandardError()), this, SLOT(logOutProcessErr()));
 }
 
 void UnikQProcess::run(const QByteArray cmd)
@@ -23,6 +23,10 @@ void UnikQProcess::run(const QByteArray cmd, bool detached)
 void UnikQProcess::logOutProcess()
 {
     setLogData(this->readAll());
+}
+void UnikQProcess::logOutProcessErr()
+{
+    setLogData(this->readAllStandardError());
 }
 
 
