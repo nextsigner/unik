@@ -621,45 +621,122 @@ bool UK::mkUpk(QByteArray folder, QByteArray upkName, QByteArray user, QByteArra
     if (!dir.exists()) {
         dir.mkpath(".");
     }
-    dir.setFilter(QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks);
+    //dir.setFilter(QDir::Files | QDir::Dirs | QDir::AllDirs | QDir::AllEntries);
+    //QDirIterator it(dir, QDirIterator::Subdirectories);
+    QDirIterator it(folder, QStringList() << "*" , QDir::Files, QDirIterator::Subdirectories);
     qInfo()<<"Scanning: "<<dir.path();
+    //qInfo()<<"Scanning 2: "<<it.;
     //Iterando la lista de archivos
-    QStringList fileList = dir.entryList();
-    qInfo()<<"For reading "<<fileList.count()<<" files...";
-    for (int i=0; i<fileList.count(); i++){
-        //qDebug()<<"Upkando: "<<fileList[i];
-        QByteArray ro;
-        ro.append(folder);
-        ro.append("/");
-        ro.append(fileList[i]);
-        QFile archOrig(ro);
-        if(archOrig.size()>0&&!QString(fileList[i]).contains(".qmlc")){
-            if(!archOrig.open(QIODevice::ReadOnly)){
-                qInfo()<<"Read error "<<ro;
-                return false;
-            }else{
-                qInfo()<<"Reading: "<<ro;
-            }
-
+    //QStringList fileList = dir.entryList();
+    //qInfo()<<"For reading "<<fileList.count()<<" files...";
+    //qInfo()<<"For reading "<<it.<<" files...";
+    //QThread::sleep(5);
+    int vf=0;
+    //while (it.hasNext()) {
+    do {
+        QString fileName=it.next();
+        QFile archOrig(fileName);
+        qInfo()<<"mkUpk reading "<<fileName<<"...";
+        qInfo()<<"mkUpk reading folder"<<folder<<"...";
+        archOrig.open(QIODevice::ReadOnly);
+        QByteArray extSqlite;
+        extSqlite.append(fileName.mid(fileName.length()-7,fileName.length()));
+        qInfo()<<"------------------------------------>"<<extSqlite<<" fileName: "<<fileName;
+        if(extSqlite!=".sqlite"&&!fileName.contains(".qmlc")&&fileName.at(fileName.length()-1)!="."&&fileName.at(fileName.length()-1)!=".."){
             //Preparando separador
+//            if(fileName.contains("USettings.qml")||fileName.contains("XFormInsert.qml")){
+//                qInfo()<<"------------------------------------>"+archOrig.readAll();
+//                return true;
+//            }
             QByteArray s1;
             s1.append(hsep);
             QByteArray nsep;
             //nsep.append(hsep);
-            if(i!=0){
-                nsep.append(s1);
-                nsep.append("X-X");
-            }
-            nsep.append(fileList[i]);
-            nsep.append(s1);
-            nsep.append("X+X");
+            QByteArray ext;
+            ext.append(fileName.mid(fileName.length()-4,fileName.length()));
 
-            dataUpk1.append(nsep);
-            dataUpk1.append(archOrig.readAll());
+            qInfo()<<"Reading ext: "<<ext;
+            qInfo()<<"Reading extSqlite: "<<extSqlite;
+            if(!fileName.contains(".")||ext==".qml"||ext==".js"||ext==".png"||ext==".PNG"||ext==".jpg"||ext==".JPG"||ext==".jpeg"||ext==".JPEG"||ext==".gif"||ext==".GIF"||ext==".wav"||ext==".WAV"||ext==".mp3"||ext==".MP3"||ext==".mp4"||ext==".MP4"||ext==".ogg"||ext==".OGG"||ext==".mkv"||ext==".MKV"){
+                if(vf!=0){
+                    nsep.append(s1);
+                    nsep.append("X-X");
+                }
+                nsep.append(fileName.replace(folder, "").replace("/", "@"));
+                nsep.append(s1);
+                nsep.append("X+X");
+
+                dataUpk1.append(nsep);
+                dataUpk1.append(byteArrayToBase64(archOrig.readAll()));
+                vf++;
+            }else{
+                if(vf!=0){
+                    nsep.append(s1);
+                    nsep.append("X-X");
+                }
+                nsep.append(fileName.replace(folder, "").replace("/", "@"));
+                nsep.append(s1);
+                nsep.append("X+X");
+
+                dataUpk1.append(nsep);
+                dataUpk1.append(archOrig.readAll());
+                //qInfo()<<dataUpk1;
+                vf++;
+            }
         }else{
-            qInfo()<<"File not has data: "<<fileList[i];
+            qInfo()<<"File not has data: "<<fileName;
         }
-    }
+        archOrig.close();
+     }while(it.hasNext()) ;
+//    for (int i=0; i<fileList.count(); i++){
+//        qDebug()<<"Upkando: "<<fileList[i];
+//        QByteArray ro;
+//        ro.append(folder);
+//        ro.append("/");
+//        ro.append(fileList[i]);
+//        QFile archOrig(ro);
+//        qInfo()<<"mkUpk reading "<<ro<<"...";
+//        if(archOrig.open(QIODevice::ReadOnly)&&archOrig.size()>0&&!QString(fileList[i]).contains(".qmlc")){
+//            //Preparando separador
+//            QByteArray s1;
+//            s1.append(hsep);
+//            QByteArray nsep;
+//            //nsep.append(hsep);
+//            QByteArray ext;
+//            ext.append(ro.mid(ro.length()-4,ro.length()));
+//            qInfo()<<"Reading ext: "<<ext;
+//            if(ext==".png"||ext==".PNG"||ext==".jpg"||ext==".JPG"||ext==".jpeg"||ext==".JPEG"||ext==".gif"||ext==".GIF"||ext==".wav"||ext==".WAV"||ext==".mp3"||ext==".MP3"||ext==".mp4"||ext==".MP4"||ext==".ogg"||ext==".OGG"||ext==".mkv"||ext==".MKV"){
+//                if(vf!=0){
+//                    nsep.append(s1);
+//                    nsep.append("X-X");
+//                }
+//                nsep.append(fileList[i]);
+//                nsep.append(s1);
+//                nsep.append("X+X");
+
+//                dataUpk1.append(nsep);
+//                dataUpk1.append(byteArrayToBase64(archOrig.readAll()));
+//                vf++;
+//            }else{
+//                if(vf!=0){
+//                    nsep.append(s1);
+//                    nsep.append("X-X");
+//                }
+//                nsep.append(fileList[i]);
+//                nsep.append(s1);
+//                nsep.append("X+X");
+
+//                dataUpk1.append(nsep);
+//                dataUpk1.append(archOrig.readAll());
+//                vf++;
+//            }
+//        }else{
+//            qInfo()<<"File not has data: "<<fileList[i];
+//            if(folderExist(fileList[i].toUtf8())){
+//                qInfo()<<"Folder: "<<fileList[i];
+//            }
+//        }
+//    }
 
     //Abriendo archivo upk
     QFile upk2(urlUPK);
@@ -753,10 +830,55 @@ bool UK::upkToFolder(QByteArray upk, QByteArray user, QByteArray key, QByteArray
         urlNf.append("/");
         urlNf.append(m0.at(0));
 
-        QFile f1(urlNf);
+        QString fn;
+        fn.append(QString(urlNf).replace("//", "/"));
+        qInfo()<<"UP fn:"<<fn;
+        //QStringList folders=fn.split("/");
+        int folderLength=fn.split('@').length();
+        if(folderLength==3){
+            QString up=fn.split('@').at(fn.split('@').length()-2);
+            QString nf;
+            nf.append(folderDestination);
+            nf.append("/");
+            nf.append(up);
+            mkdir(nf);
+        }
+        if(folderLength==4){
+            QString up=fn.split('@').at(fn.split('@').length()-3);
+            QString nf;
+            nf.append(folderDestination);
+            nf.append("/");
+            nf.append(up);
+            mkdir(nf);
+        }
+        if(folderLength==5){
+            QString up=fn.split('@').at(fn.split('@').length()-4);
+            QString nf;
+            nf.append(folderDestination);
+            nf.append("/");
+            nf.append(up);
+            mkdir(nf);
+        }
+        if(folderLength==6){
+            QString up=fn.split('@').at(fn.split('@').length()-5);
+            QString nf;
+            nf.append(folderDestination);
+            nf.append("/");
+            nf.append(up);
+            mkdir(nf);
+        }
+        QByteArray ext;
+        ext.append(fn.mid(fn.length()-4,fn.length()));
+        QByteArray extSqlite;
+        extSqlite.append(fn.mid(fn.length()-6,fn.length()));
+        QFile f1(urlNf.replace("@", "/"));
         if(f1.open(QIODevice::WriteOnly)){
             QByteArray d;
-            d.append(m0.at(1));
+            if(!fn.contains(".")||ext==".qml"||ext==".js"||ext==".png"||ext==".PNG"||ext==".jpg"||ext==".JPG"||ext==".jpeg"||ext==".JPEG"||ext==".gif"||ext==".GIF"||ext==".wav"||ext==".WAV"||ext==".mp3"||ext==".MP3"||ext==".mp4"||ext==".MP4"||ext==".ogg"||ext==".OGG"||ext==".mkv"||ext==".MKV"){
+                d.append(base64ToByteArray(m0.at(1).toUtf8()));
+            }else{
+                d.append(m0.at(1));
+            }
             f1.write(d);
         }
         f1.close();

@@ -600,6 +600,14 @@ int main(int argc, char *argv[])
         }
         //<-install
 
+        //>-UPK
+        if(arg.contains(".upk")&&arg.length()==2){
+            //qInfo()<<"Upk"<<arg.at(1);
+            //qApp->quit();
+            break;
+        }
+        //<-UPK
+
 
 
         if(arg.contains("-user=")){
@@ -1486,7 +1494,12 @@ int main(int argc, char *argv[])
                 lba.append("\");");
                 qInfo()<<lba;
             }
-            if(u.upkToFolder(arg1.toUtf8(), user, key, tempFolder)){
+            QString tf;
+            tf.append(u.getPath(2));
+            tf.append("/");
+            tf.append(tempFolder);
+            //qInfo()<<"Extrayendo "<<arg1.toUtf8()<<" "<<user<<" "<<key<<" "<<tf;
+            if(u.upkToFolder(arg1.toUtf8()+".upk", user, key, tf.toUtf8())){
                 if(setPass){
                     //user = arg2.toLatin1();
                     //key = arg3.toLatin1();
@@ -1499,6 +1512,13 @@ int main(int argc, char *argv[])
                 lba.append(nAppName);
                 lba.append(".upk");
                 qInfo()<<lba;
+                ffmqml = "";
+                ffmqml.append(tf);
+                ffmqml.append("/");
+                QDir::setCurrent(ffmqml);
+                showLaunch=false;
+                modeUpk=true;
+                uap.showLaunch=false;
                 //appName = nAppName;
                 //return 0;
             }else{
