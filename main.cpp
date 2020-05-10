@@ -600,16 +600,6 @@ int main(int argc, char *argv[])
         }
         //<-install
 
-        //>-UPK
-        if(arg.contains(".upk")&&arg.length()==2){
-            //qInfo()<<"Upk"<<arg.at(1);
-            //qApp->quit();
-            break;
-        }
-        //<-UPK
-
-
-
         if(arg.contains("-user=")){
             QStringList marg = arg.split("-user=");
             if(marg.size()==2){
@@ -1099,16 +1089,6 @@ int main(int argc, char *argv[])
 #endif
     //<--WebSockets and WebSocketServer configuration
 
-
-
-
-    //-->UPK
-    QByteArray upkFileName;
-    //<--UPK
-
-
-
-
     //-->Check and Donwload Main Module
 #ifdef Q_OS_ANDROID
     QByteArray mf;
@@ -1219,6 +1199,12 @@ int main(int argc, char *argv[])
         if(ext==".upk"){
             qInfo()<<"Run mode upk direct file.";
             appArg1=QByteArray(argv[1]);
+            modeGit=false;
+            modeUrl=false;
+            modeZip=false;
+            modeFolder=false;
+            modeFolderToUpk=false;
+            modeRemoteFolder=false;
             modeUpk=true;
             updateUnikTools=false;
         }
@@ -1263,7 +1249,6 @@ int main(int argc, char *argv[])
     }
 
     //MODO -remoteFolder
-
     if(modeRemoteFolder){
         modoDeEjecucion="-remoteFolder";
         //appArg1=QByteArray(argv[2]);
@@ -1354,68 +1339,68 @@ int main(int argc, char *argv[])
     }
     QString appName;
     qInfo()<<"Count standar no uap arguments: "<<argc;
-    if(modeUpk){
-        qInfo("Mode Upk 1 procces...");
-        if(debugLog){
-            qDebug()<<"Upk filename: "<<appArg1;
-            qDebug()<<"Upk user: "<<user;
-            qDebug()<<"Upk key: "<<key;
-        }
-        QString sl2;
-        sl2.append(appArg1);
-        QString pathCorr;
-        pathCorr = sl2.replace("\\", "/");
-        QByteArray urlUpkCorr;
-        urlUpkCorr.append(pathCorr);
-        QStringList mAppName = sl2.split("/");
-        QString nan = mAppName.at(mAppName.size()-1);
-        //appName=nan.replace(".upk", "");
-        if(pathCorr.mid(pathCorr.size()-4, pathCorr.size()-1)==QString(".upk")){
-            QByteArray err;
-            if(debugLog){
-                lba="";
-                lba.append("UPK detected: ");
-                lba.append(pathCorr);
-                qInfo()<<lba;
-            }
-        }
-        QByteArray tf;
-        tf.append(QDateTime::currentDateTime().toString("hhmmss"));
-        ffmqml="";
-        ffmqml.append(QStandardPaths::standardLocations(QStandardPaths::TempLocation).last());
-        ffmqml.append("/");
-        ffmqml.append(tf);
-        u.mkdir(ffmqml);
-        ffmqml.append("/");
-        QFile upkCheck(urlUpkCorr);
-        if(upkCheck.exists()&&u.upkToFolder(urlUpkCorr, user, key, ffmqml.toUtf8())){
-            if(debugLog){
-                lba="";
-                lba.append(argv[1]);
-                lba.append(" extract successful...");
-                qInfo()<<lba;
-            }
-            QStringList sl =sl2.split("/");
-            QByteArray nAppName;
-            nAppName.append(sl.at(sl.size()-1));
-            updateUnikTools=false;
-        }else{
-            if(!upkCheck.exists()){
-                listaErrores.append("Upk file does not exist!\n");
-            }else{
-                listaErrores.append("Upk unpack fail!\n");
-                if(user!="unik-free"||key!="free"){
-                    listaErrores.append("User or key pass error. \n \n");
-                }
-                if(debugLog){
-                    lba="";
-                    lba.append(argv[1]);
-                    lba.append(" extract no successful...");
-                    qInfo()<<lba;
-                }
-            }
-        }
-    }
+//    if(modeUpk){
+//        qInfo("Mode Upk 1 procces...");
+//        if(debugLog){
+//            qDebug()<<"Upk filename: "<<appArg1;
+//            qDebug()<<"Upk user: "<<user;
+//            qDebug()<<"Upk key: "<<key;
+//        }
+//        QString sl2;
+//        sl2.append(appArg1);
+//        QString pathCorr;
+//        pathCorr = sl2.replace("\\", "/");
+//        QByteArray urlUpkCorr;
+//        urlUpkCorr.append(pathCorr);
+//        QStringList mAppName = sl2.split("/");
+//        QString nan = mAppName.at(mAppName.size()-1);
+//        //appName=nan.replace(".upk", "");
+//        if(pathCorr.mid(pathCorr.size()-4, pathCorr.size()-1)==QString(".upk")){
+//            QByteArray err;
+//            if(debugLog){
+//                lba="";
+//                lba.append("UPK detected: ");
+//                lba.append(pathCorr);
+//                qInfo()<<lba;
+//            }
+//        }
+//        QByteArray tf;
+//        tf.append(QDateTime::currentDateTime().toString("hhmmss"));
+//        ffmqml="";
+//        ffmqml.append(QStandardPaths::standardLocations(QStandardPaths::TempLocation).last());
+//        ffmqml.append("/");
+//        ffmqml.append(tf);
+//        u.mkdir(ffmqml);
+//        ffmqml.append("/");
+//        QFile upkCheck(urlUpkCorr);
+//        if(upkCheck.exists()&&u.upkToFolder(urlUpkCorr, user, key, ffmqml.toUtf8())){
+//            if(debugLog){
+//                lba="";
+//                lba.append(argv[1]);
+//                lba.append(" extract successful...");
+//                qInfo()<<lba;
+//            }
+//            QStringList sl =sl2.split("/");
+//            QByteArray nAppName;
+//            nAppName.append(sl.at(sl.size()-1));
+//            updateUnikTools=false;
+//        }else{
+//            if(!upkCheck.exists()){
+//                listaErrores.append("Upk file does not exist!\n");
+//            }else{
+//                listaErrores.append("Upk unpack fail!\n");
+//                if(user!="unik-free"||key!="free"){
+//                    listaErrores.append("User or key pass error. \n \n");
+//                }
+//                if(debugLog){
+//                    lba="";
+//                    lba.append(argv[1]);
+//                    lba.append(" extract no successful...");
+//                    qInfo()<<lba;
+//                }
+//            }
+//        }
+//    }
 
     if(modeFolder){
         ffmqml = "";
@@ -1440,6 +1425,7 @@ int main(int argc, char *argv[])
         u.setProperty("currentModule", cmn);
     }
     QString arg1Control;
+    QByteArray upkFileName;
     if(modeUpk){
         qInfo("Mode Upk 2 procces...");
         if(debugLog){
@@ -1478,6 +1464,7 @@ int main(int argc, char *argv[])
         QStringList sl =arg4.split("/");
 #endif
 
+
         QByteArray nAppName;
         nAppName.append(sl.at(sl.size()-1));
         if(nAppName!=""){
@@ -1494,12 +1481,15 @@ int main(int argc, char *argv[])
                 lba.append("\");");
                 qInfo()<<lba;
             }
+
             QString tf;
             tf.append(u.getPath(2));
             tf.append("/");
             tf.append(tempFolder);
+            //ir a upk
             //qInfo()<<"Extrayendo "<<arg1.toUtf8()<<" "<<user<<" "<<key<<" "<<tf;
             if(u.upkToFolder(arg1.toUtf8()+".upk", user, key, tf.toUtf8())){
+            //if(true){
                 if(setPass){
                     //user = arg2.toLatin1();
                     //key = arg3.toLatin1();
@@ -1538,18 +1528,6 @@ int main(int argc, char *argv[])
                 lba.append(upkFileName);
                 qInfo()<<lba;
             }
-            if(u.upkToFolder(upkFileName, user, key, ffmqml.toUtf8())){
-                if(debugLog){
-                    lba="";
-                    lba.append(nAppName);
-                    lba.append(" extract successful...");
-                    qInfo()<<lba;
-                }
-                //upkActivo = nAppName;
-                updateUnikTools=false;
-                //engine2.rootContext()->setContextProperty("upkActivo", appName);
-            }
-            //rewriteUpk=true;
         }
     }
     //--------------------------------------<2
@@ -1686,6 +1664,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("sourcePath", ffmqml);
     engine.rootContext()->setContextProperty("unikDocs", pws);
     engine.rootContext()->setContextProperty("pws", pws);
+    //engine.rootContext()->setContextProperty("upk", "");
     //engine.rootContext()->setContextProperty("splashsuspend", false);
 
     u.setProperty("splashsuspend", false);
@@ -2125,6 +2104,7 @@ int main(int argc, char *argv[])
 
     //-->Latest codes
 #ifdef _WIN32
+    u.checkWinRegistry();
     if (AttachConsole(ATTACH_PARENT_PROCESS)) {
         freopen("CONOUT$", "w", stdout);
         freopen("CONOUT$", "w", stderr);

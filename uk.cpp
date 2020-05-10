@@ -641,7 +641,7 @@ bool UK::mkUpk(QByteArray folder, QByteArray upkName, QByteArray user, QByteArra
         archOrig.open(QIODevice::ReadOnly);
         QByteArray extSqlite;
         extSqlite.append(fileName.mid(fileName.length()-7,fileName.length()));
-        qInfo()<<"------------------------------------>"<<extSqlite<<" fileName: "<<fileName;
+        //qInfo()<<"------------------------------------>"<<extSqlite<<" fileName: "<<fileName;
         //if(extSqlite!=".sqlite"&&!fileName.contains(".qmlc")&&fileName.at(fileName.length()-1)!="."&&fileName.at(fileName.length()-1)!=".."){
         if(!fileName.contains(".qmlc")&&fileName.at(fileName.length()-1)!="."&&fileName.at(fileName.length()-1)!=".."){
         //Preparando separador
@@ -658,7 +658,7 @@ bool UK::mkUpk(QByteArray folder, QByteArray upkName, QByteArray user, QByteArra
 
             qInfo()<<"Reading ext: "<<ext;
             qInfo()<<"Reading extSqlite: "<<extSqlite;
-            if(extSqlite==".sqlite"||!fileName.contains(".")||ext==".qml"||ext==".js"||ext==".png"||ext==".PNG"||ext==".jpg"||ext==".JPG"||ext==".jpeg"||ext==".JPEG"||ext==".gif"||ext==".GIF"||ext==".wav"||ext==".WAV"||ext==".mp3"||ext==".MP3"||ext==".mp4"||ext==".MP4"||ext==".ogg"||ext==".OGG"||ext==".mkv"||ext==".MKV"){
+            if(extSqlite==".sqlite"||ext==".png"||ext==".PNG"||ext==".jpg"||ext==".JPG"||ext==".jpeg"||ext==".JPEG"||ext==".gif"||ext==".GIF"||ext==".wav"||ext==".WAV"||ext==".mp3"||ext==".MP3"||ext==".mp4"||ext==".MP4"||ext==".ogg"||ext==".OGG"||ext==".mkv"||ext==".MKV"){
                 if(vf!=0){
                     nsep.append(s1);
                     nsep.append("X-X");
@@ -833,7 +833,8 @@ bool UK::upkToFolder(QByteArray upk, QByteArray user, QByteArray key, QByteArray
 
         QString fn;
         fn.append(QString(urlNf).replace("//", "/"));
-        qInfo()<<"UP fn:"<<fn;
+        this->log(fn.toUtf8());
+        //qInfo()<<"UP fn:"<<fn;
         //QStringList folders=fn.split("/");
         int folderLength=fn.split('@').length();
         if(folderLength==3){
@@ -875,7 +876,7 @@ bool UK::upkToFolder(QByteArray upk, QByteArray user, QByteArray key, QByteArray
         QFile f1(urlNf.replace("@", "/"));
         if(f1.open(QIODevice::WriteOnly)){
             QByteArray d;
-            if(extSqlite==".sqlite"||!fn.contains(".")||ext==".qml"||ext==".js"||ext==".png"||ext==".PNG"||ext==".jpg"||ext==".JPG"||ext==".jpeg"||ext==".JPEG"||ext==".gif"||ext==".GIF"||ext==".wav"||ext==".WAV"||ext==".mp3"||ext==".MP3"||ext==".mp4"||ext==".MP4"||ext==".ogg"||ext==".OGG"||ext==".mkv"||ext==".MKV"){
+            if(extSqlite==".sqlite"||ext==".png"||ext==".PNG"||ext==".jpg"||ext==".JPG"||ext==".jpeg"||ext==".JPEG"||ext==".gif"||ext==".GIF"||ext==".wav"||ext==".WAV"||ext==".mp3"||ext==".MP3"||ext==".mp4"||ext==".MP4"||ext==".ogg"||ext==".OGG"||ext==".mkv"||ext==".MKV"){
                 d.append(base64ToByteArray(m0.at(1).toUtf8()));
             }else{
                 d.append(m0.at(1));

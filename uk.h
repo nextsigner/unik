@@ -284,9 +284,43 @@ public:
 #endif
     //For Audio Stream
     qint64 uFileSize=0;
+#ifdef Q_OS_WIN
+    void checkWinRegistry()
+    {
+        QString val;
+        QString exePath = qApp->applicationFilePath();
+        exePath.replace("/", "\\");
 
+        QSettings regType("HKEY_CURRENT_USER\\SOFTWARE\\Classes\\.upk",
+                                       QSettings::NativeFormat);
+        QSettings regIcon("HKEY_CURRENT_USER\\SOFTWARE\\Classes\\.upk\\DefaultIcon",
+                                       QSettings::NativeFormat);
+        QSettings regShell("HKEY_CURRENT_USER\\SOFTWARE\\Classes\\.upk\\Shell\\Open\\Command",
+                                       QSettings::NativeFormat);
+
+        /** . means default value, you can also use the "Default" string */
+        if("" != regType.value(".").toString()){
+            regType.setValue(".","");
+        }
+
+        /** 0 使用当前程序内置图标 */
+        val = exePath + ",0";
+        if(val != regIcon.value(".").toString()){
+            regIcon.setValue(".",val);
+        }
+
+        val = exePath + " \"%1\"";
+        if(val != regShell.value(".").toString()){
+            regShell.setValue(".",val);
+        }
+    }
+#endif
+    void setUpkExtractRequest(QString upk, QString user, QString key, QString folderDestination){
+        emit upkExtractRequest(upk, user, key, folderDestination);
+    }
  signals:
     //Señales para QML
+    void upkExtractRequest(QString upk, QString user, QString key, QString folderDestination);
     void splashFinished();
     void log();
     void uWarningChanged();
