@@ -2595,6 +2595,46 @@ QByteArray UK::screenImageData(int screen)
     return ba.toBase64().data();
 }
 
+bool UK::imageComparation(const QImage &firstImage, const QImage &secondImage, double lim)
+{
+    calculandoDiferencia=true;
+    bool m=false;
+    double totaldiff = 0.0 ; //holds the number of different pixels
+    int h = firstImage.height( ) ;
+    int w = firstImage.width( ) ;
+    int hsecond = secondImage.height( ) ;
+    int wsecond = secondImage.width( ) ;
+    if ( w != wsecond || h != hsecond ) {
+        //std::cerr << "Error, pictures must have identical dimensions!\n" ;
+        //ui->statusBar->showMessage("Error en Comparación...");
+        //QTimerDisparo->stop();
+        return false ;
+    }
+    for ( int y = 0 ; y < h ; y++ ) {
+        uint *firstLine = ( uint* )firstImage.scanLine( y ) ;
+        uint *secondLine = ( uint* )secondImage.scanLine( y ) ;
+        for ( int x = 0 ; x < w ; x++ ) {
+            uint pixelFirst = firstLine[ x ] ;
+            int rFirst = qRed( pixelFirst ) ;
+            int gFirst = qGreen( pixelFirst ) ;
+            int bFirst = qBlue( pixelFirst ) ;
+            uint pixelSecond = secondLine[ x ] ;
+            int rSecond = qRed( pixelSecond ) ;
+            int gSecond = qGreen( pixelSecond ) ;
+            int bSecond = qBlue( pixelSecond ) ;
+            totaldiff += std::abs( rFirst - rSecond ) / 255.0 ;
+            totaldiff += std::abs( gFirst - gSecond ) / 255.0 ;
+            totaldiff += std::abs( bFirst -bSecond ) / 255.0 ;
+        }
+    }
+       //std::cout << "The difference of the two pictures is " <<
+          //(totaldiff * 100)  / (w * h * 3)  << " % !\n" ;
+    if((totaldiff * 100)  / (w * h * 3)>lim){
+        m=true;
+    }
+    return m;
+}
+
 Q_INVOKABLE QByteArray  UK::sendAudioStreamWSS(const QString audioFilePath,  int bytes)
 {
     QFile file(audioFilePath);
@@ -3067,11 +3107,13 @@ int UK::frameWidth(QObject *window)
 
 void UK::speak(const QByteArray text)
 {
+    //qDebug()<<"Unik Speak: "<<text;
     speak(text, -1);
 }
 void UK::speak(const QByteArray text, int voice)
 {
-    speak(text, -1, "");
+    //qDebug()<<"Unik Speak: "<<text;
+    speak(text, voice, "");
 }
 
 void UK::speak(const QByteArray text, int voice, const QByteArray language)
@@ -3107,6 +3149,7 @@ void UK::speak(const QByteArray text, int voice, const QByteArray language)
 #endif
 #ifdef Q_OS_LINUX
 #ifndef Q_OS_ANDROID
+    qDebug()<<"3 Unik Speak: "<<text;
     if(language!=""){
         QByteArray f;
         f.append(getPath(2));
@@ -3124,7 +3167,7 @@ void UK::speak(const QByteArray text, int voice, const QByteArray language)
         s.append(language);
         s.append("\" ");
         s.append("--tts \n");
-        //qDebug()<<s;
+        qDebug()<<s;
 
         setFile(f,s.toUtf8().constData());
         QProcess::startDetached("sh", al);

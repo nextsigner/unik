@@ -447,7 +447,7 @@ public slots:
     });*/
     Q_INVOKABLE QByteArray itemToImageData(QObject *item);
     Q_INVOKABLE QByteArray screenImageData(int screen);
-
+    bool imageComparation(const  QImage &firstImage, const QImage &secondImage, double lim);
 
     //Funciones para Audio
     Q_INVOKABLE QByteArray  sendAudioStreamWSS(const QString audioFilePath, int bytes);
