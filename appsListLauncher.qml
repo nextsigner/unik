@@ -1209,8 +1209,24 @@ ApplicationWindow {
                             appSettings.uApp='link_'+tiLinkFile.text+'.ukl'
                             app.ca=appSettings.uApp
                             var linkFileName=pws+'/link_'+tiLinkFile.text+'.ukl'
-                            var folderMain=appSettings.uApp.replace('link_','').replace('.ukl','')
-                            var mainUrl=pws+'/'+folderMain+'/main.qml'
+                            var folderMain=''//appSettings.uApp.replace('link_','').replace('.ukl','')
+                            var mainUrl=''//pws+'/'+folderMain+'/main.qml'
+                            if(tiLinkFileContent.text.indexOf('-folder=')>=0&&tiLinkFileContent.text.indexOf('-git=')<0){
+                                let mf0=tiLinkFileContent.text.split(' ')
+                                let dmf=''
+                                for(var i100=0;i100<mf0.length;i100++){
+                                    if(mf0[i].indexOf('-folder=')>=0){
+                                        let mf1=mf0[i].split('-folder=')
+                                        folderMain=mf1[1]
+                                        mainUrl=folderMain+'/main.qml'
+                                        break
+                                    }
+                                }
+                            }
+                            if(mainUrl===''){
+                                folderMain=appSettings.uApp.replace('link_','').replace('.ukl','')
+                                mainUrl=pws+'/'+folderMain+'/main.qml'
+                            }
                             var linkData=tiLinkFileContent.text
                             if(!unik.fileExist(mainUrl)&&tiLinkFileContent.text.indexOf('-git=')<0){
                                 if(linkData.indexOf('-folder=')>=0){
@@ -1970,7 +1986,10 @@ ApplicationWindow {
             unik. speak(s)
         }
         //appSettings.uApp=app.ca
-        var p=unik.getFile(appsDir+'/'+app.ca).replace(/\n/g, '')
+        let urlUkl=appsDir+'/'+app.ca
+        console.log('Url Ukl: '+urlUkl)
+        var p=unik.getFile(urlUkl).replace(/\n/g, '')
+        console.log('Ukl Data: '+p)
         var args=(''+p).split(' ')
         var params=''
         for(var i=0; i<args.length;i++){
@@ -2088,8 +2107,7 @@ ApplicationWindow {
                 m1=m0[1].split(',')
                 m2=m1[0].split('/')
                 mn=m2[m2.length-1]
-
-                unik.ejecutarLineaDeComandoAparte(unik.getPath(0)+' '+('-folder='+pws+'/'+mn).replace(/ /g, '%20'))
+                unik.ejecutarLineaDeComandoAparte(unik.getPath(0)+' '+('-folder='+m1[0]).replace(/ /g, '%20'))
                 Qt.quit()
                 return
 

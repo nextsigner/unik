@@ -2597,7 +2597,7 @@ QByteArray UK::screenImageData(int screen)
 
 bool UK::imageComparation(const QImage &firstImage, const QImage &secondImage, double lim)
 {
-    calculandoDiferencia=true;
+    //calculandoDiferencia=true;
     bool m=false;
     double totaldiff = 0.0 ; //holds the number of different pixels
     int h = firstImage.height( ) ;
