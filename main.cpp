@@ -216,8 +216,16 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
+    QString appName="unik";
+    QString appNameSource="";
+#ifndef APPNAME
     app.setApplicationDisplayName("unik qml engine");
     app.setApplicationName("unik");
+#else
+    appName=APPNAME;
+    app.setApplicationDisplayName(appName);
+    app.setApplicationName(appName);
+#endif
     app.setOrganizationDomain("http://www.unikode.org/");
     app.setOrganizationName("unikode.org");
 
@@ -343,6 +351,8 @@ int main(int argc, char *argv[])
     QByteArray appArg4="";
     QByteArray appArg5="";
     QByteArray appArg6="";
+
+    QString mainModule="unik-tools";
 
 #ifndef __arm__
 #ifdef UNIK_COMPILE_ANDROID_X86
@@ -583,121 +593,125 @@ int main(int argc, char *argv[])
     //QThread::sleep(20);
 
 
-
-    //-->Iterator for setting all application arguments from app args or cfg.json.
-    for (int i = 0; i < uap.args.length(); ++i) {
-        if(uap.args.at(i)==QByteArray("-debug")){
-            debugLog=true;
-        }
-
-        QString arg;
-        arg.append(uap.args.at(i));
-
-        //>-install
-        if(arg.contains("-install")){
-            install=true;
-            break;
-        }
-        //<-install
-
-        if(arg.contains("-user=")){
-            QStringList marg = arg.split("-user=");
-            if(marg.size()==2){
-                user = "";
-                user.append(marg.at(1));
+    qDebug()<<"appName: "<<appName;
+    //u.sleep(5);
+    //qApp->quit();
+    if(appName=="unik"){
+        qDebug()<<"appName unik... "<<appName;
+        //-->Iterator for setting all application arguments from app args or cfg.json.
+        for (int i = 0; i < uap.args.length(); ++i) {
+            if(uap.args.at(i)==QByteArray("-debug")){
+                debugLog=true;
             }
-            setPass1=true;
-        }
-        if(arg.contains("-key=")){
-            QStringList marg = arg.split("-key=");
-            if(marg.size()==2){
-                key = "";
-                key.append(marg.at(1));
+
+            QString arg;
+            arg.append(uap.args.at(i));
+
+            //>-install
+            if(arg.contains("-install")){
+                install=true;
+                break;
             }
-            setPass2=true;
-        }
-        if(arg.contains("-dir=")){
-            QStringList marg = arg.split("-dir=");
-            if(marg.size()==2){
-                QString ncp;
-                ncp.append(marg.at(1));
-                QDir fscd(ncp);
-                if(!fscd.exists()){
-                    fscd.mkdir(ncp);
+            //<-install
+
+            if(arg.contains("-user=")){
+                QStringList marg = arg.split("-user=");
+                if(marg.size()==2){
+                    user = "";
+                    user.append(marg.at(1));
                 }
-                if(!qApp->arguments().contains("-install")){
-                    QDir::setCurrent(ncp);
+                setPass1=true;
+            }
+            if(arg.contains("-key=")){
+                QStringList marg = arg.split("-key=");
+                if(marg.size()==2){
+                    key = "";
+                    key.append(marg.at(1));
                 }
+                setPass2=true;
+            }
+            if(arg.contains("-dir=")){
+                QStringList marg = arg.split("-dir=");
+                if(marg.size()==2){
+                    QString ncp;
+                    ncp.append(marg.at(1));
+                    QDir fscd(ncp);
+                    if(!fscd.exists()){
+                        fscd.mkdir(ncp);
+                    }
+                    if(!qApp->arguments().contains("-install")){
+                        QDir::setCurrent(ncp);
+                    }
 
 #ifndef Q_OS_WIN
-                engine.addImportPath(QDir::currentPath());
-                engine.addPluginPath(QDir::currentPath());
+                    engine.addImportPath(QDir::currentPath());
+                    engine.addPluginPath(QDir::currentPath());
 #else
-                QString pip;
-                pip.append("file:///");
-                pip.append(QDir::currentPath());
-                engine.addImportPath(pip);
-                engine.addPluginPath(pip);
+                    QString pip;
+                    pip.append("file:///");
+                    pip.append(QDir::currentPath());
+                    engine.addImportPath(pip);
+                    engine.addPluginPath(pip);
 #endif
-                qInfo()<<"-dir="<<marg.at(1);
-                showLaunch=false;
-                uap.showLaunch=false;
-            }
-        }
-
-        //>-folder
-        if(arg.contains("-folder=")){
-            QStringList marg = arg.split("-folder=");
-            if(marg.size()==2){
-                modoDeEjecucion="-folder";
-                appArg1="";
-                appArg1.append(QString(marg.at(0)).replace("%20", " "));
-                appArg2="";
-                appArg2.append(QString(marg.at(1)).replace("%20", " "));
-                QString ncp;
-                ncp.append(appArg2);
-                QDir fscd(ncp);
-                if(!fscd.exists()){
-                    fscd.mkdir(ncp);
+                    qInfo()<<"-dir="<<marg.at(1);
+                    showLaunch=false;
+                    uap.showLaunch=false;
                 }
-                if(!qApp->arguments().contains("-install")){
-                    QDir::setCurrent(ncp);
-                }
-                showLaunch=false;
-                uap.showLaunch=false;
-                modeFolder=true;
-                makeUpk=false;
-                qInfo()<<"[-folder 1] Running in mode -folder="<<ncp;
-                qInfo()<<"[-folder 2] Current application directory: "<<QDir::currentPath();
-                updateUnikTools=false;
-                params=true;
             }
-        }
-        //<-folder
 
-        //>-url
-        if(arg.contains("-url=")){
-            QStringList marg = arg.split("-url=");
-            if(marg.size()==2){
-                modoDeEjecucion="-url";
-                //return 0;
-                appArg1="";
-                appArg1.append(marg.at(0));
-                appArg2="";
-                appArg2.append(marg.at(1));
-                qInfo()<<"[-folder 1] Running in mode -url appArg1: "<<appArg1<<" appArg2: "<<appArg2;
-                return 0;
-                QString ncp;
-                ncp.append(appArg2);
+            //>-folder
+            if(arg.contains("-folder=")){
+                QStringList marg = arg.split("-folder=");
+                if(marg.size()==2){
+                    modoDeEjecucion="-folder";
+                    appArg1="";
+                    appArg1.append(QString(marg.at(0)).replace("%20", " "));
+                    appArg2="";
+                    appArg2.append(QString(marg.at(1)).replace("%20", " "));
+                    QString ncp;
+                    ncp.append(appArg2);
+                    QDir fscd(ncp);
+                    if(!fscd.exists()){
+                        fscd.mkdir(ncp);
+                    }
+                    if(!qApp->arguments().contains("-install")){
+                        QDir::setCurrent(ncp);
+                    }
+                    showLaunch=false;
+                    uap.showLaunch=false;
+                    modeFolder=true;
+                    makeUpk=false;
+                    qInfo()<<"[-folder 1] Running in mode -folder="<<ncp;
+                    qInfo()<<"[-folder 2] Current application directory: "<<QDir::currentPath();
+                    updateUnikTools=false;
+                    params=true;
+                }
+            }
+            //<-folder
 
-                /*QDir fscd(ncp);
+            //>-url
+            if(arg.contains("-url=")){
+                QStringList marg = arg.split("-url=");
+                if(marg.size()==2){
+                    modoDeEjecucion="-url";
+                    //return 0;
+                    appArg1="";
+                    appArg1.append(marg.at(0));
+                    appArg2="";
+                    appArg2.append(marg.at(1));
+                    qInfo()<<"[-folder 1] Running in mode -url appArg1: "<<appArg1<<" appArg2: "<<appArg2;
+                    return 0;
+                    QString ncp;
+                    ncp.append(appArg2);
+
+                    /*QDir fscd(ncp);
                 if(!fscd.exists()){
                     fscd.mkdir(ncp);
                 }
                 if(!qApp->arguments().contains("-install")){
                     QDir::setCurrent(ncp);
                 }*/
-                /*showLaunch=false;
+                    /*showLaunch=false;
                 uap.showLaunch=false;
                 modeFolder=true;
                 makeUpk=false;
@@ -705,54 +719,54 @@ int main(int argc, char *argv[])
                 qInfo()<<"[-folder 2] Current application directory: "<<QDir::currentPath();
                 updateUnikTools=false;
                 params=true;*/
+                }
             }
-        }
-        //<-url
+            //<-url
 
-        //>-remoteFolder
-        if(arg.contains("-folderTo=")){
-            QStringList marg = arg.split("-folderTo=");
-            appArg2="";
-            if(marg.size()==2){
-                appArg2.append(marg.at(1));
-                folderTo=appArg2;
-                qInfo()<<"[-remoteFolder 2] Running in mode -remoteFolder folderTo: "<<appArg2;
-            }
-        }
-        if(arg.contains("-remoteFolder=")){
-            QStringList marg = arg.split("-remoteFolder=");
-            if(marg.size()==2){
-                modoDeEjecucion="-remoteFolder";
-                appArg1="";
-                appArg1.append(marg.at(1));
-                qInfo()<<"[-remoteFolder 1] Running in mode -remoteFolder url: "<<appArg1;
-                if(!folderTo.isEmpty()){
-                    appArg2.append(folderTo);
+            //>-remoteFolder
+            if(arg.contains("-folderTo=")){
+                QStringList marg = arg.split("-folderTo=");
+                appArg2="";
+                if(marg.size()==2){
+                    appArg2.append(marg.at(1));
+                    folderTo=appArg2;
                     qInfo()<<"[-remoteFolder 2] Running in mode -remoteFolder folderTo: "<<appArg2;
-                }else{
-                    appArg2.append(u.getPath(2));
-                    appArg2.append("/");
-                    appArg2.append(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
-                    u.mkdir(appArg2);
-                    if(u.folderExist(appArg2)){
-                        qInfo()<<"[-remoteFolder 2] Running in mode -remoteFolder folderTo temp: "<<appArg2;
-                        folderTo=appArg2;
-                        QDir fscd(folderTo);
-                        if(fscd.exists()){
-                            QDir::setCurrent(folderTo);
+                }
+            }
+            if(arg.contains("-remoteFolder=")){
+                QStringList marg = arg.split("-remoteFolder=");
+                if(marg.size()==2){
+                    modoDeEjecucion="-remoteFolder";
+                    appArg1="";
+                    appArg1.append(marg.at(1));
+                    qInfo()<<"[-remoteFolder 1] Running in mode -remoteFolder url: "<<appArg1;
+                    if(!folderTo.isEmpty()){
+                        appArg2.append(folderTo);
+                        qInfo()<<"[-remoteFolder 2] Running in mode -remoteFolder folderTo: "<<appArg2;
+                    }else{
+                        appArg2.append(u.getPath(2));
+                        appArg2.append("/");
+                        appArg2.append(QDateTime::currentDateTime().toString("yyyy-MM-dd-hh-mm-ss"));
+                        u.mkdir(appArg2);
+                        if(u.folderExist(appArg2)){
+                            qInfo()<<"[-remoteFolder 2] Running in mode -remoteFolder folderTo temp: "<<appArg2;
+                            folderTo=appArg2;
+                            QDir fscd(folderTo);
+                            if(fscd.exists()){
+                                QDir::setCurrent(folderTo);
+                            }
                         }
                     }
-                }
-                QDir fscd(folderTo);
-                if(fscd.exists()){
-                    QDir::setCurrent(folderTo);
-                    modeRemoteFolder=true;
-                    showLaunch=false;
-                    uap.showLaunch=false;
-                    modeFolder=false;
-                    makeUpk=false;
-                }
-                /*QStringList marg2 = arg.split("-folderTo=");
+                    QDir fscd(folderTo);
+                    if(fscd.exists()){
+                        QDir::setCurrent(folderTo);
+                        modeRemoteFolder=true;
+                        showLaunch=false;
+                        uap.showLaunch=false;
+                        modeFolder=false;
+                        makeUpk=false;
+                    }
+                    /*QStringList marg2 = arg.split("-folderTo=");
                 appArg2="";
                 if(marg2.size()==2){
                     appArg2.append(marg2.at(1));
@@ -780,148 +794,172 @@ int main(int argc, char *argv[])
                     }
                 }
                 */
+                }
             }
-        }
-        if(arg.contains("-fileList=")){
-            QStringList marg = arg.split("-fileList=");
-            if(marg.size()==2){
-                fileList=QString(marg.at(1)).split("|");
+            if(arg.contains("-fileList=")){
+                QStringList marg = arg.split("-fileList=");
+                if(marg.size()==2){
+                    fileList=QString(marg.at(1)).split("|");
+                }else{
+                    fileList.append("main.qml");
+                }
             }else{
                 fileList.append("main.qml");
             }
-        }else{
-            fileList.append("main.qml");
-        }
-        //<-remoteFolder
+            //<-remoteFolder
 
-        if(arg.contains("-zip=")){
-            QStringList marg = arg.split("-zip=");
-            if(marg.size()==2){
-                QString pUrlZip1;
-                pUrlZip1.append(marg.at(1));
-                lba="";
-                lba.append("-zip=");
-                lba.append(marg.at(1));
-                qInfo()<<lba;
-                urlZip = "";
-                if(pUrlZip1.contains(".zip")&&pUrlZip1.mid(pUrlZip1.size()-4, pUrlZip1.size())==".zip"){
-                    urlZip.append(pUrlZip1);
-                    QFileInfo infoZip(urlZip);
-                    qInfo()<<"unziping fileName: "<<infoZip.fileName();
-                    moduloZip=infoZip.fileName().replace(".zip","").toUtf8();
-                    modeZip=true;
+            if(arg.contains("-zip=")){
+                QStringList marg = arg.split("-zip=");
+                if(marg.size()==2){
+                    QString pUrlZip1;
+                    pUrlZip1.append(marg.at(1));
+                    lba="";
+                    lba.append("-zip=");
+                    lba.append(marg.at(1));
+                    qInfo()<<lba;
+                    urlZip = "";
+                    if(pUrlZip1.contains(".zip")&&pUrlZip1.mid(pUrlZip1.size()-4, pUrlZip1.size())==".zip"){
+                        urlZip.append(pUrlZip1);
+                        QFileInfo infoZip(urlZip);
+                        qInfo()<<"unziping fileName: "<<infoZip.fileName();
+                        moduloZip=infoZip.fileName().replace(".zip","").toUtf8();
+                        modeZip=true;
+                        showLaunch=false;
+                        uap.showLaunch=false;
+                        modeZip=true;
+                        params=true;
+                    }
+                }
+            }
+            if(arg.contains("-git=")){
+                QStringList marg = arg.split("-git=");
+                if(marg.size()==2){
+                    QString pUrlGit1;
+                    pUrlGit1.append(marg.at(1));
+                    lba="";
+                    lba.append("-git=");
+                    lba.append(marg.at(1));
+                    qInfo()<<lba;
+                    urlGit = "";
+                    if(pUrlGit1.contains(".git")||pUrlGit1.mid(pUrlGit1.size()-4, pUrlGit1.size())==".git"){
+                        urlGit.append(pUrlGit1.mid(0, pUrlGit1.size()-4));
+                    }else{
+                        urlGit.append(pUrlGit1);
+                    }
+                    QString pUrlGit2 = pUrlGit1;
+                    QStringList m100 = pUrlGit2.split("/");
+                    if(m100.size()>1){
+                        //moduloGit="";
+                        //moduloGit.append(m100.at(m100.size()-1));
+                        QString mg1=QString(m100.at(m100.size()-1));
+                        QString mg2=mg1.replace(".git","");
+                        QString ncp;
+                        ncp.append(pws);
+                        ncp.append("/");
+                        ncp.append(mg2);
+                        QDir fscd(ncp);
+                        if(!fscd.exists()){
+                            fscd.mkdir(ncp);
+                        }
+                        if(!qApp->arguments().contains("-install")){
+                            QDir::setCurrent(ncp);
+                        }
+                        moduloGit="";
+                        moduloGit.append(mg2);
+                        modeGitArg=true;
+                    }
                     showLaunch=false;
                     uap.showLaunch=false;
-                    modeZip=true;
+                    modeGit=true;
                     params=true;
                 }
             }
-        }
-        if(arg.contains("-git=")){
-            QStringList marg = arg.split("-git=");
-            if(marg.size()==2){
-                QString pUrlGit1;
-                pUrlGit1.append(marg.at(1));
-                lba="";
-                lba.append("-git=");
-                lba.append(marg.at(1));
-                qInfo()<<lba;
-                urlGit = "";
-                if(pUrlGit1.contains(".git")||pUrlGit1.mid(pUrlGit1.size()-4, pUrlGit1.size())==".git"){
-                    urlGit.append(pUrlGit1.mid(0, pUrlGit1.size()-4));
-                }else{
-                    urlGit.append(pUrlGit1);
-                }
-                QString pUrlGit2 = pUrlGit1;
-                QStringList m100 = pUrlGit2.split("/");
-                if(m100.size()>1){
-                    //moduloGit="";
-                    //moduloGit.append(m100.at(m100.size()-1));
-                    QString mg1=QString(m100.at(m100.size()-1));
-                    QString mg2=mg1.replace(".git","");
-                    QString ncp;
-                    ncp.append(pws);
-                    ncp.append("/");
-                    ncp.append(mg2);
-                    QDir fscd(ncp);
-                    if(!fscd.exists()){
-                        fscd.mkdir(ncp);
-                    }
-                    if(!qApp->arguments().contains("-install")){
-                        QDir::setCurrent(ncp);
-                    }
-                    moduloGit="";
-                    moduloGit.append(mg2);
-                    modeGitArg=true;
-                }
-                showLaunch=false;
-                uap.showLaunch=false;
-                modeGit=true;
-                params=true;
-            }
-        }
-        if(arg.contains("-ws=")){
-            QStringList marg = arg.split("-ws=");
-            QString nws;
-            nws.append(marg.at(1));
-            if(marg.size()==2){
-                qInfo()<<"Setting WorkSpace by user ws: "<<nws;
-                bool nWSExist=false;
-                QDir nWSDir(nws);
-                if(nWSDir.exists()){
-                    nWSExist=true;
-                }else{
-                    qInfo()<<"Making custom WorkSpace "<<nWSDir.currentPath();
-                    nWSDir.mkpath(".");
+            if(arg.contains("-ws=")){
+                QStringList marg = arg.split("-ws=");
+                QString nws;
+                nws.append(marg.at(1));
+                if(marg.size()==2){
+                    qInfo()<<"Setting WorkSpace by user ws: "<<nws;
+                    bool nWSExist=false;
+                    QDir nWSDir(nws);
                     if(nWSDir.exists()){
-                        qInfo()<<"Custom WorkSpace now is ready: "<<nws;
                         nWSExist=true;
+                    }else{
+                        qInfo()<<"Making custom WorkSpace "<<nWSDir.currentPath();
+                        nWSDir.mkpath(".");
+                        if(nWSDir.exists()){
+                            qInfo()<<"Custom WorkSpace now is ready: "<<nws;
+                            nWSExist=true;
+                        }
+                    }
+                    if(nWSExist){
+                        qInfo()<<"Finishing the custom WorkSpace setting.";
+                        u.setWorkSpace(nws);
+                        pws.clear();
+                        pws.append(nws);
+                        modeGit=true;
+                    }
+                    params=true;
+                }
+            }
+            if(arg.contains("-dim=")){
+                QStringList marg = arg.split("-dim=");
+                if(marg.size()==2){
+                    QString md0;
+                    md0.append(marg.at(1));
+                    QStringList md1=md0.split("x");
+                    if(md1.size()==2){
+                        u.log("Dim: "+md0.toUtf8());
+                        dim=md1.at(0)+"x"+md1.at(1);
                     }
                 }
-                if(nWSExist){
-                    qInfo()<<"Finishing the custom WorkSpace setting.";
-                    u.setWorkSpace(nws);
-                    pws.clear();
-                    pws.append(nws);
-                    modeGit=true;
+                params=true;
+            }
+            if(arg.contains("-pos=")){
+                QStringList marg = arg.split("-pos=");
+                if(marg.size()==2){
+                    QString mp0;
+                    mp0.append(marg.at(1));
+                    QStringList mp1=mp0.split("x");
+                    if(mp1.size()==2){
+                        u.log("Pos: x="+mp0.toUtf8());
+                        pos=mp1.at(0)+"x"+mp1.at(1);
+                    }
+                    params=true;
                 }
+            }
+            if(arg.contains("-wss")){
+                wss=true;
+                qInfo()<<"WebSocket Server init request...";
                 params=true;
             }
         }
-        if(arg.contains("-dim=")){
-            QStringList marg = arg.split("-dim=");
-            if(marg.size()==2){
-                QString md0;
-                md0.append(marg.at(1));
-                QStringList md1=md0.split("x");
-                if(md1.size()==2){
-                    u.log("Dim: "+md0.toUtf8());
-                    dim=md1.at(0)+"x"+md1.at(1);
-                }
-            }
-            params=true;
+        //<--Iterator for setting all application arguments from app args or cfg.json.
+    }else{
+        appNameSource=APPSOURCE;
+        ffmqml.append("/");
+        ffmqml.append(appName);
+        ffmqml.append("/");
+        QString ncp;
+        ncp.append(pws);
+        ncp.append("/");
+        ncp.append(appName);
+        QDir fscd(ncp);
+        if(!fscd.exists()){
+            fscd.mkdir(ncp);
         }
-        if(arg.contains("-pos=")){
-            QStringList marg = arg.split("-pos=");
-            if(marg.size()==2){
-                QString mp0;
-                mp0.append(marg.at(1));
-                QStringList mp1=mp0.split("x");
-                if(mp1.size()==2){
-                    u.log("Pos: x="+mp0.toUtf8());
-                    pos=mp1.at(0)+"x"+mp1.at(1);
-                }
-                params=true;
-            }
-        }
-        if(arg.contains("-wss")){
-            wss=true;
-            qInfo()<<"WebSocket Server init request...";
-            params=true;
-        }
+        QDir::setCurrent(ncp);
+        uap.showLaunch=false;
+        showLaunch=false;
+        moduloGit="";
+        moduloGit.append(appName);
+        modeGit=true;
+        modeFolder=false;
+        modeGitArg=true;
+        urlGit="";
+        urlGit.append(appNameSource);
+        qDebug()<<"Cargando appName...";
     }
-    //<--Iterator for setting all application arguments from app args or cfg.json.
-
     //->Comienza install gnu/linux
 #ifdef Q_OS_LINUX
     if(install){
@@ -1140,6 +1178,12 @@ int main(int argc, char *argv[])
     mainModLocation.append("-rpi");
 #endif
 #endif
+if(appName!="unik"){
+    mainModLocation="";
+    mainModLocation.append(pws);
+    mainModLocation.append("/");
+    mainModLocation.append(appName);
+}
 
 
     //-->Checking if exist the Main Module Path.
@@ -1337,7 +1381,7 @@ int main(int argc, char *argv[])
     if (!dir0.exists()) {
         dir0.mkpath(".");
     }
-    QString appName;
+    //QString appName;
     qInfo()<<"Count standar no uap arguments: "<<argc;
 //    if(modeUpk){
 //        qInfo("Mode Upk 1 procces...");
@@ -1467,7 +1511,7 @@ int main(int argc, char *argv[])
 
         QByteArray nAppName;
         nAppName.append(sl.at(sl.size()-1));
-        if(nAppName!=""){
+        if(nAppName!=""&&appName=="unik"){
             if(debugLog){
                 lba="";
                 lba.append("Run upkToFolder(\"");
@@ -2041,6 +2085,8 @@ int main(int argc, char *argv[])
     uklUrl.append(pws);
     uklUrl.append("/link_android-apps.ukl");
     u.setFile(uklUrl, uklData);
+    //u.fibonacci(20);
+    //u.restart();
 #endif
 
 #ifdef Q_OS_WIN
@@ -2115,5 +2161,12 @@ int main(int argc, char *argv[])
 #ifdef  Q_OS_ANDROID
     //QtAndroid::hideSplashScreen(5);
 #endif
-    return app.exec();
+    //return app.exec();
+    int returncode = app.exec();
+    if (returncode == -1)
+    {
+      QProcess* proc = new QProcess();
+      proc->start(QCoreApplication::applicationFilePath());
+    }
+    return returncode;
 }

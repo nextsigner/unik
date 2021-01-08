@@ -4,6 +4,11 @@
 # Whatsapps: +54 11 3802 4370
 # GitHub: https://github.com/nextsigner/unik
 
+APPNAME=quiron
+DEFINES += APPNAME=\\\"$$APPNAME\\\"
+APPSOURCE=https://github.com/nextsigner/quiron.git
+DEFINES += APPSOURCE=\\\"$$APPSOURCE\\\"
+
 QT += qml quick sql websockets svg serialport
 
 QT += texttospeech
