@@ -8,6 +8,9 @@ APPNAME=quiron
 DEFINES += APPNAME=\\\"$$APPNAME\\\"
 APPSOURCE=https://github.com/nextsigner/quiron.git
 DEFINES += APPSOURCE=\\\"$$APPSOURCE\\\"
+APPSCOLORTHEME=0
+DEFINES += APPCOLORTHEME=\\\"$$APPCOLORTHEME\\\"
+
 
 QT += qml quick sql websockets svg serialport
 

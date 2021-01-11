@@ -217,7 +217,8 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QString appName="unik";
-    QString appNameSource="";
+    QString appSource="";
+    int appColorTheme=0;
 #ifndef APPNAME
     app.setApplicationDisplayName("unik qml engine");
     app.setApplicationName("unik");
@@ -228,6 +229,11 @@ int main(int argc, char *argv[])
 #endif
     app.setOrganizationDomain("http://www.unikode.org/");
     app.setOrganizationName("unikode.org");
+
+#ifdef APPCOLORTHEME
+    QString nAppCT=APPCOLORTHEME;
+    appColorTheme=nAppCT.toInt();
+#endif
 
 
 
@@ -481,6 +487,8 @@ int main(int argc, char *argv[])
 
     //-->Setting Engine Vars
     u.setEngine(&engine);//Set engine for a variable access into the unik main instance.
+    engine.rootContext()->setContextProperty("appName", appName);
+    engine.rootContext()->setContextProperty("appColorTheme", appColorTheme);
     engine.rootContext()->setContextProperty("appExec", appExec);
     engine.addImageProvider(QLatin1String("unik"), new UnikImageProvider);
     engine.rootContext()->setContextProperty("engine", &engine);
@@ -936,7 +944,7 @@ int main(int argc, char *argv[])
         }
         //<--Iterator for setting all application arguments from app args or cfg.json.
     }else{
-        appNameSource=APPSOURCE;
+        appSource=APPSOURCE;
         ffmqml.append("/");
         ffmqml.append(appName);
         ffmqml.append("/");
@@ -957,7 +965,7 @@ int main(int argc, char *argv[])
         modeFolder=false;
         modeGitArg=true;
         urlGit="";
-        urlGit.append(appNameSource);
+        urlGit.append(appSource);
         qDebug()<<"Cargando appName...";
     }
     //->Comienza install gnu/linux
@@ -1200,18 +1208,49 @@ if(appName!="unik"){
         bool unikToolDownloaded=false;
 #ifndef __arm__
 #ifndef Q_OS_ANDROID
-        unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools", pws);
+        if(appName=="unik"){
+            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools", pws);
+        }else{
+            QByteArray nUrl="";
+            nUrl.append("https://github.com/nextsigner/");
+            nUrl.append(appName);
+            unikToolDownloaded=u.downloadGit(nUrl, pws);
+        }
 #else
         //UNIK_COMPILE_ANDROID_X86 or UNIK_COMPILE_ANDROID_X86_64
-        unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-android-apps", pws);
+        //unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-android-apps", pws);
+        if(appName=="unik"){
+            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-android-apps", pws);
+        }else{
+            QByteArray nUrl="";
+            nUrl.append("https://github.com/nextsigner/");
+            nUrl.append(appName);
+            unikToolDownloaded=u.downloadGit(nUrl, pws);
+        }
 #endif
 #else
 #ifdef Q_OS_ANDROID
         if(showLaunch||uap.showLaunch){
-            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-android-apps", pws);
+            //unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-android-apps", pws);
+            if(appName=="unik"){
+                unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-android-apps", pws);
+            }else{
+                QByteArray nUrl="";
+                nUrl.append("https://github.com/nextsigner/");
+                nUrl.append(appName);
+                unikToolDownloaded=u.downloadGit(nUrl, pws);
+            }
         }
 #else
-        unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi", pws.toUtf8());
+        //unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi", pws.toUtf8());
+        if(appName=="unik"){
+            unikToolDownloaded=u.downloadGit("https://github.com/nextsigner/unik-tools-rpi", pws);
+        }else{
+            QByteArray nUrl="";
+            nUrl.append("https://github.com/nextsigner/");
+            nUrl.append(appName);
+            unikToolDownloaded=u.downloadGit(nUrl, pws);
+        }
 #endif
 #endif
 

@@ -186,7 +186,7 @@ bool UK::runAppFromZip(QByteArray url, QByteArray localFolder)
             bool modoCodeload=true;
             QString url0;
             if(modoCodeload){
-                url0=u.replace(".git", "/zip/master");
+                url0=u.replace(".git", "/zip/main");
                 urlZipGit=url0.replace("https://github.com/", "https://codeload.github.com/");
 
                 QDateTime rdt = QDateTime::currentDateTime();
@@ -194,9 +194,9 @@ bool UK::runAppFromZip(QByteArray url, QByteArray localFolder)
                 urlZipGit.append(QString::number(rdt.currentMSecsSinceEpoch()));
             }else{
                 //url of download zip no codeload
-                //https://github.com/nextsigner/qt_qml_chat_server/archive/master.zip
+                //https://github.com/nextsigner/qt_qml_chat_server/archive/main.zip
 
-                url0=u.replace(".git", "/archive/master.zip");
+                url0=u.replace(".git", "/archive/main.zip");
                 urlZipGit=url0;
             }
             qInfo()<<"Downloading zip file: "<<urlZipGit;
@@ -460,7 +460,7 @@ bool UK::runAppFromZip(QByteArray url, QByteArray localFolder)
         file.open(QIODevice::ReadOnly);
         if(v==0){
             carpeta=QString(zip.getFileNameList().at(0));
-            qInfo()<<"Carpeta de destino Zip: "<<carpeta;
+            qInfo()<<"000: Carpeta de destino Zip: "<<carpeta;
         }else{
             QString nfn;
             nfn.append(carpDestinoFinal);
@@ -471,7 +471,7 @@ bool UK::runAppFromZip(QByteArray url, QByteArray localFolder)
             QByteArray banfn3;
             banfn3.append(nfn3.at(nfn3.size()-1));
             if(banfn3!="/"){
-                qInfo()<<"Destino de archivo: "<<nfn3;
+                qInfo()<<"001: Destino de archivo: "<<nfn3;
                 QFile nfile(nfn3);
                 if(!nfile.open(QIODevice::WriteOnly)){
                     qInfo()<<"Error al abrir archivo "<<nfn3;
@@ -480,7 +480,7 @@ bool UK::runAppFromZip(QByteArray url, QByteArray localFolder)
                     nfile.close();
                 }
             }else{
-                qInfo()<<"Destino de carpeta: "<<nfn3;
+                qInfo()<<"003: Destino de carpeta: "<<nfn3;
                 QDir dnfn(nfn3);
                 dnfn.mkpath(".");
             }
@@ -1049,7 +1049,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
         bool modoCodeload=true;
         QString url0;
         if(modoCodeload){
-            url0=u.replace(".git", "/zip/master");
+            url0=u.replace(".git", "/zip/main");
             urlZipGit=url0.replace("https://github.com/", "https://codeload.github.com/");
 
             QDateTime rdt = QDateTime::currentDateTime();
@@ -1057,9 +1057,9 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
             urlZipGit.append(QString::number(rdt.currentMSecsSinceEpoch()));
         }else{
             //url of download zip no codeload
-            //https://github.com/nextsigner/qt_qml_chat_server/archive/master.zip
+            //https://github.com/nextsigner/qt_qml_chat_server/archive/main.zip
 
-            url0=u.replace(".git", "/archive/master.zip");
+            url0=u.replace(".git", "/archive/main.zip");
             urlZipGit=url0;
         }
         qInfo()<<"Downloading zip file: "<<urlZipGit;
@@ -1303,18 +1303,18 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
         file.open(QIODevice::ReadOnly);
         if(v==0){
             carpeta=QString(zip.getFileNameList().at(0));
-            qInfo()<<"Carpeta de destino Zip: "<<carpeta;
+            qInfo()<<"010: Carpeta de destino Zip: "<<carpeta;
         }else{
             QString nfn;
             nfn.append(carpDestinoFinal);
             nfn.append("/");
             nfn.append(zip.getFileNameList().at(v));
-            QString nfn2 = nfn.replace("-master/", "/");
+            QString nfn2 = nfn.replace("-main/", "/");
             QString nfn3 = nfn2.replace(" ", "%20");
             QByteArray banfn3;
             banfn3.append(nfn3.at(nfn3.size()-1));
             if(banfn3!="/"){
-                qInfo()<<"Destino de archivo: "<<nfn3;
+                qInfo()<<"011: Destino de archivo: "<<nfn3;
                 QFile nfile(nfn3);
                 if(!nfile.open(QIODevice::WriteOnly)){
                     qInfo()<<"Error al abrir archivo "<<nfn3;
@@ -1323,7 +1323,7 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
                     nfile.close();
                 }
             }else{
-                qInfo()<<"Destino de carpeta: "<<nfn3;
+                qInfo()<<"012: Destino de carpeta: "<<nfn3;
                 QDir dnfn(nfn3);
                 dnfn.mkpath(".");
             }
