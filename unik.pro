@@ -11,7 +11,6 @@ DEFINES += APPSOURCE=\\\"$$APPSOURCE\\\"
 APPSCOLORTHEME=0
 DEFINES += APPCOLORTHEME=\\\"$$APPCOLORTHEME\\\"
 
-
 QT += qml quick sql websockets svg serialport
 
 QT += texttospeech
@@ -129,3 +128,4 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 
 
+android: include(/home/ns/Android/Sdk/android_openssl/openssl.pri)
