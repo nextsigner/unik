@@ -109,8 +109,17 @@ HEADERS += \
 DISTFILES += \
     android.pri \
     android/AndroidManifest.xml \
+    android/AndroidManifest.xml \
+    android/build.gradle \
+    android/gradle.properties \
+    android/gradle.properties \
     android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew \
+    android/gradlew \
+    android/gradlew.bat \
+    android/res/values/libs.xml \
     android/res/values/libs.xml \
     android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.properties \
@@ -129,3 +138,5 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 
 android: include(/home/ns/Android/Sdk/android_openssl/openssl.pri)
+
+ANDROID_EXTRA_LIBS = /home/ns/Android/Sdk/android_openssl/latest/arm/libcrypto_1_1.so /home/ns/Android/Sdk/android_openssl/latest/arm/libssl_1_1.so /home/ns/Android/Sdk/android_openssl/latest/arm64/libcrypto_1_1.so /home/ns/Android/Sdk/android_openssl/latest/arm64/libssl_1_1.so /home/ns/Android/Sdk/android_openssl/latest/x86/libcrypto_1_1.so /home/ns/Android/Sdk/android_openssl/latest/x86/libssl_1_1.so /home/ns/Android/Sdk/android_openssl/latest/x86_64/libcrypto_1_1.so /home/ns/Android/Sdk/android_openssl/latest/x86_64/libssl_1_1.so
