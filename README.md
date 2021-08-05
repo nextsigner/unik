@@ -1,5 +1,8 @@
 # unik
 
+Compilado con Qt 5.15.2
+
+
 ## English Description
 It is the official repository of unik qml engine project by @nextsigner.
 
