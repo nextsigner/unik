@@ -1,19 +1,18 @@
-# Compile this project with Qt 5.13.0 on GNU/Linux, Windows or Macos
+# Compile this project with Qt 5.15.2 on GNU/Linux, Windows or Macos
 
 #Linux Deploy
 #Deploy Command Line Example
 
 #1) Edit default.desktop
 
-#2)  ~/linuxdeployqt-continuous-x86_64.AppImage /media/ns/ZONA-A1/nsp/unik/build_linux/unik -qmldir=/media/ns/ZONA-A1/nsp/unik -qmake=/home/ns/Qt5.13.0/5.13.0/gcc_64/bin/qmake -verbose=3
-
+#2)  ~/linuxdeployqt-continuous-x86_64.AppImage /media/nextsigner/ZONA-A11/nsp/unik/build_linux/unik -qmldir=/media/nextsigner/ZONA-A11/nsp/unik -qmake=/home/nextsigner/Qt/5.12.3/gcc_64/bin/qmake -verbose=3
 
 
 #3 optional) Copy full plugins and qml folder for full qtquick support.
 #Copy <QT-INSTALL>/gcc_64/qml and <QT-INSTALL>/gcc_64/plugins folders manualy to the executable folder location.
 
 #Make Unik AppImage
-#4) ~/linuxdeployqt-continuous-x86_64.AppImage /media/ns/ZONA-A1/nsp/unik/build_linux/unik -qmldir=/media/ns/ZONA-A1/nsp/unik -qmake=/home/ns/Qt5.13.0/5.13.0/gcc_64/bin/qmake -verbose=3 -bundle-non-qt-libs -no-plugins -appimage
+#4) ~/linuxdeployqt-continuous-x86_64.AppImage /media/nextsigner/ZONA-A11/nsp/unik/build_linux/unik -qmldir=/media/nextsigner/ZONA-A11/nsp/unik -qmake=/home/nextsigner/Qt/5.12.3/gcc_64/bin/qmake -verbose=3 -bundle-non-qt-libs -no-plugins -appimage
 
 #5 optional) Copy nss3 files into
 #cp -r /usr/lib/x86_64-linux-gnu/nss <executable path>/
@@ -49,7 +48,7 @@ message(linux.pri is loaded......)
         DEPLOYDATASH+="echo Iniciando deploy.sh..."
         DEPLOYDATASH+="cd ../"
         DEPLOYDATASH+="cd ./unik-dev-apps/unik"
-        DEPLOYDATASH+="~/linuxdeployqt-continuous-x86_64.AppImage $$PWD/build_linux/unik -qmldir=$$PWD -qmake=/home/nextsigner/Qt/5.13.0/gcc_64/bin/qmake -verbose=3 -bundle-non-qt-libs -no-plugins -appimage && cp unik_v"$$APPVERSION"-x86_64.AppImage ~/unik_v"$$APPVERSION"-x86_64.AppImage && rm -f /usr/local/bin/unik && cd ~/ && ln ~/unik_v"$$APPVERSION"-x86_64.AppImage /usr/local/bin/unik && unik -install"
+        DEPLOYDATASH+="~/linuxdeployqt-continuous-x86_64.AppImage $$PWD/build_linux/unik -qmldir=$$PWD -qmake=/home/nextsigner/Qt/5.12.3/gcc_64/bin/qmake -verbose=3 -bundle-non-qt-libs -no-plugins -appimage && cp unik_v"$$APPVERSION"-x86_64.AppImage ~/unik_v"$$APPVERSION"-x86_64.AppImage && rm -f /usr/local/bin/unik && cd ~/ && ln ~/unik_v"$$APPVERSION"-x86_64.AppImage /usr/local/bin/unik && unik -install"
         write_file($$PWD/deploy.sh, DEPLOYDATASH)
 
 

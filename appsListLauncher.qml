@@ -2023,7 +2023,8 @@ ApplicationWindow {
                 xPb.opacity=1.0
                 //var d = unik.downloadGit(m1[0], pws)
                 unik.setUnikStartSettings(params)
-                unik.restartApp()
+                unik.loadQml((''+pws+'/'+mn).replace(/ /g, '%20')+'/main.qml')
+                //unik.restartApp()
                 return
                 /*if(app.downloading){
                     unik.setUnikStartSettings(params)
@@ -2044,7 +2045,8 @@ ApplicationWindow {
                 unik.mkdir(pws+'/'+mn)
                 var d = unik.runAppFromZip(m1[0], pws)
                 unik.setUnikStartSettings(params)
-                unik.restartApp()
+                unik.loadQml((''+pws+'/'+mn).replace(/ /g, '%20')+'/main.qml')
+                //unik.restartApp()
                 //unik.cd(pws+'/'+mn)
                 //engine.load(pws+'/'+mn+'/main.qml')
                 //app.close()
@@ -2059,7 +2061,8 @@ ApplicationWindow {
                 mn=m2[m2.length-1]
 
                 unik.setUnikStartSettings(params)
-                unik.restartApp()
+                unik.loadQml((''+pws+'/'+mn).replace(/ /g, '%20')+'/main.qml')
+                //unik.restartApp()
 
                 //unik.cd(pws)
                 //unik.mkdir(pws+'/'+mn)
@@ -2080,8 +2083,9 @@ ApplicationWindow {
                 xPb.opacity=1.0
                 d = unik.downloadGit(m1[0], pws)
                 if(app.downloading){
-                    unik.ejecutarLineaDeComandoAparte(unik.getPath(0)+' '+('-folder='+pws+'/'+mn).replace(/ /g, '%20'))
-                    Qt.quit()
+                    unik.loadQml((''+pws+'/'+mn).replace(/ /g, '%20')+'/main.qml')
+                    /*unik.ejecutarLineaDeComandoAparte(unik.getPath(0)+' '+('-folder='+pws+'/'+mn).replace(/ /g, '%20'))
+                    Qt.quit()*/
                     return
                 }
             }
@@ -2096,8 +2100,9 @@ ApplicationWindow {
                 unik.mkdir(pws+'/'+mn)
                 d = unik.runAppFromZip(m1[0], pws)
                 unik.cd(pws+'/'+mn)
-                unik.ejecutarLineaDeComandoAparte(unik.getPath(0)+' '+('-folder='+pws+'/'+mn).replace(/ /g, '%20'))
-                Qt.quit()
+                unik.loadQml((''+pws+'/'+mn).replace(/ /g, '%20')+'/main.qml')
+                //unik.ejecutarLineaDeComandoAparte(unik.getPath(0)+' '+('-folder='+pws+'/'+mn).replace(/ /g, '%20'))
+                //Qt.quit()
                 return
                 /*engine.load(pws+'/'+mn+'/main.qml')
                 app.close()*/
@@ -2107,8 +2112,9 @@ ApplicationWindow {
                 m1=m0[1].split(',')
                 m2=m1[0].split('/')
                 mn=m2[m2.length-1]
-                unik.ejecutarLineaDeComandoAparte(unik.getPath(0)+' '+('-folder='+m1[0]).replace(/ /g, '%20'))
-                Qt.quit()
+                unik.loadQml((''+pws+'/'+mn).replace(/ /g, '%20')+'/main.qml')
+                //unik.ejecutarLineaDeComandoAparte(unik.getPath(0)+' '+('-folder='+m1[0]).replace(/ /g, '%20'))
+                //Qt.quit()
                 return
 
                 /*unik.cd(pws)

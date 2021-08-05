@@ -1782,7 +1782,7 @@ int main(int argc, char *argv[])
     log4.append("\n");
 
     log4.append("Work Space: ");
-    log4.append(settings.value("ws").toString());
+    log4.append(settings.value("ws").toString().toUtf8());
     log4.append("\n");
 
     log4.append("modeFolder: ");

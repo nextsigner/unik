@@ -100,8 +100,10 @@ HEADERS += \
 
 
 DISTFILES += \
+    ../../../../../media/ns/ZONA-A1/nsp/unik/android/AndroidManifest.xml \
     android.pri \
     android/AndroidManifest.xml \
+    android/gradle.properties \
     android/gradle/wrapper/gradle-wrapper.jar \
     android/gradlew \
     android/res/values/libs.xml \
@@ -121,3 +123,4 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 
 
+android: include(/home/ns/Android/Sdk/android_openssl/openssl.pri)

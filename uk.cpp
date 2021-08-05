@@ -1,4 +1,5 @@
 ﻿#include "uk.h"
+#include <QApplication>
 
 
 UK::UK(QObject *parent) : QObject(parent)//,
@@ -76,7 +77,7 @@ void UK::engineExited(int n)
 {
     QByteArray ld;
     ld.append("Unik Qml Engine exited with code: ");
-    ld.append(QString::number(n));
+    ld.append(QString::number(n).toUtf8());
     qInfo()<<ld;
     db.close();
 }
@@ -206,12 +207,12 @@ bool UK::runAppFromZip(QByteArray url, QByteArray localFolder)
         qInfo()<<"Downloading from GitHub: "<<url;
         qInfo()<<"Download Folder Location: "<<carpetaDestino;
 
-        tempFile.append(getPath(2));
+        tempFile.append(getPath(2).toUtf8());
         tempFile.append("/");
 #ifndef __arm__
         tempFile.append(QString::number(a.toSecsSinceEpoch()));
 #else
-        tempFile.append(QString::number(a.toMSecsSinceEpoch()));
+        tempFile.append(QString::number(a.toMSecsSinceEpoch()).toUtf8());
 #endif
         tempFile.append(".zip");
         qInfo()<<"temp zip location "<<tempFile;
@@ -551,15 +552,15 @@ bool UK::downloadRemoteFolder(QString urlFolder, QString list, QString dirDestin
 
     for (int i = 0; i < m0.size(); ++i) {
         QByteArray rd;
-        rd.append(dirDestination);
+        rd.append(dirDestination.toUtf8());
         rd.append("/");
-        rd.append(m0.at(i));
+        rd.append(m0.at(i).toUtf8());
         QByteArray ro;
-        ro.append(urlFolder);
+        ro.append(urlFolder.toUtf8());
         ro.append("/");
-        ro.append(m0.at(i));
+        ro.append(m0.at(i).toUtf8());
         ro.append("?r=");
-        ro.append(QDateTime::currentDateTime().toString("zzz"));
+        ro.append(QDateTime::currentDateTime().toString("zzz").toUtf8());
         QByteArray code;
         code.append(getHttpFile(ro));
         QFile qml(rd);
@@ -605,7 +606,7 @@ bool UK::mkUpk(QByteArray folder, QByteArray upkName, QByteArray user, QByteArra
 
     //Primeras 2 letras a hexadecimal
     QByteArray hsep;
-    hsep.append(QString(QCryptographicHash::hash(sep,QCryptographicHash::Md5)));
+    hsep.append(QString(QCryptographicHash::hash(sep,QCryptographicHash::Md5)).toUtf8());
 
     //Ubicaciòn final de upk
     QByteArray urlUPK;
@@ -640,21 +641,21 @@ bool UK::mkUpk(QByteArray folder, QByteArray upkName, QByteArray user, QByteArra
         qInfo()<<"mkUpk reading folder"<<folder<<"...";
         archOrig.open(QIODevice::ReadOnly);
         QByteArray extSqlite;
-        extSqlite.append(fileName.mid(fileName.length()-7,fileName.length()));
+        extSqlite.append(fileName.mid(fileName.length()-7,fileName.length()).toUtf8());
         //qInfo()<<"------------------------------------>"<<extSqlite<<" fileName: "<<fileName;
         //if(extSqlite!=".sqlite"&&!fileName.contains(".qmlc")&&fileName.at(fileName.length()-1)!="."&&fileName.at(fileName.length()-1)!=".."){
         if(!fileName.contains(".qmlc")&&fileName.at(fileName.length()-1)!="."&&fileName.at(fileName.length()-1)!=".."){
-        //Preparando separador
-//            if(fileName.contains("USettings.qml")||fileName.contains("XFormInsert.qml")){
-//                qInfo()<<"------------------------------------>"+archOrig.readAll();
-//                return true;
-//            }
+            //Preparando separador
+            //            if(fileName.contains("USettings.qml")||fileName.contains("XFormInsert.qml")){
+            //                qInfo()<<"------------------------------------>"+archOrig.readAll();
+            //                return true;
+            //            }
             QByteArray s1;
             s1.append(hsep);
             QByteArray nsep;
             //nsep.append(hsep);
             QByteArray ext;
-            ext.append(fileName.mid(fileName.length()-4,fileName.length()));
+            ext.append(fileName.mid(fileName.length()-4,fileName.length()).toUtf8());
 
             qInfo()<<"Reading ext: "<<ext;
             qInfo()<<"Reading extSqlite: "<<extSqlite;
@@ -663,7 +664,7 @@ bool UK::mkUpk(QByteArray folder, QByteArray upkName, QByteArray user, QByteArra
                     nsep.append(s1);
                     nsep.append("X-X");
                 }
-                nsep.append(fileName.replace(folder, "").replace("/", "@"));
+                nsep.append(fileName.replace(folder, "").replace("/", "@").toUtf8());
                 nsep.append(s1);
                 nsep.append("X+X");
 
@@ -675,7 +676,7 @@ bool UK::mkUpk(QByteArray folder, QByteArray upkName, QByteArray user, QByteArra
                     nsep.append(s1);
                     nsep.append("X-X");
                 }
-                nsep.append(fileName.replace(folder, "").replace("/", "@"));
+                nsep.append(fileName.replace(folder, "").replace("/", "@").toUtf8());
                 nsep.append(s1);
                 nsep.append("X+X");
 
@@ -688,56 +689,56 @@ bool UK::mkUpk(QByteArray folder, QByteArray upkName, QByteArray user, QByteArra
             qInfo()<<"File not has data: "<<fileName;
         }
         archOrig.close();
-     }while(it.hasNext()) ;
-//    for (int i=0; i<fileList.count(); i++){
-//        qDebug()<<"Upkando: "<<fileList[i];
-//        QByteArray ro;
-//        ro.append(folder);
-//        ro.append("/");
-//        ro.append(fileList[i]);
-//        QFile archOrig(ro);
-//        qInfo()<<"mkUpk reading "<<ro<<"...";
-//        if(archOrig.open(QIODevice::ReadOnly)&&archOrig.size()>0&&!QString(fileList[i]).contains(".qmlc")){
-//            //Preparando separador
-//            QByteArray s1;
-//            s1.append(hsep);
-//            QByteArray nsep;
-//            //nsep.append(hsep);
-//            QByteArray ext;
-//            ext.append(ro.mid(ro.length()-4,ro.length()));
-//            qInfo()<<"Reading ext: "<<ext;
-//            if(ext==".png"||ext==".PNG"||ext==".jpg"||ext==".JPG"||ext==".jpeg"||ext==".JPEG"||ext==".gif"||ext==".GIF"||ext==".wav"||ext==".WAV"||ext==".mp3"||ext==".MP3"||ext==".mp4"||ext==".MP4"||ext==".ogg"||ext==".OGG"||ext==".mkv"||ext==".MKV"){
-//                if(vf!=0){
-//                    nsep.append(s1);
-//                    nsep.append("X-X");
-//                }
-//                nsep.append(fileList[i]);
-//                nsep.append(s1);
-//                nsep.append("X+X");
+    }while(it.hasNext()) ;
+    //    for (int i=0; i<fileList.count(); i++){
+    //        qDebug()<<"Upkando: "<<fileList[i];
+    //        QByteArray ro;
+    //        ro.append(folder);
+    //        ro.append("/");
+    //        ro.append(fileList[i]);
+    //        QFile archOrig(ro);
+    //        qInfo()<<"mkUpk reading "<<ro<<"...";
+    //        if(archOrig.open(QIODevice::ReadOnly)&&archOrig.size()>0&&!QString(fileList[i]).contains(".qmlc")){
+    //            //Preparando separador
+    //            QByteArray s1;
+    //            s1.append(hsep);
+    //            QByteArray nsep;
+    //            //nsep.append(hsep);
+    //            QByteArray ext;
+    //            ext.append(ro.mid(ro.length()-4,ro.length()));
+    //            qInfo()<<"Reading ext: "<<ext;
+    //            if(ext==".png"||ext==".PNG"||ext==".jpg"||ext==".JPG"||ext==".jpeg"||ext==".JPEG"||ext==".gif"||ext==".GIF"||ext==".wav"||ext==".WAV"||ext==".mp3"||ext==".MP3"||ext==".mp4"||ext==".MP4"||ext==".ogg"||ext==".OGG"||ext==".mkv"||ext==".MKV"){
+    //                if(vf!=0){
+    //                    nsep.append(s1);
+    //                    nsep.append("X-X");
+    //                }
+    //                nsep.append(fileList[i]);
+    //                nsep.append(s1);
+    //                nsep.append("X+X");
 
-//                dataUpk1.append(nsep);
-//                dataUpk1.append(byteArrayToBase64(archOrig.readAll()));
-//                vf++;
-//            }else{
-//                if(vf!=0){
-//                    nsep.append(s1);
-//                    nsep.append("X-X");
-//                }
-//                nsep.append(fileList[i]);
-//                nsep.append(s1);
-//                nsep.append("X+X");
+    //                dataUpk1.append(nsep);
+    //                dataUpk1.append(byteArrayToBase64(archOrig.readAll()));
+    //                vf++;
+    //            }else{
+    //                if(vf!=0){
+    //                    nsep.append(s1);
+    //                    nsep.append("X-X");
+    //                }
+    //                nsep.append(fileList[i]);
+    //                nsep.append(s1);
+    //                nsep.append("X+X");
 
-//                dataUpk1.append(nsep);
-//                dataUpk1.append(archOrig.readAll());
-//                vf++;
-//            }
-//        }else{
-//            qInfo()<<"File not has data: "<<fileList[i];
-//            if(folderExist(fileList[i].toUtf8())){
-//                qInfo()<<"Folder: "<<fileList[i];
-//            }
-//        }
-//    }
+    //                dataUpk1.append(nsep);
+    //                dataUpk1.append(archOrig.readAll());
+    //                vf++;
+    //            }
+    //        }else{
+    //            qInfo()<<"File not has data: "<<fileList[i];
+    //            if(folderExist(fileList[i].toUtf8())){
+    //                qInfo()<<"Folder: "<<fileList[i];
+    //            }
+    //        }
+    //    }
 
     //Abriendo archivo upk
     QFile upk2(urlUPK);
@@ -792,7 +793,8 @@ bool UK::upkToFolder(QByteArray upk, QByteArray user, QByteArray key, QByteArray
     sep.append(key);
 
     QByteArray hsep;
-    hsep.append(QString(QCryptographicHash::hash(sep,QCryptographicHash::Md5)));
+    hsep.append(QString(QCryptographicHash::hash(sep,QCryptographicHash::Md5)).toUtf8()
+                );
 
     //Preparando separador 1
     QByteArray s1;
@@ -806,7 +808,7 @@ bool UK::upkToFolder(QByteArray upk, QByteArray user, QByteArray key, QByteArray
     int nl=0;
     QByteArray fileData;
     do{
-        fileData.append(stream.read(1));
+        fileData.append(stream.read(1).toUtf8());
         nl++;
     }while (nl<upkFile.size());
     upkFile.close();
@@ -829,7 +831,7 @@ bool UK::upkToFolder(QByteArray upk, QByteArray user, QByteArray key, QByteArray
         QByteArray urlNf;
         urlNf.append(folderDestination);
         urlNf.append("/");
-        urlNf.append(m0.at(0));
+        urlNf.append(m0.at(0).toUtf8());
 
         QString fn;
         fn.append(QString(urlNf).replace("//", "/"));
@@ -870,16 +872,16 @@ bool UK::upkToFolder(QByteArray upk, QByteArray user, QByteArray key, QByteArray
             mkdir(nf);
         }
         QByteArray ext;
-        ext.append(fn.mid(fn.length()-4,fn.length()));
+        ext.append(fn.mid(fn.length()-4,fn.length()).toUtf8());
         QByteArray extSqlite;
-        extSqlite.append(fn.mid(fn.length()-7,fn.length()));
+        extSqlite.append(fn.mid(fn.length()-7,fn.length()).toUtf8());
         QFile f1(urlNf.replace("@", "/"));
         if(f1.open(QIODevice::WriteOnly)){
             QByteArray d;
             if(extSqlite==".sqlite"||ext==".png"||ext==".PNG"||ext==".jpg"||ext==".JPG"||ext==".jpeg"||ext==".JPEG"||ext==".gif"||ext==".GIF"||ext==".wav"||ext==".WAV"||ext==".mp3"||ext==".MP3"||ext==".mp4"||ext==".MP4"||ext==".ogg"||ext==".OGG"||ext==".mkv"||ext==".MKV"){
                 d.append(base64ToByteArray(m0.at(1).toUtf8()));
             }else{
-                d.append(m0.at(1));
+                d.append(m0.at(1).toUtf8());
             }
             f1.write(d);
         }
@@ -895,7 +897,7 @@ bool UK::isFree(QString upk)
         if(debugLog){
             lba="";
             lba.append("isFree() revision Upk file not open or not permission: ");
-            lba.append(upk);
+            lba.append(upk.toUtf8());
             log(lba);
         }
         return false;
@@ -903,7 +905,7 @@ bool UK::isFree(QString upk)
         if(debugLog){
             lba="";
             lba.append("isFree() revision Upk file open in: ");
-            lba.append(upk);
+            lba.append(upk.toUtf8());
             log(lba);
         }
     }
@@ -913,7 +915,7 @@ bool UK::isFree(QString upk)
     sep.append("free");
 
     QByteArray hsep;
-    hsep.append(QString(QCryptographicHash::hash(sep,QCryptographicHash::Md5)));
+    hsep.append(QString(QCryptographicHash::hash(sep,QCryptographicHash::Md5)).toUtf8());
 
     //Preparando separador 1
     QByteArray s1;
@@ -927,7 +929,7 @@ bool UK::isFree(QString upk)
     int nl=0;
     QByteArray fileData;
     do{
-        fileData.append(stream.read(1));
+        fileData.append(stream.read(1).toUtf8());
         nl++;
     }while (nl<upkFile.size());
     upkFile.close();
@@ -973,12 +975,12 @@ bool UK::loadUpk(QString upkLocation, bool closeAppLauncher, QString user, QStri
         }
         QByteArray upk;
         upk.append("/");
-        upk.append(appName);
+        upk.append(appName.toUtf8());
         upk.append(".upk");
         dupl = upkLocation.replace(upk, "");
     }
     QByteArray tempFolder;
-    tempFolder.append(QDateTime::currentDateTime().toString("hhmmss"));
+    tempFolder.append(QDateTime::currentDateTime().toString("hhmmss").toUtf8());
     QString pq;
     pq.append(getPath(2));
     pq.append("/");
@@ -997,7 +999,7 @@ bool UK::loadUpk(QString upkLocation, bool closeAppLauncher, QString user, QStri
             }
             _engine->rootContext()->setContextProperty("appName", appName);
             QByteArray mainQml;
-            mainQml.append(pq);
+            mainQml.append(pq.toUtf8());
             mainQml.append("/main.qml");
             if(closeAppLauncher){
                 QObject *rootQml = _engine->rootObjects().at(0);
@@ -1070,12 +1072,12 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     qInfo()<<"Download Folder Location: "<<carpetaDestino;
     QDateTime a = QDateTime::currentDateTime();
     QByteArray tempFile;
-    tempFile.append(getPath(2));
+    tempFile.append(getPath(2).toUtf8());
     tempFile.append("/");
 #ifndef __arm__
     tempFile.append(QString::number(a.toSecsSinceEpoch()));
 #else
-    tempFile.append(QString::number(a.toMSecsSinceEpoch()));
+    tempFile.append(QString::number(a.toMSecsSinceEpoch()).toUtf8());
 #endif
     tempFile.append(".zip");
     qInfo("temp zip location "+tempFile);
@@ -1381,6 +1383,28 @@ bool UK::downloadGit(QByteArray url, QByteArray localFolder)
     return true;
 }
 
+void UK::loadQml(const QString qml)
+{
+    _engine->clearComponentCache();
+    if (!_engine->rootObjects().isEmpty()){
+        for (int i=0;i<_engine->rootObjects().count();i++) {
+            QObject *aw0 = _engine->rootObjects().at(i);
+            qDebug()<<"Tipo de Objeto Widget: "<<aw0->isWidgetType();
+            qDebug()<<"Tipo de Objeto: Window: "<<aw0->isWindowType();
+            if(aw0->isWindowType()){
+                QQuickWindow *root = qobject_cast<QQuickWindow*>(_engine->rootObjects().at(i));
+                root->close();
+                //aw0->;
+            }
+            /*if(aw0->property("objectName")=="awsplash"){
+                aw0->setProperty("ver", false);
+                //engine.rootContext()->setContextProperty("ver", false);
+            }*/
+        }
+   }
+    _engine->load(qml);
+}
+
 void UK::restartApp()
 {
 
@@ -1393,8 +1417,9 @@ void UK::restartApp()
 #else
     //qApp->quit();
     //QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
-
-    auto activity = QtAndroid::androidActivity();
+    const QString cmd="sudo service org.unikdev.unik.android.bindings.QtService restart";
+    QProcess::execute(cmd, QStringList());
+    /*auto activity = QtAndroid::androidActivity();
     auto packageManager = activity.callObjectMethod("getPackageManager", "()Landroid/content/pm/PackageManager;");
 
     auto activityIntent = packageManager.callObjectMethod("getLaunchIntentForPackage",
@@ -1419,7 +1444,10 @@ void UK::restartApp()
                                   QAndroidJniObject::getStaticField<jint>("android/app/AlarmManager", "RTC"),
                                   jlong(QDateTime::currentMSecsSinceEpoch() + 1500), pendingIntent.object());
 
-    qApp->quit();
+        qApp->quit();*/
+//    QCoreApplication* eApp = QCoreApplication::instance();
+//    eApp->quit();
+//    QProcess::startDetached(eApp->arguments()[0], eApp->arguments());
 #endif
     //emit restartingApp();
 }
@@ -1509,7 +1537,7 @@ void UK::finalizaRun(int e)
 {
     QByteArray s;
     s.append("command line finished with status ");
-    s.append(QString::number(e));
+    s.append(QString::number(e).toUtf8());
     log(s);
     proc->close();
 }
@@ -1611,7 +1639,7 @@ QString UK::getPath(int path)
         if(debugLog){
             lba="";
             lba.append("Making folder ");
-            lba.append(r);
+            lba.append(r.toUtf8());
             log(lba);
         }
         dir.mkpath(".");
@@ -1619,7 +1647,7 @@ QString UK::getPath(int path)
         if(debugLog){
             lba="";
             lba.append("Folder ");
-            lba.append(r);
+            lba.append(r.toUtf8());
             lba.append(" exist.");
         }
     }
@@ -1654,13 +1682,13 @@ QString UK::encData(QByteArray d, QString user, QString key)
         r2=rC2;
     }
     QByteArray segUser;
-    segUser.append(user);
+    segUser.append(user.toUtf8());
     for (int i = 0; i < 40-user.size()-1; ++i) {
         segUser.append("|");
     }
     segUser.append("-");
     QByteArray segKey;
-    segKey.append(key);
+    segKey.append(key.toUtf8());
     for (int i = 0; i < 20-key.size(); ++i) {
         segKey.append("|");
     }
@@ -1678,7 +1706,7 @@ QString UK::encData(QByteArray d, QString user, QString key)
         }else if(uc0.contains(r2.at(2))){
             suHC.append(r2.at(3));
         }else{
-            suHC.append(uc0);
+            suHC.append(uc0.toUtf8());
         }
     }
 
@@ -1696,7 +1724,7 @@ QString UK::encData(QByteArray d, QString user, QString key)
         }else if(uc0.contains(r2.at(2))){
             skHC.append(r2.at(3));
         }else{
-            skHC.append(uc0);
+            skHC.append(uc0.toUtf8());
         }
     }
     ru.append(suHC);
@@ -1714,7 +1742,7 @@ QString UK::encData(QByteArray d, QString user, QString key)
     }
 
     QByteArray ru2;
-    ru2.append(cru2);
+    ru2.append(cru2.toUtf8());
     QString ret0="";
     ret0.append(r);
     ret0.append(r2);
@@ -1737,7 +1765,7 @@ QString UK::encData(QByteArray d, QString user, QString key)
         }else if(uc0.contains(r2.at(2))){
             encode.append(r2.at(3));
         }else{
-            encode.append(uc0);
+            encode.append(uc0.toUtf8());
         }
     }
     ret0.append("||||||");
@@ -1753,7 +1781,7 @@ QString UK::decData(QByteArray d0, QString user, QString key)
     QString ret;
     QString pd=QString(d0);
     QByteArray d;
-    d.append(desCompData(pd));
+    d.append(desCompData(pd).toUtf8());
 
     QByteArray arch;
     QByteArray nom;
@@ -1777,7 +1805,7 @@ QString UK::decData(QByteArray d0, QString user, QString key)
         }else if(l.contains(r2.at(2))){
             enc.append(r2.at(3));
         }else{
-            enc.append(l);
+            enc.append(l.toUtf8());
         }
         if(l.contains("O"))
         {
@@ -1798,7 +1826,7 @@ QString UK::decData(QByteArray d0, QString user, QString key)
                     }else if(l2.contains(r2.at(2))){
                         decSegUK.append(r2.at(3));
                     }else{
-                        decSegUK.append(l2);
+                        decSegUK.append(l2.toUtf8());
                     }
                 }
                 passData.append(QByteArray::fromHex(decSegUK));
@@ -1824,11 +1852,11 @@ QString UK::decData(QByteArray d0, QString user, QString key)
             }
             passDataWrite=true;
         }else  if(i<4){
-            r.append(l);
+            r.append(l.toUtf8());
         }else  if(i>=4&&i<8){
-            r2.append(l);
+            r2.append(l.toUtf8());
         }else  if(i>=8&&i<=67+60){
-            passDataBA.append(l);
+            passDataBA.append(l.toUtf8());
         }else{
             if(tipo==0){
                 //nom.append(enc);
@@ -1906,10 +1934,10 @@ QByteArray UK::getHttpFile(QByteArray url)
         if(debugLog){
             lba="";
             lba.append("Failure ");
-            lba.append(reply->errorString());
+            lba.append(reply->errorString().toUtf8());
             log(lba);
         }
-        err.append(reply->errorString());
+        err.append(reply->errorString().toUtf8());
         return err;
         delete reply;
     }
@@ -1938,10 +1966,10 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
         v++;
     }
 
- #ifndef Q_OS_OSX
+#ifndef Q_OS_OSX
 #ifndef Q_OS_ANDROID
-    #ifndef Q_OS_WIN
-    #ifndef Q_OS_LINUX
+#ifndef Q_OS_WIN
+#ifndef Q_OS_LINUX
     QEventLoop eventLoop0;
     QNetworkAccessManager mgr0;
     QObject::connect(&mgr0, SIGNAL(finished(QNetworkReply*)), &eventLoop0, SLOT(quit()));
@@ -1990,7 +2018,7 @@ bool UK::downloadZipFile(QByteArray url, QByteArray ubicacion)
         if(debugLog){
             QByteArray log100;
             log100.append("Failure ");
-            log100.append(reply->errorString());
+            log100.append(reply->errorString().toUtf8());
             log(log100);
         }
         reply->deleteLater();
@@ -2031,10 +2059,10 @@ void UK::sendFile(QString file, QString phpReceiver)
     }
     QNetworkAccessManager *am = new QNetworkAccessManager(this);
     QByteArray origen;
-    origen.append(file);
+    origen.append(file.toUtf8());
     QStringList l = file.split("/");
     QByteArray destino;
-    destino.append(l.at(l.size()-1));
+    destino.append(l.at(l.size()-1).toUtf8());
     QStringList l2 = phpReceiver.split("/");
     if(l2.size()<2){
         return;
@@ -2045,21 +2073,21 @@ void UK::sendFile(QString file, QString phpReceiver)
     if(debugLog){
         lba="";
         lba.append("Mime type: ");
-        lba.append(type.name());
+        lba.append(type.name().toUtf8());
         log(lba);
     }
     QByteArray urlReceiver;
-    urlReceiver.append(phpReceiver);
+    urlReceiver.append(phpReceiver.toUtf8());
     QNetworkRequest request(QUrl(urlReceiver.constData()));
     QString bound="margin";
     QByteArray data;
     data.append("--");
-    data.append(bound);
+    data.append(bound.toUtf8());
     data.append("\r\n");
     data.append("Content-Disposition: form-data; name=\"action\"\r\n\r\n");
-    data.append(l2.at(l2.size()-1));
+    data.append(l2.at(l2.size()-1).toUtf8());
     data.append("\r\n");
-    data.append("--" + bound + "\r\n");
+    data.append("--" + bound.toUtf8() + "\r\n");
     data.append("Content-Disposition: form-data; name=\"uploaded\"; filename=\""+destino+"\"\r\n");
     data.append("Content-Type: ");
     data.append(type.name());
@@ -2294,17 +2322,17 @@ QList<QObject *> UK::getSqlData(QString query)
         if(debugLog){
             QByteArray cc;
             cc.append("Row count result: ");
-            cc.append(QString::number(v));
+            cc.append(QString::number(v).toUtf8());
             cc.append(" ");
             cc.append("Column count result: ");
-            cc.append(QString::number(cantcols));
+            cc.append(QString::number(cantcols).toUtf8());
             log(cc);
         }
     }else{
         if(debugLog){
             lba="";
             lba.append("Sql query no exec: ");
-            lba.append(consultar.lastError().text());
+            lba.append(consultar.lastError().text().toUtf8());
             log(lba);
         }
     }
@@ -2387,7 +2415,7 @@ bool UK::setFile(QByteArray fileName, QByteArray fileData, QByteArray codec)
     if (!file.open(QIODevice::WriteOnly)) {
         lba="";
         lba.append("Cannot open file for writing: ");
-        lba.append(file.errorString());
+        lba.append(file.errorString().toUtf8());
         log(lba);
         return false;
     }
@@ -2442,7 +2470,7 @@ QString UK::getUpkTempPath()
     if(debugLog){
         lba="";
         lba.append("Temp folder of Qmls: ");
-        lba.append(pq);
+        lba.append(pq.toUtf8());
         //log(lba);
     }
     QDir dir0(pq);
@@ -2536,20 +2564,20 @@ bool UK::createLink(QString execString, QString desktopLocationFileName, QString
 
     QByteArray desktopFile = "";
     desktopFile.append("[Desktop Entry]\n");
-    desktopFile.append("Name="+name+"\n");
-    desktopFile.append("Comment="+comment+"\n");
-    desktopFile.append("Exec="+execString+"\n");
+    desktopFile.append("Name="+name.toUtf8()+"\n");
+    desktopFile.append("Comment="+comment.toUtf8()+"\n");
+    desktopFile.append("Exec="+execString.toUtf8()+"\n");
     QString cf;
     cf.append(iconPath);
     if(cf.isEmpty()){
         cf.append(getPath(4));
         cf.append("/img/unik.png");
     }
-    desktopFile.append("Icon="+cf+"\n");
+    desktopFile.append("Icon="+cf.toUtf8()+"\n");
     desktopFile.append("Terminal=false\n");
     desktopFile.append("Type=Application\n");
     QByteArray url;
-    url.append(desktopLocationFileName);
+    url.append(desktopLocationFileName.toUtf8());
     setFile(url, desktopFile);
     run("chmod a+x "+url);
     return true;
@@ -2627,8 +2655,8 @@ bool UK::imageComparation(const QImage &firstImage, const QImage &secondImage, d
             totaldiff += std::abs( bFirst -bSecond ) / 255.0 ;
         }
     }
-       //std::cout << "The difference of the two pictures is " <<
-          //(totaldiff * 100)  / (w * h * 3)  << " % !\n" ;
+    //std::cout << "The difference of the two pictures is " <<
+    //(totaldiff * 100)  / (w * h * 3)  << " % !\n" ;
     if((totaldiff * 100)  / (w * h * 3)>lim){
         m=true;
     }
@@ -2649,21 +2677,21 @@ Q_INVOKABLE QByteArray  UK::sendAudioStreamWSS(const QString audioFilePath,  int
         //uFileSize=fileSize;
         QByteArray data;
         data.reserve(50000);
-       //data.append(file.read(num));
+        //data.append(file.read(num));
         data.append(file.readAll().toBase64());
-       if(audioFilePath==QString("/tmp/stream-0.ogg")){
-           qDebug() <<"XFile Size:"<< file.size();
-           qDebug() <<"XFile 64 Size:"<< data.size();
-       }
+        if(audioFilePath==QString("/tmp/stream-0.ogg")){
+            qDebug() <<"XFile Size:"<< file.size();
+            qDebug() <<"XFile 64 Size:"<< data.size();
+        }
         //qDebug() << "File Read: "<<data;
-       file.close();
-       /*QFile fileSalida("/home/nextsigner/salida.ogg");
+        file.close();
+        /*QFile fileSalida("/home/nextsigner/salida.ogg");
        if(fileSalida.open(QIODevice::WriteOnly))
        {
            fileSalida.write(data);
            fileSalida.close();
        }*/
-       return data;
+        return data;
     }
     return "";
 }
@@ -2730,14 +2758,14 @@ void UK::crearPDF(QString captura, QString url, int orientacion)
 #ifdef UNIK_COMPILE_RPI
 Q_INVOKABLE void UK::initRpiGpio()
 {
-    #ifdef UNIK_COMPILE_RPI
+#ifdef UNIK_COMPILE_RPI
     rpiGpio = new mmapGpio();
-    #endif
+#endif
 }
 
 Q_INVOKABLE void UK::setPinType(int pin, int type)
 {
-    #ifdef UNIK_COMPILE_RPI
+#ifdef UNIK_COMPILE_RPI
     if(type!=0&&type!=1){
         return;
     }
@@ -2746,12 +2774,12 @@ Q_INVOKABLE void UK::setPinType(int pin, int type)
     }else{
         rpiGpio->setPinDir(pin,mmapGpio::INPUT);
     }
-    #endif
+#endif
 }
 
 Q_INVOKABLE void UK::setPinState(int pin, int state)
 {
-    #ifdef UNIK_COMPILE_RPI
+#ifdef UNIK_COMPILE_RPI
     if(state!=0&&state!=1){
         return;
     }
@@ -2760,33 +2788,33 @@ Q_INVOKABLE void UK::setPinState(int pin, int state)
     }else{
         rpiGpio->writePinHigh(pin);
     }
-    #endif
+#endif
 }
 
 Q_INVOKABLE unsigned int UK::readPin(unsigned int pin)
 {
-    #ifdef UNIK_COMPILE_RPI
+#ifdef UNIK_COMPILE_RPI
     return rpiGpio->readPin(pin);
-    #else
+#else
     return 0;
-    #endif
+#endif
 }
 
 Q_INVOKABLE void UK::writePinHigh(unsigned int pinnum)
 {
-    #ifdef UNIK_COMPILE_RPI
+#ifdef UNIK_COMPILE_RPI
     rpiGpio->writePinHigh(pinnum);
-    #endif
+#endif
 }
 
 Q_INVOKABLE void UK::writePinLow(unsigned int pinnum)
 {
-    #ifdef UNIK_COMPILE_RPI
+#ifdef UNIK_COMPILE_RPI
     rpiGpio->writePinLow(pinnum);
-    #endif
+#endif
 }
 Q_INVOKABLE bool UK::pinIsHigh(int pin){
-    #ifdef UNIK_COMPILE_RPI
+#ifdef UNIK_COMPILE_RPI
     unsigned int pinVal;
     pinVal = rpiGpio->readPin(pin);
     if(pinVal == mmapGpio::HIGH){
@@ -3056,7 +3084,7 @@ QString UK::desCompData(QString d)
 
 void UK::downloadZipProgress(qint64 bytesSend, qint64 bytesTotal)
 {    
-    double porc;    
+    double porc;
     if(bytesTotal!=-1){
         if(uZipSize>=bytesTotal){
             porc = (((double)bytesSend)/(double)uZipSize)*100;
@@ -3079,9 +3107,9 @@ void UK::downloadZipProgress(qint64 bytesSend, qint64 bytesTotal)
     QStringList sd1=d1.split(".");
     QByteArray nl;
     nl.append("download git ");
-    nl.append(uZipUrl);
+    nl.append(uZipUrl.toUtf8());
     nl.append(" %");
-    nl.append(sd1.at(0));
+    nl.append(sd1.at(0).toUtf8());
     //nl.append(" Size: ");
     //nl.append(QString::number(uZipSize));
     log(nl);
@@ -3269,55 +3297,55 @@ void UK::ttsEngineSelected(int index)
     ttsCurrentEngine = ttsEnginesList.at(index);
     uTtsVoicesIndex = 0;
     QString engineName = ttsEnginesList.at(index);
-                emit ttsSelectingEngine(index);
-                QVector<QLocale> locales = tts->availableLocales();
-                QLocale locale;
-                if(ttsLocalesVariants.count()>0){
-                     locale = ttsLocalesVariants.at(uTtsLocalesIndex);
-                    tts->setLocale(locale);
-                }
-                ttsVoices = tts->availableVoices();
-                uTtsVoicesIndex = 0;
-                ttsVoicesList.clear();
-                ttsVoices = tts->availableVoices();
-                QVoice currentVoice = tts->voice();
-                foreach (const QVoice &voice, ttsVoices) {
-                    ttsVoicesList.append(QString("%1 - %2 - %3").arg(voice.name())
-                                      .arg(QVoice::genderName(voice.gender()))
-                                      .arg(QVoice::ageName(voice.age())));
-                    if (voice.name() == currentVoice.name())
-                        ttsCurrentVoice=ttsVoicesList.at(ttsVoicesList.count() - 1);
-                }
-                tts->setRate(uTtsRate);
-                tts->setPitch(uTtsPitch);
-                tts->setVolume(uTtsVolume);
-                connect(tts, SIGNAL(stateChanged(QTextToSpeech::State)), this, SLOT(stateChanged(QTextToSpeech::State)));
-                //connect(tts, SIGNAL(localeChanged()), this, SLOT(tts));
+    emit ttsSelectingEngine(index);
+    QVector<QLocale> locales = tts->availableLocales();
+    QLocale locale;
+    if(ttsLocalesVariants.count()>0){
+        locale = ttsLocalesVariants.at(uTtsLocalesIndex);
+        tts->setLocale(locale);
+    }
+    ttsVoices = tts->availableVoices();
+    uTtsVoicesIndex = 0;
+    ttsVoicesList.clear();
+    ttsVoices = tts->availableVoices();
+    QVoice currentVoice = tts->voice();
+    foreach (const QVoice &voice, ttsVoices) {
+        ttsVoicesList.append(QString("%1 - %2 - %3").arg(voice.name())
+                             .arg(QVoice::genderName(voice.gender()))
+                             .arg(QVoice::ageName(voice.age())));
+        if (voice.name() == currentVoice.name())
+            ttsCurrentVoice=ttsVoicesList.at(ttsVoicesList.count() - 1);
+    }
+    tts->setRate(uTtsRate);
+    tts->setPitch(uTtsPitch);
+    tts->setVolume(uTtsVolume);
+    connect(tts, SIGNAL(stateChanged(QTextToSpeech::State)), this, SLOT(stateChanged(QTextToSpeech::State)));
+    //connect(tts, SIGNAL(localeChanged()), this, SLOT(tts));
 }
 
 void UK::ttsLanguageSelected(int languaje)
 {
     QLocale locale;
     if(ttsLocalesVariants.count()>0){
-         locale = ttsLocalesVariants.at(languaje);
+        locale = ttsLocalesVariants.at(languaje);
         tts->setLocale(locale);
     }
     uTtsLocalesIndex = languaje;
     uTtsVoicesIndex = 0;
     ttsVoicesList.clear();
-            ttsVoices = tts->availableVoices();
-            QVoice currentVoice = tts->voice();
-            foreach (const QVoice &voice, ttsVoices) {
-                ttsVoicesList.append(QString("%1 - %2 - %3").arg(voice.name())
-                                  .arg(QVoice::genderName(voice.gender()))
-                                  .arg(QVoice::ageName(voice.age())));
-                if (voice.name() == currentVoice.name())
-                    ttsCurrentVoice=ttsVoicesList.at(ttsVoicesList.count() - 1);
-            }
-            tts->setRate(uTtsRate / 10.0);
-            tts->setPitch(uTtsPitch / 10.0);
-            tts->setVolume(uTtsVolume / 100.0);
-            connect(tts, SIGNAL(stateChanged(QTextToSpeech::State)), this, SLOT(stateChanged(QTextToSpeech::State)));
+    ttsVoices = tts->availableVoices();
+    QVoice currentVoice = tts->voice();
+    foreach (const QVoice &voice, ttsVoices) {
+        ttsVoicesList.append(QString("%1 - %2 - %3").arg(voice.name())
+                             .arg(QVoice::genderName(voice.gender()))
+                             .arg(QVoice::ageName(voice.age())));
+        if (voice.name() == currentVoice.name())
+            ttsCurrentVoice=ttsVoicesList.at(ttsVoicesList.count() - 1);
+    }
+    tts->setRate(uTtsRate / 10.0);
+    tts->setPitch(uTtsPitch / 10.0);
+    tts->setVolume(uTtsVolume / 100.0);
+    connect(tts, SIGNAL(stateChanged(QTextToSpeech::State)), this, SLOT(stateChanged(QTextToSpeech::State)));
 }
 
 void UK::ttsVoiceSelected(int index)

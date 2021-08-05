@@ -188,7 +188,7 @@ public:
                 porcent.append("uploaded ");
             }
             porcent.append("%");
-            porcent.append(QString::number(porc));
+            porcent.append(QString::number(porc).toUtf8());
             log(porcent);
             }
     }
@@ -370,6 +370,7 @@ public slots:
     bool isFree(QString upk);
     bool loadUpk(QString upkLocation, bool closeAppLauncher, QString user, QString key);
     bool downloadGit(QByteArray url, QByteArray localFolder);
+    void loadQml(const QString qml);
     void restartApp();
     void restartApp(QString args);
     bool run(QString commandLine);
