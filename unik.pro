@@ -100,7 +100,11 @@ HEADERS += \
 
 
 DISTFILES += \
-    ../../../../../media/ns/ZONA-A1/nsp/unik/android/AndroidManifest.xml \
+    ./android/AndroidManifest.xml \
+    ./android/build.gradle \
+    ./android/gradle/wrapper/gradle-wrapper.jar \
+    ./android/gradle/wrapper/gradle-wrapper.properties \
+    ./android/res/values/libs.xml \
     android.pri \
     android/AndroidManifest.xml \
     android/gradle.properties \

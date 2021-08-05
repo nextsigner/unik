@@ -1,10 +1,16 @@
-# Compile this project for Android with Qt 5.13.0 on GNU/Linux
+# Compile this project for Android with Qt 5.15.2 on GNU/Linux
 # For Android we are recomend compile into
-#OS: GNU/Linux Ubuntu 16.04
-# Android SDK Version: 29
-# and Android NDK r19c
-# For Android All Arch use API 21-28
+#OS: GNU/Linux Ubuntu 20.04
+# Android SDK Version: 29 v3.0
+# and Android NDK r19c v21.3.65
+# For Android All Arch use API 21-30
 #JDK Location: /usr/lib/jvm/java-8-openjdk-amd64
+
+ANDROID_TARGET_SDK_VERSION = 29
+#ANDROID_ABIS="armeabi-v7a arm64-v8a x86 x86_64"
+
+#Este ABI ha sido aceptado por Google Play Console
+ANDROID_ABIS="arm64-v8a"
 
 message(Programando en Android)
 
