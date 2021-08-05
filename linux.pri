@@ -5,14 +5,16 @@
 
 #1) Edit default.desktop
 
-#2)  ~/linuxdeployqt-continuous-x86_64.AppImage /media/nextsigner/ZONA-A11/nsp/unik/build_linux/unik -qmldir=/media/nextsigner/ZONA-A11/nsp/unik -qmake=/home/nextsigner/Qt/5.12.3/gcc_64/bin/qmake -verbose=3
+#2)  ~/linuxdeployqt-continuous-x86_64.AppImage /home/ns/unik/build_linux/unik -qmldir=/home/ns/unik -qmake=/home/ns/Qt/5.15.2/gcc_64/bin/qmake -verbose=3
 
 
 #3 optional) Copy full plugins and qml folder for full qtquick support.
 #Copy <QT-INSTALL>/gcc_64/qml and <QT-INSTALL>/gcc_64/plugins folders manualy to the executable folder location.
+#cp -r ~/Qt/5.15.2/gcc_64/qml ~/unik/build_linux/
+#cp -r ~/Qt/5.15.2/gcc_64/plugins ~/unik/build_linux/
 
 #Make Unik AppImage
-#4) ~/linuxdeployqt-continuous-x86_64.AppImage /media/nextsigner/ZONA-A11/nsp/unik/build_linux/unik -qmldir=/media/nextsigner/ZONA-A11/nsp/unik -qmake=/home/nextsigner/Qt/5.12.3/gcc_64/bin/qmake -verbose=3 -bundle-non-qt-libs -no-plugins -appimage
+#4) ~/linuxdeployqt-continuous-x86_64.AppImage /home/ns/unik/build_linux/unik -qmldir=/home/ns/unik -qmake=/home/ns/Qt/5.15.2/gcc_64/bin/qmake -verbose=3 -bundle-non-qt-libs -no-plugins -appimage
 
 #5 optional) Copy nss3 files into
 #cp -r /usr/lib/x86_64-linux-gnu/nss <executable path>/
