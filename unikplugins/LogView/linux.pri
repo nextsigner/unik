@@ -10,7 +10,7 @@ message(linux.pri is loaded)
     DESTDIR= $$[QT_INSTALL_QML]/LogView
 
     #DestDir for a unik probe
-    DESTDIR=../build
+    DESTDIR=/media/ns/Archivos/nsp/plugins/LogView
 
 
     EXTRA_BINFILES += \

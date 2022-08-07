@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.3
+/*Editado*/
 Item {
     id: raiz
     property alias w: raiz.width
