@@ -510,6 +510,7 @@ int main(int argc, char *argv[])
 #endif
     //This register is deprecated.  It will be eliminated.
     qmlRegisterType<UK>("uk", 1, 0, "UK");
+    qmlRegisterType<UK>("unik.Unik", 1, 0, "Unik");
     //<--Register Types
     qmlRegisterType<UnikQProcess>("unik.UnikQProcess", 1, 0, "UnikQProcess");
 
@@ -1897,6 +1898,15 @@ int main(int argc, char *argv[])
 
 
 #else
+
+    //Add import path for folder./modules
+    QByteArray modulesPath="";
+    QByteArray mainLocation="";
+    mainLocation.append(QDir::currentPath());
+    modulesPath.append(mainLocation);
+    modulesPath.append("/modules");
+    engine.addImportPath(modulesPath);
+
     qmlImportPath.append(ffmqml);
     QString ncqmls;
     ncqmls.append(ffmqml.mid(0,ffmqml.size()-1).replace("/", "\\"));
