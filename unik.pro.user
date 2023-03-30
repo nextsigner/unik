@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.11.1, 2023-03-23T10:11:03. -->
+<!-- Written by QtCreator 4.11.1, 2023-03-30T12:22:07. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -287,7 +287,7 @@
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/ns/nsp/unik/unik.pro</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/ns/nsp/unik/unik.pro</value>
-    <value type="QString" key="RunConfiguration.Arguments">-folder=/home/ns/nsp/qml-chatgpt</value>
+    <value type="QString" key="RunConfiguration.Arguments">-folder=/home/ns/nsp/qml-chatgpt -dev</value>
     <value type="bool" key="RunConfiguration.Arguments.multi">false</value>
     <value type="QString" key="RunConfiguration.OverrideDebuggerStartup"></value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
@@ -296,7 +296,7 @@
     <value type="bool" key="RunConfiguration.UseMultiProcess">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory"></value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory">/home/ns/nsp/qml-chatgpt</value>
     <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/ns/nsp/unik/build_linux</value>
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
