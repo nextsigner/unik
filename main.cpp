@@ -389,6 +389,8 @@ int main(int argc, char *argv[])
     QString dim="";
     QString pos="";
     bool modeFolder=false;
+    QByteArray pathFromArgFolder="";
+    bool safeSplash=false;
     bool modeFolderToUpk=false;
 
 
@@ -486,6 +488,10 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("splashvisible", u.splashvisible);
     engine.rootContext()->setContextProperty("setInitString", u.setInitString);
 #ifndef Q_OS_ANDROID
+    QByteArray documentsPath;
+    documentsPath.append(u.getPath(3).toUtf8());
+    documentsPath.append("/unik");
+    engine.rootContext()->setContextProperty("documentsPath", documentsPath);
     engine.rootContext()->setContextProperty("clipboard", &clipboard);
 #else
     engine.rootContext()->setContextProperty("console", &u);
@@ -573,6 +579,7 @@ int main(int argc, char *argv[])
     engine.load("qrc:/Splash.qml");
 #else
 #ifndef __arm__
+    engine.rootContext()->setContextProperty("safeSplash", safeSplash);
     engine.load("qrc:/Splash.qml");
 #else
     engine.load("://Splash.qml");
@@ -661,6 +668,8 @@ int main(int argc, char *argv[])
                 if(!fscd.exists()){
                     fscd.mkdir(ncp);
                 }
+                pathFromArgFolder="";
+                pathFromArgFolder.append(appArg2);
                 if(!qApp->arguments().contains("-install")){
                     QDir::setCurrent(ncp);
                 }
@@ -675,6 +684,18 @@ int main(int argc, char *argv[])
             }
         }
         //<-folder
+
+        //>-safeSplash
+        if(arg.contains("-safeSplash=true")){
+            safeSplash=true;
+            engine.rootContext()->setContextProperty("safeSplash", true);
+        }else{
+            safeSplash=false;
+            engine.rootContext()->setContextProperty("safeSplash", false);
+            qDebug()<<"1ARG:::"<<arg;
+
+        }
+        //<-safeSplash
 
         //>-url
         if(arg.contains("-url=")){
@@ -1665,6 +1686,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("sourcePath", ffmqml);
     engine.rootContext()->setContextProperty("unikDocs", pws);
     engine.rootContext()->setContextProperty("pws", pws);
+    engine.rootContext()->setContextProperty("pathFromArgFolder", pathFromArgFolder);
     //engine.rootContext()->setContextProperty("upk", "");
     //engine.rootContext()->setContextProperty("splashsuspend", false);
 
@@ -1922,6 +1944,12 @@ int main(int argc, char *argv[])
     engine.addPluginPath("assets:/lib/x86_64");
     engine.addPluginPath("assets:/lib/x86-64");
 #endif
+
+    if(safeSplash){
+        //return -3;
+        qDebug()<<"safeSplash mainLocation: "<<mainLocation;
+        //engine.load(mainLocation);
+    }
 
     QString unikPluginsPath;
     unikPluginsPath.append(u.getPath(1));

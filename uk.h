@@ -50,6 +50,7 @@
 #include <QUrl>
 #include <QUrlQuery>
 #include <QEventLoop>
+#include "recvthread.h" //TcpClient
 
 //Librerías Sqlite
 #include <QtSql/QSqlDatabase>
@@ -271,6 +272,10 @@ public:
     bool splashvisible=true;
     bool setInitString=false;
 
+    //Tcp
+    QTcpSocket *client;
+    RecvThread *recThread;
+
 #ifdef UNIK_COMPILE_RPI
     //GPIO functions for RPI
     //This function returns void values for other os.
@@ -336,6 +341,7 @@ public:
     void initWSS(const QByteArray, const int, const QByteArray);
 #endif*/
     void restartingApp();
+
 
     //TTS Signals
     void ttsSpeakingChanged();
@@ -403,6 +409,9 @@ public slots:
     void downloadProgress(qint64 bytesSend, qint64 bytesTotal);
     void sendFinished();
     bool startWSS(QByteArray ip,  int port, QByteArray serverName);
+
+    //TcpClient
+    void sendToTcpServer(const QByteArray host, int port, const QByteArray from,  const QByteArray to, const QByteArray data);
 
     //Funciones Sqlite
     bool sqliteInit(QString pathName);

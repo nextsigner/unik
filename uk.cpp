@@ -15,6 +15,11 @@ UK::UK(QObject *parent) : QObject(parent)//,
 #endif
 
 
+    //TcpClient
+    recThread=new RecvThread();
+    client = new QTcpSocket(this);
+    client->connectToHost(QHostAddress("192.168.1.42"), 3111);
+
     //connect(tts, SIGNAL(stateChanged()), this, SLOT(stateChanged()));
 
 
@@ -2235,6 +2240,29 @@ bool UK::startWSS(QByteArray ip, int port, QByteArray serverName)
 {
     emit initWSS(_engine, ip, port, serverName);
     return true;
+}
+
+void UK::sendToTcpServer(const QByteArray host, int port, const QByteArray from, const QByteArray to, const QByteArray data)
+{
+    client = new QTcpSocket();
+    client->connectToHost(QHostAddress(QString(host)), port);
+
+    QByteArray s="";
+
+    s.append("{\"from\":\"");
+    s.append(from);
+    s.append("\", ");
+
+    s.append("\"to\":\"");
+    s.append(to);
+    s.append("\", ");
+
+    s.append("\"data\":\"");
+    s.append(data);
+    s.append("\"");
+    s.append("}");
+    client->write(s);
+    client->close();
 }
 
 bool UK::sqliteInit(QString pathName)

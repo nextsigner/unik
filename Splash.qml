@@ -181,6 +181,7 @@ ApplicationWindow {
             color: "transparent"
             anchors.centerIn: parent
             opacity: xLogTxt.opacity
+            visible: !safeSplash
             Behavior on opacity{
                 NumberAnimation{
                     duration:500
@@ -297,6 +298,18 @@ ApplicationWindow {
                 }
             }
         }
+        Rectangle{
+            id: xCustomSplashImage
+            anchors.fill: r
+            color: 'transparent'
+            visible: safeSplash
+            Image{
+                width: parent.height
+                height: width
+                anchors.centerIn: parent
+                source: safeSplash?'file://'+pathFromArgFolder+'/splash.png':''
+            }
+        }
         Item{
             id:xLogTxt
             //width: appSplash.fs*30
@@ -306,6 +319,7 @@ ApplicationWindow {
             anchors.topMargin: appSplash.fs
             anchors.horizontalCenter: r.horizontalCenter
             opacity: r.opacity
+            visible: r.visible
             onOpacityChanged: {
                 if(opacity===0.0){
                     appSplash.visible=false
@@ -400,6 +414,20 @@ ApplicationWindow {
             Qt.quit()
         }
     }
+    Text{
+        text:'<b>'+safeSplash+'</b><br>'+pathFromArgFolder
+        anchors.centerIn: parent
+        color: 'white'
+        font.pixelSize: 40
+        visible: false
+    }
     Connections {target: unik;onUkStdChanged: logtxt.setTxtLog(''+unik.ukStd);}
     Connections {target: unik;onStdErrChanged: logtxt.setTxtLog(''+unik.getStdErr());}
+    Component.onCompleted: {
+        if(safeSplash){
+            tWaitHide.stop()
+            r.visible=false
+            unik.notifySplashFinished()
+        }
+    }
 }

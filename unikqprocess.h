@@ -42,7 +42,7 @@ public slots:
 
     void logOutProcess();
     void logOutProcessErr();
-private:    
+private:
 };
 
 #endif // UNIKQPROCESS_H

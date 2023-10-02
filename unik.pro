@@ -13,6 +13,10 @@ requires(qtHaveModule(gui))
 
 #Widget for Qt.labs.platform 1.0
 QT += widgets
+QT       += core gui
+QT       += network
+TEMPLATE = app
+
 
 !contains(QMAKE_HOST.arch, arm.*):{
     message(NO Desarrollando para RPI)
@@ -61,6 +65,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
     audiorecorder.cpp \
+    recvthread.cpp \
     uk.cpp \
     row.cpp \
     unikargsproc.cpp \
@@ -87,6 +92,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     audiorecorder.h \
+    recvthread.h \
     uk.h \
     qmlclipboardadapter.h \
     row.h \
