@@ -570,6 +570,9 @@ int main(int argc, char *argv[])
 
 
 
+    pathFromArgFolder="";
+    pathFromArgFolder.append(QDir::currentPath());
+    engine.rootContext()->setContextProperty("pathFromArgFolder", pathFromArgFolder);
     engine.rootContext()->setContextProperty("pws", pws);
     //qDebug()<<"PWS L587: "<<pws;
 
@@ -670,6 +673,7 @@ int main(int argc, char *argv[])
                 }
                 pathFromArgFolder="";
                 pathFromArgFolder.append(appArg2);
+                engine.rootContext()->setContextProperty("pathFromArgFolder", pathFromArgFolder);
                 if(!qApp->arguments().contains("-install")){
                     QDir::setCurrent(ncp);
                 }
@@ -1686,7 +1690,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty("sourcePath", ffmqml);
     engine.rootContext()->setContextProperty("unikDocs", pws);
     engine.rootContext()->setContextProperty("pws", pws);
-    engine.rootContext()->setContextProperty("pathFromArgFolder", pathFromArgFolder);
+
     //engine.rootContext()->setContextProperty("upk", "");
     //engine.rootContext()->setContextProperty("splashsuspend", false);
 
