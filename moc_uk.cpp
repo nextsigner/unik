@@ -23,8 +23,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_UK_t {
-    QByteArrayData data[239];
-    char stringdata0[2645];
+    QByteArrayData data[240];
+    char stringdata0[2657];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -181,97 +181,98 @@ QT_MOC_LITERAL(144, 1572, 8), // "fileData"
 QT_MOC_LITERAL(145, 1581, 5), // "codec"
 QT_MOC_LITERAL(146, 1587, 7), // "getFile"
 QT_MOC_LITERAL(147, 1595, 11), // "folderExist"
-QT_MOC_LITERAL(148, 1607, 5), // "mkdir"
-QT_MOC_LITERAL(149, 1613, 17), // "getFolderFileList"
-QT_MOC_LITERAL(150, 1631, 14), // "getUpkTempPath"
-QT_MOC_LITERAL(151, 1646, 16), // "getUpksLocalPath"
-QT_MOC_LITERAL(152, 1663, 9), // "fileExist"
-QT_MOC_LITERAL(153, 1673, 17), // "base64ToByteArray"
-QT_MOC_LITERAL(154, 1691, 17), // "byteArrayToBase64"
-QT_MOC_LITERAL(155, 1709, 11), // "uCompressed"
-QT_MOC_LITERAL(156, 1721, 10), // "createLink"
-QT_MOC_LITERAL(157, 1732, 10), // "execString"
-QT_MOC_LITERAL(158, 1743, 23), // "desktopLocationFileName"
-QT_MOC_LITERAL(159, 1767, 7), // "comment"
-QT_MOC_LITERAL(160, 1775, 8), // "iconPath"
-QT_MOC_LITERAL(161, 1784, 9), // "getScreen"
-QT_MOC_LITERAL(162, 1794, 6), // "screen"
-QT_MOC_LITERAL(163, 1801, 29), // "imageCameraCapturaToByteArray"
-QT_MOC_LITERAL(164, 1831, 15), // "itemToImageData"
-QT_MOC_LITERAL(165, 1847, 4), // "item"
-QT_MOC_LITERAL(166, 1852, 15), // "screenImageData"
-QT_MOC_LITERAL(167, 1868, 16), // "imageComparation"
-QT_MOC_LITERAL(168, 1885, 10), // "firstImage"
-QT_MOC_LITERAL(169, 1896, 11), // "secondImage"
-QT_MOC_LITERAL(170, 1908, 3), // "lim"
-QT_MOC_LITERAL(171, 1912, 18), // "sendAudioStreamWSS"
-QT_MOC_LITERAL(172, 1931, 13), // "audioFilePath"
-QT_MOC_LITERAL(173, 1945, 5), // "bytes"
-QT_MOC_LITERAL(174, 1951, 24), // "appendAudioStreamFileWSS"
-QT_MOC_LITERAL(175, 1976, 13), // "toHtmlEscaped"
-QT_MOC_LITERAL(176, 1990, 8), // "htmlCode"
-QT_MOC_LITERAL(177, 1999, 8), // "crearPDF"
-QT_MOC_LITERAL(178, 2008, 7), // "captura"
-QT_MOC_LITERAL(179, 2016, 11), // "orientacion"
-QT_MOC_LITERAL(180, 2028, 5), // "speak"
-QT_MOC_LITERAL(181, 2034, 4), // "text"
-QT_MOC_LITERAL(182, 2039, 5), // "voice"
-QT_MOC_LITERAL(183, 2045, 8), // "language"
-QT_MOC_LITERAL(184, 2054, 15), // "getSpeakEngines"
-QT_MOC_LITERAL(185, 2070, 13), // "isTtsSpeaking"
-QT_MOC_LITERAL(186, 2084, 11), // "isTtsPaused"
-QT_MOC_LITERAL(187, 2096, 12), // "ttsSpeakStop"
-QT_MOC_LITERAL(188, 2109, 8), // "ttsPause"
-QT_MOC_LITERAL(189, 2118, 9), // "ttsResume"
-QT_MOC_LITERAL(190, 2128, 10), // "setTtsRate"
-QT_MOC_LITERAL(191, 2139, 11), // "setTtsPitch"
-QT_MOC_LITERAL(192, 2151, 12), // "setTtsVolume"
-QT_MOC_LITERAL(193, 2164, 6), // "volume"
-QT_MOC_LITERAL(194, 2171, 12), // "stateChanged"
-QT_MOC_LITERAL(195, 2184, 20), // "QTextToSpeech::State"
-QT_MOC_LITERAL(196, 2205, 5), // "state"
-QT_MOC_LITERAL(197, 2211, 17), // "ttsEngineSelected"
-QT_MOC_LITERAL(198, 2229, 19), // "ttsLanguageSelected"
-QT_MOC_LITERAL(199, 2249, 8), // "languaje"
-QT_MOC_LITERAL(200, 2258, 16), // "ttsVoiceSelected"
-QT_MOC_LITERAL(201, 2275, 14), // "encPrivateData"
-QT_MOC_LITERAL(202, 2290, 14), // "decPrivateData"
-QT_MOC_LITERAL(203, 2305, 8), // "compData"
-QT_MOC_LITERAL(204, 2314, 11), // "desCompData"
-QT_MOC_LITERAL(205, 2326, 19), // "downloadZipProgress"
-QT_MOC_LITERAL(206, 2346, 11), // "getUWarning"
-QT_MOC_LITERAL(207, 2358, 11), // "setUWarning"
-QT_MOC_LITERAL(208, 2370, 2), // "uw"
-QT_MOC_LITERAL(209, 2373, 7), // "getPorc"
-QT_MOC_LITERAL(210, 2381, 7), // "setPorc"
-QT_MOC_LITERAL(211, 2389, 1), // "p"
-QT_MOC_LITERAL(212, 2391, 4), // "mode"
-QT_MOC_LITERAL(213, 2396, 14), // "getUploadState"
-QT_MOC_LITERAL(214, 2411, 14), // "setUploadState"
-QT_MOC_LITERAL(215, 2426, 2), // "us"
-QT_MOC_LITERAL(216, 2429, 9), // "getStdErr"
-QT_MOC_LITERAL(217, 2439, 9), // "setStdErr"
-QT_MOC_LITERAL(218, 2449, 1), // "s"
-QT_MOC_LITERAL(219, 2451, 16), // "getInitStdString"
-QT_MOC_LITERAL(220, 2468, 16), // "setInitStdString"
-QT_MOC_LITERAL(221, 2485, 4), // "unik"
-QT_MOC_LITERAL(222, 2490, 8), // "getRunCL"
-QT_MOC_LITERAL(223, 2499, 8), // "setRunCL"
-QT_MOC_LITERAL(224, 2508, 1), // "b"
-QT_MOC_LITERAL(225, 2510, 11), // "setDebugLog"
-QT_MOC_LITERAL(226, 2522, 11), // "getDebugLog"
-QT_MOC_LITERAL(227, 2534, 7), // "setHost"
-QT_MOC_LITERAL(228, 2542, 2), // "nh"
-QT_MOC_LITERAL(229, 2545, 19), // "clearComponentCache"
-QT_MOC_LITERAL(230, 2565, 4), // "porc"
-QT_MOC_LITERAL(231, 2570, 11), // "uploadState"
-QT_MOC_LITERAL(232, 2582, 5), // "runCL"
-QT_MOC_LITERAL(233, 2588, 8), // "debugLog"
-QT_MOC_LITERAL(234, 2597, 5), // "ukStd"
-QT_MOC_LITERAL(235, 2603, 6), // "stdErr"
-QT_MOC_LITERAL(236, 2610, 13), // "initStdString"
-QT_MOC_LITERAL(237, 2624, 8), // "uWarning"
-QT_MOC_LITERAL(238, 2633, 11) // "ttsSpeaking"
+QT_MOC_LITERAL(148, 1607, 11), // "getFileList"
+QT_MOC_LITERAL(149, 1619, 5), // "mkdir"
+QT_MOC_LITERAL(150, 1625, 17), // "getFolderFileList"
+QT_MOC_LITERAL(151, 1643, 14), // "getUpkTempPath"
+QT_MOC_LITERAL(152, 1658, 16), // "getUpksLocalPath"
+QT_MOC_LITERAL(153, 1675, 9), // "fileExist"
+QT_MOC_LITERAL(154, 1685, 17), // "base64ToByteArray"
+QT_MOC_LITERAL(155, 1703, 17), // "byteArrayToBase64"
+QT_MOC_LITERAL(156, 1721, 11), // "uCompressed"
+QT_MOC_LITERAL(157, 1733, 10), // "createLink"
+QT_MOC_LITERAL(158, 1744, 10), // "execString"
+QT_MOC_LITERAL(159, 1755, 23), // "desktopLocationFileName"
+QT_MOC_LITERAL(160, 1779, 7), // "comment"
+QT_MOC_LITERAL(161, 1787, 8), // "iconPath"
+QT_MOC_LITERAL(162, 1796, 9), // "getScreen"
+QT_MOC_LITERAL(163, 1806, 6), // "screen"
+QT_MOC_LITERAL(164, 1813, 29), // "imageCameraCapturaToByteArray"
+QT_MOC_LITERAL(165, 1843, 15), // "itemToImageData"
+QT_MOC_LITERAL(166, 1859, 4), // "item"
+QT_MOC_LITERAL(167, 1864, 15), // "screenImageData"
+QT_MOC_LITERAL(168, 1880, 16), // "imageComparation"
+QT_MOC_LITERAL(169, 1897, 10), // "firstImage"
+QT_MOC_LITERAL(170, 1908, 11), // "secondImage"
+QT_MOC_LITERAL(171, 1920, 3), // "lim"
+QT_MOC_LITERAL(172, 1924, 18), // "sendAudioStreamWSS"
+QT_MOC_LITERAL(173, 1943, 13), // "audioFilePath"
+QT_MOC_LITERAL(174, 1957, 5), // "bytes"
+QT_MOC_LITERAL(175, 1963, 24), // "appendAudioStreamFileWSS"
+QT_MOC_LITERAL(176, 1988, 13), // "toHtmlEscaped"
+QT_MOC_LITERAL(177, 2002, 8), // "htmlCode"
+QT_MOC_LITERAL(178, 2011, 8), // "crearPDF"
+QT_MOC_LITERAL(179, 2020, 7), // "captura"
+QT_MOC_LITERAL(180, 2028, 11), // "orientacion"
+QT_MOC_LITERAL(181, 2040, 5), // "speak"
+QT_MOC_LITERAL(182, 2046, 4), // "text"
+QT_MOC_LITERAL(183, 2051, 5), // "voice"
+QT_MOC_LITERAL(184, 2057, 8), // "language"
+QT_MOC_LITERAL(185, 2066, 15), // "getSpeakEngines"
+QT_MOC_LITERAL(186, 2082, 13), // "isTtsSpeaking"
+QT_MOC_LITERAL(187, 2096, 11), // "isTtsPaused"
+QT_MOC_LITERAL(188, 2108, 12), // "ttsSpeakStop"
+QT_MOC_LITERAL(189, 2121, 8), // "ttsPause"
+QT_MOC_LITERAL(190, 2130, 9), // "ttsResume"
+QT_MOC_LITERAL(191, 2140, 10), // "setTtsRate"
+QT_MOC_LITERAL(192, 2151, 11), // "setTtsPitch"
+QT_MOC_LITERAL(193, 2163, 12), // "setTtsVolume"
+QT_MOC_LITERAL(194, 2176, 6), // "volume"
+QT_MOC_LITERAL(195, 2183, 12), // "stateChanged"
+QT_MOC_LITERAL(196, 2196, 20), // "QTextToSpeech::State"
+QT_MOC_LITERAL(197, 2217, 5), // "state"
+QT_MOC_LITERAL(198, 2223, 17), // "ttsEngineSelected"
+QT_MOC_LITERAL(199, 2241, 19), // "ttsLanguageSelected"
+QT_MOC_LITERAL(200, 2261, 8), // "languaje"
+QT_MOC_LITERAL(201, 2270, 16), // "ttsVoiceSelected"
+QT_MOC_LITERAL(202, 2287, 14), // "encPrivateData"
+QT_MOC_LITERAL(203, 2302, 14), // "decPrivateData"
+QT_MOC_LITERAL(204, 2317, 8), // "compData"
+QT_MOC_LITERAL(205, 2326, 11), // "desCompData"
+QT_MOC_LITERAL(206, 2338, 19), // "downloadZipProgress"
+QT_MOC_LITERAL(207, 2358, 11), // "getUWarning"
+QT_MOC_LITERAL(208, 2370, 11), // "setUWarning"
+QT_MOC_LITERAL(209, 2382, 2), // "uw"
+QT_MOC_LITERAL(210, 2385, 7), // "getPorc"
+QT_MOC_LITERAL(211, 2393, 7), // "setPorc"
+QT_MOC_LITERAL(212, 2401, 1), // "p"
+QT_MOC_LITERAL(213, 2403, 4), // "mode"
+QT_MOC_LITERAL(214, 2408, 14), // "getUploadState"
+QT_MOC_LITERAL(215, 2423, 14), // "setUploadState"
+QT_MOC_LITERAL(216, 2438, 2), // "us"
+QT_MOC_LITERAL(217, 2441, 9), // "getStdErr"
+QT_MOC_LITERAL(218, 2451, 9), // "setStdErr"
+QT_MOC_LITERAL(219, 2461, 1), // "s"
+QT_MOC_LITERAL(220, 2463, 16), // "getInitStdString"
+QT_MOC_LITERAL(221, 2480, 16), // "setInitStdString"
+QT_MOC_LITERAL(222, 2497, 4), // "unik"
+QT_MOC_LITERAL(223, 2502, 8), // "getRunCL"
+QT_MOC_LITERAL(224, 2511, 8), // "setRunCL"
+QT_MOC_LITERAL(225, 2520, 1), // "b"
+QT_MOC_LITERAL(226, 2522, 11), // "setDebugLog"
+QT_MOC_LITERAL(227, 2534, 11), // "getDebugLog"
+QT_MOC_LITERAL(228, 2546, 7), // "setHost"
+QT_MOC_LITERAL(229, 2554, 2), // "nh"
+QT_MOC_LITERAL(230, 2557, 19), // "clearComponentCache"
+QT_MOC_LITERAL(231, 2577, 4), // "porc"
+QT_MOC_LITERAL(232, 2582, 11), // "uploadState"
+QT_MOC_LITERAL(233, 2594, 5), // "runCL"
+QT_MOC_LITERAL(234, 2600, 8), // "debugLog"
+QT_MOC_LITERAL(235, 2609, 5), // "ukStd"
+QT_MOC_LITERAL(236, 2615, 6), // "stdErr"
+QT_MOC_LITERAL(237, 2622, 13), // "initStdString"
+QT_MOC_LITERAL(238, 2636, 8), // "uWarning"
+QT_MOC_LITERAL(239, 2645, 11) // "ttsSpeaking"
 
     },
     "UK\0upkExtractRequest\0\0upk\0user\0key\0"
@@ -318,8 +319,8 @@ QT_MOC_LITERAL(238, 2633, 11) // "ttsSpeaking"
     "databaseName\0sqliteClose\0cd\0"
     "currentFolderPath\0currentFolderName\0"
     "deleteFile\0f\0setFile\0fileName\0fileData\0"
-    "codec\0getFile\0folderExist\0mkdir\0"
-    "getFolderFileList\0getUpkTempPath\0"
+    "codec\0getFile\0folderExist\0getFileList\0"
+    "mkdir\0getFolderFileList\0getUpkTempPath\0"
     "getUpksLocalPath\0fileExist\0base64ToByteArray\0"
     "byteArrayToBase64\0uCompressed\0createLink\0"
     "execString\0desktopLocationFileName\0"
@@ -356,157 +357,158 @@ static const uint qt_meta_data_UK[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-     139,   14, // methods
-       9, 1190, // properties
+     140,   14, // methods
+       9, 1198, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
       14,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    4,  709,    2, 0x06 /* Public */,
-       7,    0,  718,    2, 0x06 /* Public */,
-       8,    0,  719,    2, 0x06 /* Public */,
-       9,    0,  720,    2, 0x06 /* Public */,
-      10,    0,  721,    2, 0x06 /* Public */,
-      11,    0,  722,    2, 0x06 /* Public */,
-      12,    0,  723,    2, 0x06 /* Public */,
-      13,    0,  724,    2, 0x06 /* Public */,
-      14,    0,  725,    2, 0x06 /* Public */,
-      15,    0,  726,    2, 0x06 /* Public */,
-      16,    4,  727,    2, 0x06 /* Public */,
-      19,    0,  736,    2, 0x06 /* Public */,
-      20,    0,  737,    2, 0x06 /* Public */,
-      21,    1,  738,    2, 0x06 /* Public */,
+       1,    4,  714,    2, 0x06 /* Public */,
+       7,    0,  723,    2, 0x06 /* Public */,
+       8,    0,  724,    2, 0x06 /* Public */,
+       9,    0,  725,    2, 0x06 /* Public */,
+      10,    0,  726,    2, 0x06 /* Public */,
+      11,    0,  727,    2, 0x06 /* Public */,
+      12,    0,  728,    2, 0x06 /* Public */,
+      13,    0,  729,    2, 0x06 /* Public */,
+      14,    0,  730,    2, 0x06 /* Public */,
+      15,    0,  731,    2, 0x06 /* Public */,
+      16,    4,  732,    2, 0x06 /* Public */,
+      19,    0,  741,    2, 0x06 /* Public */,
+      20,    0,  742,    2, 0x06 /* Public */,
+      21,    1,  743,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      23,    0,  741,    2, 0x0a /* Public */,
-      24,    1,  742,    2, 0x0a /* Public */,
-      27,    1,  745,    2, 0x0a /* Public */,
-      30,    1,  748,    2, 0x0a /* Public */,
-      32,    1,  751,    2, 0x0a /* Public */,
-      33,    0,  754,    2, 0x0a /* Public */,
-      34,    0,  755,    2, 0x0a /* Public */,
-      35,    1,  756,    2, 0x0a /* Public */,
-      37,    1,  759,    2, 0x0a /* Public */,
-      39,    0,  762,    2, 0x0a /* Public */,
-      41,    1,  763,    2, 0x0a /* Public */,
-      43,    1,  766,    2, 0x0a /* Public */,
-      45,    5,  769,    2, 0x0a /* Public */,
-      48,    5,  780,    2, 0x0a /* Public */,
-      54,    2,  791,    2, 0x0a /* Public */,
-      57,    3,  796,    2, 0x0a /* Public */,
-      61,    5,  803,    2, 0x0a /* Public */,
-      62,    4,  814,    2, 0x0a /* Public */,
-      63,    1,  823,    2, 0x0a /* Public */,
-      64,    4,  826,    2, 0x0a /* Public */,
-      67,    2,  835,    2, 0x0a /* Public */,
-      68,    1,  840,    2, 0x0a /* Public */,
-      70,    0,  843,    2, 0x0a /* Public */,
-      70,    1,  844,    2, 0x0a /* Public */,
-      72,    1,  847,    2, 0x0a /* Public */,
-      72,    3,  850,    2, 0x0a /* Public */,
-      76,    1,  857,    2, 0x0a /* Public */,
-      78,    1,  860,    2, 0x0a /* Public */,
-      80,    0,  863,    2, 0x0a /* Public */,
-      81,    0,  864,    2, 0x0a /* Public */,
-      82,    1,  865,    2, 0x0a /* Public */,
-       8,    1,  868,    2, 0x0a /* Public */,
-      85,    1,  871,    2, 0x0a /* Public */,
-      87,    1,  874,    2, 0x0a /* Public */,
-      89,    3,  877,    2, 0x0a /* Public */,
-      90,    3,  884,    2, 0x0a /* Public */,
-      92,    1,  891,    2, 0x0a /* Public */,
-      94,    2,  894,    2, 0x0a /* Public */,
-      97,    1,  899,    2, 0x0a /* Public */,
-      98,    0,  902,    2, 0x0a /* Public */,
-      99,    0,  903,    2, 0x0a /* Public */,
-     100,    1,  904,    2, 0x0a /* Public */,
-     101,    0,  907,    2, 0x0a /* Public */,
-     102,    2,  908,    2, 0x0a /* Public */,
-     104,    1,  913,    2, 0x0a /* Public */,
-     105,    0,  916,    2, 0x0a /* Public */,
-     106,    2,  917,    2, 0x0a /* Public */,
-     109,    2,  922,    2, 0x0a /* Public */,
-     112,    2,  927,    2, 0x0a /* Public */,
-     113,    0,  932,    2, 0x0a /* Public */,
-     114,    3,  933,    2, 0x0a /* Public */,
-     118,    5,  940,    2, 0x0a /* Public */,
-     122,    1,  951,    2, 0x0a /* Public */,
-     124,    1,  954,    2, 0x0a /* Public */,
-     126,    1,  957,    2, 0x0a /* Public */,
-     128,    5,  960,    2, 0x0a /* Public */,
-     134,    2,  971,    2, 0x0a /* Public */,
-     136,    0,  976,    2, 0x0a /* Public */,
-     137,    1,  977,    2, 0x0a /* Public */,
-     138,    0,  980,    2, 0x0a /* Public */,
-     139,    0,  981,    2, 0x0a /* Public */,
-     140,    1,  982,    2, 0x0a /* Public */,
-     142,    2,  985,    2, 0x0a /* Public */,
-     142,    3,  990,    2, 0x0a /* Public */,
-     146,    1,  997,    2, 0x0a /* Public */,
-     147,    1, 1000,    2, 0x0a /* Public */,
-     148,    1, 1003,    2, 0x0a /* Public */,
-     149,    1, 1006,    2, 0x0a /* Public */,
-     150,    0, 1009,    2, 0x0a /* Public */,
-     151,    0, 1010,    2, 0x0a /* Public */,
-     152,    1, 1011,    2, 0x0a /* Public */,
-     153,    1, 1014,    2, 0x0a /* Public */,
-     154,    1, 1017,    2, 0x0a /* Public */,
-     155,    1, 1020,    2, 0x0a /* Public */,
-     156,    4, 1023,    2, 0x0a /* Public */,
-     156,    5, 1032,    2, 0x0a /* Public */,
-     161,    1, 1043,    2, 0x0a /* Public */,
-     163,    1, 1046,    2, 0x0a /* Public */,
-     164,    1, 1049,    2, 0x0a /* Public */,
-     166,    1, 1052,    2, 0x0a /* Public */,
-     167,    3, 1055,    2, 0x0a /* Public */,
-     171,    2, 1062,    2, 0x0a /* Public */,
-     174,    2, 1067,    2, 0x0a /* Public */,
-     175,    1, 1072,    2, 0x0a /* Public */,
-     177,    3, 1075,    2, 0x0a /* Public */,
-     180,    1, 1082,    2, 0x0a /* Public */,
-     180,    2, 1085,    2, 0x0a /* Public */,
-     180,    3, 1090,    2, 0x0a /* Public */,
-     184,    0, 1097,    2, 0x0a /* Public */,
-     180,    2, 1098,    2, 0x0a /* Public */,
-     185,    0, 1103,    2, 0x0a /* Public */,
-     186,    0, 1104,    2, 0x0a /* Public */,
-     187,    0, 1105,    2, 0x0a /* Public */,
-     188,    0, 1106,    2, 0x0a /* Public */,
-     189,    0, 1107,    2, 0x0a /* Public */,
-     190,    1, 1108,    2, 0x0a /* Public */,
-     191,    1, 1111,    2, 0x0a /* Public */,
-     192,    1, 1114,    2, 0x0a /* Public */,
-     194,    1, 1117,    2, 0x0a /* Public */,
-     197,    1, 1120,    2, 0x0a /* Public */,
-     198,    1, 1123,    2, 0x0a /* Public */,
-     200,    1, 1126,    2, 0x0a /* Public */,
-     201,    3, 1129,    2, 0x08 /* Private */,
-     202,    3, 1136,    2, 0x08 /* Private */,
-     203,    1, 1143,    2, 0x08 /* Private */,
-     204,    1, 1146,    2, 0x08 /* Private */,
-     205,    2, 1149,    2, 0x08 /* Private */,
+      23,    0,  746,    2, 0x0a /* Public */,
+      24,    1,  747,    2, 0x0a /* Public */,
+      27,    1,  750,    2, 0x0a /* Public */,
+      30,    1,  753,    2, 0x0a /* Public */,
+      32,    1,  756,    2, 0x0a /* Public */,
+      33,    0,  759,    2, 0x0a /* Public */,
+      34,    0,  760,    2, 0x0a /* Public */,
+      35,    1,  761,    2, 0x0a /* Public */,
+      37,    1,  764,    2, 0x0a /* Public */,
+      39,    0,  767,    2, 0x0a /* Public */,
+      41,    1,  768,    2, 0x0a /* Public */,
+      43,    1,  771,    2, 0x0a /* Public */,
+      45,    5,  774,    2, 0x0a /* Public */,
+      48,    5,  785,    2, 0x0a /* Public */,
+      54,    2,  796,    2, 0x0a /* Public */,
+      57,    3,  801,    2, 0x0a /* Public */,
+      61,    5,  808,    2, 0x0a /* Public */,
+      62,    4,  819,    2, 0x0a /* Public */,
+      63,    1,  828,    2, 0x0a /* Public */,
+      64,    4,  831,    2, 0x0a /* Public */,
+      67,    2,  840,    2, 0x0a /* Public */,
+      68,    1,  845,    2, 0x0a /* Public */,
+      70,    0,  848,    2, 0x0a /* Public */,
+      70,    1,  849,    2, 0x0a /* Public */,
+      72,    1,  852,    2, 0x0a /* Public */,
+      72,    3,  855,    2, 0x0a /* Public */,
+      76,    1,  862,    2, 0x0a /* Public */,
+      78,    1,  865,    2, 0x0a /* Public */,
+      80,    0,  868,    2, 0x0a /* Public */,
+      81,    0,  869,    2, 0x0a /* Public */,
+      82,    1,  870,    2, 0x0a /* Public */,
+       8,    1,  873,    2, 0x0a /* Public */,
+      85,    1,  876,    2, 0x0a /* Public */,
+      87,    1,  879,    2, 0x0a /* Public */,
+      89,    3,  882,    2, 0x0a /* Public */,
+      90,    3,  889,    2, 0x0a /* Public */,
+      92,    1,  896,    2, 0x0a /* Public */,
+      94,    2,  899,    2, 0x0a /* Public */,
+      97,    1,  904,    2, 0x0a /* Public */,
+      98,    0,  907,    2, 0x0a /* Public */,
+      99,    0,  908,    2, 0x0a /* Public */,
+     100,    1,  909,    2, 0x0a /* Public */,
+     101,    0,  912,    2, 0x0a /* Public */,
+     102,    2,  913,    2, 0x0a /* Public */,
+     104,    1,  918,    2, 0x0a /* Public */,
+     105,    0,  921,    2, 0x0a /* Public */,
+     106,    2,  922,    2, 0x0a /* Public */,
+     109,    2,  927,    2, 0x0a /* Public */,
+     112,    2,  932,    2, 0x0a /* Public */,
+     113,    0,  937,    2, 0x0a /* Public */,
+     114,    3,  938,    2, 0x0a /* Public */,
+     118,    5,  945,    2, 0x0a /* Public */,
+     122,    1,  956,    2, 0x0a /* Public */,
+     124,    1,  959,    2, 0x0a /* Public */,
+     126,    1,  962,    2, 0x0a /* Public */,
+     128,    5,  965,    2, 0x0a /* Public */,
+     134,    2,  976,    2, 0x0a /* Public */,
+     136,    0,  981,    2, 0x0a /* Public */,
+     137,    1,  982,    2, 0x0a /* Public */,
+     138,    0,  985,    2, 0x0a /* Public */,
+     139,    0,  986,    2, 0x0a /* Public */,
+     140,    1,  987,    2, 0x0a /* Public */,
+     142,    2,  990,    2, 0x0a /* Public */,
+     142,    3,  995,    2, 0x0a /* Public */,
+     146,    1, 1002,    2, 0x0a /* Public */,
+     147,    1, 1005,    2, 0x0a /* Public */,
+     148,    1, 1008,    2, 0x0a /* Public */,
+     149,    1, 1011,    2, 0x0a /* Public */,
+     150,    1, 1014,    2, 0x0a /* Public */,
+     151,    0, 1017,    2, 0x0a /* Public */,
+     152,    0, 1018,    2, 0x0a /* Public */,
+     153,    1, 1019,    2, 0x0a /* Public */,
+     154,    1, 1022,    2, 0x0a /* Public */,
+     155,    1, 1025,    2, 0x0a /* Public */,
+     156,    1, 1028,    2, 0x0a /* Public */,
+     157,    4, 1031,    2, 0x0a /* Public */,
+     157,    5, 1040,    2, 0x0a /* Public */,
+     162,    1, 1051,    2, 0x0a /* Public */,
+     164,    1, 1054,    2, 0x0a /* Public */,
+     165,    1, 1057,    2, 0x0a /* Public */,
+     167,    1, 1060,    2, 0x0a /* Public */,
+     168,    3, 1063,    2, 0x0a /* Public */,
+     172,    2, 1070,    2, 0x0a /* Public */,
+     175,    2, 1075,    2, 0x0a /* Public */,
+     176,    1, 1080,    2, 0x0a /* Public */,
+     178,    3, 1083,    2, 0x0a /* Public */,
+     181,    1, 1090,    2, 0x0a /* Public */,
+     181,    2, 1093,    2, 0x0a /* Public */,
+     181,    3, 1098,    2, 0x0a /* Public */,
+     185,    0, 1105,    2, 0x0a /* Public */,
+     181,    2, 1106,    2, 0x0a /* Public */,
+     186,    0, 1111,    2, 0x0a /* Public */,
+     187,    0, 1112,    2, 0x0a /* Public */,
+     188,    0, 1113,    2, 0x0a /* Public */,
+     189,    0, 1114,    2, 0x0a /* Public */,
+     190,    0, 1115,    2, 0x0a /* Public */,
+     191,    1, 1116,    2, 0x0a /* Public */,
+     192,    1, 1119,    2, 0x0a /* Public */,
+     193,    1, 1122,    2, 0x0a /* Public */,
+     195,    1, 1125,    2, 0x0a /* Public */,
+     198,    1, 1128,    2, 0x0a /* Public */,
+     199,    1, 1131,    2, 0x0a /* Public */,
+     201,    1, 1134,    2, 0x0a /* Public */,
+     202,    3, 1137,    2, 0x08 /* Private */,
+     203,    3, 1144,    2, 0x08 /* Private */,
+     204,    1, 1151,    2, 0x08 /* Private */,
+     205,    1, 1154,    2, 0x08 /* Private */,
+     206,    2, 1157,    2, 0x08 /* Private */,
 
  // methods: name, argc, parameters, tag, flags
-     206,    0, 1154,    2, 0x02 /* Public */,
-     207,    1, 1155,    2, 0x02 /* Public */,
-     209,    0, 1158,    2, 0x02 /* Public */,
-     210,    2, 1159,    2, 0x02 /* Public */,
-     213,    0, 1164,    2, 0x02 /* Public */,
-     214,    1, 1165,    2, 0x02 /* Public */,
-     216,    0, 1168,    2, 0x02 /* Public */,
-     217,    1, 1169,    2, 0x02 /* Public */,
-     219,    0, 1172,    2, 0x02 /* Public */,
-     220,    1, 1173,    2, 0x02 /* Public */,
-     221,    0, 1176,    2, 0x02 /* Public */,
-     222,    0, 1177,    2, 0x02 /* Public */,
-     223,    1, 1178,    2, 0x02 /* Public */,
-     225,    1, 1181,    2, 0x02 /* Public */,
-     226,    0, 1184,    2, 0x02 /* Public */,
-     227,    1, 1185,    2, 0x02 /* Public */,
-     119,    0, 1188,    2, 0x02 /* Public */,
-     229,    0, 1189,    2, 0x02 /* Public */,
+     207,    0, 1162,    2, 0x02 /* Public */,
+     208,    1, 1163,    2, 0x02 /* Public */,
+     210,    0, 1166,    2, 0x02 /* Public */,
+     211,    2, 1167,    2, 0x02 /* Public */,
+     214,    0, 1172,    2, 0x02 /* Public */,
+     215,    1, 1173,    2, 0x02 /* Public */,
+     217,    0, 1176,    2, 0x02 /* Public */,
+     218,    1, 1177,    2, 0x02 /* Public */,
+     220,    0, 1180,    2, 0x02 /* Public */,
+     221,    1, 1181,    2, 0x02 /* Public */,
+     222,    0, 1184,    2, 0x02 /* Public */,
+     223,    0, 1185,    2, 0x02 /* Public */,
+     224,    1, 1186,    2, 0x02 /* Public */,
+     226,    1, 1189,    2, 0x02 /* Public */,
+     227,    0, 1192,    2, 0x02 /* Public */,
+     228,    1, 1193,    2, 0x02 /* Public */,
+     119,    0, 1196,    2, 0x02 /* Public */,
+     230,    0, 1197,    2, 0x02 /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::QString,    3,    4,    5,    6,
@@ -591,6 +593,7 @@ static const uint qt_meta_data_UK[] = {
     QMetaType::Bool, QMetaType::QByteArray, QMetaType::QByteArray, QMetaType::QByteArray,  143,  144,  145,
     QMetaType::QString, QMetaType::QByteArray,   31,
     QMetaType::Bool, QMetaType::QByteArray,   46,
+    0x80000000 | 40, QMetaType::QByteArray,   46,
     QMetaType::Bool, QMetaType::QString,   88,
     0x80000000 | 40, QMetaType::QByteArray,   46,
     QMetaType::QString,
@@ -599,22 +602,22 @@ static const uint qt_meta_data_UK[] = {
     QMetaType::QByteArray, QMetaType::QByteArray,   77,
     QMetaType::QByteArray, QMetaType::QByteArray,   77,
     QMetaType::QByteArray, QMetaType::QByteArray,   77,
-    QMetaType::Bool, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::QString,  157,  158,   95,  159,
-    QMetaType::Bool, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::QString,  157,  158,   95,  159,  160,
-    QMetaType::QImage, QMetaType::Int,  162,
+    QMetaType::Bool, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::QString,  158,  159,   95,  160,
+    QMetaType::Bool, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::QString,  158,  159,   95,  160,  161,
+    QMetaType::QImage, QMetaType::Int,  163,
     QMetaType::QByteArray, QMetaType::QString,   55,
-    QMetaType::QByteArray, QMetaType::QObjectStar,  165,
-    QMetaType::QByteArray, QMetaType::Int,  162,
-    QMetaType::Bool, QMetaType::QImage, QMetaType::QImage, QMetaType::Double,  168,  169,  170,
-    QMetaType::QByteArray, QMetaType::QString, QMetaType::Int,  172,  173,
-    QMetaType::Void, QMetaType::QString, QMetaType::QByteArray,  172,   77,
-    QMetaType::QString, QMetaType::QString,  176,
-    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Int,  178,   55,  179,
-    QMetaType::Void, QMetaType::QByteArray,  181,
-    QMetaType::Void, QMetaType::QByteArray, QMetaType::Int,  181,  182,
-    QMetaType::Void, QMetaType::QByteArray, QMetaType::Int, QMetaType::QByteArray,  181,  182,  183,
+    QMetaType::QByteArray, QMetaType::QObjectStar,  166,
+    QMetaType::QByteArray, QMetaType::Int,  163,
+    QMetaType::Bool, QMetaType::QImage, QMetaType::QImage, QMetaType::Double,  169,  170,  171,
+    QMetaType::QByteArray, QMetaType::QString, QMetaType::Int,  173,  174,
+    QMetaType::Void, QMetaType::QString, QMetaType::QByteArray,  173,   77,
+    QMetaType::QString, QMetaType::QString,  177,
+    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::Int,  179,   55,  180,
+    QMetaType::Void, QMetaType::QByteArray,  182,
+    QMetaType::Void, QMetaType::QByteArray, QMetaType::Int,  182,  183,
+    QMetaType::Void, QMetaType::QByteArray, QMetaType::Int, QMetaType::QByteArray,  182,  183,  184,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::QByteArray, QMetaType::QByteArray,  181,  183,
+    QMetaType::Void, QMetaType::QByteArray, QMetaType::QByteArray,  182,  184,
     QMetaType::Bool,
     QMetaType::Bool,
     QMetaType::Void,
@@ -622,10 +625,10 @@ static const uint qt_meta_data_UK[] = {
     QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    2,
     QMetaType::Void, QMetaType::Int,    2,
-    QMetaType::Void, QMetaType::Int,  193,
-    QMetaType::Void, 0x80000000 | 195,  196,
+    QMetaType::Void, QMetaType::Int,  194,
+    QMetaType::Void, 0x80000000 | 196,  197,
     QMetaType::Void, QMetaType::Int,   22,
-    QMetaType::Void, QMetaType::Int,  199,
+    QMetaType::Void, QMetaType::Int,  200,
     QMetaType::Void, QMetaType::Int,   22,
     QMetaType::QString, QMetaType::QByteArray, QMetaType::QString, QMetaType::QString,   84,    4,    5,
     QMetaType::QString, QMetaType::QByteArray, QMetaType::QString, QMetaType::QString,   91,    4,    5,
@@ -635,34 +638,34 @@ static const uint qt_meta_data_UK[] = {
 
  // methods: parameters
     QMetaType::QString,
-    QMetaType::Void, QMetaType::QString,  208,
+    QMetaType::Void, QMetaType::QString,  209,
     QMetaType::Int,
-    QMetaType::Void, QMetaType::Int, QMetaType::Int,  211,  212,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int,  212,  213,
     QMetaType::QString,
-    QMetaType::Void, QMetaType::QString,  215,
+    QMetaType::Void, QMetaType::QString,  216,
     QMetaType::QString,
-    QMetaType::Void, QMetaType::QString,  218,
+    QMetaType::Void, QMetaType::QString,  219,
     QMetaType::QString,
-    QMetaType::Void, QMetaType::QString,  218,
+    QMetaType::Void, QMetaType::QString,  219,
     QMetaType::QObjectStar,
     QMetaType::Bool,
-    QMetaType::Void, QMetaType::Bool,  224,
-    QMetaType::Void, QMetaType::Bool,  224,
+    QMetaType::Void, QMetaType::Bool,  225,
+    QMetaType::Void, QMetaType::Bool,  225,
     QMetaType::Bool,
-    QMetaType::Void, QMetaType::QString,  228,
+    QMetaType::Void, QMetaType::QString,  229,
     QMetaType::QString,
     QMetaType::Void,
 
  // properties: name, type, flags
-     230, QMetaType::Int, 0x00495001,
-     231, QMetaType::QString, 0x00495103,
-     232, QMetaType::Bool, 0x00495103,
+     231, QMetaType::Int, 0x00495001,
+     232, QMetaType::QString, 0x00495103,
      233, QMetaType::Bool, 0x00495103,
-     234, QMetaType::QString, 0x00495103,
+     234, QMetaType::Bool, 0x00495103,
      235, QMetaType::QString, 0x00495103,
-     236, QMetaType::QString, 0x00095103,
-     237, QMetaType::QString, 0x00495103,
-     238, QMetaType::Int, 0x00495103,
+     236, QMetaType::QString, 0x00495103,
+     237, QMetaType::QString, 0x00095103,
+     238, QMetaType::QString, 0x00495103,
+     239, QMetaType::Int, 0x00495103,
 
  // properties: notify_signal_id
        4,
@@ -800,97 +803,99 @@ void UK::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
         case 79: { bool _r = _t->folderExist((*reinterpret_cast< const QByteArray(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 80: { bool _r = _t->mkdir((*reinterpret_cast< const QString(*)>(_a[1])));
-            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 81: { QList<QString> _r = _t->getFolderFileList((*reinterpret_cast< const QByteArray(*)>(_a[1])));
+        case 80: { QList<QString> _r = _t->getFileList((*reinterpret_cast< QByteArray(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QList<QString>*>(_a[0]) = std::move(_r); }  break;
-        case 82: { QString _r = _t->getUpkTempPath();
+        case 81: { bool _r = _t->mkdir((*reinterpret_cast< const QString(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
+        case 82: { QList<QString> _r = _t->getFolderFileList((*reinterpret_cast< const QByteArray(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< QList<QString>*>(_a[0]) = std::move(_r); }  break;
+        case 83: { QString _r = _t->getUpkTempPath();
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 83: { QString _r = _t->getUpksLocalPath();
+        case 84: { QString _r = _t->getUpksLocalPath();
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 84: { bool _r = _t->fileExist((*reinterpret_cast< QByteArray(*)>(_a[1])));
+        case 85: { bool _r = _t->fileExist((*reinterpret_cast< QByteArray(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 85: { QByteArray _r = _t->base64ToByteArray((*reinterpret_cast< const QByteArray(*)>(_a[1])));
+        case 86: { QByteArray _r = _t->base64ToByteArray((*reinterpret_cast< const QByteArray(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QByteArray*>(_a[0]) = std::move(_r); }  break;
-        case 86: { QByteArray _r = _t->byteArrayToBase64((*reinterpret_cast< const QByteArray(*)>(_a[1])));
+        case 87: { QByteArray _r = _t->byteArrayToBase64((*reinterpret_cast< const QByteArray(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QByteArray*>(_a[0]) = std::move(_r); }  break;
-        case 87: { QByteArray _r = _t->uCompressed((*reinterpret_cast< const QByteArray(*)>(_a[1])));
+        case 88: { QByteArray _r = _t->uCompressed((*reinterpret_cast< const QByteArray(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QByteArray*>(_a[0]) = std::move(_r); }  break;
-        case 88: { bool _r = _t->createLink((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< QString(*)>(_a[3])),(*reinterpret_cast< QString(*)>(_a[4])));
+        case 89: { bool _r = _t->createLink((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< QString(*)>(_a[3])),(*reinterpret_cast< QString(*)>(_a[4])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 89: { bool _r = _t->createLink((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< QString(*)>(_a[3])),(*reinterpret_cast< QString(*)>(_a[4])),(*reinterpret_cast< QString(*)>(_a[5])));
+        case 90: { bool _r = _t->createLink((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< QString(*)>(_a[3])),(*reinterpret_cast< QString(*)>(_a[4])),(*reinterpret_cast< QString(*)>(_a[5])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 90: { QImage _r = _t->getScreen((*reinterpret_cast< int(*)>(_a[1])));
+        case 91: { QImage _r = _t->getScreen((*reinterpret_cast< int(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QImage*>(_a[0]) = std::move(_r); }  break;
-        case 91: { QByteArray _r = _t->imageCameraCapturaToByteArray((*reinterpret_cast< QString(*)>(_a[1])));
+        case 92: { QByteArray _r = _t->imageCameraCapturaToByteArray((*reinterpret_cast< QString(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QByteArray*>(_a[0]) = std::move(_r); }  break;
-        case 92: { QByteArray _r = _t->itemToImageData((*reinterpret_cast< QObject*(*)>(_a[1])));
+        case 93: { QByteArray _r = _t->itemToImageData((*reinterpret_cast< QObject*(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QByteArray*>(_a[0]) = std::move(_r); }  break;
-        case 93: { QByteArray _r = _t->screenImageData((*reinterpret_cast< int(*)>(_a[1])));
+        case 94: { QByteArray _r = _t->screenImageData((*reinterpret_cast< int(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QByteArray*>(_a[0]) = std::move(_r); }  break;
-        case 94: { bool _r = _t->imageComparation((*reinterpret_cast< const QImage(*)>(_a[1])),(*reinterpret_cast< const QImage(*)>(_a[2])),(*reinterpret_cast< double(*)>(_a[3])));
+        case 95: { bool _r = _t->imageComparation((*reinterpret_cast< const QImage(*)>(_a[1])),(*reinterpret_cast< const QImage(*)>(_a[2])),(*reinterpret_cast< double(*)>(_a[3])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 95: { QByteArray _r = _t->sendAudioStreamWSS((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
+        case 96: { QByteArray _r = _t->sendAudioStreamWSS((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< QByteArray*>(_a[0]) = std::move(_r); }  break;
-        case 96: _t->appendAudioStreamFileWSS((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QByteArray(*)>(_a[2]))); break;
-        case 97: { QString _r = _t->toHtmlEscaped((*reinterpret_cast< QString(*)>(_a[1])));
+        case 97: _t->appendAudioStreamFileWSS((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QByteArray(*)>(_a[2]))); break;
+        case 98: { QString _r = _t->toHtmlEscaped((*reinterpret_cast< QString(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 98: _t->crearPDF((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
-        case 99: _t->speak((*reinterpret_cast< const QByteArray(*)>(_a[1]))); break;
-        case 100: _t->speak((*reinterpret_cast< const QByteArray(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 101: _t->speak((*reinterpret_cast< const QByteArray(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< const QByteArray(*)>(_a[3]))); break;
-        case 102: _t->getSpeakEngines(); break;
-        case 103: _t->speak((*reinterpret_cast< const QByteArray(*)>(_a[1])),(*reinterpret_cast< const QByteArray(*)>(_a[2]))); break;
-        case 104: { bool _r = _t->isTtsSpeaking();
+        case 99: _t->crearPDF((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3]))); break;
+        case 100: _t->speak((*reinterpret_cast< const QByteArray(*)>(_a[1]))); break;
+        case 101: _t->speak((*reinterpret_cast< const QByteArray(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 102: _t->speak((*reinterpret_cast< const QByteArray(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< const QByteArray(*)>(_a[3]))); break;
+        case 103: _t->getSpeakEngines(); break;
+        case 104: _t->speak((*reinterpret_cast< const QByteArray(*)>(_a[1])),(*reinterpret_cast< const QByteArray(*)>(_a[2]))); break;
+        case 105: { bool _r = _t->isTtsSpeaking();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 105: { bool _r = _t->isTtsPaused();
+        case 106: { bool _r = _t->isTtsPaused();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 106: _t->ttsSpeakStop(); break;
-        case 107: _t->ttsPause(); break;
-        case 108: _t->ttsResume(); break;
-        case 109: _t->setTtsRate((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 110: _t->setTtsPitch((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 111: _t->setTtsVolume((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 112: _t->stateChanged((*reinterpret_cast< QTextToSpeech::State(*)>(_a[1]))); break;
-        case 113: _t->ttsEngineSelected((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 114: _t->ttsLanguageSelected((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 115: _t->ttsVoiceSelected((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 116: { QString _r = _t->encPrivateData((*reinterpret_cast< QByteArray(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< QString(*)>(_a[3])));
+        case 107: _t->ttsSpeakStop(); break;
+        case 108: _t->ttsPause(); break;
+        case 109: _t->ttsResume(); break;
+        case 110: _t->setTtsRate((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 111: _t->setTtsPitch((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 112: _t->setTtsVolume((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 113: _t->stateChanged((*reinterpret_cast< QTextToSpeech::State(*)>(_a[1]))); break;
+        case 114: _t->ttsEngineSelected((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 115: _t->ttsLanguageSelected((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 116: _t->ttsVoiceSelected((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 117: { QString _r = _t->encPrivateData((*reinterpret_cast< QByteArray(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< QString(*)>(_a[3])));
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 117: { QString _r = _t->decPrivateData((*reinterpret_cast< QByteArray(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< QString(*)>(_a[3])));
+        case 118: { QString _r = _t->decPrivateData((*reinterpret_cast< QByteArray(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2])),(*reinterpret_cast< QString(*)>(_a[3])));
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 118: { QString _r = _t->compData((*reinterpret_cast< QString(*)>(_a[1])));
+        case 119: { QString _r = _t->compData((*reinterpret_cast< QString(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 119: { QString _r = _t->desCompData((*reinterpret_cast< QString(*)>(_a[1])));
+        case 120: { QString _r = _t->desCompData((*reinterpret_cast< QString(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 120: _t->downloadZipProgress((*reinterpret_cast< qint64(*)>(_a[1])),(*reinterpret_cast< qint64(*)>(_a[2]))); break;
-        case 121: { QString _r = _t->getUWarning();
+        case 121: _t->downloadZipProgress((*reinterpret_cast< qint64(*)>(_a[1])),(*reinterpret_cast< qint64(*)>(_a[2]))); break;
+        case 122: { QString _r = _t->getUWarning();
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 122: _t->setUWarning((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 123: { int _r = _t->getPorc();
+        case 123: _t->setUWarning((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 124: { int _r = _t->getPorc();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = std::move(_r); }  break;
-        case 124: _t->setPorc((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 125: { QString _r = _t->getUploadState();
+        case 125: _t->setPorc((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 126: { QString _r = _t->getUploadState();
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 126: _t->setUploadState((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 127: { QString _r = _t->getStdErr();
+        case 127: _t->setUploadState((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 128: { QString _r = _t->getStdErr();
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 128: _t->setStdErr((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 129: { QString _r = _t->getInitStdString();
+        case 129: _t->setStdErr((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 130: { QString _r = _t->getInitStdString();
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 130: _t->setInitStdString((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 131: { QObject* _r = _t->unik();
+        case 131: _t->setInitStdString((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 132: { QObject* _r = _t->unik();
             if (_a[0]) *reinterpret_cast< QObject**>(_a[0]) = std::move(_r); }  break;
-        case 132: { bool _r = _t->getRunCL();
+        case 133: { bool _r = _t->getRunCL();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 133: _t->setRunCL((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 134: _t->setDebugLog((*reinterpret_cast< bool(*)>(_a[1]))); break;
-        case 135: { bool _r = _t->getDebugLog();
+        case 134: _t->setRunCL((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 135: _t->setDebugLog((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 136: { bool _r = _t->getDebugLog();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 136: _t->setHost((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 137: { QString _r = _t->host();
+        case 137: _t->setHost((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 138: { QString _r = _t->host();
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 138: _t->clearComponentCache(); break;
+        case 139: _t->clearComponentCache(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -903,7 +908,7 @@ void UK::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_
                 *reinterpret_cast<int*>(_a[0]) = qRegisterMetaType< QQmlApplicationEngine* >(); break;
             }
             break;
-        case 112:
+        case 113:
             switch (*reinterpret_cast<int*>(_a[1])) {
             default: *reinterpret_cast<int*>(_a[0]) = -1; break;
             case 0:
@@ -1078,13 +1083,13 @@ int UK::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 139)
+        if (_id < 140)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 139;
+        _id -= 140;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 139)
+        if (_id < 140)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 139;
+        _id -= 140;
     }
 #ifndef QT_NO_PROPERTIES
     else if (_c == QMetaObject::ReadProperty || _c == QMetaObject::WriteProperty

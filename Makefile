@@ -14,10 +14,10 @@ EQ            = =
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DUNIK_PROJECT_LOCATION=\"/home/ns/nsp/unik\" -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_WEBENGINE_LIB -DQT_WEBENGINECORE_LIB -DQT_QUICK_LIB -DQT_SVG_LIB -DQT_WIDGETS_LIB -DQT_MULTIMEDIA_LIB -DQT_WEBVIEW_LIB -DQT_GUI_LIB -DQT_QMLMODELS_LIB -DQT_WEBCHANNEL_LIB -DQT_QML_LIB -DQT_WEBSOCKETS_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_SERIALPORT_LIB -DQT_TEXTTOSPEECH_LIB -DQT_POSITIONING_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_OPENGL_SUPPORT -DUNIK_PROJECT_LOCATION=\"/home/ns/nsp/unik\" -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_WEBENGINE_LIB -DQT_WEBENGINECORE_LIB -DQT_QUICK_LIB -DQT_CHARTS_LIB -DQT_SVG_LIB -DQT_WIDGETS_LIB -DQT_MULTIMEDIA_LIB -DQT_WEBVIEW_LIB -DQT_GUI_LIB -DQT_QMLMODELS_LIB -DQT_WEBCHANNEL_LIB -DQT_QML_LIB -DQT_WEBSOCKETS_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_SERIALPORT_LIB -DQT_TEXTTOSPEECH_LIB -DQT_POSITIONING_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O2 -std=gnu++11 -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -Iquazip -I/usr/local/zlib/include -I../../Qt5.14.2/5.14.2/gcc_64/include -I../../Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I../../Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I../../Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I../../Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I../../Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I../../Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I../../Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I../../Qt5.14.2/5.14.2/gcc_64/include/QtGui -I../../Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I../../Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I../../Qt5.14.2/5.14.2/gcc_64/include/QtQml -I../../Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I../../Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I../../Qt5.14.2/5.14.2/gcc_64/include/QtSql -I../../Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I../../Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I../../Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I../../Qt5.14.2/5.14.2/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -I../../Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++
+INCPATH       = -I. -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/Qt3D -Iquazip -I/usr/local/zlib/include -isystem /usr/include/libdrm -I../../Qt5.14.2/5.14.2/gcc_64/include -I../../Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I../../Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I../../Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I../../Qt5.14.2/5.14.2/gcc_64/include/QtCharts -I../../Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I../../Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I../../Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I../../Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I../../Qt5.14.2/5.14.2/gcc_64/include/QtGui -I../../Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I../../Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I../../Qt5.14.2/5.14.2/gcc_64/include/QtQml -I../../Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I../../Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I../../Qt5.14.2/5.14.2/gcc_64/include/QtSql -I../../Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I../../Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I../../Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I../../Qt5.14.2/5.14.2/gcc_64/include/QtCore -I. -I../../Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/ns/Qt5.14.2/5.14.2/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -40,7 +40,7 @@ DISTNAME      = unik1.0.0
 DISTDIR = /home/ns/nsp/unik/.tmp/unik1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-rpath,/home/ns/Qt5.14.2/5.14.2/gcc_64/lib -Wl,-rpath-link,/home/ns/Qt5.14.2/5.14.2/gcc_64/lib
-LIBS          = $(SUBLIBS) -lz -L/usr/local/zlib/lib /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5WebEngine.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5WebEngineCore.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Quick.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Svg.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Widgets.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Multimedia.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5WebView.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Gui.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5QmlModels.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5WebChannel.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Qml.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5WebSockets.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Network.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Sql.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5SerialPort.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5TextToSpeech.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Positioning.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Core.so -lGL -lpthread   
+LIBS          = $(SUBLIBS) -L/home/ns/Qt5.14.2/5.14.2/gcc_64/lib -lQt53DCore -L/home/qt/openssl-1.1.1d/lib -lQt53DRender -lQt53DInput -lQt53DLogic -lQt53DQuick -lQt53DQuickRender -lQt53DQuickInput -lQt53DQuickExtras /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt53DExtras.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt53DInput.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt53DQuick.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt53DRender.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt53DLogic.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt53DCore.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Gamepad.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Concurrent.so -lz -L/usr/local/zlib/lib -lGL /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5WebEngine.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5WebEngineCore.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Quick.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Charts.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Svg.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Widgets.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Multimedia.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5WebView.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Gui.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5QmlModels.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5WebChannel.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Qml.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5WebSockets.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Network.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Sql.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5SerialPort.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5TextToSpeech.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Positioning.so /home/ns/Qt5.14.2/5.14.2/gcc_64/lib/libQt5Core.so -lpthread   
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -186,7 +186,6 @@ DIST          = android/AndroidManifest.xml \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_accessibility_support_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_bluetooth.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_bluetooth_private.pri \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_bodymovin_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_bootstrap_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_charts.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_charts_private.pri \
@@ -228,8 +227,6 @@ DIST          = android/AndroidManifest.xml \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_multimediawidgets_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_network.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_network_private.pri \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_networkauth.pri \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_networkauth_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_nfc.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_nfc_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_opengl.pri \
@@ -244,8 +241,6 @@ DIST          = android/AndroidManifest.xml \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_positioningquick_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_printsupport.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_printsupport_private.pri \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_purchasing.pri \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_purchasing_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_qml.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_qml_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_qmldebug_private.pri \
@@ -281,10 +276,6 @@ DIST          = android/AndroidManifest.xml \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_remoteobjects_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_repparser.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_repparser_private.pri \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_script.pri \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_script_private.pri \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_scripttools.pri \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_scripttools_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_scxml.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_scxml_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_sensors.pri \
@@ -348,12 +339,12 @@ DIST          = android/AndroidManifest.xml \
 		linux.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/resolve_config.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/default_post.prf \
+		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/unix/opengl.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/warn_on.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/qt.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/resources_functions.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/resources.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/moc.prf \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/unix/opengl.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/uic.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/unix/thread.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/qmake_use.prf \
@@ -462,7 +453,6 @@ Makefile: unik.pro ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf ../
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_accessibility_support_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_bluetooth.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_bluetooth_private.pri \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_bodymovin_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_bootstrap_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_charts.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_charts_private.pri \
@@ -504,8 +494,6 @@ Makefile: unik.pro ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf ../
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_multimediawidgets_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_network.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_network_private.pri \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_networkauth.pri \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_networkauth_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_nfc.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_nfc_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_opengl.pri \
@@ -520,8 +508,6 @@ Makefile: unik.pro ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf ../
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_positioningquick_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_printsupport.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_printsupport_private.pri \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_purchasing.pri \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_purchasing_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_qml.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_qml_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_qmldebug_private.pri \
@@ -557,10 +543,6 @@ Makefile: unik.pro ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf ../
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_remoteobjects_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_repparser.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_repparser_private.pri \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_script.pri \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_script_private.pri \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_scripttools.pri \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_scripttools_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_scxml.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_scxml_private.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_sensors.pri \
@@ -624,12 +606,12 @@ Makefile: unik.pro ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf ../
 		linux.pri \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/resolve_config.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/default_post.prf \
+		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/unix/opengl.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/warn_on.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/qt.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/resources_functions.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/resources.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/moc.prf \
-		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/unix/opengl.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/uic.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/unix/thread.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/qmake_use.prf \
@@ -639,7 +621,15 @@ Makefile: unik.pro ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf ../
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/yacc.prf \
 		../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/lex.prf \
 		unik.pro \
-		qml.qrc
+		qml.qrc \
+		../../Qt5.14.2/5.14.2/gcc_64/lib/libQt53DCore.prl \
+		../../Qt5.14.2/5.14.2/gcc_64/lib/libQt53DRender.prl \
+		../../Qt5.14.2/5.14.2/gcc_64/lib/libQt53DInput.prl \
+		../../Qt5.14.2/5.14.2/gcc_64/lib/libQt53DLogic.prl \
+		../../Qt5.14.2/5.14.2/gcc_64/lib/libQt53DQuick.prl \
+		../../Qt5.14.2/5.14.2/gcc_64/lib/libQt53DQuickRender.prl \
+		../../Qt5.14.2/5.14.2/gcc_64/lib/libQt53DQuickInput.prl \
+		../../Qt5.14.2/5.14.2/gcc_64/lib/libQt53DQuickExtras.prl
 	$(QMAKE) -o Makefile unik.pro -spec linux-g++
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/spec_pre.prf:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/common/unix.conf:
@@ -677,7 +667,6 @@ Makefile: unik.pro ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf ../
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_accessibility_support_private.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_bluetooth.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_bluetooth_private.pri:
-../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_bodymovin_private.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_bootstrap_private.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_charts.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_charts_private.pri:
@@ -719,8 +708,6 @@ Makefile: unik.pro ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf ../
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_multimediawidgets_private.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_network.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_network_private.pri:
-../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_networkauth.pri:
-../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_networkauth_private.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_nfc.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_nfc_private.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_opengl.pri:
@@ -735,8 +722,6 @@ Makefile: unik.pro ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf ../
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_positioningquick_private.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_printsupport.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_printsupport_private.pri:
-../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_purchasing.pri:
-../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_purchasing_private.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_qml.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_qml_private.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_qmldebug_private.pri:
@@ -772,10 +757,6 @@ Makefile: unik.pro ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++/qmake.conf ../
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_remoteobjects_private.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_repparser.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_repparser_private.pri:
-../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_script.pri:
-../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_script_private.pri:
-../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_scripttools.pri:
-../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_scripttools_private.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_scxml.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_scxml_private.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/modules/qt_lib_sensors.pri:
@@ -839,12 +820,12 @@ version.pri:
 linux.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/resolve_config.prf:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/default_post.prf:
+../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/unix/opengl.prf:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/warn_on.prf:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/qt.prf:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/resources_functions.prf:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/resources.prf:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/moc.prf:
-../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/unix/opengl.prf:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/uic.prf:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/unix/thread.prf:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/qmake_use.prf:
@@ -855,6 +836,14 @@ linux.pri:
 ../../Qt5.14.2/5.14.2/gcc_64/mkspecs/features/lex.prf:
 unik.pro:
 qml.qrc:
+../../Qt5.14.2/5.14.2/gcc_64/lib/libQt53DCore.prl:
+../../Qt5.14.2/5.14.2/gcc_64/lib/libQt53DRender.prl:
+../../Qt5.14.2/5.14.2/gcc_64/lib/libQt53DInput.prl:
+../../Qt5.14.2/5.14.2/gcc_64/lib/libQt53DLogic.prl:
+../../Qt5.14.2/5.14.2/gcc_64/lib/libQt53DQuick.prl:
+../../Qt5.14.2/5.14.2/gcc_64/lib/libQt53DQuickRender.prl:
+../../Qt5.14.2/5.14.2/gcc_64/lib/libQt53DQuickInput.prl:
+../../Qt5.14.2/5.14.2/gcc_64/lib/libQt53DQuickExtras.prl:
 qmake: FORCE
 	@$(QMAKE) -o Makefile unik.pro -spec linux-g++
 
@@ -998,7 +987,7 @@ moc_quagzipfile.cpp: quazip/quagzipfile.h \
 		quazip/quazip_global.h \
 		moc_predefs.h \
 		../../Qt5.14.2/5.14.2/gcc_64/bin/moc
-	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include quazip/quagzipfile.h -o moc_quagzipfile.cpp
+	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/Qt3D -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/usr/include/libdrm -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCharts -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include quazip/quagzipfile.h -o moc_quagzipfile.cpp
 
 moc_quaziodevice.cpp: quazip/quaziodevice.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/QIODevice \
@@ -1058,7 +1047,7 @@ moc_quaziodevice.cpp: quazip/quaziodevice.h \
 		quazip/quazip_global.h \
 		moc_predefs.h \
 		../../Qt5.14.2/5.14.2/gcc_64/bin/moc
-	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include quazip/quaziodevice.h -o moc_quaziodevice.cpp
+	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/Qt3D -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/usr/include/libdrm -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCharts -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include quazip/quaziodevice.h -o moc_quaziodevice.cpp
 
 moc_quazipfile.cpp: quazip/quazipfile.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/QIODevice \
@@ -1134,7 +1123,7 @@ moc_quazipfile.cpp: quazip/quazipfile.h \
 		quazip/quazipnewinfo.h \
 		moc_predefs.h \
 		../../Qt5.14.2/5.14.2/gcc_64/bin/moc
-	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include quazip/quazipfile.h -o moc_quazipfile.cpp
+	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/Qt3D -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/usr/include/libdrm -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCharts -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include quazip/quazipfile.h -o moc_quazipfile.cpp
 
 moc_audiorecorder.cpp: audiorecorder.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/QObject \
@@ -1221,7 +1210,7 @@ moc_audiorecorder.cpp: audiorecorder.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/qurlquery.h \
 		moc_predefs.h \
 		../../Qt5.14.2/5.14.2/gcc_64/bin/moc
-	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include audiorecorder.h -o moc_audiorecorder.cpp
+	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/Qt3D -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/usr/include/libdrm -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCharts -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include audiorecorder.h -o moc_audiorecorder.cpp
 
 moc_recvthread.cpp: recvthread.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/QThread \
@@ -1488,7 +1477,7 @@ moc_recvthread.cpp: recvthread.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/QTimer \
 		moc_predefs.h \
 		../../Qt5.14.2/5.14.2/gcc_64/bin/moc
-	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include recvthread.h -o moc_recvthread.cpp
+	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/Qt3D -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/usr/include/libdrm -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCharts -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include recvthread.h -o moc_recvthread.cpp
 
 moc_uk.cpp: uk.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/QObject \
@@ -1927,7 +1916,7 @@ moc_uk.cpp: uk.h \
 		mmapGpio.h \
 		moc_predefs.h \
 		../../Qt5.14.2/5.14.2/gcc_64/bin/moc
-	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include uk.h -o moc_uk.cpp
+	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/Qt3D -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/usr/include/libdrm -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCharts -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include uk.h -o moc_uk.cpp
 
 moc_qmlclipboardadapter.cpp: qmlclipboardadapter.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtWidgets/QApplication \
@@ -2045,7 +2034,7 @@ moc_qmlclipboardadapter.cpp: qmlclipboardadapter.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/QObject \
 		moc_predefs.h \
 		../../Qt5.14.2/5.14.2/gcc_64/bin/moc
-	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include qmlclipboardadapter.h -o moc_qmlclipboardadapter.cpp
+	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/Qt3D -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/usr/include/libdrm -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCharts -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include qmlclipboardadapter.h -o moc_qmlclipboardadapter.cpp
 
 moc_row.cpp: row.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/QObject \
@@ -2103,7 +2092,7 @@ moc_row.cpp: row.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobject_impl.h \
 		moc_predefs.h \
 		../../Qt5.14.2/5.14.2/gcc_64/bin/moc
-	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include row.h -o moc_row.cpp
+	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/Qt3D -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/usr/include/libdrm -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCharts -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include row.h -o moc_row.cpp
 
 moc_unikargsproc.cpp: unikargsproc.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtGui/QGuiApplication \
@@ -2205,7 +2194,7 @@ moc_unikargsproc.cpp: unikargsproc.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/qjsonarray.h \
 		moc_predefs.h \
 		../../Qt5.14.2/5.14.2/gcc_64/bin/moc
-	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include unikargsproc.h -o moc_unikargsproc.cpp
+	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/Qt3D -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/usr/include/libdrm -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCharts -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include unikargsproc.h -o moc_unikargsproc.cpp
 
 moc_chatserver.cpp: chatserver.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/QObject \
@@ -2277,7 +2266,7 @@ moc_chatserver.cpp: chatserver.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
 		moc_predefs.h \
 		../../Qt5.14.2/5.14.2/gcc_64/bin/moc
-	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include chatserver.h -o moc_chatserver.cpp
+	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/Qt3D -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/usr/include/libdrm -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCharts -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include chatserver.h -o moc_chatserver.cpp
 
 moc_unikqprocess.cpp: unikqprocess.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/QObject \
@@ -2350,7 +2339,7 @@ moc_unikqprocess.cpp: unikqprocess.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsharedpointer_impl.h \
 		moc_predefs.h \
 		../../Qt5.14.2/5.14.2/gcc_64/bin/moc
-	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include unikqprocess.h -o moc_unikqprocess.cpp
+	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/Qt3D -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/usr/include/libdrm -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCharts -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include unikqprocess.h -o moc_unikqprocess.cpp
 
 moc_websocketclientwrapper.cpp: websocketclientwrapper.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/QObject \
@@ -2408,7 +2397,7 @@ moc_websocketclientwrapper.cpp: websocketclientwrapper.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobject_impl.h \
 		moc_predefs.h \
 		../../Qt5.14.2/5.14.2/gcc_64/bin/moc
-	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include websocketclientwrapper.h -o moc_websocketclientwrapper.cpp
+	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/Qt3D -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/usr/include/libdrm -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCharts -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include websocketclientwrapper.h -o moc_websocketclientwrapper.cpp
 
 moc_websockettransport.cpp: websockettransport.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel/QWebChannelAbstractTransport \
@@ -2469,7 +2458,7 @@ moc_websockettransport.cpp: websockettransport.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel/qwebchannelglobal.h \
 		moc_predefs.h \
 		../../Qt5.14.2/5.14.2/gcc_64/bin/moc
-	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include websockettransport.h -o moc_websockettransport.cpp
+	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/Qt3D -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/usr/include/libdrm -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCharts -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include websockettransport.h -o moc_websockettransport.cpp
 
 moc_uniklogobject.cpp: uniklogobject.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/QObject \
@@ -2527,7 +2516,7 @@ moc_uniklogobject.cpp: uniklogobject.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/qobject_impl.h \
 		moc_predefs.h \
 		../../Qt5.14.2/5.14.2/gcc_64/bin/moc
-	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include uniklogobject.h -o moc_uniklogobject.cpp
+	/home/ns/Qt5.14.2/5.14.2/gcc_64/bin/moc $(DEFINES) --include /home/ns/nsp/unik/moc_predefs.h -I/home/ns/Qt5.14.2/5.14.2/gcc_64/mkspecs/linux-g++ -I/home/ns/nsp/unik -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/Qt3D -I/home/ns/nsp/unik/quazip -I/usr/local/zlib/include -I/usr/include/libdrm -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngine -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebEngineCore -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQuick -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCharts -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSvg -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWidgets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtMultimedia -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebView -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtGui -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQmlModels -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebChannel -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtQml -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtWebSockets -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtNetwork -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSql -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtSerialPort -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtPositioning -I/home/ns/Qt5.14.2/5.14.2/gcc_64/include/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/local/include -I/home/ns/android-ndk-r20b/toolchains/llvm/prebuilt/linux-x86_64/lib64/clang/8.0.7/include -I/usr/include/x86_64-linux-gnu -I/usr/include uniklogobject.h -o moc_uniklogobject.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -3429,6 +3418,7 @@ main.o: main.cpp ../../Qt5.14.2/5.14.2/gcc_64/include/QtGui/QGuiApplication \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtGui/qpixmap.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/QSettings \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/qsettings.h \
+		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/QFile \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech/QTextToSpeech \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech/qtexttospeech.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtTextToSpeech/qtexttospeech_global.h \
@@ -3484,7 +3474,6 @@ main.o: main.cpp ../../Qt5.14.2/5.14.2/gcc_64/include/QtGui/QGuiApplication \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/qfileinfo.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/QDirIterator \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/qdiriterator.h \
-		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/QFile \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/QBuffer \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/qbuffer.h \
 		../../Qt5.14.2/5.14.2/gcc_64/include/QtCore/QDebug \

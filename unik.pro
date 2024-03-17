@@ -4,7 +4,7 @@
 # Whatsapps: +54 11 3802 4370
 # GitHub: https://github.com/nextsigner/unik
 
-QT += qml quick sql websockets svg serialport
+QT += qml quick charts sql websockets svg serialport
 
 QT += texttospeech
 requires(qtHaveModule(gui))
@@ -15,6 +15,14 @@ requires(qtHaveModule(gui))
 QT += widgets
 QT       += core gui
 QT       += network
+greaterThan(QT_MAJOR_VERSION, 5): QT += 3d
+
+contains(QT_CONFIG, opengl): DEFINES += QT_OPENGL_SUPPORT
+INCLUDEPATH += /home/ns/Qt5.14.2/5.14.2/gcc_64/include/Qt3D
+LIBS += -L/home/ns/Qt5.14.2/5.14.2/gcc_64/lib -lQt53DCore -lQt53DRender -lQt53DInput -lQt53DLogic -lQt53DQuick -lQt53DQuickRender -lQt53DQuickInput -lQt53DQuickExtras
+CONFIG += opengl desktop
+
+
 TEMPLATE = app
 
 
@@ -32,11 +40,21 @@ LOCATION = $$PWD
 DEFINES += UNIK_PROJECT_LOCATION=\\\"$$LOCATION\\\"
 
 include(version.pri)
+#include(./swe/swe.pri)
+#VPATH += ./swe
+
+#HEADERS += $$PWD/swe/*.h
+#SOURCES += $$PWD/swe/*.cpp
+#SOURCES += $$PWD/swe/*.c
+
 linux:!android{
     include(linux.pri)
 }
 windows{
     include(windows.pri)
+
+    #INCLUDEPATH += $$PWD/swe
+    #LIBS += -L/ruta/a/sweph -lsweph
 }
 
 mac{

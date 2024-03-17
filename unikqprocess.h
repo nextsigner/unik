@@ -12,11 +12,11 @@ class UnikQProcess : public QProcess
 public:
     explicit UnikQProcess(QObject *parent = nullptr);
     QString logData;
-    void setLogData(const QString ld){
+    Q_INVOKABLE void setLogData(const QString ld){
         logData=ld;
         emit logDataChanged();
     }
-    QString getLogData(){
+    Q_INVOKABLE QString getLogData(){
         return logData;
     }
 //    Q_INVOKABLE void write(const QByteArray cmd){

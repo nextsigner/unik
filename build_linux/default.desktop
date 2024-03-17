@@ -1,7 +1,7 @@
 [Desktop Entry]
 Categories=Qt;Settings;
 Type=Application
-Name=unik_v7.41.1
+Name=unik_v8.12.7
 Exec=AppRun %F
 Icon=default
 Comment=Unik Qml Engine by Unikode.org

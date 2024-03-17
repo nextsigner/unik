@@ -1,1 +1,1 @@
-Se corrige Splash.qml
+Se agrega Qt3D
