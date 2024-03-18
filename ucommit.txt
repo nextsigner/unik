@@ -1,1 +1,1 @@
-Se agrega Qt3D
+Se agraga QtQuick3D
