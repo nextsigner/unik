@@ -254,6 +254,9 @@ public:
     Q_INVOKABLE void clearComponentCache(){
         _engine->clearComponentCache();
     }
+    Q_INVOKABLE void addImportPath(const QByteArray p){
+        _engine->addImportPath(p);
+    }
 
 #ifndef Q_OS_ANDROID
 #ifdef __arm__

@@ -334,7 +334,7 @@ ApplicationWindow {
                         id:labelbtnDelete
                         text: "Delete Config File"
                         font.pixelSize: app.fs*0.8
-                        anchors.centerIn: parent
+                        //anchors.centerIn: parent
                     }
                     MouseArea{
                         anchors.fill: parent

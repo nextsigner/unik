@@ -1,1 +1,1 @@
-Se agraga QtQuick3D
+Se agrega unik.addImportPaths()
